@@ -277,7 +277,7 @@ function uploadMultipleImages($name, $target){
 }
 
 ##### CODE START HERE @DISPLAY ALL CARDS #####
-function displayAll($num){
+function displayAll($num, $query = NULL){
 	$card = "";
 
 	// FOR LEGAL DOCUMENT DISPLAYING CARDS
@@ -309,8 +309,8 @@ function displayAll($num){
 	}
 	// FOR ADVENTURE POSTED DISPLAYING CARDS
 	else if($num === 1){
-
 		$card = DB::query("SELECT * FROM adventure WHERE orga_id = ?", array($_SESSION['organizer']), "READ");
+		if($query != NULL) $card = $query;
 
 		if(count($card)>0){
 			foreach($card as $result){
@@ -334,7 +334,6 @@ function displayAll($num){
 
 				echo "
 				<div class='card'>
-
 					<figure>
 						<img src='images/organizers/".$_SESSION['organizer']."/$image[$displayImage]' alt='image'>
 					</figure>
@@ -345,7 +344,6 @@ function displayAll($num){
 						<li><a href='edit_adv.php?id=".$result['adv_id']."'><i class='fas fa-edit'></i></a></li>
 						<li><a href='delete.php?table=adventure&id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to delete this adventure?\");'><i class='far fa-trash-alt'></i></a></li>
 					</ul>
-					
 				</div>
 				";
 			}
@@ -598,6 +596,7 @@ function updateVoucher(){
 	}
 }
 
+##### CODE START HERE @CHANGE A PASSWORD (JOINER OR ORGANIZER) #####
 function changePassword(){
 	// DECLARING
 	$user = "";
@@ -653,11 +652,6 @@ function changePassword(){
 			echo "<script>alert('Joiner does not exist!')</script>";
 	}
 }
-
-
-
-
-
 
 
 
