@@ -328,11 +328,13 @@ function displayAll($num){
 				// REMAINING GUEST
 				$numRemainingGuests = $result['adv_maxguests'] - $result['adv_currentGuest'];
 
+				// REMAINING GUEST IN TEXT
 				if($result['adv_type'] == 'Packaged')
 					$remainingGuestsText = "- ".$numRemainingGuests." guests remaining";
 
 				echo "
 				<div class='card'>
+
 					<figure>
 						<img src='images/organizers/".$_SESSION['organizer']."/$image[$displayImage]' alt='image'>
 					</figure>
@@ -343,6 +345,7 @@ function displayAll($num){
 						<li><a href='edit_adv.php?id=".$result['adv_id']."'><i class='fas fa-edit'></i></a></li>
 						<li><a href='delete.php?table=adventure&id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to delete this adventure?\");'><i class='far fa-trash-alt'></i></a></li>
 					</ul>
+					
 				</div>
 				";
 			}
@@ -595,8 +598,60 @@ function updateVoucher(){
 	}
 }
 
-function newFunction(){
-	
+function changePassword(){
+	// DECLARING
+	$user = "";
+	$pass = trim(md5($_POST['pass']));
+	$newPass = trim($_POST['newPass']);
+	$retypeNewPass = trim($_POST['retypeNewPass']);
+
+	// CURRENT LOGIN USER IS ORGANIZER
+	if(isset($_SESSION['organizer'])){
+		$user = DB::query("SELECT * FROM organizer WHERE orga_id=?", array($_SESSION['organizer']), "READ");
+
+		if(count($user)>0){
+			$user = $user[0];
+			// ERROR TRAPPINGS
+			if($pass != $user['orga_password']){
+				echo "<script>alert('Current password do not match!')</script>";
+			}
+			else if($newPass != $retypeNewPass){
+				echo "<script>alert('New password must match retype password!')</script>";
+			}
+			else {
+				DB::query('UPDATE organizer SET orga_password=? WHERE orga_id=?', array(md5($newPass), $_SESSION['organizer']), 'UPDATE');
+				//
+				header("Location: settings.php?changepass=1");
+				exit;
+			}
+		}
+		else
+			echo "<script>alert('Organizer does not exist!')</script>";
+
+	// CURRENT LOGIN USER IS JOINER
+	}
+	else {
+		$user = DB::query("SELECT * FROM joiner WHERE joiner_id=?", array($_SESSION['joiner']), "READ");
+
+		if(count($user)>0){
+			$user = $user[0];
+			// ERROR TRAPPINGS
+			if($pass != $user['joiner_password']){
+				echo "<script>alert('Current password do not match!')</script>";
+			}
+			else if($newPass != $retypeNewPass){
+				echo "<script>alert('New password must match retype password!')</script>";
+			}
+			else {
+				DB::query('UPDATE joiner SET joiner_password=? WHERE joiner_id=?', array(md5($newPass), $_SESSION['joiner']), 'UPDATE');
+				//
+				header("Location: settings.php?changepass=1");
+				exit;
+			}
+		}
+		else
+			echo "<script>alert('Joiner does not exist!')</script>";
+	}
 }
 
 
