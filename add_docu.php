@@ -81,7 +81,7 @@
 <div id="main_area">
 	<div class="wrapper">
 		<div class="breadcrumbs">
-			<a href="index.php">Home</a> &#187; <a href="settings.php">Settings</a> &#187; Profile
+			<a href="index.php">Home</a> &#187; <a href="settings.php">Settings</a> &#187; Legal Documents
 		</div>
 		<div class="main_con">
 			<!-- Sub Navigation -->
