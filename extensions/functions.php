@@ -595,6 +595,10 @@ function updateVoucher(){
 	}
 }
 
+function newFunction(){
+	
+}
+
 
 
 
