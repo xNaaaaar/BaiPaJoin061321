@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 14, 2021 at 05:39 PM
+-- Generation Time: Aug 07, 2021 at 07:33 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.3.28
 
@@ -52,18 +52,30 @@ INSERT INTO `admin` (`admin_id`, `admin_name`, `admin_email`, `admin_pass`) VALU
 
 CREATE TABLE `adventure` (
   `adv_id` int(11) NOT NULL,
-  `adv_type` varchar(10) NOT NULL,
-  `adv_location` varchar(50) NOT NULL,
+  `adv_images` varchar(200) NOT NULL,
+  `adv_name` varchar(50) NOT NULL,
+  `adv_kind` varchar(25) NOT NULL,
+  `adv_type` varchar(15) NOT NULL,
+  `adv_address` varchar(50) NOT NULL,
   `adv_totalcostprice` decimal(7,2) NOT NULL,
   `adv_date` date NOT NULL,
   `adv_details` varchar(100) NOT NULL,
   `adv_postedDate` date NOT NULL,
   `adv_maxguests` int(3) DEFAULT NULL,
   `adv_currentGuest` int(3) DEFAULT NULL,
-  `adv_itineraryImg` varchar(25) NOT NULL,
+  `adv_itineraryImg` varchar(50) NOT NULL,
   `adv_status` varchar(25) NOT NULL,
   `orga_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `adventure`
+--
+
+INSERT INTO `adventure` (`adv_id`, `adv_images`, `adv_name`, `adv_kind`, `adv_type`, `adv_address`, `adv_totalcostprice`, `adv_date`, `adv_details`, `adv_postedDate`, `adv_maxguests`, `adv_currentGuest`, `adv_itineraryImg`, `adv_status`, `orga_id`) VALUES
+(4, ',610a6ddb4b7d77.05444535.jpg,610a6ddb4bbd00.93179917.jpg,610a6ddb4bf4d5.75726548.jpg,610a6ddb4c2a81.44878891.jpg', 'Adventure Sample Name 1', 'Island Hopping', 'Packaged', 'Bantayan Island', '9000.00', '2021-08-18', 'Sample Details For This Specific Adventure', '2021-08-04', 10, NULL, '610a6ddb4accf4.33141146.jpg', '', 1),
+(5, ',610a6e35ba74c0.97995878.jpg,610a6e35baca15.67750987.jpg', 'Adventure Sample Name 2', 'Canyoneering', 'Not Packaged', 'Bantayan Island', '1200.00', '2021-08-19', 'Sample Details For This Specific Adventure', '2021-08-04', 1, NULL, '610a6e35ba32b1.85947545.jpg', '', 1),
+(6, ',610a6e7bad99c2.28812658.jpg,610a6e7badd352.95263461.jpg', 'Adventure Sample Name 3', 'Snorkeling', 'Not Packaged', 'Malapascua Island', '888.00', '2021-08-27', 'Sample Details For This Specific Adventure', '2021-08-04', 1, NULL, '610a6e7bad5d30.22130229.jpg', '', 1);
 
 -- --------------------------------------------------------
 
@@ -110,6 +122,13 @@ CREATE TABLE `joiner` (
   `joiner_password` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `joiner`
+--
+
+INSERT INTO `joiner` (`joiner_id`, `joiner_fname`, `joiner_lname`, `joiner_mi`, `joiner_address`, `joiner_phone`, `joiner_email`, `joiner_password`) VALUES
+(1, 'Melnar', 'Ancit', 'B', '', '', 'melnar.a@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0');
+
 -- --------------------------------------------------------
 
 --
@@ -129,7 +148,8 @@ CREATE TABLE `legal_document` (
 --
 
 INSERT INTO `legal_document` (`orga_id`, `docu_type`, `docu_description`, `docu_image`, `docu_dateadded`) VALUES
-(1, 'Docu Type2', 'No description being added!', '60ef029ee77b07.48886988.jpg', '2021-07-14');
+(1, 'Docu Type2', 'sample document info 2', '610504665c7d40.98140871.jpg', '2021-07-31'),
+(1, 'Docu Type4', 'Sample Documents', '610e15d7755132.76321047.jpg', '2021-08-07');
 
 -- --------------------------------------------------------
 
@@ -171,9 +191,10 @@ CREATE TABLE `organizer` (
 --
 
 INSERT INTO `organizer` (`orga_id`, `orga_company`, `orga_fname`, `orga_lname`, `orga_mi`, `orga_address`, `orga_phone`, `orga_email`, `orga_password`, `orga_verified`) VALUES
-(1, 'ABC Company', 'Nar', 'Ancit', 'B', 'Sitio Granada Quiot Pardo', '09345734757', 'narancit@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0', 1),
-(3, '', 'Merry Joy', 'Blanco', 'G', '', '', 'joyblanco@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0', 0),
-(4, '', 'John', 'Doe', 'A', '', '', 'johndoe@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0', 0);
+(1, 'ABCDEFG Company', 'Naaaaar', 'Ancit', 'B', 'Sitio Granada Quiot Pardo', '09345734757', 'narancit@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0', 1),
+(3, '', 'Joy', 'Blanco', 'G', '', '', 'joyblanco@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0', 0),
+(4, '', 'John', 'Doe', 'A', '', '', 'johndoe@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0', 0),
+(5, '', 'Johnney', 'Deep', 'S', '', '', 'johnneydeep@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0', 0);
 
 -- --------------------------------------------------------
 
@@ -274,11 +295,13 @@ CREATE TABLE `request` (
 --
 
 CREATE TABLE `voucher` (
-  `vouch_code` varchar(10) NOT NULL,
+  `vouch_code` varchar(25) NOT NULL,
+  `vouch_discount` int(11) NOT NULL,
   `vouch_name` varchar(25) NOT NULL,
   `vouch_startdate` date NOT NULL,
   `vouch_enddate` date NOT NULL,
   `vouch_minspent` decimal(7,2) NOT NULL,
+  `vouch_user` int(11) NOT NULL,
   `orga_id` int(11) NOT NULL,
   `adv_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -287,8 +310,9 @@ CREATE TABLE `voucher` (
 -- Dumping data for table `voucher`
 --
 
-INSERT INTO `voucher` (`vouch_code`, `vouch_name`, `vouch_startdate`, `vouch_enddate`, `vouch_minspent`, `orga_id`, `adv_id`) VALUES
-('1222', 'SampleName', '2021-07-15', '2021-07-17', '1000.00', 1, NULL);
+INSERT INTO `voucher` (`vouch_code`, `vouch_discount`, `vouch_name`, `vouch_startdate`, `vouch_enddate`, `vouch_minspent`, `vouch_user`, `orga_id`, `adv_id`) VALUES
+('6105117e8e5b22.86114507', 11, 'Updater Voucher 1', '2021-08-02', '2021-08-03', '700.00', 0, 1, NULL),
+('610bba08e12692.05886862', 10, 'Voucher 2', '2021-08-24', '2021-08-25', '500.00', 0, 1, NULL);
 
 --
 -- Indexes for dumped tables
@@ -420,7 +444,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `adventure`
 --
 ALTER TABLE `adventure`
-  MODIFY `adv_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `adv_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `booking`
@@ -432,7 +456,7 @@ ALTER TABLE `booking`
 -- AUTO_INCREMENT for table `joiner`
 --
 ALTER TABLE `joiner`
-  MODIFY `joiner_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `joiner_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `notification`
@@ -444,7 +468,7 @@ ALTER TABLE `notification`
 -- AUTO_INCREMENT for table `organizer`
 --
 ALTER TABLE `organizer`
-  MODIFY `orga_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `orga_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `payment`
