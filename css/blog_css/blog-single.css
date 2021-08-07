@@ -1,0 +1,90 @@
+/**Add these on style.css:**/
+
+/*** COMMENTS STYLE ***/
+.post {margin: 20px 0;  padding: 20px;  background: #F6F6F6;}
+.post h2 a {color: #8BC63F; text-decoration: none; }
+.post h2 a:hover {text-decoration: underline; opacity: 0.8;}
+.post img {max-width: 100%;}
+
+.entry-title{ margin-bottom: 15px;font-size: 25px; line-height: 115%; }
+.entry-meta{margin-bottom: 25px;font-style: italic;}
+.comment-reply-title{font-size: 20px;}
+
+#comments{margin: 15px 0px;}
+#comments-title, .avatar {display: none;}
+
+.commentlist {list-style: none; margin: 0px; padding: 0px;}
+.comment-meta a {font-size: 13px; text-decoration: none;}
+
+ol.commentlist {width:auto; max-width:100%; margin:0; padding: 0px;}
+ol.commentlist ul {border-top:1px solid #CCC; width:100%; margin-top:15px; list-style:none;}
+ol.commentlist ul li {border-bottom:1px dashed #CCC;margin: 15px auto; padding-bottom: 0;}
+.commentlist li{border: 1px dashed #ccc; padding: 20px; border-radius: 15px 15px 15px 0; margin-bottom: 20px;}
+.commentlist li:nth-child(even){border-radius: 15px 15px 0 15px;}
+.comment-notes {margin: 30px 0px;}
+.commentlist .fn {text-transform: capitalize;}
+#comment-1 .fn a {cursor: pointer; text-decoration: none; }
+
+.comment p {padding: 0; line-height:20px; margin: 15px auto;}
+.comment-form label { vertical-align:top; width:100%; display:block; margin-bottom: 15px;}
+
+.form-submit input {background:#369A3A; border:none; color:#fff; font-weight:bold; padding:7px 12px; cursor:pointer;}.comment-form input, .comment-form textarea
+.form-submit input:hover {opacity: 0.8;}
+.fn {font-style: normal; font-weight: bold; font-size: 20px;}
+.children li {border: none; background: none !important; padding-top: 15px !important;}
+.children li:before {content: "" !important;}
+.children li:last-child {border: none;}
+
+#respond {width: auto;  max-width: 100%;  padding: 20px;  margin-top: 10px;  background: rgba(255,255,255,.6);  box-shadow: 0 0 5px 0 rgba(55, 55, 55, 0.25);  border-radius: 5px;  border: none;}
+.comment-form-author, .comment-form-email{display: inline-block;vertical-align: top;width: 49.75%;}
+.comment-respond p { padding: 10px 0; line-height: 20px; margin: 0 !important; }
+.comment-form textarea{ min-height: 50px; }
+.comment-form input, .comment-form textarea { width:100%; padding: 5px; border: 1px solid #bbb; font-family: inherit; font-size: inherit; font-weight: inherit;  -webkit-border-radius:0;}
+.comment-form input:focus, .comment-form textarea:focus { border: 1px solid #666; }
+.comment-form input[type="submit"] {-webkit-border-radius:0; width:100%; background:#900ece; border:none; color:#fff; font-weight:bold; padding:7px 12px; cursor:pointer;}
+
+.pagination {text-align:right;}
+.pagination span, .pagination a { padding: 5px 10px 10px; background: #2f4695; display: inline-block; margin-right: 5px; color: #fff; font-weight: bold; }
+.pagination .current, .pagination a:hover { background:#1d2d63; color: #fff;}
+
+.alignnone, .aligncenter{ display: block; margin: 0 auto; }
+.alignleft{ float: left; margin-right: 10px; }
+.alignright{ float: right; margin-left: 10px; }
+
+#nav-below{margin-bottom: 20px;}
+.nav-previous, .nav-next{display: inline-block;  vertical-align: top;}
+.nav-previous a, .nav-next a{display: inline-block;  width: auto;  padding: 5px 15px;  background: #b2040a;  height: auto;  color: #fff;}
+.nav-previous a:hover, .nav-next a:hover{background: #00468b;text-decoration: none;color: #fff;}
+
+.entry-utility{ margin: 30px 0 0; }
+
+/*Presets*/
+
+main h2{font-size:30px; border-left:5px solid #c9ac02; padding-left:10px; font-weight:bold; color:#c9ac02;}
+main h3{font-size:27px; border-bottom:1px solid #c9ac02; padding-bottom:10px; margin-bottom:10px;}
+main ul {padding:0;margin-bottom: 15px;margin-top: 0;}
+main ul li{position:relative;padding-left: 25px;margin-bottom: 0}
+main ul li::before{position: absolute; content: ""; width: 8px; height: 8px; border-radius: 50%; left: 3px; top: 10px; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 10px solid #c9ac02;}
+
+
+/*para dili sikit kaayo ang word ug ang image before ma responsive ang website*/
+.g-recaptcha {transform: scale(0.75)!important;} 
+.required{color:red;}
+.nav-previous a, .nav-next a {margin-bottom:10px;}
+.nav-previous a .comp, .nav-next a .comp{color:#fff!important;}
+
+@media only screen and (max-width :1010px) {
+.entry-content img {float: none; margin: 0 auto 15px; display: block; }
+.entry-content div {float: none; margin: 0 auto 15px; display: block; }
+}
+
+@media only screen
+and (max-width : 900px) {
+.comment-form-author, .comment-form-email{width: 100%;}
+}
+
+@media only screen
+and (max-width : 600px) {
+.alignleft{ float: none; display: block; margin: 0 auto; }
+.alignright{ float: none; display: block; margin: 0 auto; }
+}
