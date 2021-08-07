@@ -101,7 +101,7 @@
 
 				<?php } else { ?>
 					<div class="form form1">
-						<input type="text" style="display:none;" required>
+						<input type="text" style="display:none;">
 						<input type="text" name="txtFirstname" value="<?php echo "{$_SESSION['fname']}"; ?>" placeholder="Firstname" required>
 						<input type="text" name="txtLastname" value="<?php echo "{$_SESSION['lname']}"; ?>" placeholder="Lastname" required>
 						<input type="text" name="txtMi" value="<?php echo "{$_SESSION['mi']}"; ?>" placeholder="Mi" maxlength="1" required>
