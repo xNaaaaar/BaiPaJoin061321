@@ -40,9 +40,12 @@
 		.sidebar ul li a{color:#454545;}
 		.sidebar ul li a:hover{color:#bf127a;}
 
-		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
+		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;position:relative;}
 		main h2{font:600 59px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h3{font:600 30px/100% Montserrat,sans-serif;color:#ff4444;margin-bottom:10px;text-align:center;}
+		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
+		main button:first-of-type{right:67px;}
+		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:142px;right:15px;z-index:5;font-size:20px;}
 
 		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 125px 30px 215px;line-height:35px;text-align:left;margin:25px auto;border:1px solid #cfcfcf;}
 		.card:hover{border:1px solid #bf127a;}
@@ -101,10 +104,24 @@
 			<main>
 				<form method="post" >
 					<h2>Posted Adventures</h2>
+					<input type="text" name="txtSearch" placeholder="Search any...">
+					<button type="submit" name="btnSearch"><i class="fas fa-search"></i></button>
+					<button type="submit" name="btnRestart"><i class="fas fa-undo-alt"></i></button>
 
 					<?php
 						// DISPLAY ALL ADVENTURE POSTED BY SPECIFIC ORGANIZER
-						displayAll(1);
+						if(isset($_POST['btnSearch'])){
+							$txtSearch = trim(ucwords($_POST['txtSearch']));
+
+							$card = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' AND orga_id = ?", array($_SESSION['organizer']), "READ");
+
+							displayAll(1, $card);
+						}
+						else if(isset($_POST['btnRestart'])){
+							displayAll(1);
+						}
+						else
+							displayAll(1);
 
 						// CHECK IF ORGANIZER IS VERIFIED TO POST ADVENTURE
 						if($_SESSION['verified'] == 1) echo "<a class='btn edit' href='adventures_added.php'>Post an Adventure</a>";
