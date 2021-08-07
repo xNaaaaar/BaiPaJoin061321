@@ -18,7 +18,7 @@
 	if(isset($_GET['added']) && $_GET['added'] == 1){
 		echo "<script>alert('Document successfully added!')</script>";
 	}
-	// IF DOCUMENT IS ADDED SUCCESSFULLY
+	// IF PASSWORD IS CHANGED SUCCESSFULLY
 	if(isset($_GET['changepass']) && $_GET['changepass'] == 1){
 		echo "<script>alert('Password successfully changed!')</script>";
 	}
