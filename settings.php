@@ -18,6 +18,10 @@
 	if(isset($_GET['added']) && $_GET['added'] == 1){
 		echo "<script>alert('Document successfully added!')</script>";
 	}
+	// IF DOCUMENT IS ADDED SUCCESSFULLY
+	if(isset($_GET['changepass']) && $_GET['changepass'] == 1){
+		echo "<script>alert('Password successfully changed!')</script>";
+	}
 
 ?>
 
@@ -124,7 +128,7 @@
 						<input type="email" value="<?php echo "{$_SESSION['email']}"; ?>" placeholder="Email Address" disabled>
 					</div>
 
-					<h2>Password <span><a href="#">Change Password</a></span></h2>
+					<h2>Password <span><a href="edit_password.php">Change Password</a></span></h2>
 					<div class="form form2">
 						<input type="password" name="" value="" placeholder="**********" disabled>
 					</div>
@@ -146,7 +150,7 @@
 						<input type="email" value="<?php echo "{$_SESSION['email']}"; ?>" placeholder="Email Address" disabled>
 					</div>
 
-					<h2>Password <span><a href="#">Change Password</a></span></h2>
+					<h2>Password <span><a href="edit_password.php">Change Password</a></span></h2>
 					<div class="form form2">
 						<input type="password" name="" value="" placeholder="**********" disabled>
 					</div>
