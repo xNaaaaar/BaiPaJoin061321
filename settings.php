@@ -45,13 +45,15 @@
 		.sidebar ul li i{width:40px;position:relative;}
 		.sidebar ul li i:before{position:absolute;top:-25px;left:50%;transform:translateX(-50%);}
 		.sidebar ul li:last-child{margin:auto 0;}
-		.sidebar ul li a{color:#454545;}
+		.sidebar ul li a{color:#454545;position:relative;}
+		.sidebar ul li a small{color:#fff;font-size:15px;position:absolute;top:0;right:-20px;background:#bf127a;height:25px;width:25px;text-align:center;border-radius:50px;line-height:25px;}
 		.sidebar ul li a:hover{color:#bf127a;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
 		main h2{font:600 59px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h3{font:600 30px/100% Montserrat,sans-serif;color:#ff4444;margin-bottom:10px;text-align:left;}
 		main h2 span{font-size:25px;}
+		main h2 .legal{font-size:30px;}
 		main h2 span a:hover{color:#313131;text-decoration:none;}
 		main .form{display:flex;justify-content:center;flex-wrap:wrap;margin-bottom:40px;position:relative;}
 		main .form input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 30px;margin:15px auto;}
@@ -115,7 +117,7 @@
 
 			<main>
 				<form method="post">
-					<h2>Profile <span><a href="edit_profile.php">Update</a></span></h2>
+					<h2>Profile <span><a href="edit_profile.php"><i class='fas fa-edit'></i></a></span></h2>
 
 					<?php if(isset($_SESSION['organizer'])){ ?>
 					<div class="form form1">
@@ -128,12 +130,12 @@
 						<input type="email" value="<?php echo "{$_SESSION['email']}"; ?>" placeholder="Email Address" disabled>
 					</div>
 
-					<h2>Password <span><a href="edit_password.php">Change Password</a></span></h2>
+					<h2>Password <span><a href="edit_password.php"><i class='fas fa-edit'></i></a></span></h2>
 					<div class="form form2">
 						<input type="password" name="" value="" placeholder="**********" disabled>
 					</div>
 
-					<h2>Legal Documents <span><a href="add_docu.php">Add Legal Documents</a></span></h2>
+					<h2>Legal Documents <span class="legal" ><a href="add_docu.php"><i class='fas fa-plus-circle'></i></a></span></h2>
 
 					<!-- DISPLAY ALL LEGAL DOCUMENT ADDED -->
 					<?php displayAll(0);
@@ -150,7 +152,7 @@
 						<input type="email" value="<?php echo "{$_SESSION['email']}"; ?>" placeholder="Email Address" disabled>
 					</div>
 
-					<h2>Password <span><a href="edit_password.php">Change Password</a></span></h2>
+					<h2>Password <span><a href="edit_password.php"><i class='fas fa-edit'></i></a></span></h2>
 					<div class="form form2">
 						<input type="password" name="" value="" placeholder="**********" disabled>
 					</div>
