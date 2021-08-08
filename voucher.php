@@ -36,17 +36,23 @@
 		.sidebar ul li i{width:40px;position:relative;}
 		.sidebar ul li i:before{position:absolute;top:-25px;left:50%;transform:translateX(-50%);}
 		.sidebar ul li:last-child{margin:auto 0;}
-		.sidebar ul li a{color:#454545;}
+		.sidebar ul li a{color:#454545;position:relative;}
+		.sidebar ul li a small{color:#fff;font-size:15px;position:absolute;top:0;right:-20px;background:#bf127a;height:25px;width:25px;text-align:center;border-radius:50px;line-height:25px;}
 		.sidebar ul li a:hover{color:#bf127a;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
 		main h2{font:600 59px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+		main h2 span{font-size:30px;}
+		main h2 span a:hover{color:#313131;text-decoration:none;}
 		main h3{font:600 30px/100% Montserrat,sans-serif;color:#ff4444;margin-bottom:10px;text-align:center;}
+		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
+		main button:first-of-type{right:67px;}
+		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:152px;right:15px;z-index:5;font-size:20px;}
 
 		.card-div{display:flex;justify-content:center;flex-wrap:wrap;}
 		.card{width:48%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 100px 30px 200px;line-height:35px;text-align:left;margin:25px auto 0;border:1px solid #cfcfcf;overflow:hidden;}
 		.card:before{content:'';width:1px;height:85%;border:none;border-left:5px dotted #cfcfcf;position:absolute;top:50%;left:34%;transform:translateY(-50%);}
-		.card:hover{border:1px solid #bf127a;}
+		.card:hover{border:1px solid #bf127a;margin:20px auto 0;}
 		.card:hover:before{border-left:5px dotted #bf127a;}
 		.card .expired{width:65%;height:100%;top:-5px;left:50%;transform:translateX(-50%);z-index:5;}
 		.card figure{width:135px;height:135px;position:absolute;top:30px;left:20px;}
@@ -62,8 +68,8 @@
 		.card p:last-of-type{color:#111;font-size:25px;font-weight:500;margin:0 0 0 2px;}
 		.card p q{display:block;}
 
-		main .btn{display:inline-block;width:249px;height:60px;background:#bf127a;border-radius:50px;color:#fff;margin:40px 5px;text-align:center;font:normal 20px/59px Montserrat,sans-serif;}
-		main .btn:hover{background:#8c0047;text-decoration:none;color:#fff;}
+		/* main .btn{display:inline-block;width:249px;height:60px;background:#bf127a;border-radius:50px;color:#fff;margin:40px 5px;text-align:center;font:normal 20px/59px Montserrat,sans-serif;}
+		main .btn:hover{background:#8c0047;text-decoration:none;color:#fff;} */
 
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
@@ -104,22 +110,36 @@
 
 			<main>
 				<form method="post" >
-					<h2>Vouchers</h2>
+					<h2>Vouchers <span>
+						<?php
+							// CHECK IF ORGANIZER IS VERIFIED TO ADD VOUCHER
+							if($_SESSION['verified'] == 1)
+								echo "<a class='btn edit' href='add_voucher.php'><i class='fas fa-plus-circle'></i></a>";
+							else
+								echo "<a class='btn edit disable' style='background:#313131;'><i class='fas fa-plus-circle'></i></a>";
+						?>
+					</span> </h2>
+					<input type="text" name="txtSearch" placeholder="Search any...">
+					<button type="submit" name="btnSearch"><i class="fas fa-search"></i></button>
+					<button type="submit" name="btnRestart"><i class="fas fa-undo-alt"></i></button>
 
 					<div class="card-div">
 						<?php
 						// DISPLAY ALL VOUCHER ADDED BY SPECIFIC ORGANIZER
-						displayAll(2);
+						if(isset($_POST['btnSearch'])){
+							$txtSearch = trim(ucwords($_POST['txtSearch']));
+
+							$card = DB::query("SELECT * FROM voucher WHERE vouch_discount LIKE '%{$txtSearch}%' || vouch_name LIKE '%{$txtSearch}%' || vouch_startdate LIKE '%{$txtSearch}%' || vouch_enddate LIKE '%{$txtSearch}%' || vouch_minspent LIKE '%{$txtSearch}%' AND orga_id = ?", array($_SESSION['organizer']), "READ");
+
+							displayAll(2, $card);
+						}
+						else if(isset($_POST['btnRestart'])){
+							displayAll(2);
+						}
+						else
+							displayAll(2);
 						?>
 					</div>
-
-
-					<?php
-						// CHECK IF ORGANIZER IS VERIFIED TO ADD VOUCHER
-						if($_SESSION['verified'] == 1) echo "<a class='btn edit' href='add_voucher.php'>Add Voucher</a>";
-						else echo "<a class='btn edit disable' style='background:#313131;'>Add Voucher</a>";
-					?>
-
 				</form>
 
 
