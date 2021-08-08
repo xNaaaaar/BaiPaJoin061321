@@ -355,6 +355,7 @@ function displayAll($num, $query = NULL){
 	// FOR VOUCHER ADDED DISPLAYING CARDS
 	else if($num === 2){
 		$card = DB::query("SELECT * FROM voucher WHERE orga_id = ?", array($_SESSION['organizer']), "READ");
+		if($query != NULL) $card = $query;
 
 		if(count($card)>0){
 			foreach($card as $result){
