@@ -63,7 +63,7 @@
 			}
 		?>
 		<li class="<?php if($currentSidebarPage == 'voucher') echo 'current_sidebar'; ?>"><a href="voucher.php"><i class="fas fa-tags"></i> <q>Voucher</q></a></li>
-		<li class="<?php if($currentSidebarPage == 'notifications') echo 'current_sidebar'; ?>"><a href=""><i class="fas fa-bell"></i> <q>Notification</q></a></li>
+		<li class="<?php if($currentSidebarPage == 'notifications') echo 'current_sidebar'; ?>"><a href=""><i class="fas fa-bell"></i> <q>Notify Me</q> <small>10</small> </a></li>
 		<li class="<?php if($currentSidebarPage == 'reports') echo 'current_sidebar'; ?>"><a href=""><i class="fas fa-sticky-note"></i> <q>Reports</q></a></li>
 		<li><a href="logout.php" onclick="return confirm('Are you sure you want to logout?');"><i class="fas fa-sign-out-alt"></i> <q>Logout</q></a></li>
 	</ul>
