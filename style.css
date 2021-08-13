@@ -247,6 +247,13 @@ header{}
   .forgotpass main form a:last-of-type{width:170px;height:30px;margin:0;display:block;background:none;color:#fff;text-align:center;border-radius:0;border:none;font:600 20px/20px Montserrat,sans-serif;position:absolute;bottom:30px;left:53px;color:#fff;}
   .forgotpass main form a:last-of-type:hover{background:none;text-decoration:underline;}
 
+  /*CAROUSEL @place.php ffac33 */
+  .carousel-cell{--height:400px;width:100%;height:var(--height);margin-right:10px;border-radius:5px;}
+  .flickity-prev-next-button.previous{left:150px !important;}
+  .flickity-prev-next-button.next{right:150px !important;}
+  .place_title{width:100%;}
+
+
 /*end main*/
 
 /*bottom*/

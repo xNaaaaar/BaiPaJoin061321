@@ -105,6 +105,7 @@
   <script src="js/jquery.skitter.min.js"></script>
   <script src="js/responsiveslides.min.js"></script>
   <script src="js/plugins.js"></script>
+	<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
   <!--?php wp_footer(); ?-->
 
 	<script type="text/javascript">
