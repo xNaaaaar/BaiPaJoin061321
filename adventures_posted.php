@@ -110,9 +110,9 @@
 						<?php
 						// CHECK IF ORGANIZER IS VERIFIED TO POST ADVENTURE
 						if($_SESSION['verified'] == 1)
-							echo "<a class='btn edit' href='adventures_added.php'><i class='fas fa-plus-circle'></i></a>";
+							echo "<a class='btn' href='adventures_added.php'><i class='fas fa-plus-circle'></i></a>";
 						else
-							echo "<a class='btn edit disable' style='background:#313131;'><i class='fas fa-plus-circle'></i></a>";
+							echo "<a class='btn disable' style='background:#313131;'><i class='fas fa-plus-circle'></i></a>";
 						?>
 					</span></h2>
 					<input type="text" name="txtSearch" placeholder="Search any...">
