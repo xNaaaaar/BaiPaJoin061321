@@ -45,14 +45,13 @@
 				<div class="place_title">
 					<h1>Santa Fe</h1>
 					<ul class="title_info1">
-						<li>5 <i class="fas fa-star"></i></li>
-						<li><q>(25 reviews)</q></li>
+						<li>5 <i class="fas fa-star"></i> <q>(25 reviews)</q></li>
 						<li><i class="fas fa-map-marker-alt"></i> <address>Santa Fe, Cebu</address></li>
 					</ul>
-					<ul class="title_info2">
+					<!-- <ul class="title_info2">
 						<li><i class="fas fa-share-square"></i> Share</li>
 						<li><i class="fas fa-heart"></i> Save</li>
-					</ul>
+					</ul> -->
 				</div>
 				<!--  -->
 				<div class="carousel" data-flickity>
@@ -72,57 +71,53 @@
 				<!--  -->
 				<div class="place_info">
 					<div class="main_info">
-						<ul class="info">
-							<li>
-								<h2>Overview</h2>
-								<p>You are reading dummy text as placeholders for this layout. Dummy text for the reader to review. Words shown on this layout are placeholders. More information about the company will be posted soon. Contents are for display purposes only. This space is reserved for more details.You are reading dummy text as placeholders for this layout. Dummy text for the reader to review. Words shown on this layout are placeholders. More information about the company will be posted soon. Contents are for display purposes only.  This space is reserved for more details.</p>
-							</li>
-							<li>
-								<h2>Property Amenities</h2>
-								<ul>
-									<li><i class="fas fa-water"></i> Beaching</li>
-									<li><i class="fas fa-wine-bottle"></i> Kayaking</li>
-								</ul>
-							</li>
-							<li>
-								<h2>Room Features</h2>
-								<ul>
-									<li><i class="fas fa-person-booth"></i> Private Balcony</li>
-									<li><i class="fas fa-wind"></i> Air Conditioning</li>
-									<li><i class="fas fa-tv"></i> Flatscreen TV</li>
-								</ul>
-							</li>
-						</ul>
+						<h2>Overview</h2>
+						<p>You are reading dummy text as placeholders for this layout. Dummy text for the reader to review. Words shown on this layout are placeholders. More information about the company will be posted soon. Contents are for display purposes only. This space is reserved for more details.You are reading dummy text as placeholders for this layout. Dummy text for the reader to review. Words shown on this layout are placeholders. More information about the company will be posted soon. Contents are for display purposes only.  This space is reserved for more details.</p>
 					</div>
 					<div class="book_info">
-						<div>
-							<ul>
-								<li>₱3,000/person</li>
-								<li>5 <i class="fas fa-star"></i> <q>(25 reviews)</q></li>
-							</ul>
-						</div>
-						<form>
-							<input type="text" name="" placeholder="Check-In" onfocus="(this.type='date')">
-							<input type="text" name="" placeholder="Check-Out" onfocus="(this.type='date')">
-							<select>
-								<option>No. of Guests</option>
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-							</select>
-							<button>Book</button>
-							<button>Lend</button>
-						</form>
+						<h2>On Aug. 25, 2021 <span>₱3,000/guest</span> </h2>
+						<a class="edit" href="#">Book</a>
+						<a class="edit" href="#">Lend</a>
 					</div>
 				</div>
 				<!--  -->
-				<div class="place_location">
-					<h1>Location</h1>
-					<div class="loc_map">
-						<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125221.35542696604!2d123.7606403408645!3d11.249096259254607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a87d5fc950c8fb%3A0x9dbab0f8f9885ad1!2sSanta%20Fe%2C%20Cebu!5e0!3m2!1sen!2sph!4v1616413480817!5m2!1sen!2sph" allowfullscreen="" loading="lazy"></iframe>
+				<div class="place_reviews">
+					<h2>Reviews</h2>
+					<div class="review_cards">
+						<div class="card">
+							<i class="fas fa-quote-left"></i>
+							<p>You are reading dummy text as placeholders for this layout. Dummy text for the reader to review. Words shown on this layout are placeholders. More information about the company will be posted soon. Contents are for display purposes only.</p>
+							<h3>Melnar Ancit <span>rated 4 <i class="fas fa-star"></i></span></h3>
+						</div>
+						<div class="card">
+							<i class="fas fa-quote-left"></i>
+							<p>You are reading dummy text as placeholders for this layout. Dummy text for the reader to review. Words shown on this layout are placeholders. </p>
+							<h3>Joy Blanco <span>rated 3 <i class="fas fa-star"></i></span></h3>
+						</div>
+						<div class="card">
+							<i class="fas fa-quote-left"></i>
+							<p>You are reading dummy text as placeholders for this layout. Dummy text for the reader to review. Words shown on this layout are placeholders. More information about the company will be posted soon. Contents are for display purposes only. This space is reserved for more details.</p>
+							<h3>John Doe <span>rated 4 <i class="fas fa-star"></i></span></h3>
+						</div>
 					</div>
+				</div>
+				<!--  -->
+				<div class="place_ratings">
+					<h2>Ratings</h2>
+					<form method="post">
+						<div class="rating">
+							<input type="radio" id="star5" name="star" value="5" required><label for="star5"></label>
+							<input type="radio" id="star4" name="star" value="4" required><label for="star4"></label>
+							<input type="radio" id="star3" name="star" value="3" required><label for="star3"></label>
+							<input type="radio" id="star2" name="star" value="2" required><label for="star2"></label>
+							<input type="radio" id="star1" name="star" value="1" required><label for="star1"></label>
+						</div>
+						<div class="feedback">
+							<textarea name="txtFeedback" placeholder="Feedback (Optional)"></textarea>
+							<button class="edit" type="submit" name="btnRate">Rate</button>
+							<a class="edit" href="adventures.php">Back</a>
+						</div>
+					</form>
 				</div>
 			</main>
 		</div>
