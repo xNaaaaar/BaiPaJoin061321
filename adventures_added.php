@@ -114,8 +114,7 @@
 							<option value="Snorkeling">Snorkeling</option>
 							<option value="Canyoneering">Canyoneering</option>
 							<option value="Biking">Biking</option>
-							<option value="Scuba Diving">Scuba Diving</option>
-							<option value="Free Diving">Free Diving</option>
+							<option value="Diving">Diving</option>
 							<option value="Jetski">Jetski</option>
 							<option value="Banana Boat">Banana Boat</option>
 						</select>

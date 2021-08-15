@@ -24,10 +24,11 @@
 		.sidebar p{margin-bottom:35px;}
 		.sidebar p q{color:#00c851;}
 		.sidebar ul{display:flex;height:100%;flex-direction:column;justify-content:space-between;font:600 20px/100% Montserrat,sans-serif;list-style:none;}
-		.sidebar .places li input, .sidebar .adventures li input{width:20px;height:20px;}
+		.sidebar .places li input, .sidebar .activites li input{width:20px;height:20px;}
 		.sidebar .prices li input{width:90%;height:30px;font-size:18px;}
 		.sidebar ul h3{font-size:25px;margin-top:15px;}
 		.sidebar ul li{line-height:35px;}
+		.sidebar ul li label{font-weight:400;}
 		.sidebar button{display:inline-block;width:200px;height:50px;background:#bf127a;border-radius:50px;color:#fff;margin:15px 5px;text-align:center;font:normal 20px/45px Montserrat,sans-serif;border:none;}
 		.sidebar button:hover{background:#8c0047;}
 
@@ -75,28 +76,46 @@
 		<div class="main_con">
 			<form method="post">
 			<aside class="sidebar">
-				<h2>Melnar Ancit <i class="fas fa-check-circle"></i> </h2>
-				<!-- <i class="fas fa-undo"></i> <i class="fas fa-times-circle"></i> -->
-				<p>Status: <q>Verified</q></p>
+				<?php
+				if($_SESSION['current_user'] == 'Joiner') {
+					currentJoiner($_SESSION['joiner']);
+					//
+					echo "<h2> {$_SESSION['fname']} {$_SESSION['lname']} </h2>
+					<p>User Type: Joiner</p>";
+				}
+				else {
+					echo "<h2>Welcome guests!</h2>";
+				}
+				?>
 
 				<div class="filters">
 					<ul class="places">
 						<li><h3>Places</h3></li>
-						<li><input type="checkbox" name="places" value="Bantayan"> Bantayan</li>
-						<li><input type="checkbox" name="places" value="Malapascua"> Malapascua</li>
-						<li><input type="checkbox" name="places" value="Camotes"> Camotes</li>
-						<li><input type="checkbox" name="places" value="Camotes"> Moalboal</li>
-						<li><input type="checkbox" name="places" value="Camotes"> Badian</li>
-						<li><input type="checkbox" name="places" value="Camotes"> Oslob</li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Bantayan Island" <?php checkPlaces("Bantayan Island"); ?>> <label for="">Bantayan Island</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Malapascua Island" <?php checkPlaces("Malapascua Island"); ?>> <label for="">Malapascua Island</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Camotes Island" <?php checkPlaces("Camotes Island"); ?>> <label for="">Camotes Island</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Moalboal" <?php checkPlaces("Moalboal"); ?>> <label for="">Moalboal</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Badian" <?php checkPlaces("Badian"); ?>> <label for="">Badian</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Oslob" <?php checkPlaces("Oslob"); ?>> <label for="">Oslob</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Alcoy" <?php checkPlaces("Alcoy"); ?>> <label for="">Alcoy</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Aloginsan" <?php checkPlaces("Aloginsan"); ?>> <label for="">Aloginsan</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Santander" <?php checkPlaces("Santander"); ?>> <label for="">Santander</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Alegria" <?php checkPlaces("Alegria"); ?>> <label for="">Alegria</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Dalaguete" <?php checkPlaces("Dalaguete"); ?>> <label for="">Dalaguete</label></li>
 					</ul>
-					<ul class="adventures">
-						<li><h3>Adventures</h3></li>
-						<li><input type="checkbox" name="places" value="Bantayan"> Swimming</li>
-						<li><input type="checkbox" name="places" value="Malapascua"> Camping</li>
-						<li><input type="checkbox" name="places" value="Camotes"> Island Hopping</li>
-						<li><input type="checkbox" name="places" value="Camotes"> Mountain Hiking</li>
-						<li><input type="checkbox" name="places" value="Camotes"> Snorkeling</li>
-						<li><input type="checkbox" name="places" value="Camotes"> Canyoneering</li>
+					<ul class="activites">
+						<li><h3>Activities</h3></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Packaged" <?php checkActivities("Packaged") ?>> <label for="">Packaged</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Swimming" <?php checkActivities("Swimming") ?>> <label for="">Swimming</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Camping" <?php checkActivities("Camping") ?>> <label for="">Camping</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Island Hopping" <?php checkActivities("Island Hopping") ?>> <label for="">Island Hopping</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Mountain Hiking" <?php checkActivities("Mountain Hiking") ?>> <label for="">Mountain Hiking</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Snorkeling" <?php checkActivities("Snorkeling") ?>> <label for="">Snorkeling</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Canyoneering" <?php checkActivities("Canyoneering") ?>> <label for="">Canyoneering</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Biking" <?php checkActivities("Biking") ?>> <label for="">Biking</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Diving" <?php checkActivities("Diving") ?>> <label for="">Diving</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Jetski" <?php checkActivities("Jetski") ?>> <label for="">Jetski</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Banana Boat" <?php checkActivities("Banana Boat") ?>> <label for="">Banana Boat</label></li>
 					</ul>
 					<ul class="prices">
 						<li><h3>Prices</h3></li>

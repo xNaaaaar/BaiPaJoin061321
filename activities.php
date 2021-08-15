@@ -1,6 +1,11 @@
 <?php
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
+
+	if(isset($_POST['places'])){
+		$_SESSION['places'] = $_POST['places'];
+	}
+
 ?>
 
 <!-- Head -->
@@ -37,22 +42,22 @@
 				  <a href="index.php"><figure><img src="images/main-logo.png" alt="<?php //echo get_bloginfo('name');?>"/></figure></a>
 				</div>
 
-				<form method="post" action="activities.php">
-					<h2>Places in Cebu you want to visit? <span>Check all that applies:</span> </h2>
+				<form method="post" action="adventures.php">
+					<h2>Activities you're looking forward to? <span>Check all that applies:</span> </h2>
 					<ul>
-						<li><input class="checkboxes" type="checkbox" name="places[]" required value="Bantayan Island"> <label for="">Bantayan Island</label></li>
-						<li><input class="checkboxes" type="checkbox" name="places[]" required value="Malapascua Island"> <label for="">Malapascua Island</label></li>
-						<li><input class="checkboxes" type="checkbox" name="places[]" required value="Camotes Island"> <label for="">Camotes Island</label></li>
-						<li><input class="checkboxes" type="checkbox" name="places[]" required value="Moalboal"> <label for="">Moalboal</label></li>
-						<li><input class="checkboxes" type="checkbox" name="places[]" required value="Badian"> <label for="">Badian</label></li>
-						<li><input class="checkboxes" type="checkbox" name="places[]" required value="Oslob"> <label for="">Oslob</label></li>
-						<li><input class="checkboxes" type="checkbox" name="places[]" required value="Alcoy"> <label for="">Alcoy</label></li>
-						<li><input class="checkboxes" type="checkbox" name="places[]" required value="Aloginsan"> <label for="">Aloginsan</label></li>
-						<li><input class="checkboxes" type="checkbox" name="places[]" required value="Santander"> <label for="">Santander</label></li>
-						<li><input class="checkboxes" type="checkbox" name="places[]" required value="Alegria"> <label for="">Alegria</label></li>
-						<li><input class="checkboxes" type="checkbox" name="places[]" required value="Dalaguete"> <label for="">Dalaguete</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Packaged"> <label for="">Packaged</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Swimming"> <label for="">Swimming</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Camping"> <label for="">Camping</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Island Hopping"> <label for="">Island Hopping</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Mountain Hiking"> <label for="">Mountain Hiking</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Snorkeling"> <label for="">Snorkeling</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Canyoneering"> <label for="">Canyoneering</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Biking"> <label for="">Biking</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Diving"> <label for="">Diving</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Jetski"> <label for="">Jetski</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Banana Boat"> <label for="">Banana Boat</label></li>
 					</ul>
-					<button type="submit" name="btnNext">Next &#187;</button>
+					<button type="submit" name="btnSearch">Search &#187;</button>
 				</form>
 			</main>
 		</div>
@@ -86,7 +91,7 @@
   <script src="js/responsiveslides.min.js"></script>
   <script src="js/plugins.js"></script>
   <!--?php wp_footer(); ?-->
-	
+
 	<script type="text/javascript">
 		$(document).ready(function(){
 			var checkboxes = $('.checkboxes');

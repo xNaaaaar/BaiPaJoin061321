@@ -16,7 +16,7 @@
 			<div class="bnr_info">
 				<h2 class="wow fadeInLeft" data-wow-duration="1s">Search an Adventures <span>in CEBU</span></h2>
 				<p class="wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">We are using these temporary contents on the website  These dummy texts are for display purposes only.</p>
-				<a href="javascript:;" class="wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".6s">Search Now &#187;</a>
+				<a href="islands.php" class="wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".6s">Search Now &#187;</a>
 			</div>
 
 		</div>
