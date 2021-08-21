@@ -57,7 +57,7 @@
 						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Jetski"> <label for="">Jetski</label></li>
 						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Banana Boat"> <label for="">Banana Boat</label></li>
 					</ul>
-					<button type="submit" name="btnSearch">Search &#187;</button>
+					<button type="submit" name="btnSearchIt">Search &#187;</button>
 				</form>
 			</main>
 		</div>

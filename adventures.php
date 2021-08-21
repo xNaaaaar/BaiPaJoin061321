@@ -129,7 +129,7 @@
 						<li><input type="number" name="" placeholder="Minimum price"></li>
 						<li><input type="number" name="" placeholder="Maximum price"></li>
 					</ul>
-					<button type="button" name="button">Save Changes</button>
+					<button type="button" name="btnSave">Save Changes</button>
 				</div>
 				</form>
 			</aside>
