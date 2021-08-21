@@ -13,7 +13,7 @@
 		.main_logo{position:static;margin-left:10px;}
 
 		/* Main Area */
-		.main_con form{display:flex;justify-content:space-between;}
+		.main_con{display:flex;justify-content:space-between;}
 
 		.sidebar{flex:1;min-height:529px;padding:30px 30px 30px 0;position:relative;}
 		.sidebar:before{content:'';width:2px;height:50%;background:#cdcdcd;position:absolute;top:50%;right:0;transform:translateY(-50%);}
@@ -32,17 +32,24 @@
 		.sidebar button{display:inline-block;width:200px;height:50px;background:#bf127a;border-radius:50px;color:#fff;margin:15px 5px;text-align:center;font:normal 20px/45px Montserrat,sans-serif;border:none;}
 		.sidebar button:hover{background:#8c0047;}
 
-		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
+		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;position:relative;}
 		main h2{font:600 59px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+		main h2 span{font-size:30px;}
+		main h2 span a:hover{color:#313131;text-decoration:none;}
+		main h3{font:600 30px/100% Montserrat,sans-serif;color:#ff4444;margin-bottom:10px;text-align:center;}
+		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
+		main button:first-of-type{right:67px;}
+		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:142px;right:15px;z-index:5;font-size:20px;}
 
+		.card-link{text-decoration:none !important;}
 		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 125px 30px 215px;line-height:35px;text-align:left;margin:25px auto;border:1px solid #cfcfcf;}
 		.card:hover{border:1px solid #bf127a;}
-		.card a{color:#313131}
-		.card a:hover{color:#313131;text-decoration:none;}
-		.card figure{width:165px;height:165px;position:absolute;top:30px;left:30px;border:1px solid #1a1a1a;}
-		.card figure img{width:100%;}
-		.card small{position:absolute;top:20px;right:20px;font-size:35px;}
-		.card small:hover{cursor:pointer;color:#bf127a;}
+		.card figure{width:165px;height:165px;position:absolute;top:30px;left:30px;border:1px solid #cfcfcf;}
+		.card figure img{width:100%;height:100%;}
+		.card ul{position:absolute;top:20px;right:20px;font-size:30px;}
+		.card ul li{display:inline-block;margin:0;}
+		.card ul li a{color:#313131;}
+		.card ul li a:hover{color:#bf127a;}
 		.card h2{font:600 35px/100% Montserrat,sans-serif;color:#313131;margin-bottom:15px;}
 		.card h2 span{display:block;font-size:18px;color:gray;}
 		.card h2 span i{color:#ffac33;}
@@ -74,8 +81,8 @@
 			<a href="index.php">Home</a> &#187; Adventures
 		</div>
 		<div class="main_con">
-			<form method="post">
 			<aside class="sidebar">
+				<form method="post">
 				<?php
 				if($_SESSION['current_user'] == 'Joiner') {
 					currentJoiner($_SESSION['joiner']);
@@ -124,49 +131,35 @@
 					</ul>
 					<button type="button" name="button">Save Changes</button>
 				</div>
-
+				</form>
 			</aside>
 
+
 			<main>
+				<form method="post" >
 					<h2>Adventures</h2>
+					<input type="text" name="txtSearch" placeholder="Search any...">
+					<button type="submit" name="btnSearch"><i class="fas fa-search"></i></button>
+					<button type="submit" name="btnRestart"><i class="fas fa-undo-alt"></i></button>
 
-					<div class="card">
-						<a href="#">
-							<figure>
-								<img src="" alt="image">
-							</figure>
-							<small><i class="fas fa-bookmark"></i></small>
-							<h2>Coastal Rock Resort - Swimming <span>5 <i class="fas fa-star"></i> (25 reviews) - 10 guests remaining</span> </h2>
-							<p>Alcoy, Cebu</p>
-							<p>₱ 1380 / guest</p>
-						</a>
-					</div>
+					<?php
+						// DISPLAY ALL ADVENTURE
+						if(isset($_POST['btnSearch'])){
+							$txtSearch = trim(ucwords($_POST['txtSearch']));
 
-					<div class="card">
-						<a href="#">
-							<figure>
-								<img src="" alt="image">
-							</figure>
-							<small><i class="fas fa-bookmark"></i></small>
-							<h2>Coastal Rock Resort - Swimming <span>5 <i class="fas fa-star"></i> (25 reviews) - 10 guests remaining</span> </h2>
-							<p>Alcoy, Cebu</p>
-							<p>₱ 1380 / guest</p>
-						</a>
-					</div>
+							$card = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%'", array(), "READ");
 
-					<div class="card">
-						<a href="#">
-							<figure>
-								<img src="" alt="image">
-							</figure>
-							<small><i class="fas fa-bookmark"></i></small>
-							<h2>Coastal Rock Resort - Swimming <span>5 <i class="fas fa-star"></i> (25 reviews) - 10 guests remaining</span> </h2>
-							<p>Alcoy, Cebu</p>
-							<p>₱ 1380 / guest</p>
-						</a>
-					</div>
+							displayAll(99, $card);
+						}
+						else if(isset($_POST['btnRestart'])){
+							displayAll(99);
+						}
+						else
+							displayAll(99);
+					?>
+
+				</form>
 			</main>
-			</form>
 		</div>
 
 	<div class="clearfix"></div>

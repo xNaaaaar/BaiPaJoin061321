@@ -339,7 +339,7 @@ function displayAll($num, $query = NULL){
 					</figure>
 					<h2>".$result['adv_name']." - ".$result['adv_kind']." <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
 					<p>".$result['adv_address']."</p>
-					<p>₱ ".$price." / guest</p>
+					<p>₱ ".number_format((float)$price, 2, '.', '')." / guest</p>
 					<ul class='icons'>
 						<li><a href='edit_adv.php?id=".$result['adv_id']."'><i class='fas fa-edit'></i></a></li>
 						<li><a href='delete.php?table=adventure&id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to delete this adventure?\");'><i class='far fa-trash-alt'></i></a></li>
@@ -390,9 +390,52 @@ function displayAll($num, $query = NULL){
 			echo "<h3>No added voucher yet...</h3>";
 		}
 	}
-	// ELSE TO IFS
+	// ELSE TO IFS AND DISPLAY ALL ADVENTURES
 	else {
+		$card = DB::query("SELECT * FROM adventure", array(), "READ");
+		if($query != NULL) $card = $query;
 
+		if(count($card)>0){
+			foreach($card as $result){
+				$remainingGuestsText = "";
+				$images = $result['adv_images'];
+				$image = explode(",", $images);
+
+				// RANDOM IMAGE DISPLAY
+				$totalImagesNum = count($image) - 1;
+				$displayImage = rand(1,$totalImagesNum);
+
+				// PRICE PER PERSON
+				$price = $result['adv_totalcostprice'] / $result['adv_maxguests'];
+
+				// REMAINING GUEST
+				$numRemainingGuests = $result['adv_maxguests'] - $result['adv_currentGuest'];
+
+				// REMAINING GUEST IN TEXT
+				if($result['adv_type'] == 'Packaged')
+					$remainingGuestsText = "- ".$numRemainingGuests." guests remaining";
+
+				echo "
+				<a class='card-link' href='place.php?id=".$result['adv_id']."'>
+				<div class='card'>
+					<figure>
+						<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt='image'>
+					</figure>
+					<h2>".$result['adv_name']." - ".$result['adv_kind']." <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
+					<p>".$result['adv_address']."</p>
+					<p>₱ ".number_format((float)$price, 2, '.', '')." / guest</p>
+					<ul class='icons'>
+						<li><a href='#'><i class='fas fa-book'></i></a></li>
+						<li><a href='#' onclick='return confirm(\"Add adventure to favorites?\");'><i class='fas fa-bookmark'></i></a></li>
+					</ul>
+				</div>
+				</a>
+				";
+			}
+		}
+		else {
+			echo "<h3>Adventure does not exist...</h3>";
+		}
 	}
 
 }

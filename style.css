@@ -251,7 +251,7 @@ header{}
   .forgotpass main form a:last-of-type:hover{background:none;text-decoration:underline;}
 
   /*CAROUSEL @place.php ffac33 */
-  .carousel-cell{--height:400px;width:100%;height:var(--height);margin-right:10px;}
+  .carousel-cell{--height:500px;width:100%;height:var(--height);margin-right:10px;}
   .carousel-cell img{width:100%;}
   .fa-star{color:#ffac33;}
 
@@ -267,10 +267,10 @@ header{}
   .main_info{width:65%;padding-right:50px;}
   .main_info p{width:100% !important;text-align:left;font:400 20px/35px Montserrat,sans-serif;}
 
-  .book_info{width:486px;height:250px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;text-align:right;margin:25px auto;border:1px solid #cfcfcf;}
-  .book_info h2{margin:0 0 15px;text-align:right;font-size:45px;}
+  .book_info{width:486px;min-height:250px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;text-align:right;margin:25px auto;border:1px solid #cfcfcf;}
+  .book_info h2{margin:0 0 30px;text-align:right;font-size:45px;}
   .book_info h2 span{font:600 30px/100% Montserrat,sans-serif;color:gray;display:block;margin-top:5px;}
-  .book_info form input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 30px;margin:5px auto;border:1px solid #cfcfcf;}
+  .book_info a{display:block;width:80%;}
 
   .place_reviews{margin:40px 0 0;}
   .place_reviews h2{font:600 40px/100% Montserrat,sans-serif;}

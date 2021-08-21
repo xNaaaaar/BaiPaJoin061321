@@ -41,12 +41,23 @@
 			<a href="index.php">Home</a> &#187; <a href="adventures.php">Adventures</a> &#187; Place
 		</div>
 		<div class="main_con">
+			<?php
+				// DISPLAY DETAILS CODE STARTS HERE
+				if(isset($_GET['id'])){
+					$place = DB::query("SELECT * FROM adventure WHERE adv_id = ?", array($_GET['id']), "READ");
+
+					if(count($place)>0){
+						$place = $place[0];
+						$price = $place['adv_totalcostprice'] / $place['adv_maxguests'];
+
+						$advImages = explode(",", $place['adv_images']);
+			?>
 			<main>
 				<div class="place_title">
-					<h1>Santa Fe</h1>
+					<h1><?php echo $place['adv_name']; ?></h1>
 					<ul class="title_info1">
 						<li>5 <i class="fas fa-star"></i> <q>(25 reviews)</q></li>
-						<li><i class="fas fa-map-marker-alt"></i> <address>Santa Fe, Cebu</address></li>
+						<li><i class="fas fa-map-marker-alt"></i> <address><?php echo $place['adv_address']; ?></address></li>
 					</ul>
 					<!-- <ul class="title_info2">
 						<li><i class="fas fa-share-square"></i> Share</li>
@@ -55,31 +66,34 @@
 				</div>
 				<!--  -->
 				<div class="carousel" data-flickity>
-					<div class="carousel-cell">
-						<img src="images/slider/1.jpg" alt="">
-					</div>
-					<div class="carousel-cell">
-						<img src="images/slider/2.jpg" alt="">
-					</div>
-					<div class="carousel-cell">
-						<img src="images/slider/3.jpg" alt="">
-					</div>
-					<div class="carousel-cell">
-						<img src="images/slider/4.jpg" alt="">
-					</div>
+					<?php
+						// DISPLAYING IMAGES
+						for($i = 1; $i < count($advImages); $i++){
+							echo "
+							<div class='carousel-cell'>
+								<img src='images/organizers/".$place['orga_id']."/".$advImages[$i]."' alt='".$advImages[$i]."'>
+							</div>
+							";
+						}
+					?>
 				</div>
 				<!--  -->
 				<div class="place_info">
 					<div class="main_info">
 						<h2>Overview</h2>
-						<p>You are reading dummy text as placeholders for this layout. Dummy text for the reader to review. Words shown on this layout are placeholders. More information about the company will be posted soon. Contents are for display purposes only. This space is reserved for more details.You are reading dummy text as placeholders for this layout. Dummy text for the reader to review. Words shown on this layout are placeholders. More information about the company will be posted soon. Contents are for display purposes only.  This space is reserved for more details.</p>
+						<p><?php echo $place['adv_details']; ?></p>
 					</div>
 					<div class="book_info">
-						<h2>On Aug. 25, 2021 <span>₱3,000/guest</span> </h2>
+						<h2>On <?php echo date('M. j, Y', strtotime($place['adv_date'])); ?> <span><?php echo "₱ ".number_format((float)$price, 2, '.', '')." / guest"; ?></span> </h2>
 						<a class="edit" href="#">Book</a>
 						<a class="edit" href="#">Lend</a>
 					</div>
 				</div>
+				<?php
+						}
+					}
+					// DISPLAY DETAILS CODE ENDS HERE
+				?>
 				<!--  -->
 				<div class="place_reviews">
 					<h2>Reviews</h2>
