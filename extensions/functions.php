@@ -390,6 +390,103 @@ function displayAll($num, $query = NULL){
 			echo "<h3>No added voucher yet...</h3>";
 		}
 	}
+	// FOR VOUCHER DISPLAYING ALL CARDS FOR JOINER
+	else if($num === 3){
+		$card = DB::query("SELECT * FROM voucher WHERE orga_id = ?", array($_SESSION['organizer']), "READ");
+		if($query != NULL) $card = $query;
+
+		if(count($card)>0){
+			foreach($card as $result){
+				if($result['vouch_enddate'] < date('Y-m-d')){
+					echo "
+					<div class='card'>
+						<figure class='expired'>
+							<img src='images/expired.png' alt='image'>
+						</figure>";
+				}
+				else {
+					echo "
+					<div class='card'>";
+				}
+
+				echo "
+					<figure>
+						<img src='images/voucher.jpg' alt='image'>
+					</figure>
+					<h2>".$result['vouch_discount']."% OFF <span>₱".$result['vouch_minspent']." min. spend</span> </h2>
+					<p>Valid Until: <q>".date('M. j, Y', strtotime($result['vouch_enddate']))."</q></p>
+
+					<ul class='icons'>
+						<li><a href='edit_voucher.php?id=".$result['vouch_code']."'><i class='fas fa-edit'></i></a></li>
+						<li><a href='delete.php?table=voucher&id=".$result['vouch_code']."' onclick='return confirm(\"Are you sure you want to delete this voucher?\");'><i class='far fa-trash-alt'></i></a></li>
+					</ul>
+				</div>
+				";
+			}
+		}
+		else {
+			echo "<h3>No added voucher yet...</h3>";
+		}
+	}
+	// FOR FAVORITES DISPLAYING CARDS
+	else if($num === 4){
+		$card = DB::query("SELECT * FROM adventure, favorite WHERE joiner_id = ? AND adventure.adv_id = favorite.adv_id", array($_SESSION['joiner']), "READ");
+		if($query != NULL) $card = $query;
+
+		if(count($card)>0){
+			foreach($card as $result){
+				$remainingGuestsText = "";
+				$images = $result['adv_images'];
+				$image = explode(",", $images);
+
+				// RANDOM IMAGE DISPLAY
+				$totalImagesNum = count($image) - 1;
+				$displayImage = rand(1,$totalImagesNum);
+
+				// PRICE PER PERSON
+				$price = $result['adv_totalcostprice'] / $result['adv_maxguests'];
+
+				// REMAINING GUEST
+				$numRemainingGuests = $result['adv_maxguests'] - $result['adv_currentGuest'];
+
+				// REMAINING GUEST IN TEXT
+				if($result['adv_type'] == 'Packaged')
+					$remainingGuestsText = "- ".$numRemainingGuests." guests remaining";
+
+				echo "
+				<a class='card-link' href='place.php?id=".$result['adv_id']."'>
+				<div class='card'>
+					<figure>
+						<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt='image'>
+					</figure>
+					<h2>".$result['adv_name']." - ".$result['adv_kind']." <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
+					<p>".$result['adv_address']."</p>
+					<p>₱ ".number_format((float)$price, 2, '.', '')." / guest</p>
+					<ul class='icons'>
+						<li><a href='#'><i class='fas fa-book'></i></a></li>";
+
+			  if(isset($_SESSION['joiner'])){
+					$favAdv = DB::query("SELECT * FROM favorite WHERE joiner_id = ? AND adv_id = ?", array($_SESSION['joiner'], $result['adv_id']), "READ");
+
+					if(count($favAdv) > 0)
+						echo "<li><a id='saved' class='added' href='favorites.php?removeFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to remove this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+					else
+						echo "<li><a href='favorites.php?addFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to add this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+
+				} else
+					echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to add adventures to favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+
+				echo "
+					</ul>
+				</div>
+				</a>
+				";
+			}
+		}
+		else {
+			echo "<h3>No adventure added to favorites...</h3>";
+		}
+	}
 	// ELSE TO IFS AND DISPLAY ALL ADVENTURES
 	else {
 		$card = DB::query("SELECT * FROM adventure", array(), "READ");
@@ -728,17 +825,23 @@ function checkActivities($activity){
 }
 
 ##### CODE START HERE @ADDING ADVENTURE TO FAVORITES #####
-function addToFavorites($advId){
+function addToFavorites($advId, $page = NULL){
 	DB::query("INSERT INTO favorite(joiner_id, adv_id, fav_date) VALUES(?,?,?)", array($_SESSION['joiner'], $advId, date('Y-m-d')), "CREATE");
 
-	header('Location: adventures.php?added=1');
+	if($page != NULL && $page == 'fave')
+		header('Location: favorites.php?added=1');
+	else
+		header('Location: adventures.php?added=1');
 }
 
 ##### CODE START HERE @REMOVING ADVENTURE TO FAVORITES #####
-function removeFavorite($advId){
+function removeFavorite($advId, $page = NULL){
 	DB::query("DELETE FROM favorite WHERE adv_id = ?", array($advId), "DELETE");
 
-	header('Location: adventures.php?removed=1');
+	if($page != NULL && $page == 'fave')
+		header('Location: favorites.php?removed=1');
+	else
+		header('Location: adventures.php?removed=1');
 }
 
 

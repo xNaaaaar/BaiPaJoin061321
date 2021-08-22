@@ -45,7 +45,7 @@
 				echo "'><a href=''><i class='fas fa-plus-circle'></i> <q>Bookings</q></a></li>
 				<li class='";
 					if($currentSidebarPage == 'favorites') echo 'current_sidebar';
-				echo "'><a href=''><i class='fas fa-bookmark'></i> <q>Favorites</q></a></li>
+				echo "'><a href='favorites.php'><i class='fas fa-bookmark'></i> <q>Favorites</q></a></li>
 				";
 			}
 			#
