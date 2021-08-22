@@ -250,13 +250,14 @@ header{}
   .forgotpass main form a:last-of-type{width:170px;height:30px;margin:0;display:block;background:none;color:#fff;text-align:center;border-radius:0;border:none;font:600 20px/20px Montserrat,sans-serif;position:absolute;bottom:30px;left:53px;color:#fff;}
   .forgotpass main form a:last-of-type:hover{background:none;text-decoration:underline;}
 
-  /*CAROUSEL @place.php ffac33 */
+  /*CAROUSEL @place.php*/
   .carousel-cell{--height:500px;width:100%;height:var(--height);margin-right:10px;}
   .carousel-cell img{width:100%;}
   .fa-star{color:#ffac33;}
 
   .place_title{width:100%;text-align:left;}
   .place_title h1{font:600 59px/100% Montserrat,sans-serif;color:#313131;}
+  .place_title h1 span{font-size:35px !important;}
   .place_title .title_info1{list-style:none;margin-bottom:20px;font:600 18px/100% Montserrat,sans-serif;color:gray;}
   .place_title .title_info1 li{display:inline-block;}
   .place_title .title_info1 li address{display:inline-block;}

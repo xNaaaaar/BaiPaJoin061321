@@ -54,7 +54,7 @@
 			?>
 			<main>
 				<div class="place_title">
-					<h1><?php echo $place['adv_name']; ?></h1>
+					<h1><?php echo $place['adv_name']; ?> <span>(<?php echo $place['adv_kind']; ?>)</span> </h1>
 					<ul class="title_info1">
 						<li>5 <i class="fas fa-star"></i> <q>(25 reviews)</q></li>
 						<li><i class="fas fa-map-marker-alt"></i> <address><?php echo $place['adv_address']; ?></address></li>

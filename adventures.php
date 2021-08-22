@@ -1,6 +1,29 @@
 <?php
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
+
+	// ADD ADVENTURE TO FAVORITES
+	if(isset($_GET['addFav'])) addToFavorites($_GET['addFav']);
+
+	// REMOVE ADVENTURE TO FAVORITES
+	if(isset($_GET['removeFav'])) removeFavorite($_GET['removeFav']);
+
+	// IF ADVENTURE IS ADDED SUCCESSFULLY
+	if(isset($_GET['added']) && $_GET['added'] == 1){
+		echo "<script>alert('Adventure successfully added to favorites!')</script>";
+	}
+
+	// IF ADVENTURE IS REMOVED SUCCESSFULLY
+	if(isset($_GET['removed']) && $_GET['removed'] == 1){
+		echo "<script>
+		alert('Adventure successfully removed to favorites!')
+
+		let fave = document.getElementById('saved')
+		fave.addEventListener('click', () => {
+			fave.classList.remove('added')
+		})
+		</script>";
+	}
 ?>
 
 <!-- Head -->
@@ -23,7 +46,7 @@
 		.sidebar h2 i:last-child{color:#ff4444;} */
 		.sidebar p{margin-bottom:35px;}
 		.sidebar p q{color:#00c851;}
-		.sidebar ul{display:flex;height:100%;flex-direction:column;justify-content:space-between;font:600 20px/100% Montserrat,sans-serif;list-style:none;}
+		.sidebar ul{display:block;height:auto;font:600 20px/100% Montserrat,sans-serif;list-style:none;}
 		.sidebar .places li input, .sidebar .activites li input{width:20px;height:20px;}
 		.sidebar .prices li input{width:90%;height:30px;font-size:18px;}
 		.sidebar ul h3{font-size:25px;margin-top:15px;}
@@ -47,7 +70,8 @@
 		.card figure{width:165px;height:165px;position:absolute;top:30px;left:30px;border:1px solid #cfcfcf;}
 		.card figure img{width:100%;height:100%;}
 		.card ul{position:absolute;top:20px;right:20px;font-size:30px;}
-		.card ul li{display:inline-block;margin:0;}
+		.card ul li{display:inline-block;margin:0 0 0 8px;}
+		.card ul li .added{color:#bf127a;}
 		.card ul li a{color:#313131;}
 		.card ul li a:hover{color:#bf127a;}
 		.card h2{font:600 35px/100% Montserrat,sans-serif;color:#313131;margin-bottom:15px;}

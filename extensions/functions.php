@@ -425,8 +425,20 @@ function displayAll($num, $query = NULL){
 					<p>".$result['adv_address']."</p>
 					<p>₱ ".number_format((float)$price, 2, '.', '')." / guest</p>
 					<ul class='icons'>
-						<li><a href='#'><i class='fas fa-book'></i></a></li>
-						<li><a href='#' onclick='return confirm(\"Add adventure to favorites?\");'><i class='fas fa-bookmark'></i></a></li>
+						<li><a href='#'><i class='fas fa-book'></i></a></li>";
+
+			  if(isset($_SESSION['joiner'])){
+					$favAdv = DB::query("SELECT * FROM favorite WHERE joiner_id = ? AND adv_id = ?", array($_SESSION['joiner'], $result['adv_id']), "READ");
+
+					if(count($favAdv) > 0)
+						echo "<li><a id='saved' class='added' href='adventures.php?removeFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to remove this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+					else
+						echo "<li><a href='adventures.php?addFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to add this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+
+				} else
+					echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to add adventures to favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+
+				echo "
 					</ul>
 				</div>
 				</a>
@@ -713,6 +725,20 @@ function checkActivities($activity){
 			if($result == $activity) echo "checked";
 		}
 	}
+}
+
+##### CODE START HERE @ADDING ADVENTURE TO FAVORITES #####
+function addToFavorites($advId){
+	DB::query("INSERT INTO favorite(joiner_id, adv_id, fav_date) VALUES(?,?,?)", array($_SESSION['joiner'], $advId, date('Y-m-d')), "CREATE");
+
+	header('Location: adventures.php?added=1');
+}
+
+##### CODE START HERE @REMOVING ADVENTURE TO FAVORITES #####
+function removeFavorite($advId){
+	DB::query("DELETE FROM favorite WHERE adv_id = ?", array($advId), "DELETE");
+
+	header('Location: adventures.php?removed=1');
 }
 
 
