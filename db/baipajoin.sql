@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 07, 2021 at 07:33 AM
+-- Generation Time: Aug 22, 2021 at 02:09 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.3.28
 
@@ -59,7 +59,7 @@ CREATE TABLE `adventure` (
   `adv_address` varchar(50) NOT NULL,
   `adv_totalcostprice` decimal(7,2) NOT NULL,
   `adv_date` date NOT NULL,
-  `adv_details` varchar(100) NOT NULL,
+  `adv_details` varchar(500) NOT NULL,
   `adv_postedDate` date NOT NULL,
   `adv_maxguests` int(3) DEFAULT NULL,
   `adv_currentGuest` int(3) DEFAULT NULL,
@@ -75,7 +75,8 @@ CREATE TABLE `adventure` (
 INSERT INTO `adventure` (`adv_id`, `adv_images`, `adv_name`, `adv_kind`, `adv_type`, `adv_address`, `adv_totalcostprice`, `adv_date`, `adv_details`, `adv_postedDate`, `adv_maxguests`, `adv_currentGuest`, `adv_itineraryImg`, `adv_status`, `orga_id`) VALUES
 (4, ',610a6ddb4b7d77.05444535.jpg,610a6ddb4bbd00.93179917.jpg,610a6ddb4bf4d5.75726548.jpg,610a6ddb4c2a81.44878891.jpg', 'Adventure Sample Name 1', 'Island Hopping', 'Packaged', 'Bantayan Island', '9000.00', '2021-08-18', 'Sample Details For This Specific Adventure', '2021-08-04', 10, NULL, '610a6ddb4accf4.33141146.jpg', '', 1),
 (5, ',610a6e35ba74c0.97995878.jpg,610a6e35baca15.67750987.jpg', 'Adventure Sample Name 2', 'Canyoneering', 'Not Packaged', 'Bantayan Island', '1200.00', '2021-08-19', 'Sample Details For This Specific Adventure', '2021-08-04', 1, NULL, '610a6e35ba32b1.85947545.jpg', '', 1),
-(6, ',610a6e7bad99c2.28812658.jpg,610a6e7badd352.95263461.jpg', 'Adventure Sample Name 3', 'Snorkeling', 'Not Packaged', 'Malapascua Island', '888.00', '2021-08-27', 'Sample Details For This Specific Adventure', '2021-08-04', 1, NULL, '610a6e7bad5d30.22130229.jpg', '', 1);
+(6, ',610a6e7bad99c2.28812658.jpg,610a6e7badd352.95263461.jpg', 'Adventure Sample Name 3', 'Snorkeling', 'Not Packaged', 'Malapascua Island', '888.00', '2021-08-27', 'Sample Details For This Specific Adventure', '2021-08-04', 1, NULL, '610a6e7bad5d30.22130229.jpg', '', 1),
+(7, ',61209ae1ad4045.81969567.jpg,61209ae1ad83b8.77585375.jpg,61209ae1af2f29.68859817.jpg', 'Adventure Sample Name 4', 'Biking', 'Packaged', 'Aloginsan', '5000.00', '2021-08-30', 'This Is A Sample Details For Adventure Sample No. 4', '2021-08-21', 6, NULL, '61209ae1acda87.00494230.jpg', '', 3);
 
 -- --------------------------------------------------------
 
@@ -105,6 +106,14 @@ CREATE TABLE `favorite` (
   `fav_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `favorite`
+--
+
+INSERT INTO `favorite` (`joiner_id`, `adv_id`, `fav_date`) VALUES
+(1, 5, '2021-08-22'),
+(1, 7, '2021-08-22');
+
 -- --------------------------------------------------------
 
 --
@@ -127,7 +136,7 @@ CREATE TABLE `joiner` (
 --
 
 INSERT INTO `joiner` (`joiner_id`, `joiner_fname`, `joiner_lname`, `joiner_mi`, `joiner_address`, `joiner_phone`, `joiner_email`, `joiner_password`) VALUES
-(1, 'Melnar', 'Ancit', 'B', '', '', 'melnar.a@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0');
+(1, 'Melnar', 'Ancit', 'B', 'Sitio Granada Quiot Pardo', '09458756665', 'melnar.a@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0');
 
 -- --------------------------------------------------------
 
@@ -191,8 +200,8 @@ CREATE TABLE `organizer` (
 --
 
 INSERT INTO `organizer` (`orga_id`, `orga_company`, `orga_fname`, `orga_lname`, `orga_mi`, `orga_address`, `orga_phone`, `orga_email`, `orga_password`, `orga_verified`) VALUES
-(1, 'ABCDEFG Company', 'Naaaaar', 'Ancit', 'B', 'Sitio Granada Quiot Pardo', '09345734757', 'narancit@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0', 1),
-(3, '', 'Joy', 'Blanco', 'G', '', '', 'joyblanco@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0', 0),
+(1, 'ABC Company', 'Melnar', 'Ancit', 'B', 'Sitio Granada Quiot Pardo', '09345734757', 'narancit@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0', 1),
+(3, '', 'Joy', 'Blanco', 'G', '', '', 'joyblanco@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0', 1),
 (4, '', 'John', 'Doe', 'A', '', '', 'johndoe@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0', 0),
 (5, '', 'Johnney', 'Deep', 'S', '', '', 'johnneydeep@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0', 0);
 
@@ -444,7 +453,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `adventure`
 --
 ALTER TABLE `adventure`
-  MODIFY `adv_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `adv_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `booking`
