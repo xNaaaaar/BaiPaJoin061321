@@ -844,6 +844,19 @@ function removeFavorite($advId, $page = NULL){
 		header('Location: adventures.php?removed=1');
 }
 
+##### CODE START HERE @RATING ADVENTURE #####
+function rateAdventure(){
+	$star = $_POST['star'];
+	$txtFeedback = trim(ucwords($_POST['txtFeedback']));
+
+	if($txtFeedback == "")
+		$txtFeedback = "No comment";
+
+	DB::query("INSERT INTO rating(rating_stars, rating_message, joiner_id, adv_id) VALUES(?,?,?,?)", array($star, $txtFeedback, $_SESSION['joiner'], $_GET['id']), "CREATE");
+
+	header("Location: place.php?id={$_GET['id']}&rated=1");
+}
+
 
 
 

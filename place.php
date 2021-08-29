@@ -1,6 +1,15 @@
 <?php
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
+
+	if(isset($_POST['btnRate'])){
+		rateAdventure();
+	}
+
+	// IF RATED SUCCESSFULLY AN ADVENTURE
+	if(isset($_GET['rated']) && $_GET['rated'] == 1){
+		echo "<script>alert('This adventure is successfully rated!')</script>";
+	}
 ?>
 
 <!-- Head -->
@@ -14,7 +23,7 @@
 
 		/* Main Area */
 		main{width:100%;flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0;border-radius:0;text-align:center;}
-		main h2{font:600 59px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 	</style>
 
 	<!--?php wp_head(); ?-->
@@ -116,6 +125,12 @@
 					</div>
 				</div>
 				<!--  -->
+				<?php
+					if(isset($_SESSION['joiner'])){
+						$rateCheck = DB::query("SELECT * FROM rating WHERE joiner_id = ? AND adv_id = ?", array($_SESSION['joiner'], $_GET['id']), "READ");
+
+						if(count($rateCheck)<1){
+				?>
 				<div class="place_ratings">
 					<h2>Ratings</h2>
 					<form method="post">
@@ -133,6 +148,10 @@
 						</div>
 					</form>
 				</div>
+				<?php
+						}
+					}
+				?>
 			</main>
 		</div>
 
