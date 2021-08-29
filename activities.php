@@ -18,7 +18,7 @@
 		.user_area main{width:100%;height:100vh;background:none;color:#2f2f2f;border-radius:0;padding:0;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
 		.user_area main .main_logo{left:-4px;transform:none;}
 		.user_area main form{width:95%;display:block;position:absolute;top:55%;left:50%;transform:translate(-50%,-50%);height:60vh;text-align:left;}
-		.user_area main form h2{font:600 59px/100% Montserrat,sans-serif;color:#fff;}
+		.user_area main form h2{font:600 45px/100% Montserrat,sans-serif;color:#fff;}
 		.user_area main form h2 span{display:block;color:#fff;font-size:25px;}
 		.user_area main form ul{margin:25px 0 0;}
 		.user_area main form ul li{line-height:50px;}

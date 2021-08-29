@@ -40,7 +40,13 @@
 					<ul>
 						<li class="<?php if($currentPage == 'index') echo 'current_page_item'; ?>"><a href="index.php">Home</a></li>
 						<li class="<?php if($currentPage == 'aboutus') echo 'current_page_item'; ?>"><a href="aboutus.php">About Us</a></li>
-						<li class="<?php if($currentPage == 'adventures') echo 'current_page_item'; ?>"><a href="adventures.php">Adventures</a></li>
+						<?php
+							if(!isset($_SESSION['organizer'])){
+						?>
+							<li class="<?php if($currentPage == 'adventures') echo 'current_page_item'; ?>"><a href="adventures.php">Adventures</a></li>
+						<?php
+							}
+						?>
 						<li class="<?php if($currentPage == 'contactus') echo 'current_page_item'; ?>"><a href="contactus.php">Contact Us</a></li>
 						<!-- IF USER LOGIN OR NOT -->
 						<?php
