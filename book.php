@@ -25,16 +25,17 @@
 		main{width:100%;flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0;border-radius:0;text-align:center;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 
-		.main_info h2{margin:0 0 20px;}
+		.place_info{margin:0;}
+
+		.main_info h1{font:600 50px/100% Montserrat,sans-serif;text-align:left;margin:0 0 20px;}
+		.main_info h2{margin:0;font:500 30px/100% Montserrat,sans-serif;}
+		.main_info ul{text-align:left;}
 		.main_info form{margin-bottom:40px;position:relative;}
 		.main_info form label{float:left;margin-left:5px;}
 		.main_info form input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
 		.main_info form .radio{display:block;width:25px;height:25px;border:none;box-shadow:none;border-radius:0;padding:0;margin:10px auto 25px 5px;}
 		.main_info form .terms_cond{position:absolute;bottom:97px;left:40px;}
 		.main_info form button{margin:15px 5px 0 0;}
-
-		.place_info{margin:0;}
-		.main_info h2{font-size:45px;}
 
 		.book_info{text-align:left;height:100%;min-height:0;}
 		.book_info figure img{width:100%;height:200px;border-radius:10px;}
@@ -74,7 +75,7 @@
 			<main>
 				<div class="place_info">
 					<div class="main_info">
-						<h2>Your Information</h2>
+						<h1>Your Information</h1>
 						<section>
 							<h2>Melnar B. Ancit</h2>
 							<ul>
@@ -86,17 +87,13 @@
 							</ul>
 						</section>
 						<form method="post">
-							<label for="">Name</label>
-							<input type="text" name="" value="Melnar Ancit">
-							<label for="">Name</label>
-							<input type="text" name="" value="Book Date">
-							<label for="">Name</label>
-							<input type="text" name="" value="Total Price">
-							<label for="">Name</label>
-							<input type="text" name="" value="Address">
-							<label for="">Name</label>
-							<input type="text" name="" value="Guests">
-							<a class="terms_cond" href="#" target="_blank">Accept terms & condition</a>
+							<label for="">Book date</label>
+							<input type="text" name="" value="Book Date" disabled>
+							<label for="">Total Price</label>
+							<input type="text" name="" value="P900.00" disabled>
+							<label for="">Add guest/s:</label>
+							<input type="text" name="" value="3">
+							<a class="terms_cond" href="terms.php" target="_blank">Accept terms & condition</a>
 							<input class="radio" type="radio" name="" value="">
 							<button class="edit" type="button" name="button">Continue</button>
 							<button class="edit" type="button" name="button">Back</button>
