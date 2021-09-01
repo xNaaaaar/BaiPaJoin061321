@@ -10,6 +10,8 @@
 	if(isset($_GET['rated']) && $_GET['rated'] == 1){
 		echo "<script>alert('This adventure is successfully rated!')</script>";
 	}
+
+	$_SESSION['price'] = 900;
 ?>
 
 <!-- Head -->
@@ -29,7 +31,7 @@
 
 		.main_info h1{font:600 50px/100% Montserrat,sans-serif;text-align:left;margin:0 0 20px;}
 		.main_info h2{margin:0;font:500 30px/100% Montserrat,sans-serif;}
-		.main_info ul{text-align:left;}
+		.main_info ul{text-align:left;margin:0 0 30px;}
 		.main_info form{margin-bottom:40px;position:relative;}
 		.main_info form label{float:left;margin-left:5px;}
 		.main_info form input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
@@ -83,16 +85,15 @@
 								<li>Cebu City, Philippines</li>
 								<li>09458566652</li>
 								<li>melnar.a@gmail.com</li>
-								<li>Take note: Your profile will be updated too if you change anything.</li>
 							</ul>
 						</section>
 						<form method="post">
 							<label for="">Book date</label>
 							<input type="text" name="" value="Book Date" disabled>
 							<label for="">Total Price</label>
-							<input type="text" name="" value="P900.00" disabled>
+							<input id="totalPrice" type="text" name="" disabled>
 							<label for="">Add guest/s:</label>
-							<input type="text" name="" value="3">
+							<input id="guest" type="text" name="" value="3" onchange="displayTotalPrice(this.value)">
 							<a class="terms_cond" href="terms.php" target="_blank">Accept terms & condition</a>
 							<input class="radio" type="radio" name="" value="">
 							<button class="edit" type="button" name="button">Continue</button>

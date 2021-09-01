@@ -121,6 +121,10 @@
 		else
 				document.getElementById("display").style.opacity = 0;
 		}
+
+		function displayTotalPrice(guest){
+			document.getElementById("totalPrice").value = guest * <?php echo $_SESSION['price']; ?>;
+		}
 	</script>
 
 </body>
