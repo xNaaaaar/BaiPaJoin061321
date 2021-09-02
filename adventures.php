@@ -80,7 +80,22 @@
 		.card h2 span i{color:#ffac33;}
 		.card p{font-size:23px;color:#989898;width:100% !important;margin:0 0 10px 2px;}
 		.card p:last-of-type{color:#111;font-size:30px;font-weight:500;margin:0 0 0 2px;}
+
+
+//=============================== UPDATES =====================================//
+
+		<style type="text/css">	
+		a.paging:visited {background-color: none;   color:none;}
+		a.paging:active {background-color: #FFCC00; text-decoration: none;  color:#FFFFFF}
+		a.paging:hover {background-color: wheat; font-weight:bold; color:#bf127a;}
+		
+		a.pagingCurrent:visited {color:#bf127a;}
+		a.pagingCurrent:active {background: #FF0000; color:#FFFFFF; text-decoration-line: underline;}
+		a.pagingCurrent:hover {background: wheat; font-weight:bold; color: none;}
+		</style>
+
 	</style>
+
 
 	<!--?php wp_head(); ?-->
 </head>
@@ -166,22 +181,115 @@
 					<h2>Adventures</h2>
 					<input type="text" name="txtSearch" placeholder="Search any...">
 					<button type="submit" name="btnSearch"><i class="fas fa-search"></i></button>
-					<button type="submit" name="btnRestart"><i class="fas fa-undo-alt"></i></button>
+					<form>
+					      <button type="submit" formaction="adventures.php" ><i class="fas fa-undo-alt"></i></button>
+				   </form>
 
 					<?php
 						// DISPLAY ALL ADVENTURE
 						if(isset($_POST['btnSearch'])){
 							$txtSearch = trim(ucwords($_POST['txtSearch']));
 
-							$card = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%'", array(), "READ");
+//=============================== UPDATES =====================================//
+
+								if(isset($_GET['page']))
+									{
+										$page = $_GET['page'];
+									}
+									else
+										{
+											$page = 1;
+										}
+
+								$num_per_page = 1;
+								$start_from = ($page-1) * $num_per_page;
+
+							$card = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' ORDER BY adv_id DESC LIMIT $start_from,$num_per_page", array(), "READ");
 
 							displayAll(99, $card);
-						}
-						else if(isset($_POST['btnRestart'])){
-							displayAll(99);
+
+							$card1 = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' ", array(), "READ");
+
+
+								$total_record = count($card1);
+				                $total_page = ceil($total_record/$num_per_page);
+
+				                if($page > 1)
+				                {
+				                    echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
+				                } 
+
+				                
+				                for($i=1;$i<=$total_page;$i++)
+				                {
+				                	 if ($i == $page) {
+            						 $class = 'pagingCurrent';
+            						
+            						}else
+									{ 
+									$class = 'paging';
+								
+									}
+				                    echo "<a href='adventures?page=" .$i. "' class='".$class."'>  $i </a>"; 
+				                }
+
+				                if(($i-1) > $page)
+				                {
+				                    echo "<a href='adventures?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
+				                } 
 						}
 						else
-							displayAll(99);
+						   {
+//=============================== UPDATES =====================================//
+
+								if(isset($_GET['page']))
+									{
+										$page = $_GET['page'];
+									}
+									else
+										{
+											$page = 1;
+										}
+
+								$num_per_page = 1;
+								$start_from = ($page-1) * $num_per_page;
+
+						        $card1 = DB::query("SELECT * FROM adventure ORDER BY adv_id DESC LIMIT $start_from,$num_per_page", array(), "READ");
+
+		    						  displayAll(99, $card1);
+
+
+				                $card2 = DB::query("SELECT * FROM adventure", array(), "READ");
+
+ 
+								$total_record = count($card2);
+				                $total_page = ceil($total_record/$num_per_page);
+
+				                if($page > 1)
+				                {
+				                    echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
+				                } 
+
+				                
+				                for($i=1;$i<=$total_page;$i++)
+				                {
+				                	 if ($i == $page) {
+            						 $class = 'pagingCurrent';
+            						
+            						}else
+									{ 
+									$class = 'paging';
+								
+									}
+				                    echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i </a>"; 
+				                }
+
+				                if(($i-1) > $page)
+				                {
+				                    echo "<a href='adventures.php?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
+				                } 
+				            }   
+					
 					?>
 
 				</form>
