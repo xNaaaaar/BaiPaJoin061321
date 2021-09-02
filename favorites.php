@@ -79,6 +79,23 @@
 		@media only screen and (max-width:1000px) {
 			main{padding:50px 0 0 25px;}
 		}
+
+//=============================== UPDATES =====================================//
+
+		<style type="text/css">	
+		a.paging:visited {background-color: none;   color:none;}
+		a.paging:active {background-color: #FFCC00; text-decoration: none;  color:#FFFFFF}
+		a.paging:hover {background-color: wheat; font-weight:bold; color:#bf127a;}
+		
+		a.pagingCurrent:visited {color:#bf127a;}
+		a.pagingCurrent:active {background: #FF0000; color:#FFFFFF; text-decoration-line: underline;}
+		a.pagingCurrent:hover {background: wheat; font-weight:bold; color: none;}
+		</style>
+
+	</style>
+
+
+
 	</style>
 
 	<!--?php wp_head(); ?-->
@@ -117,22 +134,115 @@
 					<h2>Favorite Adventures</h2>
 					<input type="text" name="txtSearch" placeholder="Search any...">
 					<button type="submit" name="btnSearch"><i class="fas fa-search"></i></button>
-					<button type="submit" name="btnRestart"><i class="fas fa-undo-alt"></i></button>
+					<form>
+					      <button type="submit" formaction="favorites.php" ><i class="fas fa-undo-alt"></i></button>
+				   </form>
+
 
 					<?php
 						// DISPLAY ALL ADVENTURE
 						if(isset($_POST['btnSearch'])){
 							$txtSearch = trim(ucwords($_POST['txtSearch']));
 
-							$card = DB::query("SELECT * FROM adventure INNER JOIN favorite ON favorite.adv_id = adventure.adv_id WHERE joiner_id = ? AND adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%'", array($_SESSION['joiner']), "READ");
+//=============================== UPDATES =====================================//
+
+								if(isset($_GET['page']))
+									{
+										$page = $_GET['page'];
+									}
+									else
+										{
+											$page = 1;
+										}
+
+								$num_per_page = 1;
+								$start_from = ($page-1) * $num_per_page;							
+
+							$card = DB::query("SELECT * FROM adventure INNER JOIN favorite ON favorite.adv_id = adventure.adv_id WHERE joiner_id = ? AND adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' LIMIT $start_from,$num_per_page", array($_SESSION['joiner']), "READ");
 
 							displayAll(4, $card);
+
+							$card1 = DB::query("SELECT * FROM adventure INNER JOIN favorite ON favorite.adv_id = adventure.adv_id WHERE joiner_id = ? AND adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%'", array($_SESSION['joiner']), "READ");
+
+
+								$total_record = count($card1);
+				                $total_page = ceil($total_record/$num_per_page);
+
+				                if($page > 1)
+				                {
+				                    echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
+				                } 
+
+				                
+				                for($i=1;$i<=$total_page;$i++)
+				                {
+				                	 if ($i == $page) {
+            						 $class = 'pagingCurrent';
+            						
+            						}else
+									{ 
+									$class = 'paging';
+								
+									}
+				                    echo "<a href='adventures?page=" .$i. "' class='".$class."'>  $i </a>"; 
+				                }
+
+				                if(($i-1) > $page)
+				                {
+				                    echo "<a href='adventures?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
+				                } 
 						}
-						else if(isset($_POST['btnRestart'])){
-							displayAll(4);
-						}
-						else
-							displayAll(4);
+						else{
+//=============================== UPDATES =====================================//
+
+								if(isset($_GET['page']))
+									{
+										$page = $_GET['page'];
+									}
+									else
+										{
+											$page = 1;
+										}
+
+								$num_per_page = 1;
+								$start_from = ($page-1) * $num_per_page;
+
+						        $card1 = DB::query("SELECT * FROM adventure INNER JOIN favorite ON favorite.adv_id = adventure.adv_id WHERE joiner_id = ? LIMIT $start_from,$num_per_page", array($_SESSION['joiner']), "READ");
+
+		    						  displayAll(4, $card1);
+
+
+				                $card2 = DB::query("SELECT * FROM adventure INNER JOIN favorite ON favorite.adv_id = adventure.adv_id WHERE joiner_id = ?", array($_SESSION['joiner']), "READ");
+
+ 
+								$total_record = count($card2);
+				                $total_page = ceil($total_record/$num_per_page);
+
+				                if($page > 1)
+				                {
+				                    echo "<a href='favorites?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
+				                } 
+
+				                
+				                for($i=1;$i<=$total_page;$i++)
+				                {
+				                	 if ($i == $page) {
+            						 $class = 'pagingCurrent';
+            						
+            						}else
+									{ 
+									$class = 'paging';
+								
+									}
+				                    echo "<a href='favorites?page=" .$i. "' class='".$class."'>  $i </a>"; 
+				                }
+
+				                if(($i-1) > $page)
+				                {
+				                    echo "<a href='favorites?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
+				                } 
+				            }     
+
 					?>
 
 				</form>
