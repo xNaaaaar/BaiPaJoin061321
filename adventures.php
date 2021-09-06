@@ -238,7 +238,10 @@
 			                }
 						}
 
-						else if(isset($_POST['btnSave'])) { //Aside Filter code  starts here - Alexis Salvador
+						else if(isset($_POST['btnSave']))
+						{ //Aside Filter code  starts here - Alexis Salvador
+
+							unset($_SESSION['places']);
 
 							if(isset($_GET['page']))
 							{
@@ -284,6 +287,8 @@
 										// Check commented code above
 										$sqlquery = $sqlquery . " ORDER BY adv_id";	 //Temporary to show true results
 								}
+								else
+									$sqlquery = $sqlquery . " ORDER BY adv_id";
 							}
 
 							else if(!empty($_POST['activities'])) {
@@ -308,7 +313,13 @@
 
 							$card = DB::query($sqlquery, array(), "READ");
 
-							displayAll(99, $card);
+							if(!empty($card)) 
+								displayAll(99, $card);
+							else { //This works if return items from SQL is empty due to search not found
+								$card = DB::query("SELECT * FROM adventure", array(), "READ");
+								echo "Your search parameters are not found!";
+								displayAll(99, $card);
+							}	
 
 							$total_record = count($card);
 			                $total_page = ceil($total_record/$num_per_page);
@@ -338,8 +349,8 @@
 
 						} //Aside Filter code ends here - Alexis Salvador
 
-						else
-						{
+						else 
+						{ //Index to Adventure Page Filter Code starts here - Alexis Salvador
 							if(isset($_GET['page']))
 							{
 								$page = $_GET['page'];
@@ -352,14 +363,72 @@
 							$num_per_page = 1;
 							$start_from = ($page-1) * $num_per_page;
 
-					        $card1 = DB::query("SELECT * FROM adventure ORDER BY adv_id DESC LIMIT $start_from,$num_per_page", array(), "READ");
+					        if(!empty($_SESSION['places'])) {
+								
+								$sqlquery = "SELECT * FROM adventure WHERE adv_address";
 
-	    					displayAll(99, $card1);
+								$arrlength = count($_SESSION['places']);
 
+								foreach($_SESSION['places'] as $index => $place) {
+									if($index != $arrlength-1)
+										$sqlquery = $sqlquery . " = '$place' OR adv_address";
+									else 
+										$sqlquery = $sqlquery . " = '$place'";
+								}								
 
-			                $card2 = DB::query("SELECT * FROM adventure", array(), "READ");
+								if(!empty($_POST['activities'])) {
 
-							$total_record = count($card2);
+									//	Concatenates string if 1 or more Activity 																checkbox is selected 
+
+									$sqlquery = $sqlquery . " OR adv_kind"; 
+
+									$arrlength = count($_POST['activities']);								
+
+									foreach($_POST['activities'] as $index => $activity) {
+										if($index != $arrlength-1)
+											$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
+										else 
+											$sqlquery = $sqlquery . " = '$activity'";
+									}
+
+										// $sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";	 
+										// Check commented code above
+										$sqlquery = $sqlquery . " ORDER BY adv_id";	 //Temporary to show true results
+								}													
+							}													
+
+							else if(!empty($_POST['activities'])) {
+
+								if(empty($_POST['places']))
+									$sqlquery = "SELECT * FROM adventure WHERE adv_kind"; 		
+									// 	New string query is created if no Place checkbox is selected
+
+								$arrlength = count($_POST['activities']);								
+
+								foreach($_POST['activities'] as $index => $activity) {
+									if($index != $arrlength-1)
+										$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
+									else 
+										$sqlquery = $sqlquery . " = '$activity'";
+								}
+
+								// $sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page"; 
+								// Check commented code above
+								$sqlquery = $sqlquery . " ORDER BY adv_id";	//Temporary to show true results
+							}
+
+							if(!empty($sqlquery))
+								$card = DB::query($sqlquery, array(), "READ");
+
+							if(!empty($card))
+								displayAll(99, $card);
+							else { //This works if return items from SQL is empty due to search not found
+								$card = DB::query("SELECT * FROM adventure", array(), "READ");
+								echo "Enter a search parameters OR no search parameters found!";
+								displayAll(99, $card);
+							}							
+
+							$total_record = count($card);
 			                $total_page = ceil($total_record/$num_per_page);
 
 			                if($page > 1)
@@ -383,7 +452,10 @@
 			                {
 			                    echo "<a href='adventures.php?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
 			                }
-				        }
+
+			                unset($_SESSION['places']);
+
+				        } //Index to Adventure Page Filter Code starts here - Alexis Salvador
 
 						//Pagination code ends here - Kirk Albano
 					?>

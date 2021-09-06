@@ -808,8 +808,31 @@ function changePassword(){
 
 ##### CODE START HERE @SPECIFIC CHECKBOX CHECK IN PLACES #####
 function checkPlaces($place){
-	if(isset($_SESSION['places'])){
+
+	// Alexis Salvador made a change to this function
+
+	/*if(isset($_SESSION['places'])){
 		foreach($_SESSION['places'] as $result){
+			if($result == $place) echo "checked";
+		}
+	}
+	elseif(isset($_POST['places'])) {
+		foreach($_POST['places'] as $result){
+			if($result == $place) echo "checked";
+		}
+	}*/ //ORIGINAL CODE BY NAR ANCIT
+
+	if(!empty($_SESSION['places'])){ //This is to validate if $_SESSION['places'] is not empty - Alexis Salvador
+
+		foreach($_SESSION['places'] as $result){
+			if($result == $place) echo "checked";
+		}
+	}
+
+	elseif(!empty($_POST['places'])) { //This is to validate if $_POST['places'] is not empty - Alexis Salvador
+
+
+		foreach($_POST['places'] as $result){
 			if($result == $place) echo "checked";
 		}
 	}
