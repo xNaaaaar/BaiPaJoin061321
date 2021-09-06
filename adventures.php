@@ -181,9 +181,7 @@
 					<h2>Adventures</h2>
 					<input type="text" name="txtSearch" placeholder="Search any...">
 					<button type="submit" name="btnSearch"><i class="fas fa-search"></i></button>
-					<form>
-					      <button type="submit" formaction="adventures.php" ><i class="fas fa-undo-alt"></i></button>
-				   </form>
+					<button type="submit" formaction="adventures.php" ><i class="fas fa-undo-alt"></i></button>
 
 					<?php
 						// DISPLAY ALL ADVENTURE
