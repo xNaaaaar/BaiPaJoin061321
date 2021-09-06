@@ -52,7 +52,7 @@
 		.sidebar ul h3{font-size:25px;margin-top:15px;}
 		.sidebar ul li{line-height:35px;}
 		.sidebar ul li label{font-weight:400;}
-		.sidebar button{display:inline-block;width:100px;height:35px;background:#bf127a;border-radius:50px;color:#fff;margin:15px 5px;text-align:center;font:normal 15px/35px Montserrat,sans-serif;border:none;}
+		.sidebar button{display:inline-block;vertical-align:top;width:100px;height:35px;background:#bf127a;border-radius:50px;color:#fff;margin:15px 5px;text-align:center;font:normal 15px/35px Montserrat,sans-serif;border:none;}
 		.sidebar button:hover{background:#8c0047;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;position:relative;}
@@ -181,9 +181,7 @@
 					<h2>Adventures</h2>
 					<input type="text" name="txtSearch" placeholder="Search any...">
 					<button type="submit" name="btnSearch"><i class="fas fa-search"></i></button>
-					<form>
-					      <button type="submit" formaction="adventures.php" ><i class="fas fa-undo-alt"></i></button>
-				   </form>
+					<button type="submit" formaction="adventures.php" ><i class="fas fa-undo-alt"></i></button>
 
 					<?php
 
