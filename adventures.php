@@ -52,7 +52,7 @@
 		.sidebar ul h3{font-size:25px;margin-top:15px;}
 		.sidebar ul li{line-height:35px;}
 		.sidebar ul li label{font-weight:400;}
-		.sidebar button{display:inline-block;width:200px;height:50px;background:#bf127a;border-radius:50px;color:#fff;margin:15px 5px;text-align:center;font:normal 20px/45px Montserrat,sans-serif;border:none;}
+		.sidebar button{display:inline-block;width:100px;height:35px;background:#bf127a;border-radius:50px;color:#fff;margin:15px 5px;text-align:center;font:normal 15px/35px Montserrat,sans-serif;border:none;}
 		.sidebar button:hover{background:#8c0047;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;position:relative;}
@@ -63,6 +63,7 @@
 		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
 		main button:first-of-type{right:67px;}
 		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:142px;right:15px;z-index:5;font-size:20px;}
+		main button:hover{background:#8c0047;}
 
 		.card-link{text-decoration:none !important;}
 		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 125px 30px 215px;line-height:35px;text-align:left;margin:25px auto;border:1px solid #cfcfcf;}
@@ -83,11 +84,11 @@
 
 //=============================== UPDATES =====================================//
 
-		<style type="text/css">	
+		<style type="text/css">
 		a.paging:visited {background-color: none;   color:none;}
 		a.paging:active {background-color: #FFCC00; text-decoration: none;  color:#FFFFFF}
 		a.paging:hover {background-color: wheat; font-weight:bold; color:#bf127a;}
-		
+
 		a.pagingCurrent:visited {color:#bf127a;}
 		a.pagingCurrent:active {background: #FF0000; color:#FFFFFF; text-decoration-line: underline;}
 		a.pagingCurrent:hover {background: wheat; font-weight:bold; color: none;}
@@ -169,6 +170,7 @@
 						<li><input type="number" name="" placeholder="Maximum price"></li>
 					</ul>
 					<button type="submit" name="btnSave" formaction="adventures.php">Save Changes</button>
+					<button type="submit" name="btnReset" formaction="adventures.php">Reset</button>
 				</div>
 				</form>
 			</aside>
@@ -216,29 +218,29 @@
 			                if($page > 1)
 			                {
 			                    echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
-			                } 
+			                }
 
-			                
+
 			                for($i=1;$i<=$total_page;$i++)
 			                {
 			                	 if ($i == $page) {
         						 $class = 'pagingCurrent';
-        						
+
         						}else
-								{ 
+								{
 								$class = 'paging';
-							
+
 								}
-			                    echo "<a href='adventures?page=" .$i. "' class='".$class."'>  $i </a>"; 
+			                    echo "<a href='adventures?page=" .$i. "' class='".$class."'>  $i </a>";
 			                }
 
 			                if(($i-1) > $page)
 			                {
 			                    echo "<a href='adventures?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
-			                } 
+			                }
 						}
 
-						else if(isset($_POST['btnSave'])) { //Aside Filter code  starts here - Alexis Salvador							
+						else if(isset($_POST['btnSave'])) { //Aside Filter code  starts here - Alexis Salvador
 
 							if(isset($_GET['page']))
 							{
@@ -253,7 +255,7 @@
 							$start_from = ($page-1) * $num_per_page;
 
 							if(!empty($_POST['places'])) {
-								
+
 								$sqlquery = "SELECT * FROM adventure WHERE adv_address";
 
 								$arrlength = count($_POST['places']);
@@ -261,47 +263,47 @@
 								foreach($_POST['places'] as $index => $place) {
 									if($index != $arrlength-1)
 										$sqlquery = $sqlquery . " = '$place' OR adv_address";
-									else 
+									else
 										$sqlquery = $sqlquery . " = '$place'";
-								}								
+								}
 
 								if(!empty($_POST['activities'])) {
 
-									//	Concatenates string if 1 or more Activity 																checkbox is selected 
+									//	Concatenates string if 1 or more Activity 																checkbox is selected
 
-									$sqlquery = $sqlquery . " OR adv_kind"; 
+									$sqlquery = $sqlquery . " OR adv_kind";
 
-									$arrlength = count($_POST['activities']);								
+									$arrlength = count($_POST['activities']);
 
 									foreach($_POST['activities'] as $index => $activity) {
 										if($index != $arrlength-1)
 											$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
-										else 
+										else
 											$sqlquery = $sqlquery . " = '$activity'";
 									}
 
-										// $sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";	 
+										// $sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";
 										// Check commented code above
 										$sqlquery = $sqlquery . " ORDER BY adv_id";	 //Temporary to show true results
-								}													
-							}													
+								}
+							}
 
 							else if(!empty($_POST['activities'])) {
 
 								if(empty($_POST['places']))
-									$sqlquery = "SELECT * FROM adventure WHERE adv_kind"; 		
+									$sqlquery = "SELECT * FROM adventure WHERE adv_kind";
 									// 	New string query is created if no Place checkbox is selected
 
-								$arrlength = count($_POST['activities']);								
+								$arrlength = count($_POST['activities']);
 
 								foreach($_POST['activities'] as $index => $activity) {
 									if($index != $arrlength-1)
 										$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
-									else 
+									else
 										$sqlquery = $sqlquery . " = '$activity'";
 								}
 
-								// $sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page"; 
+								// $sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";
 								// Check commented code above
 								$sqlquery = $sqlquery . " ORDER BY adv_id";	//Temporary to show true results
 							}
@@ -316,27 +318,27 @@
 			                if($page > 1)
 			                {
 			                    echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
-			                } 
+			                }
 
 			                for($i=1;$i<=$total_page;$i++)
 			                {
 			                	 if ($i == $page) {
         						 $class = 'pagingCurrent';
-        						
+
         						}else
-								{ 
+								{
 								$class = 'paging';
-							
+
 								}
-			                    echo "<a href='adventures?page=" .$i. "' class='".$class."'>  $i </a>"; 
+			                    echo "<a href='adventures?page=" .$i. "' class='".$class."'>  $i </a>";
 			                }
 
 			                if(($i-1) > $page)
 			                {
 			                    echo "<a href='adventures?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
-			                } 						
+			                }
 
-						} //Aside Filter code ends here - Alexis Salvador						
+						} //Aside Filter code ends here - Alexis Salvador
 
 						else
 						{
@@ -366,26 +368,26 @@
 			                {
 			                    echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
 			                }
-			                
+
 			                for($i=1;$i<=$total_page;$i++)
 			                {
 			                	if ($i == $page) {
         						 $class = 'pagingCurrent';
         						}
-        						else { 
-								$class = 'paging';							
+        						else {
+								$class = 'paging';
 								}
 
-			                    echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i </a>"; 
+			                    echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i </a>";
 			                }
 
 			                if(($i-1) > $page)
 			                {
 			                    echo "<a href='adventures.php?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
-			                } 
-				        }   
+			                }
+				        }
 
-						//Pagination code ends here - Kirk Albano	
+						//Pagination code ends here - Kirk Albano
 					?>
 
 				</form>
