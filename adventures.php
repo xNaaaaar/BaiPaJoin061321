@@ -52,7 +52,7 @@
 		.sidebar ul h3{font-size:25px;margin-top:15px;}
 		.sidebar ul li{line-height:35px;}
 		.sidebar ul li label{font-weight:400;}
-		.sidebar button{display:inline-block;width:200px;height:50px;background:#bf127a;border-radius:50px;color:#fff;margin:15px 5px;text-align:center;font:normal 20px/45px Montserrat,sans-serif;border:none;}
+		.sidebar button{display:inline-block;width:100px;height:35px;background:#bf127a;border-radius:50px;color:#fff;margin:15px 5px;text-align:center;font:normal 15px/35px Montserrat,sans-serif;border:none;}
 		.sidebar button:hover{background:#8c0047;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;position:relative;}
@@ -63,6 +63,7 @@
 		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
 		main button:first-of-type{right:67px;}
 		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:128px;right:15px;z-index:5;font-size:20px;}
+		main button:hover{background:#8c0047;}
 
 		.card-link{text-decoration:none !important;}
 		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 125px 30px 215px;line-height:35px;text-align:left;margin:25px auto;border:1px solid #cfcfcf;}
@@ -153,7 +154,8 @@
 						<li><input type="number" name="" placeholder="Minimum price"></li>
 						<li><input type="number" name="" placeholder="Maximum price"></li>
 					</ul>
-					<button type="button" name="btnSave">Save Changes</button>
+					<button type="button" name="btnSave">Save</button>
+					<button type="button" name="btnSave">Reset</button>
 				</div>
 				</form>
 			</aside>

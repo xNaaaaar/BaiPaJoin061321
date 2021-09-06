@@ -29,17 +29,18 @@
 
 		.place_info{margin:0;}
 
+		.main_info section{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;}
 		.main_info h1{font:600 50px/100% Montserrat,sans-serif;text-align:left;margin:0 0 20px;}
-		.main_info h2{margin:0;font:500 30px/100% Montserrat,sans-serif;}
-		.main_info ul{text-align:left;margin:0 0 30px;}
+		.main_info h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
+		.main_info ul{text-align:left;font-size:20px;}
 		.main_info form{margin-bottom:40px;position:relative;}
 		.main_info form label{float:left;margin-left:5px;}
-		.main_info form input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
+		.main_info form input, .main_info form select{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
 		.main_info form .radio{display:block;width:25px;height:25px;border:none;box-shadow:none;border-radius:0;padding:0;margin:10px auto 25px 5px;}
 		.main_info form .terms_cond{position:absolute;bottom:97px;left:40px;}
-		.main_info form button{margin:15px 5px 0 0;}
+		.main_info form button, .main_info form a{margin:15px 5px 0 0;}
 
-		.book_info{text-align:left;height:100%;min-height:0;}
+		.book_info{text-align:left;height:100%;min-height:0;margin:75px auto 0;}
 		.book_info figure img{width:100%;height:200px;border-radius:10px;}
 		.book_info h2{text-align:left;margin:20px 0 10px;}
 		.book_info .title_info1{list-style:none;margin-bottom:30px;font:600 18px/100% Montserrat,sans-serif;color:gray;}
@@ -88,16 +89,22 @@
 							</ul>
 						</section>
 						<form method="post">
-							<label for="">Book date</label>
-							<input type="text" name="" value="Book Date" disabled>
-							<label for="">Total Price</label>
-							<input id="totalPrice" type="text" name="" disabled>
-							<label for="">Add guest/s:</label>
-							<input id="guest" type="text" name="" value="3" onchange="displayTotalPrice(this.value)">
+							<section>
+								<label for="">Book date</label>
+								<input type="text" name="" value="Book Date" disabled>
+								<label for="">Total Price</label>
+								<input id="totalPrice" type="text" name="" disabled>
+								<label for="">Add guest/s:</label>
+								<input id="guest" type="text" name="" value="3" onchange="displayTotalPrice(this.value)">
+								<select>
+									<option value="guest">I am booking as a guest</option>
+									<option value="someone">I am booking for someone</option>
+								</select>
+							</section>
 							<a class="terms_cond" href="terms.php" target="_blank">Accept terms & condition</a>
 							<input class="radio" type="radio" name="" value="">
 							<button class="edit" type="button" name="button">Continue</button>
-							<button class="edit" type="button" name="button">Back</button>
+							<a href="adventures.php" class="edit">Back</a>
 						</form>
 					</div>
 					<div class="book_info">
