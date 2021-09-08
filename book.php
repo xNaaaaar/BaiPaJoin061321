@@ -1,17 +1,6 @@
 <?php
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
-
-	if(isset($_POST['btnRate'])){
-		rateAdventure();
-	}
-
-	// IF RATED SUCCESSFULLY AN ADVENTURE
-	if(isset($_GET['rated']) && $_GET['rated'] == 1){
-		echo "<script>alert('This adventure is successfully rated!')</script>";
-	}
-
-	$_SESSION['price'] = 900;
 ?>
 
 <!-- Head -->
@@ -36,8 +25,6 @@
 		.main_info form{margin-bottom:40px;position:relative;}
 		.main_info form label{float:left;margin-left:5px;}
 		.main_info form input, .main_info form select{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
-		.main_info form .radio{display:block;width:25px;height:25px;border:none;box-shadow:none;border-radius:0;padding:0;margin:10px auto 25px 5px;}
-		.main_info form .terms_cond{position:absolute;bottom:97px;left:40px;}
 		.main_info form button, .main_info form a{margin:15px 5px 0 0;}
 
 		.book_info{text-align:left;height:100%;min-height:0;margin:75px auto 0;}
@@ -74,59 +61,88 @@
 			<a href="index.php">Home</a> &#187; <a href="adventures.php">Adventures</a> &#187; Book
 		</div>
 		<div class="main_con">
+			<?php
+				# CHECK IF JOINER LOGGED IN
+				if(isset($_SESSION['joiner'])) {
+					$user = DB::query("SELECT * FROM joiner WHERE joiner_id = ?", array($_SESSION['joiner']), "READ");
+					$adv = DB::query("SELECT * FROM adventure WHERE adv_id = ?", array($_GET['id']), "READ");
+					# CHECK IF JOINER EXISTED
+					if(count($user)>0 && count($adv)>0){
+						$user = $user[0];
+						$adv = $adv[0];
+						# PRICE FOR EACH GUEST
+						$price = $adv['adv_totalcostprice'] / $adv['adv_maxguests'];
+						$_SESSION['price'] = number_format((float)$price, 2, '.', '');
+						# CHOOSING RANDOM IMAGE
+						$images = $adv['adv_images'];
+						$image = explode(",", $images);
+						$totalImagesNum = count($image) - 1;
+						$displayImage = rand(1,$totalImagesNum);
+			?>
 
 			<main>
 				<div class="place_info">
 					<div class="main_info">
 						<h1>Your Information</h1>
 						<section>
-							<h2>Melnar B. Ancit</h2>
+							<h2><?php echo $user['joiner_fname']." ".$user['joiner_mi'].". ".$user['joiner_lname']; ?></h2>
 							<ul>
-								<li>Sitio Granada Quiot Pardo</li>
+								<li><?php echo $user['joiner_address']; ?></li>
 								<li>Cebu City, Philippines</li>
-								<li>09458566652</li>
-								<li>melnar.a@gmail.com</li>
+								<li><?php echo $user['joiner_phone']; ?></li>
+								<li><?php echo $user['joiner_email']; ?></li>
 							</ul>
 						</section>
-						<form method="post">
+						<!--  -->
+						<form method="post" action="book-guest.php">
 							<section>
-								<label for="">Book date</label>
-								<input type="text" name="" value="Book Date" disabled>
+								<label for="">Adventure date</label>
+								<input type="text" value="<?php echo date('M. j, Y', strtotime($adv['adv_date'])); ?>" disabled>
 								<label for="">Total Price</label>
-								<input id="totalPrice" type="text" name="" disabled>
+								<input type="number" name="numPrice" id="totalPrice"  disabled>
 								<label for="">Add guest/s:</label>
-								<input id="guest" type="text" name="" value="3" onchange="displayTotalPrice(this.value)">
-								<select>
-									<option value="guest">I am booking as a guest</option>
-									<option value="someone">I am booking for someone</option>
+								<!--  -->
+								<select name="cboGuests" id="cboGuests" onclick="displayTotalPrice(this.value)">
+									<?php
+										# SHOW ALL MAXIMUM NUMBER OF GUEST IN OPTIONS
+										for($i=1; $i<=$adv['adv_maxguests']; $i++){
+											echo "<option value='".$i."'>".$i."</option>";
+										}
+									?>
 								</select>
 							</section>
-							<a class="terms_cond" href="terms.php" target="_blank">Accept terms & condition</a>
-							<input class="radio" type="radio" name="" value="">
-							<button class="edit" type="button" name="button">Continue</button>
-							<a href="adventures.php" class="edit">Back</a>
+							<button class="edit" type="submit" name="btnCont">Continue</button>
+							<a href="place.php?id=<?php echo $_GET['id']; ?>" class="edit">Back</a>
 						</form>
 					</div>
 					<div class="book_info">
 						<figure>
-							<img src="images/organizers/1/610a6ddb4b7d77.05444535.jpg" alt="">
+							<?php
+								# DISPLAY RANDOM IMAGE
+								echo "<img src='images/organizers/".$adv['orga_id']."/$image[$displayImage]' alt=''>";
+							?>
 						</figure>
 						<section>
-							<h2>Adventure Name <span>Island Hopping</span> </h2>
+							<h2><?php echo $adv['adv_name']." (".$adv['adv_type'].")"; ?> <span><?php echo $adv['adv_kind']; ?></span> </h2>
 							<ul class="title_info1">
 								<li>5 <i class="fas fa-star"></i> <q>(25 reviews)</q></li>
-								<li><i class="fas fa-map-marker-alt"></i> <address>Bantayan Island</address></li>
+								<li><i class="fas fa-map-marker-alt"></i> <address><?php echo $adv['adv_address']; ?></address></li>
 							</ul>
-							<p>₱900 / guest</p>
+							<p>₱<?php echo $_SESSION['price']; ?> / guest</p>
 						</section>
 						<section>
 							<h2>Overview</h2>
-							<p><?php echo limit_text("You are reading dummy text as placeholders for this layout. Dummy text for the reader to review. Words shown on this layout are placeholders. More information about the company will be posted soon. Contents are for display purposes only.", 30) ?></p>
+							<!-- ADVENTURE DESCRIPTION LIMITED TO 30 WORDS -->
+							<p><?php echo limit_text($adv['adv_details'], 30) ?></p>
 						</section>
 					</div>
 				</div>
-
 			</main>
+			<?php
+				}
+			}
+			#END OF PHP CONDITION ABOVE
+			?>
 		</div>
 
 	<div class="clearfix"></div>
