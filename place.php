@@ -23,6 +23,7 @@
 
 		/* Main Area */
 		main{width:100%;flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0;border-radius:0;text-align:center;}
+		main h1 span{display:block;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 	</style>
 
@@ -63,7 +64,7 @@
 			?>
 			<main>
 				<div class="place_title">
-					<h1><?php echo $place['adv_name']; ?> <span>(<?php echo $place['adv_kind']; ?>)</span> </h1>
+					<h1><?php echo $place['adv_name']; ?> <span>(<?php echo $place['adv_kind']." - ".$place['adv_type']; ?>)</span> </h1>
 					<ul class="title_info1">
 						<li>5 <i class="fas fa-star"></i> <q>(25 reviews)</q></li>
 						<li><i class="fas fa-map-marker-alt"></i> <address><?php echo $place['adv_address']; ?></address></li>
@@ -94,7 +95,13 @@
 					</div>
 					<div class="book_info">
 						<h2>On <?php echo date('M. j, Y', strtotime($place['adv_date'])); ?> <span><?php echo "₱ ".number_format((float)$price, 2, '.', '')." / guest"; ?></span> </h2>
-						<a class="edit" href="#">Book</a>
+
+						<?php if(isset($_SESSION['joiner'])) { ?>
+							<a class="edit" href="book.php?id=<?php echo $_GET['id']; ?>">Book</a>
+						<?php	} else { ?>
+							<a class="edit" href="login.php" onclick='return confirm("Login to book adventure!");'>Book</a>
+						<?php	} ?>
+
 						<a class="edit" href="#">Lend</a>
 					</div>
 				</div>

@@ -516,24 +516,28 @@ function displayAll($num, $query = NULL){
 				<a class='card-link' href='place.php?id=".$result['adv_id']."'>
 				<div class='card'>
 					<figure>
-						<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt='image'>
+						<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt=''>
 					</figure>
-					<h2>".$result['adv_name']." - ".$result['adv_kind']." <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
+					<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
 					<p>".$result['adv_address']."</p>
 					<p>₱ ".number_format((float)$price, 2, '.', '')." / guest</p>
-					<ul class='icons'>
-						<li><a href='#'><i class='fas fa-book'></i></a></li>";
+					<ul class='icons'>";
 
 			  if(isset($_SESSION['joiner'])){
 					$favAdv = DB::query("SELECT * FROM favorite WHERE joiner_id = ? AND adv_id = ?", array($_SESSION['joiner'], $result['adv_id']), "READ");
+
+					echo "<li><a href='book.php?id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to book this adventure?\");'><i class='fas fa-book'></i></a></li>";
 
 					if(count($favAdv) > 0)
 						echo "<li><a id='saved' class='added' href='adventures.php?removeFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to remove this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
 					else
 						echo "<li><a href='adventures.php?addFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to add this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
 
-				} else
+				} else {
+					echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to book this adventures?\");'><i class='fas fa-book'></i></a></li>";
 					echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to add adventures to favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+				}
+
 
 				echo "
 					</ul>

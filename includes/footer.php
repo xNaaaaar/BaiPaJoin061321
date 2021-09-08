@@ -114,18 +114,19 @@
 	<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
   <!--?php wp_footer(); ?-->
 
-	<script type="text/javascript">
+	<script type="text/javascript" defer>
+		"use strict"
+
 		function displayMaxGuests(that) {
-		if (that.value == "packaged")
-				document.getElementById("display").style.opacity = 1;
-		else
-				document.getElementById("display").style.opacity = 0;
+			if (that.value == "packaged")
+					document.getElementById("display").style.opacity = 1;
+			else
+					document.getElementById("display").style.opacity = 0;
 		}
 
-		function displayTotalPrice(guest){
-			document.getElementById("totalPrice").value = guest * <?php echo $_SESSION['price']; ?>;
+		function displayTotalPrice(guest=1){
+			document.getElementById("totalPrice").value = (guest * <?php echo $_SESSION['price']; ?>).toFixed(2);
 		}
 	</script>
-
 </body>
 </html>
