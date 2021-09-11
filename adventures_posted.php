@@ -74,14 +74,13 @@
 
 		}	
 //=============================== UPDATES =====================================//
-
+		/* PAGINATION COLORS */
 		<style type="text/css">	
 		a.paging:visited {background-color: none;   color:none;}
 		a.paging:active {background-color: #FFCC00; text-decoration: none;  color:#FFFFFF}
 		a.paging:hover {background-color: wheat; font-weight:bold; color:#bf127a;}
 		
 		a.pagingCurrent:visited {color:#bf127a;}
-		a.pagingCurrent:active {background: #FF0000; color:#FFFFFF; text-decoration-line: underline;}
 		a.pagingCurrent:hover {background: wheat; font-weight:bold; color: none;}
 		</style>
 
@@ -131,19 +130,22 @@
 					</span></h2>
 					<input type="text" name="txtSearch" placeholder="Search any...">
 					<button type="submit" name="btnSearch"><i class="fas fa-search"></i></button>
+
+					<!-- DIRECT LINK FOR UNDO|RESET BUTTON --> 
 					<form>
 					      <button type="submit" formaction="adventures_posted.php" ><i class="fas fa-undo-alt"></i></button>
 				   </form>
 
 					<?php
 						// DISPLAY ALL ADVENTURE POSTED BY SPECIFIC ORGANIZER
-						if(isset($_POST['btnSearch'])){
+						if(isset($_POST['btnSearch']))
+						{
 							$txtSearch = trim(ucwords($_POST['txtSearch']));
 
 
 //=============================== UPDATES =====================================//
 
-								if(isset($_GET['page']))
+								if(isset($_GET['page'])) // Page SETTER & GETTER 
 									{
 										$page = $_GET['page'];
 									}
@@ -152,49 +154,71 @@
 											$page = 1;
 										}
 
-								$num_per_page = 2;
-								$start_from = ($page-1) * $num_per_page;
+								$num_per_page = 1; //NUMBER per Page
+								$start_from = ($page-1) * $num_per_page; // Page STARTED
 
 
-							$card = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' AND orga_id = ? ORDER BY adv_id DESC LIMIT $start_from,$num_per_page", array($_SESSION['organizer']), "READ");
+							$card = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' AND orga_id = ? ORDER BY adv_id DESC LIMIT $start_from,$num_per_page", array($_SESSION['organizer']), "READ"); // using LIMIT to limit SEARCH query display
 
 							displayAll(1, $card);
 
-							$card1 = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' AND orga_id = ?", array($_SESSION['organizer']), "READ");
+							$card1 = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' AND orga_id = ?", array($_SESSION['organizer']), "READ"); 
 
 
-								$total_record = count($card1);
-				                $total_page = ceil($total_record/$num_per_page);
+								$total_record = count($card1); // COUNTS DATA IN Search query
+				                $total_page = ceil($total_record/$num_per_page); // DIVIDES TOTAL RECORD SEARCH USING ceil
 
-				                if($page > 1)
+				                if($page > 1) // PAGINATION STARTS|PREVIOUS 
 				                {
 				                    echo "<a href='adventures_posted.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
 				                } 
 
 				                
-				                for($i=1;$i<=$total_page;$i++)
-				                {
-				                	 if ($i == $page) {
-            						 $class = 'pagingCurrent';
-            						
-            						}else
-									{ 
-									$class = 'paging';
-								
-									}
-				                    echo "<a href='adventures_posted?page=" .$i. "' class='".$class."'>  $i </a>"; 
-				                }
+       									//LIMIT PAGINATION NUMBER PAGE VISIBLE
+										$numpage = 1; 
+										$startPage = max(1, $page - $numpage);
+										$endPage = min( $total_page, $page + $numpage);
 
-				                if(($i-1) > $page)
+
+									    for($i=$startPage;$i<=$endPage;$i++) // PAGINATION COUNTS|LOOPS
+									    {
+
+									       
+											if ($i == $page) {
+							            		$class = 'pagingCurrent'; // PAGINATION CURRENT Page COLOR
+							            						
+							            	}else
+												{ 
+												$class = 'paging'; // PAGINATION COLOR
+												}
+
+
+											if($page > $i && $page > 2) { //CONTROL VISIBLE PAGINATION START NUMBER PAGE 
+
+											echo "<a href='adventures_posted.php' class='".$class."'> 1 ... </a>";  
+											}
+														       
+
+												echo "<a href='adventures_posted.php?page=" .$i. "' class='".$class."'>  $i   </a>"; 
+
+											if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE PAGINATION END NUMBER PAGE 
+											echo "<a href='adventures_posted.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>"; 
+
+											} 
+
+
+									    }
+
+				                if(($i-1) > $page) // PAGINATION NEXT|ENDS 
 				                {
 				                    echo "<a href='adventures_posted?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
 				                } 
 						
 						} else 
-							  {
+							{
 //=============================== UPDATES =====================================//
 
-								if(isset($_GET['page']))
+								if(isset($_GET['page'])) // Page SETTER & GETTER 
 									{
 										$page = $_GET['page'];
 									}
@@ -203,10 +227,10 @@
 											$page = 1;
 										}
 
-								$num_per_page = 1;
-								$start_from = ($page-1) * $num_per_page;
+								$num_per_page = 1; //NUMBER per Page
+								$start_from = ($page-1) * $num_per_page; // Page STARTED
 
-						        $card1 = DB::query("SELECT * FROM adventure WHERE orga_id = ? ORDER BY adv_id DESC LIMIT $start_from,$num_per_page", array($_SESSION['organizer']), "READ");
+						        $card1 = DB::query("SELECT * FROM adventure WHERE orga_id = ? ORDER BY adv_id DESC LIMIT $start_from,$num_per_page", array($_SESSION['organizer']), "READ"); // USING LIMIT to limit query display
 
 		    						  displayAll(1, $card1);
 
@@ -214,33 +238,54 @@
 				                $card2 = DB::query("SELECT * FROM adventure WHERE orga_id = ?", array($_SESSION['organizer']), "READ");
 
  
-								$total_record = count($card2);
-				                $total_page = ceil($total_record/$num_per_page);
+								$total_record = count($card2); // COUNTS DATA IN query
+				                $total_page = ceil($total_record/$num_per_page); // DIVIDES TOTAL RECORD USING ceil
 
-				                if($page > 1)
+				                if($page > 1) // PAGINATION STARTS|PREVIOUS
 				                {
 				                    echo "<a href='adventures_posted.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
 				                } 
 
-				                
-				                for($i=1;$i<=$total_page;$i++)
-				                {
-				                	 if ($i == $page) {
-            						 $class = 'pagingCurrent';
-            						
-            						}else
-									{ 
-									$class = 'paging';
-								
-									}
-				                    echo "<a href='adventures_posted?page=" .$i. "' class='".$class."'>  $i </a>"; 
-				                }
+       									//LIMIT PAGINATION NUMBER PAGE VISIBLE
+										$numpage = 1; 
+										$startPage = max(1, $page - $numpage);
+										$endPage = min( $total_page, $page + $numpage);
 
-				                if(($i-1) > $page)
+
+									    for($i=$startPage;$i<=$endPage;$i++) // PAGINATION COUNTS|LOOPS
+									    {
+
+									       
+											if ($i == $page) {
+							            		$class = 'pagingCurrent'; // PAGINATION CURRENT Page COLOR
+							            						
+							            	}else
+												{ 
+												$class = 'paging'; // PAGINATION COLOR
+												}
+
+
+											if($page > $i && $page > 2) { //CONTROL VISIBLE PAGINATION START NUMBER PAGE 
+
+											echo "<a href='adventures_posted.php' class='".$class."'> 1 ... </a>";  
+											}
+														       
+
+												echo "<a href='adventures_posted.php?page=" .$i. "' class='".$class."'>  $i   </a>"; 
+
+											if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE PAGINATION END NUMBER PAGE 
+											echo "<a href='adventures_posted.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>"; 
+
+											} 
+
+
+									    }
+
+				                if(($i-1) > $page) // PAGINATION NEXT|ENDS
 				                {
 				                    echo "<a href='adventures_posted?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
 				                } 
-				              }        
+				            }        
 					?>
 
 				</form>
