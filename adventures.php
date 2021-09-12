@@ -455,6 +455,8 @@
 
 			                unset($_SESSION['places']);
 
+			                //Test
+
 				        } //Index to Adventure Page Filter Code starts here - Alexis Salvador
 
 						//Pagination code ends here - Kirk Albano
@@ -472,3 +474,5 @@
 <!--Footer -->
 <?php include("includes/footer.php"); ?>
 <!-- End Footer -->
+
+
