@@ -144,14 +144,15 @@
 					<div class="payment_method">
 						<h2>Card Details <span><i class="far fa-credit-card"></i> <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i></span> </h2>
 						<label>Card name <span>*</span> </label>
-						<input type="text" name="" value="" placeholder="Name on card" required>
+						<input type="text" name="card_name" value="" placeholder="Your name (as it appears on your card)" required>
 						<label>Card number <span>*</span> </label>
-						<input type="text" name="" value="" placeholder="16 digit card number" maxlength="16" minlength="16" required>
+						<input type="text" name="card_num" value="" placeholder="16 digit card number" maxlength="16" minlength="16" required>
 						<label>Valid until <span>*</span> </label>
-						<input type="text" name="" value="" placeholder="MM/YY" maxlength="5" minlength="5" required>
+						<input type="text" name="card_expiry" value="" placeholder="MM/YY" maxlength="5" minlength="5" required>
 						<label>CVV <span>*</span> </label>
-						<input type="text" name="" value="" placeholder="3 digit CVV" maxlength="3" minlength="3" required>
+						<input type="text" name="card_cvv" value="" placeholder="3 digit code (at the back of the card)" maxlength="3" minlength="3" required>
 					</div>
+
 
 					<div class="price_details">
 						<h2>Price Details</h2>
@@ -173,7 +174,16 @@
 						</section>
 					</div>
 
-					<button class="edit" type="button" name="button">Pay with Credit/Debit Card</button>
+					<button class="edit" type="submit" name="btnPayCard">Pay with Credit/Debit Card</button>
+					
+					<?php
+						if(isset($_POST['btnPayCard'])) {
+							$payment_desc = "This payment is for Booking ID 123456 under Mr/Ms. " . $_POST['card_name'];
+							$final_price = number_format($final_price, 2, '', '');
+							process_paymongo_card_payment($_POST['card_name'],$_POST['card_num'],$_POST['card_expiry'],$_POST['card_cvv'],$final_price, $payment_desc);
+						}
+					?>
+					
 				</form>
 			</main>
 			<?php
