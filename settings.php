@@ -118,7 +118,7 @@
 			<main>
 				<form method="post">
 					<h2>Profile <span><a href="edit_profile.php"><i class='fas fa-edit'></i></a></span></h2>
-
+					<!-- FOR ORGANIZER -->
 					<?php if(isset($_SESSION['organizer'])){ ?>
 					<div class="form form1">
 						<input type="text" value="<?php echo "{$_SESSION['company']}"; ?>" placeholder="Company Name" disabled>
@@ -142,6 +142,7 @@
 
 					} else {
 					?>
+					<!-- FOR JOINER -->
 					<div class="form form1">
 						<input type="text" value="" style="display:none;" disabled>
 						<input type="text" value="<?php echo "{$_SESSION['fname']}"; ?>" placeholder="Firstname" disabled>
