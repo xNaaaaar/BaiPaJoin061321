@@ -1,6 +1,10 @@
 <?php
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
+
+	if(isset($_POST['btnCont1'])){
+		booking("pending");
+	}
 ?>
 
 <!-- Head -->
@@ -15,6 +19,12 @@
 		/* Main Area */
 		main{width:100%;flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0;border-radius:0;text-align:center;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+
+		.sub-breadcrumbs{text-align:right;margin-bottom:30px;}
+		.sub-breadcrumbs li{display:inline;margin-left:10px;color:gray;}
+		.sub-breadcrumbs li span{margin-left:10px;}
+		.ongoing{color:#000 !important;}
+		.success{color:#5cb85c !important;}
 
 		.place_info{margin:0;}
 
@@ -66,7 +76,7 @@
 				# GET THE ADVENTURE ID
 				$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($_GET['id']), "READ");
 				# GET THE BOOKED ADV WHERE STATUS IS PENDING
-				$pendingBooking = DB::query("SELECT * FROM booking WHERE book_guests=? AND book_totalcosts=? AND book_status=? AND joiner_id=? AND adv_id=?", array($_SESSION['cboGuests'], $_SESSION['numTotal'], "Pending", $_SESSION['joiner'], $_GET['id']), "READ");
+				$pendingBooking = DB::query("SELECT * FROM booking WHERE book_guests=? AND book_totalcosts=? AND book_status=? AND joiner_id=? AND adv_id=?", array($_SESSION['cboGuests'], $_SESSION['numTotal'], "pending", $_SESSION['joiner'], $_GET['id']), "READ");
 				$joiner = DB::query("SELECT * FROM joiner WHERE joiner_id=?", array($_SESSION['joiner']), "READ");
 				//
 				if(count($adv)>0 && count($pendingBooking)>0 && count($joiner)>0){
@@ -84,9 +94,14 @@
 		</div>
 		<div class="main_con">
 			<main>
+				<ul class="sub-breadcrumbs">
+					<li class="ongoing success"><i class="far fa-check-circle"></i> Add Guest <span>&#187;</span></li>
+					<li class="ongoing"><i class="far fa-check-circle"></i> Fill in Guest Information <span>&#187;</span></li>
+					<li><i class="far fa-check-circle"></i> Review & Payment</li>
+				</ul>
 				<div class="place_info">
 					<div class="main_info">
-						<form method="post">
+						<form method="post" action="payment-card.php?book_id=<?php echo $pendingBooking['book_id']; ?>&id=<?php echo $_GET['id']; ?>">
 						<h1>Guest Information</h1>
 						<section>
 							<h2>
@@ -129,9 +144,7 @@
 						</form>
 						<!-- WHEN BUTTON IS CLICKED -->
 						<?php
-						if(isset($_POST['btnCont2'])){
-							booking("waiting for payment", $pendingBooking['book_id']);
-						}
+
 						?>
 					</div>
 					<!-- BOOKED INFORMATION -->
@@ -169,5 +182,5 @@
 <!-- End Main -->
 
 <!--Footer -->
-<?php include("includes/footer.php"); ?>
+<?php include("includes/footer.php");?>
 <!-- End Footer -->

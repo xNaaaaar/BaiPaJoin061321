@@ -888,9 +888,10 @@ function booking($status, $book_id=null) {
 		// INSERT BOOKED ADVENTURE
 		DB::query("INSERT INTO booking(book_guests, book_datetime, book_totalcosts, book_status, joiner_id, adv_id) VALUES(?,?,?,?,?,?)", array($_SESSION['cboGuests'], $currentDateTime, $_SESSION['numTotal'], $status, $_SESSION['joiner'], $_GET['id']), "CREATE");
 		// GO TO
-		header("Location: book-guest.php?id={$_GET['id']}");
+		// header("Location: book-guest.php?id={$_GET['id']}");
 	// IF STATUS IS WAITING FOR PAYMENT
 	} else if($status === "waiting for payment") {
+		$bool = false;
 		// BOOK AS A GUEST: 1 JOINER 1:M GUESTS
 		if($_SESSION['cboGuests'] > 1 && $_SESSION['bookOption'] == "guest"){
 			for($i=0; $i<$_SESSION['cboGuests']-1; $i++){
@@ -900,11 +901,8 @@ function booking($status, $book_id=null) {
 				//
 				bookingProcess($txtName, $txtPhone, $emEmail, $status, $book_id);
 			}
-			if($bool)
-				echo $result = "<script>confirm('Successfully booked! Proceed to payment?')</script>";
-		}
 		// BOOK FOR SOMEONE: 1:M GUESTS
-		else if($_SESSION['cboGuests'] > 1 && $_SESSION['bookOption'] == "someone"){
+		} else if($_SESSION['cboGuests'] > 1 && $_SESSION['bookOption'] == "someone"){
 			for($i=0; $i<$_SESSION['cboGuests']; $i++){
 				$txtName = trim(ucwords($_POST['txtName'][$i]));
 				$txtPhone = $_POST['txtPhone'][$i];
@@ -921,15 +919,16 @@ function booking($status, $book_id=null) {
 			$emEmail = trim($_POST['emEmail'][0]);
 			//
 			bookingProcess($txtName, $txtPhone, $emEmail, $status, $book_id);
-			if($bool)
-				echo $result = "<script>confirm('Successfully booked! Proceed to payment?')</script>";
-		// BOOK AS A GUEST: 1 JOINER
+		// BOOK AS A GUEST: 1 JOINER (KUWANG)
 		} else {
 			// UPDATE JOINER BOOKING STATUS
 			DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array($status, $book_id), "UPDATE");
-			// UPDATE ADVENTURE BOOKED
+			// UPDATE ADVENTURE TABLE'S CURRENT GUEST
+			DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($_SESSION['cboGuests'], $_GET['id']), "UPDATE");
+			//
+			$bool = true;
+			//
 		}
-
 	// IF STATUS (TBD)
 	} else {
 
@@ -938,7 +937,6 @@ function booking($status, $book_id=null) {
 
 ##### CODE START HERE @BOOKING PROCESS OF ADVENTURE #####
 function bookingProcess($name, $phone, $email, $status, $book_id) {
-	$bool = false;
 	// ERROR TRAPPINGS
 	if(preg_match('/\d/', $name))
 		echo "<script>alert('Name cannot have a number!')</script>";
@@ -950,7 +948,7 @@ function bookingProcess($name, $phone, $email, $status, $book_id) {
 		// UPDATE ADVENTURE TABLE'S CURRENT GUEST
 		DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($_SESSION['cboGuests'], $_GET['id']), "UPDATE");
 		//
-		$bool = true;
+		return $bool = true;
 	}
 }
 

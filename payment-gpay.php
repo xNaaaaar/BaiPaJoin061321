@@ -1,6 +1,10 @@
 <?php
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
+
+	if(isset($_POST['btnCont2']) && isset($_GET['book_id'])){
+		booking("waiting for payment", $_GET['book_id']);
+	}
 ?>
 
 <!-- Head -->
@@ -28,6 +32,12 @@
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+
+		.sub-breadcrumbs{text-align:right;margin-bottom:30px;}
+		.sub-breadcrumbs li{display:inline;margin-left:10px;color:gray;}
+		.sub-breadcrumbs li span{margin-left:10px;}
+		.ongoing{color:#000 !important;}
+		.success{color:#5cb85c !important;}
 
 		.booking_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
 		.booking_details h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
@@ -84,23 +94,50 @@
 			<aside class="sidebar">
 				<h2>Payment Method</h2>
 				<ul>
-					<li class=""><a href="payment-card.php">Card</a> </li>
-					<li class=""><a href="payment-gcash.php">Gcash</a> </li>
-					<li class="current_sidebar"><a href="payment-gpay.php">Grab Pay</a> </li>
+					<li class=""><a href="payment-card.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Card</a> </li>
+					<li class=""><a href="payment-gcash.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Gcash</a> </li>
+					<li class="current_sidebar"><a href="payment-gpay.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Grab Pay</a> </li>
 				</ul>
 			</aside>
 			<!-- End of Sub Navigation -->
 
+			<?php
+				$joiner = DB::query("SELECT * FROM joiner WHERE joiner_id=?", array($_SESSION['joiner']), "READ");
+				$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($_GET['id']), "READ");
+				$booked = DB::query("SELECT * FROM booking WHERE book_id=?", array($_GET['book_id']), "READ");
+
+				if(count($joiner)>0 && count($adv)>0 && count($booked)>0){
+					$joiner = $joiner[0];
+					$adv = $adv[0];
+					$booked = $booked[0];
+					// JOINER FEES CALCULATION
+					$price_fee = $booked['book_totalcosts'] * 0.035 + 15;
+					$final_price = $booked['book_totalcosts'] + $price_fee;
+			?>
 			<main>
+				<ul class="sub-breadcrumbs">
+					<li class="ongoing success"><i class="far fa-check-circle"></i> Add Guest <span>&#187;</span></li>
+					<li class="ongoing success"><i class="far fa-check-circle"></i> Fill in Guest Information <span>&#187;</span></li>
+					<li class="ongoing"><i class="far fa-check-circle"></i> Review & Payment</li>
+				</ul>
 				<form method="post">
 					<h2>Payment</h2>
 
 					<div class="booking_details">
-						<h2>Melnar Ancit <em>Booking for someone else.</em> </h2>
+						<h2>
+							<?php
+							echo $joiner['joiner_fname']." ".$joiner['joiner_mi'].". ".$joiner['joiner_lname'];
+							if($_SESSION['bookOption'] == "someone"){
+								echo "<em>Booking for someone else.</em>";
+							} else {
+								echo "<em>Booking as a guest.</em>";
+							}
+							?>
+						</h2>
 						<ul>
-							<li>Book ID: 123123</li>
-							<li>Total guest/s: 3</li>
-							<li>on Monday, Sept. 23, 2021</li>
+							<li>Book ID: <?php echo $booked['book_id']; ?></li>
+							<li>Total guest/s: <?php echo $booked['book_guests']; ?></li>
+							<li>on <?php echo date('l - M. j, Y', strtotime($adv['adv_date'])); ?></li>
 						</ul>
 					</div>
 
@@ -109,26 +146,28 @@
 						<section>
 							<table>
 								<tr>
-									<td>Adventure Sample Name 1 - Island Hopping (Packaged)</td>
-									<td>₱ 780.00</td>
+									<td><?php echo $adv['adv_name']." - ".$adv['adv_kind']." (".$adv['adv_type'].")"; ?></td>
+									<td>₱ <?php echo $booked['book_totalcosts']; ?></td>
 								</tr>
 								<tr>
-									<td>Taxes and Fees</td>
-									<td>₱ 120.00</td>
+									<td>Fees</td>
+									<td>₱ <?php echo number_format($price_fee, 2, '.', ''); ?></td>
 								</tr>
 								<tr>
 									<td>Total Price</td>
-									<td>₱ 900.00</td>
+									<td>₱ <?php echo number_format($final_price, 2, '.', ''); ?></td>
 								</tr>
 							</table>
 						</section>
 					</div>
 
-					<button class="edit" type="button" name="button">Pay with Gcash</button>
+					<button class="edit" type="button" name="button">Pay with Grab Pay</button>
 				</form>
 			</main>
+			<?php
+				}
+			?>
 		</div>
-
 	<div class="clearfix"></div>
 	</div>
 </div>

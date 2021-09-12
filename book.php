@@ -1,10 +1,6 @@
 <?php
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
-
-	if(isset($_POST['btnCont1'])){
-		booking("pending");
-	}
 ?>
 
 <!-- Head -->
@@ -19,6 +15,12 @@
 		/* Main Area */
 		main{width:100%;flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0;border-radius:0;text-align:center;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+
+		.sub-breadcrumbs{text-align:right;margin-bottom:30px;}
+		.sub-breadcrumbs li{display:inline;margin-left:10px;color:gray;}
+		.sub-breadcrumbs li span{margin-left:10px;}
+		.ongoing{color:#000 !important;}
+		.success{color:#5cb85c !important;}
 
 		.place_info{margin:0;}
 
@@ -83,8 +85,12 @@
 						$totalImagesNum = count($image) - 1;
 						$displayImage = rand(1,$totalImagesNum);
 			?>
-
 			<main>
+				<ul class="sub-breadcrumbs">
+					<li class="ongoing"><i class="far fa-check-circle"></i> Add Guest <span>&#187;</span></li>
+					<li><i class="far fa-check-circle"></i> Fill in Guest Information <span>&#187;</span></li>
+					<li><i class="far fa-check-circle"></i> Review & Payment</li>
+				</ul>
 				<div class="place_info">
 					<div class="main_info">
 						<h1>Your Information</h1>
@@ -98,7 +104,7 @@
 							</ul>
 						</section>
 						<!--  -->
-						<form method="post">
+						<form method="post" action="book-guest.php?id=<?php echo $_GET['id']; ?>">
 							<section>
 								<h2><?php echo "Date: ".date('M. j, Y', strtotime($adv['adv_date'])); ?></h2>
 								<select name="cboOption" onclick="checkBooking(this.value);" required>
