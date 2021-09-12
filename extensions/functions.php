@@ -953,12 +953,130 @@ function bookingProcess($name, $phone, $email, $status, $book_id) {
 }
 
 
+##### CODE START HERE @PAYMENT METHODS #####
+function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $card_cvv, $amount,$description) {
 
+	$curl = curl_init();
 
+	//Paymongo create card PAYMENT INTENT code STARTS here
 
+	$intent_body_params = '{
+	    "data": {
+	        "attributes": {
+	            "amount": '.$amount.',
+	            "payment_method_allowed": [
+	                "card"
+	            ],
+	            "payment_method_options": {
+	                "card": {
+	                    "request_three_d_secure": "any"
+	                }
+	            },
+	            "currency": "PHP",
+	            "description": "'.$description.'"
+	        }
+	    }
+	}'; //This is to setup the query for paymongo create payment intent
 
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => 'https://api.paymongo.com/v1/payment_intents',
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'POST',
+	  CURLOPT_POSTFIELDS => $intent_body_params,
+	  CURLOPT_HTTPHEADER => array(
+	    'Authorization: Basic c2tfdGVzdF9ITFJ0NHRmYUZlMjNGUE5iZVppcmtyZXA6',
+	    'Content-Type: application/json'
+	  ),
+	));
 
+	$payment_intent = curl_exec($curl);
 
+	echo $payment_intent;
+	
+	//Paymongo create card PAYMENT INTENT code ENDS here
 
+	//Paymongo add card PAYMENT DETAILS code STARTS here
+
+	$method_body_params = '{
+	    "data": {
+	        "attributes": {
+	            "details": {
+	                "card_number": "'.$card_num.'",
+	                "exp_month": '.substr($card_expiry, 0,1).',
+	                "exp_year": '.substr($card_expiry, 3,4).',
+	                "cvc": "'.$card_cvv.'"
+	            },
+	            "type": "card"
+	        }
+	    }
+	}'; //This is to setup the query for paymongo add payment method
+
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => 'https://api.paymongo.com/v1/payment_methods',
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'POST',
+	  CURLOPT_POSTFIELDS => $method_body_params,
+	  CURLOPT_HTTPHEADER => array(
+	    'Authorization: Basic cGtfdGVzdF82RDZ4TGk3OHRORGtOWU1WR3RlZEtkcWg6',
+	    'Content-Type: application/json'
+	  ),
+	));
+
+	$payment_method = curl_exec($curl);
+
+	echo $payment_method;
+
+	//Paymongo add card PAYMENT DETAILS code ENDS here
+
+	//Paymongo attach card PAYMENT DETAILS + PAYMENT METHOD code STARTS here
+
+	$intent = json_decode($payment_intent,true);
+	$method = json_decode($payment_method,true);
+
+	$attach_body_params = '{
+    "data": {
+        "attributes": {
+            "payment_method": "'.$method['data']['id'].'",
+            "client_key": "'.$intent['data']['attributes']['client_key'].'",
+            "return_url": "https://localhost/BaiPaJoin/index.php"
+        	}
+    	}
+	}';
+	//This is to setup the query for paymongo attach payment method + payment intent
+
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => 'https://api.paymongo.com/v1/payment_intents/'.$intent['data']['id'].'/attach',
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'POST',
+	  CURLOPT_POSTFIELDS => $attach_body_params,
+	  CURLOPT_HTTPHEADER => array(
+	    'Authorization: Basic c2tfdGVzdF9ITFJ0NHRmYUZlMjNGUE5iZVppcmtyZXA6',
+	    'Content-Type: application/json'
+	  ),
+	));
+
+	$payment_attach = curl_exec($curl);
+
+	echo $payment_attach;
+
+	//Paymongo attach card PAYMENT DETAILS + PAYMENT METHOD code ENDS here
+
+	curl_close($curl);
+}
 
 ##### END OF CODES #####
