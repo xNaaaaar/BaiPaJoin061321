@@ -594,6 +594,12 @@ function deleteSQLDataTable($table, $id){
 		DB::query("DELETE FROM {$table} WHERE vouch_code=?", array($id), 'DELETE');
 	}
 
+	// DELETE ADDED BOOKING
+	else if($table == 'booking'){
+		// DELETE SPECIFIC ID
+		DB::query("DELETE FROM {$table} WHERE book_id=? AND book_status=?", array($id, "pending"), 'DELETE');
+	}
+
 	else {
 
 	}
@@ -639,7 +645,7 @@ function postAdventure(){
 			echo "<script>alert('File type is not allowed!')</script>";
 		}
 		else {
-			DB::query('INSERT INTO adventure(adv_images, adv_name, adv_kind, adv_type, adv_address, adv_totalcostprice, adv_date, adv_details, adv_postedDate, adv_maxguests, adv_itineraryImg, orga_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', array($fileAdvImgs, $txtName, $cboKind, $cboType, $cboLoc, $numPrice, $dateDate, $txtDetails, date('Y-m-d'), $numMaxGuests, $fileItineraryImg, $_SESSION['organizer']), "CREATE");
+			DB::query('INSERT INTO adventure(adv_images, adv_name, adv_kind, adv_type, adv_address, adv_totalcostprice, adv_date, adv_details, adv_postedDate, adv_maxguests, adv_currentGuest, adv_itineraryImg, orga_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)', array($fileAdvImgs, $txtName, $cboKind, $cboType, $cboLoc, $numPrice, $dateDate, $txtDetails, date('Y-m-d'), $numMaxGuests, 0, $fileItineraryImg, $_SESSION['organizer']), "CREATE");
 
 			header('Location: adventures_posted.php?added=1');
 		}
@@ -871,8 +877,82 @@ function limit_text($text, $limit) {
     return $text;
 }
 
+##### CODE START HERE @BOOKING ADVENTURE #####
+function booking($status, $book_id=null) {
+	// IF STATUS PENDING
+	if($status === "pending"){
+		$_SESSION['bookOption'] = $_POST['cboOption'];
+		$_SESSION['numTotal'] = $_POST['numTotal'];
+		$_SESSION['cboGuests'] = $_POST['cboGuests'];
+		$currentDateTime = date("Y-m-d H:i:s");
+		// INSERT BOOKED ADVENTURE
+		DB::query("INSERT INTO booking(book_guests, book_datetime, book_totalcosts, book_status, joiner_id, adv_id) VALUES(?,?,?,?,?,?)", array($_SESSION['cboGuests'], $currentDateTime, $_SESSION['numTotal'], $status, $_SESSION['joiner'], $_GET['id']), "CREATE");
+		// GO TO
+		header("Location: book-guest.php?id={$_GET['id']}");
+	// IF STATUS IS WAITING FOR PAYMENT
+	} else if($status === "waiting for payment") {
+		// BOOK AS A GUEST: 1 JOINER 1:M GUESTS
+		if($_SESSION['cboGuests'] > 1 && $_SESSION['bookOption'] == "guest"){
+			for($i=0; $i<$_SESSION['cboGuests']-1; $i++){
+				$txtName = trim(ucwords($_POST['txtName'][$i]));
+				$txtPhone = $_POST['txtPhone'][$i];
+				$emEmail = trim($_POST['emEmail'][$i]);
+				//
+				bookingProcess($txtName, $txtPhone, $emEmail, $status, $book_id);
+			}
+			if($bool)
+				echo $result = "<script>confirm('Successfully booked! Proceed to payment?')</script>";
+		}
+		// BOOK FOR SOMEONE: 1:M GUESTS
+		else if($_SESSION['cboGuests'] > 1 && $_SESSION['bookOption'] == "someone"){
+			for($i=0; $i<$_SESSION['cboGuests']; $i++){
+				$txtName = trim(ucwords($_POST['txtName'][$i]));
+				$txtPhone = $_POST['txtPhone'][$i];
+				$emEmail = trim($_POST['emEmail'][$i]);
+				//
+				bookingProcess($txtName, $txtPhone, $emEmail, $status, $book_id);
+			}
+			if($bool)
+				echo $result = "<script>confirm('Successfully booked! Proceed to payment?')</script>";
+		// BOOK FOR SOMEONE: 1 GUEST
+		} else if($_SESSION['cboGuests'] == 1 && $_SESSION['bookOption'] == "someone"){
+			$txtName = trim(ucwords($_POST['txtName'][0]));
+			$txtPhone = $_POST['txtPhone'][0];
+			$emEmail = trim($_POST['emEmail'][0]);
+			//
+			bookingProcess($txtName, $txtPhone, $emEmail, $status, $book_id);
+			if($bool)
+				echo $result = "<script>confirm('Successfully booked! Proceed to payment?')</script>";
+		// BOOK AS A GUEST: 1 JOINER
+		} else {
+			// UPDATE JOINER BOOKING STATUS
+			DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array($status, $book_id), "UPDATE");
+			// UPDATE ADVENTURE BOOKED
+		}
 
+	// IF STATUS (TBD)
+	} else {
 
+	}
+}
+
+##### CODE START HERE @BOOKING PROCESS OF ADVENTURE #####
+function bookingProcess($name, $phone, $email, $status, $book_id) {
+	$bool = false;
+	// ERROR TRAPPINGS
+	if(preg_match('/\d/', $name))
+		echo "<script>alert('Name cannot have a number!')</script>";
+	else {
+		// INSERT GUEST INFO TO TABLE
+		DB::query("INSERT INTO guest(book_id, guest_name, guest_phone, guest_email) VALUES(?,?,?,?)", array($book_id, $name, $phone, $email), "CREATE");
+		// UPDATE JOINER BOOKING STATUS
+		DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array($status, $book_id), "UPDATE");
+		// UPDATE ADVENTURE TABLE'S CURRENT GUEST
+		DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($_SESSION['cboGuests'], $_GET['id']), "UPDATE");
+		//
+		$bool = true;
+	}
+}
 
 
 

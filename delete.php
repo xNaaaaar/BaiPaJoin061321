@@ -21,6 +21,12 @@
 			//
 			header("Location: voucher.php?deleted=1");
 		}
+		else if($_GET['table'] == 'booking'){
+			// DELETE TABLE IN BOOKING
+			deleteSQLDataTable($_GET['table'], $_GET['id']);
+			//
+			header("Location: book.php?id={$_GET['adv']}");
+		}
 		else {
 
 		}

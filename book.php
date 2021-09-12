@@ -1,6 +1,10 @@
 <?php
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
+
+	if(isset($_POST['btnCont1'])){
+		booking("pending");
+	}
 ?>
 
 <!-- Head -->
@@ -94,15 +98,17 @@
 							</ul>
 						</section>
 						<!--  -->
-						<form method="post" action="book-guest.php">
+						<form method="post">
 							<section>
-								<label for="">Adventure date</label>
-								<input type="text" value="<?php echo date('M. j, Y', strtotime($adv['adv_date'])); ?>" disabled>
-								<label for="">Total Price</label>
-								<input type="number" name="numPrice" id="totalPrice"  disabled>
-								<label for="">Add guest/s:</label>
+								<h2><?php echo "Date: ".date('M. j, Y', strtotime($adv['adv_date'])); ?></h2>
+								<select name="cboOption" onclick="checkBooking(this.value);" required>
+									<option value="">-- BOOKING OPTION --</option>
+									<option value="guest">I am booking as a guest</option>
+									<option value="someone">I am booking for someone</option>
+								</select>
+								<label>Add guest/s:</label>
 								<!--  -->
-								<select name="cboGuests" id="cboGuests" onclick="displayTotalPrice(this.value)">
+								<select name="cboGuests" id="cboGuests" onclick="displayTotalPrice(this.value)" required>
 									<?php
 										# SHOW ALL MAXIMUM NUMBER OF GUEST IN OPTIONS
 										for($i=1; $i<=$adv['adv_maxguests']; $i++){
@@ -110,11 +116,14 @@
 										}
 									?>
 								</select>
+								<label>Total Price</label>
+								<input type="number" name="numTotal" id="totalPrice" value="<?php echo $_SESSION['price']; ?>" readonly required>
 							</section>
-							<button class="edit" type="submit" name="btnCont">Continue</button>
+							<button class="edit" type="submit" name="btnCont1">Continue</button>
 							<a href="place.php?id=<?php echo $_GET['id']; ?>" class="edit">Back</a>
 						</form>
 					</div>
+					<!-- BOOKED INFORMATION -->
 					<div class="book_info">
 						<figure>
 							<?php
