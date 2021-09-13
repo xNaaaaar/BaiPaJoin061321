@@ -516,24 +516,28 @@ function displayAll($num, $query = NULL){
 				<a class='card-link' href='place.php?id=".$result['adv_id']."'>
 				<div class='card'>
 					<figure>
-						<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt='image'>
+						<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt=''>
 					</figure>
-					<h2>".$result['adv_name']." - ".$result['adv_kind']." <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
+					<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
 					<p>".$result['adv_address']."</p>
 					<p>₱ ".number_format((float)$price, 2, '.', '')." / guest</p>
-					<ul class='icons'>
-						<li><a href='#'><i class='fas fa-book'></i></a></li>";
+					<ul class='icons'>";
 
 			  if(isset($_SESSION['joiner'])){
 					$favAdv = DB::query("SELECT * FROM favorite WHERE joiner_id = ? AND adv_id = ?", array($_SESSION['joiner'], $result['adv_id']), "READ");
+
+					echo "<li><a href='book.php?id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to book this adventure?\");'><i class='fas fa-book'></i></a></li>";
 
 					if(count($favAdv) > 0)
 						echo "<li><a id='saved' class='added' href='adventures.php?removeFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to remove this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
 					else
 						echo "<li><a href='adventures.php?addFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to add this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
 
-				} else
+				} else {
+					echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to book this adventures?\");'><i class='fas fa-book'></i></a></li>";
 					echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to add adventures to favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+				}
+
 
 				echo "
 					</ul>
@@ -590,6 +594,12 @@ function deleteSQLDataTable($table, $id){
 		DB::query("DELETE FROM {$table} WHERE vouch_code=?", array($id), 'DELETE');
 	}
 
+	// DELETE ADDED BOOKING
+	else if($table == 'booking'){
+		// DELETE SPECIFIC ID
+		DB::query("DELETE FROM {$table} WHERE book_id=? AND book_status=?", array($id, "pending"), 'DELETE');
+	}
+
 	else {
 
 	}
@@ -635,7 +645,7 @@ function postAdventure(){
 			echo "<script>alert('File type is not allowed!')</script>";
 		}
 		else {
-			DB::query('INSERT INTO adventure(adv_images, adv_name, adv_kind, adv_type, adv_address, adv_totalcostprice, adv_date, adv_details, adv_postedDate, adv_maxguests, adv_itineraryImg, orga_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', array($fileAdvImgs, $txtName, $cboKind, $cboType, $cboLoc, $numPrice, $dateDate, $txtDetails, date('Y-m-d'), $numMaxGuests, $fileItineraryImg, $_SESSION['organizer']), "CREATE");
+			DB::query('INSERT INTO adventure(adv_images, adv_name, adv_kind, adv_type, adv_address, adv_totalcostprice, adv_date, adv_details, adv_postedDate, adv_maxguests, adv_currentGuest, adv_itineraryImg, orga_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)', array($fileAdvImgs, $txtName, $cboKind, $cboType, $cboLoc, $numPrice, $dateDate, $txtDetails, date('Y-m-d'), $numMaxGuests, 0, $fileItineraryImg, $_SESSION['organizer']), "CREATE");
 
 			header('Location: adventures_posted.php?added=1');
 		}
@@ -844,16 +854,265 @@ function removeFavorite($advId, $page = NULL){
 		header('Location: adventures.php?removed=1');
 }
 
+##### CODE START HERE @RATING ADVENTURE #####
+function rateAdventure(){
+	$star = $_POST['star'];
+	$txtFeedback = trim(ucwords($_POST['txtFeedback']));
+
+	if($txtFeedback == "")
+		$txtFeedback = "No comment";
+
+	DB::query("INSERT INTO rating(rating_stars, rating_message, joiner_id, adv_id) VALUES(?,?,?,?)", array($star, $txtFeedback, $_SESSION['joiner'], $_GET['id']), "CREATE");
+
+	header("Location: place.php?id={$_GET['id']}&rated=1");
+}
+
+##### CODE START HERE @LIMITING TEXT CONTENTS #####
+function limit_text($text, $limit) {
+    if (str_word_count($text, 0) > $limit) {
+        $words = str_word_count($text, 2);
+        $pos   = array_keys($words);
+        $text  = substr($text, 0, $pos[$limit]) . '...';
+    }
+    return $text;
+}
+
+##### CODE START HERE @BOOKING ADVENTURE #####
+function booking($status, $book_id=null) {
+	// IF STATUS PENDING
+	if($status === "pending"){
+		$_SESSION['bookOption'] = $_POST['cboOption'];
+		$_SESSION['numTotal'] = $_POST['numTotal'];
+		$_SESSION['cboGuests'] = $_POST['cboGuests'];
+		$currentDateTime = date("Y-m-d H:i:s");
+		// INSERT BOOKED ADVENTURE
+		DB::query("INSERT INTO booking(book_guests, book_datetime, book_totalcosts, book_status, joiner_id, adv_id) VALUES(?,?,?,?,?,?)", array($_SESSION['cboGuests'], $currentDateTime, $_SESSION['numTotal'], $status, $_SESSION['joiner'], $_GET['id']), "CREATE");
+		// GO TO
+		// header("Location: book-guest.php?id={$_GET['id']}");
+	// IF STATUS IS WAITING FOR PAYMENT
+	} else if($status === "waiting for payment") {
+		$bool = false;
+		// BOOK AS A GUEST: 1 JOINER 1:M GUESTS
+		if($_SESSION['cboGuests'] > 1 && $_SESSION['bookOption'] == "guest"){
+			for($i=0; $i<$_SESSION['cboGuests']-1; $i++){
+				$txtName = trim(ucwords($_POST['txtName'][$i]));
+				$txtPhone = $_POST['txtPhone'][$i];
+				$emEmail = trim($_POST['emEmail'][$i]);
+				//
+				bookingProcess($txtName, $txtPhone, $emEmail, $status, $book_id);
+			}
+		// BOOK FOR SOMEONE: 1:M GUESTS
+		} else if($_SESSION['cboGuests'] > 1 && $_SESSION['bookOption'] == "someone"){
+			for($i=0; $i<$_SESSION['cboGuests']; $i++){
+				$txtName = trim(ucwords($_POST['txtName'][$i]));
+				$txtPhone = $_POST['txtPhone'][$i];
+				$emEmail = trim($_POST['emEmail'][$i]);
+				//
+				bookingProcess($txtName, $txtPhone, $emEmail, $status, $book_id);
+			}
+			if($bool)
+				echo $result = "<script>confirm('Successfully booked! Proceed to payment?')</script>";
+		// BOOK FOR SOMEONE: 1 GUEST
+		} else if($_SESSION['cboGuests'] == 1 && $_SESSION['bookOption'] == "someone"){
+			$txtName = trim(ucwords($_POST['txtName'][0]));
+			$txtPhone = $_POST['txtPhone'][0];
+			$emEmail = trim($_POST['emEmail'][0]);
+			//
+			bookingProcess($txtName, $txtPhone, $emEmail, $status, $book_id);
+		// BOOK AS A GUEST: 1 JOINER (KUWANG)
+		} else {
+			// UPDATE JOINER BOOKING STATUS
+			DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array($status, $book_id), "UPDATE");
+			// UPDATE ADVENTURE TABLE'S CURRENT GUEST
+			DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($_SESSION['cboGuests'], $_GET['id']), "UPDATE");
+			//
+			$bool = true;
+			//
+		}
+	// IF STATUS (TBD)
+	} else {
+
+	}
+}
+
+##### CODE START HERE @BOOKING PROCESS OF ADVENTURE #####
+function bookingProcess($name, $phone, $email, $status, $book_id) {
+	// ERROR TRAPPINGS
+	if(preg_match('/\d/', $name))
+		echo "<script>alert('Name cannot have a number!')</script>";
+	else {
+		// INSERT GUEST INFO TO TABLE
+		DB::query("INSERT INTO guest(book_id, guest_name, guest_phone, guest_email) VALUES(?,?,?,?)", array($book_id, $name, $phone, $email), "CREATE");
+		// UPDATE JOINER BOOKING STATUS
+		DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array($status, $book_id), "UPDATE");
+		// UPDATE ADVENTURE TABLE'S CURRENT GUEST
+		DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($_SESSION['cboGuests'], $_GET['id']), "UPDATE");
+		//
+		return $bool = true;
+	}
+}
 
 
+##### CODE START HERE @PAYMENT METHODS #####
+function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $card_cvv, $amount, $description) {
 
+	$curl = curl_init();
 
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
+	//Paymongo create card PAYMENT INTENT code STARTS here
 
+	$intent_body_params = '{
+	    "data": {
+	        "attributes": {
+	            "amount": '.$amount.',
+	            "payment_method_allowed": [
+	                "card"
+	            ],
+	            "payment_method_options": {
+	                "card": {
+	                    "request_three_d_secure": "any"
+	                }
+	            },
+	            "currency": "PHP",
+	            "description": "'.$description.'"
+	        }
+	    }
+	}'; //This is to setup the query for paymongo create payment intent
 
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => 'https://api.paymongo.com/v1/payment_intents',
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'POST',
+	  CURLOPT_POSTFIELDS => $intent_body_params,
+	  CURLOPT_HTTPHEADER => array(
+	    'Authorization: Basic c2tfdGVzdF9ITFJ0NHRmYUZlMjNGUE5iZVppcmtyZXA6',
+	    'Content-Type: application/json'
+	  ),
+	));
 
+	$payment_intent = curl_exec($curl);
+	$err = curl_error($curl);
 
+	if(!empty($err))
+		echo $err;
 
+	if(!empty($payment_intent)) {
+		$log_filename = "logs\payment_intent";
+		if(!file_exists($log_filename)) {
+			mkdir($log_filename, 0777, true);
+		}
+		$log_file_data = 'logs\\payment_intent\\log_' . date('d-M-Y') . '.log';
+    	file_put_contents($log_file_data, date('h:i:sa').' => '.$payment_intent . "\n" . "\n", FILE_APPEND);
+	} //This code will a log.txt file to get the response of the cURL command
+	
+	//Paymongo create card PAYMENT INTENT code ENDS here
 
+	//Paymongo add card PAYMENT DETAILS code STARTS here
+
+	$method_body_params = '{
+	    "data": {
+	        "attributes": {
+	            "details": {
+	                "card_number": "'.$card_num.'",
+	                "exp_month": '.substr($card_expiry, 0,1).',
+	                "exp_year": '.substr($card_expiry, 3,4).',
+	                "cvc": "'.$card_cvv.'"
+	            },
+	            "type": "card"
+	        }
+	    }
+	}'; //This is to setup the query for paymongo add payment method
+
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => 'https://api.paymongo.com/v1/payment_methods',
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'POST',
+	  CURLOPT_POSTFIELDS => $method_body_params,
+	  CURLOPT_HTTPHEADER => array(
+	    'Authorization: Basic cGtfdGVzdF82RDZ4TGk3OHRORGtOWU1WR3RlZEtkcWg6',
+	    'Content-Type: application/json'
+	  ),
+	));
+
+	$payment_method = curl_exec($curl);
+	$err = curl_error($curl);
+
+	if(!empty($err))
+		echo $err;
+
+	if(!empty($payment_method)) {
+		$log_filename = "logs\payment_method";
+		if(!file_exists($log_filename)) {
+			mkdir($log_filename, 0777, true);
+		}
+		$log_file_data = 'logs\\payment_method\\log_' . date('d-M-Y') . '.log';
+    	file_put_contents($log_file_data, date('h:i:sa').' => '.$payment_method . "\n" . "\n", FILE_APPEND);
+	} //This code will a log.txt file to get the response of the cURL command
+
+	//Paymongo add card PAYMENT DETAILS code ENDS here
+
+	//Paymongo attach card PAYMENT DETAILS + PAYMENT METHOD code STARTS here
+
+	$intent = json_decode($payment_intent,true);
+	$method = json_decode($payment_method,true);
+
+	$attach_body_params = '{
+    "data": {
+        "attributes": {
+            "payment_method": "'.$method['data']['id'].'",
+            "client_key": "'.$intent['data']['attributes']['client_key'].'",
+            "return_url": "https://localhost/BaiPaJoin/index.php"
+        	}
+    	}
+	}';
+	//This is to setup the query for paymongo attach payment method + payment intent
+
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => 'https://api.paymongo.com/v1/payment_intents/'.$intent['data']['id'].'/attach',
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'POST',
+	  CURLOPT_POSTFIELDS => $attach_body_params,
+	  CURLOPT_HTTPHEADER => array(
+	    'Authorization: Basic c2tfdGVzdF9ITFJ0NHRmYUZlMjNGUE5iZVppcmtyZXA6',
+	    'Content-Type: application/json'
+	  ),
+	));
+
+	$payment_attach = curl_exec($curl);
+	$err = curl_error($curl);
+
+	if(!empty($err))
+		echo $err;
+	
+	if(!empty($payment_attach)) {
+		$log_filename = "logs\payment_attach";
+		if(!file_exists($log_filename)) {
+			mkdir($log_filename, 0777, true);
+		}
+		$log_file_data = 'logs\\payment_attach\\log_' . date('d-M-Y') . '.log';
+		file_put_contents($log_file_data, date('h:i:sa').' => '.$payment_attach . "\n" . "\n", FILE_APPEND);
+	} 	//This code will a log.txt file to get the response of the cURL command
+
+	//Paymongo attach card PAYMENT DETAILS + PAYMENT METHOD code ENDS here
+
+	curl_close($curl);
+}
 
 ##### END OF CODES #####

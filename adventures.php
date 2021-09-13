@@ -52,7 +52,7 @@
 		.sidebar ul h3{font-size:25px;margin-top:15px;}
 		.sidebar ul li{line-height:35px;}
 		.sidebar ul li label{font-weight:400;}
-		.sidebar button{display:inline-block;width:200px;height:50px;background:#bf127a;border-radius:50px;color:#fff;margin:15px 5px;text-align:center;font:normal 20px/45px Montserrat,sans-serif;border:none;}
+		.sidebar button{display:inline-block;vertical-align:top;width:100px;height:35px;background:#bf127a;border-radius:50px;color:#fff;margin:15px 5px;text-align:center;font:normal 15px/35px Montserrat,sans-serif;border:none;}
 		.sidebar button:hover{background:#8c0047;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;position:relative;}
@@ -63,6 +63,7 @@
 		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
 		main button:first-of-type{right:67px;}
 		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:142px;right:15px;z-index:5;font-size:20px;}
+		main button:hover{background:#8c0047;}
 
 		.card-link{text-decoration:none !important;}
 		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 125px 30px 215px;line-height:35px;text-align:left;margin:25px auto;border:1px solid #cfcfcf;}
@@ -82,13 +83,14 @@
 
 
 //=============================== UPDATES =====================================//
-		/* PAGINATION COLORS */
-		<style type="text/css">	
-		a.paging:visited {background-color: black;   color:black;}
-		a.paging:active {background-color: black; color:black}
+
+		<style type="text/css">
+		a.paging:visited {background-color: none;   color:none;}
+		a.paging:active {background-color: #FFCC00; text-decoration: none;  color:#FFFFFF}
 		a.paging:hover {background-color: wheat; font-weight:bold; color:#bf127a;}
-		
+
 		a.pagingCurrent:visited {color:#bf127a;}
+		a.pagingCurrent:active {background: #FF0000; color:#FFFFFF; text-decoration-line: underline;}
 		a.pagingCurrent:hover {background: wheat; font-weight:bold; color: none;}
 		</style>
 
@@ -136,38 +138,39 @@
 				<div class="filters">
 					<ul class="places">
 						<li><h3>Places</h3></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Bantayan Island" <?php checkPlaces("Bantayan Island"); ?>> <label for="">Bantayan Island</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Malapascua Island" <?php checkPlaces("Malapascua Island"); ?>> <label for="">Malapascua Island</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Camotes Island" <?php checkPlaces("Camotes Island"); ?>> <label for="">Camotes Island</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Moalboal" <?php checkPlaces("Moalboal"); ?>> <label for="">Moalboal</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Badian" <?php checkPlaces("Badian"); ?>> <label for="">Badian</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Oslob" <?php checkPlaces("Oslob"); ?>> <label for="">Oslob</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Alcoy" <?php checkPlaces("Alcoy"); ?>> <label for="">Alcoy</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Aloginsan" <?php checkPlaces("Aloginsan"); ?>> <label for="">Aloginsan</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Santander" <?php checkPlaces("Santander"); ?>> <label for="">Santander</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Alegria" <?php checkPlaces("Alegria"); ?>> <label for="">Alegria</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" required value="Dalaguete" <?php checkPlaces("Dalaguete"); ?>> <label for="">Dalaguete</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" value="Bantayan Island" <?php checkPlaces("Bantayan Island"); ?>> <label for="">Bantayan Island</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" value="Malapascua Island" <?php checkPlaces("Malapascua Island"); ?>> <label for="">Malapascua Island</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" value="Camotes Island" <?php checkPlaces("Camotes Island"); ?>> <label for="">Camotes Island</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" value="Moalboal" <?php checkPlaces("Moalboal"); ?>> <label for="">Moalboal</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" value="Badian" <?php checkPlaces("Badian"); ?>> <label for="">Badian</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" value="Oslob" <?php checkPlaces("Oslob"); ?>> <label for="">Oslob</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" value="Alcoy" <?php checkPlaces("Alcoy"); ?>> <label for="">Alcoy</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" value="Aloginsan" <?php checkPlaces("Aloginsan"); ?>> <label for="">Aloginsan</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" value="Santander" <?php checkPlaces("Santander"); ?>> <label for="">Santander</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" value="Alegria" <?php checkPlaces("Alegria"); ?>> <label for="">Alegria</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" value="Dalaguete" <?php checkPlaces("Dalaguete"); ?>> <label for="">Dalaguete</label></li>
 					</ul>
 					<ul class="activites">
 						<li><h3>Activities</h3></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Packaged" <?php checkActivities("Packaged") ?>> <label for="">Packaged</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Swimming" <?php checkActivities("Swimming") ?>> <label for="">Swimming</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Camping" <?php checkActivities("Camping") ?>> <label for="">Camping</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Island Hopping" <?php checkActivities("Island Hopping") ?>> <label for="">Island Hopping</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Mountain Hiking" <?php checkActivities("Mountain Hiking") ?>> <label for="">Mountain Hiking</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Snorkeling" <?php checkActivities("Snorkeling") ?>> <label for="">Snorkeling</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Canyoneering" <?php checkActivities("Canyoneering") ?>> <label for="">Canyoneering</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Biking" <?php checkActivities("Biking") ?>> <label for="">Biking</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Diving" <?php checkActivities("Diving") ?>> <label for="">Diving</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Jetski" <?php checkActivities("Jetski") ?>> <label for="">Jetski</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Banana Boat" <?php checkActivities("Banana Boat") ?>> <label for="">Banana Boat</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Packaged" <?php checkActivities("Packaged") ?>> <label for="">Packaged</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Swimming" <?php checkActivities("Swimming") ?>> <label for="">Swimming</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Camping" <?php checkActivities("Camping") ?>> <label for="">Camping</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Island Hopping" <?php checkActivities("Island Hopping") ?>> <label for="">Island Hopping</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Mountain Hiking" <?php checkActivities("Mountain Hiking") ?>> <label for="">Mountain Hiking</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Snorkeling" <?php checkActivities("Snorkeling") ?>> <label for="">Snorkeling</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Canyoneering" <?php checkActivities("Canyoneering") ?>> <label for="">Canyoneering</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Biking" <?php checkActivities("Biking") ?>> <label for="">Biking</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Diving" <?php checkActivities("Diving") ?>> <label for="">Diving</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Jetski" <?php checkActivities("Jetski") ?>> <label for="">Jetski</label></li>
+						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Banana Boat" <?php checkActivities("Banana Boat") ?>> <label for="">Banana Boat</label></li>
 					</ul>
 					<ul class="prices">
 						<li><h3>Prices</h3></li>
 						<li><input type="number" name="" placeholder="Minimum price"></li>
 						<li><input type="number" name="" placeholder="Maximum price"></li>
 					</ul>
-					<button type="button" name="btnSave">Save Changes</button>
+					<button type="submit" name="btnSave" formaction="adventures.php">Save Changes</button>
+					<button type="submit" name="btnReset" formaction="adventures.php">Reset</button>
 				</div>
 				</form>
 			</aside>
@@ -178,175 +181,288 @@
 					<h2>Adventures</h2>
 					<input type="text" name="txtSearch" placeholder="Search any...">
 					<button type="submit" name="btnSearch"><i class="fas fa-search"></i></button>
-
-					<!-- DIRECT LINK FOR UNDO|RESET BUTTON --> 
-					<form>
-					      <button type="submit" formaction="adventures.php" ><i class="fas fa-undo-alt"></i></button>
-				   </form>
+					<button type="submit" formaction="adventures.php" ><i class="fas fa-undo-alt"></i></button>
 
 					<?php
-						// DISPLAY ALL ADVENTURE //
+
+						//Pagination code  starts here - Kirk Albano
 
 						if(isset($_POST['btnSearch']))
 						{
 							$txtSearch = trim(ucwords($_POST['txtSearch']));
 
-//=============================== UPDATES =====================================//
+							if(isset($_GET['page']))
+							{
+								$page = $_GET['page'];
+							}
+							else
+							{
+								$page = 1;
+							}
 
-								if(isset($_GET['page'])) // Page SETTER & GETTER 
-									{
-										$page = $_GET['page'];
-									}
-									else
-										{
-											$page = 1;
-										}
+							$num_per_page = 1;
+							$start_from = ($page-1) * $num_per_page;
 
-											$num_per_page = 1; //NUMBER per Page
-											$start_from = ($page-1) * $num_per_page; // Page STARTED
+							$card = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' ORDER BY adv_id DESC LIMIT $start_from,$num_per_page", array(), "READ");
 
-										$card = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' ORDER BY adv_id DESC LIMIT $start_from,$num_per_page", array(), "READ"); // using LIMIT to limit SEARCH query display 
+							displayAll(99, $card);
 
-										displayAll(99, $card);
-
-										$card1 = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' ", array(), "READ");
+							$card1 = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' ", array(), "READ");
 
 
-												$total_record = count($card1); // COUNTS DATA IN Search query
-								                $total_page = ceil($total_record/$num_per_page); // DIVIDES TOTAL RECORD SEARCH USING ceil
+							$total_record = count($card1);
+			                $total_page = ceil($total_record/$num_per_page);
 
-								                if($page > 1) // PAGINATION STARTS|PREVIOUS 
-								                {
-								                    echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
-								                } 
-								                		
-				             						//LIMIT PAGINATION NUMBER PAGE VISIBLE
-													$numpage = 1; 
-													$startPage = max(1, $page - $numpage);
-													$endPage = min( $total_page, $page + $numpage);
+			                if($page > 1)
+			                {
+			                    echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
+			                }
 
 
-									                for($i=$startPage;$i<=$endPage;$i++) // PAGINATION COUNTS|LOOPS
-									                {
+			                for($i=1;$i<=$total_page;$i++)
+			                {
+			                	 if ($i == $page) {
+        						 $class = 'pagingCurrent';
 
-									       
-											                	if ($i == $page) {
-							            						 $class = 'pagingCurrent'; // PAGINATION CURRENT Page COLOR
-							            						
-							            						}else
-																	{ 
-																	$class = 'paging'; // PAGINATION COLOR
-																	}
+        						}else
+								{
+								$class = 'paging';
 
+								}
+			                    echo "<a href='adventures?page=" .$i. "' class='".$class."'>  $i </a>";
+			                }
 
-																if($page > $i && $page > 2) { //CONTROL VISIBLE PAGINATION START NUMBER PAGE 
-
-														          echo "<a href='adventures.php' class='".$class."'> 1 ... </a>";  
-																}
-														       
-
-														        	echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i   </a>"; 
-
-															    if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE PAGINATION END NUMBER PAGE 
-															                    
-															       echo "<a href='adventures.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>"; 
-
-															    } 
-
-
-									                }
-
-
-										        if(($i-1) > $page) // PAGINATION NEXT|ENDS 
-										        {
-										                    echo "<a href='adventures?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
-										        } 
-						
+			                if(($i-1) > $page)
+			                {
+			                    echo "<a href='adventures?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
+			                }
 						}
-						else
-						   {
-//=============================== UPDATES =====================================//
 
-								if(isset($_GET['page'])) // Page SETTER & GETTER 
-									{
-										$page = $_GET['page'];
-									}
+						else if(isset($_POST['btnSave']))
+						{ //Aside Filter code  starts here - Alexis Salvador
+
+							unset($_SESSION['places']);
+
+							if(isset($_GET['page']))
+							{
+								$page = $_GET['page'];
+							}
+							else
+							{
+								$page = 1;
+							}
+
+							$num_per_page = 1;
+							$start_from = ($page-1) * $num_per_page;
+
+							if(!empty($_POST['places'])) {
+
+								$sqlquery = "SELECT * FROM adventure WHERE adv_address";
+
+								$arrlength = count($_POST['places']);
+
+								foreach($_POST['places'] as $index => $place) {
+									if($index != $arrlength-1)
+										$sqlquery = $sqlquery . " = '$place' OR adv_address";
 									else
-										{
-											$page = 1;
-										}
+										$sqlquery = $sqlquery . " = '$place'";
+								}
 
-											$num_per_page = 1;  //NUMBER per Page
-											$start_from = ($page-1) * $num_per_page; // Page STARTED
+								if(!empty($_POST['activities'])) {
 
-									        $card1 = DB::query("SELECT * FROM adventure ORDER BY adv_id DESC LIMIT $start_from,$num_per_page", array(), "READ"); // USING LIMIT to limit query display 
+									//	Concatenates string if 1 or more Activity 																checkbox is selected
 
-					    						  displayAll(99, $card1);
+									$sqlquery = $sqlquery . " OR adv_kind";
 
+									$arrlength = count($_POST['activities']);
 
-							                $card2 = DB::query("SELECT * FROM adventure", array(), "READ");
+									foreach($_POST['activities'] as $index => $activity) {
+										if($index != $arrlength-1)
+											$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
+										else
+											$sqlquery = $sqlquery . " = '$activity'";
+									}
 
-												$total_record = count($card2); // COUNTS DATA IN query
-								                $total_page = ceil($total_record/$num_per_page); // DIVIDES TOTAL RECORD USING ceil
+										// $sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";
+										// Check commented code above
+										$sqlquery = $sqlquery . " ORDER BY adv_id";	 //Temporary to show true results
+								}
+								else
+									$sqlquery = $sqlquery . " ORDER BY adv_id";
+							}
 
+							else if(!empty($_POST['activities'])) {
 
-								                if($page > 1) // PAGINATION STARTS|PREVIOUS
-								                {
-								                    echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
-								                } 
+								if(empty($_POST['places']))
+									$sqlquery = "SELECT * FROM adventure WHERE adv_kind";
+									// 	New string query is created if no Place checkbox is selected
 
-								                	//LIMIT PAGINATION NUMBER PAGE VISIBLE
-													$numpage = 1; 
-													$startPage = max(1, $page - $numpage);
-													$endPage = min( $total_page, $page + $numpage);
+								$arrlength = count($_POST['activities']);
 
+								foreach($_POST['activities'] as $index => $activity) {
+									if($index != $arrlength-1)
+										$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
+									else
+										$sqlquery = $sqlquery . " = '$activity'";
+								}
 
-									                for($i=$startPage;$i<=$endPage;$i++) // PAGINATION COUNTS|LOOPS
-									                {
+								// $sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";
+								// Check commented code above
+								$sqlquery = $sqlquery . " ORDER BY adv_id";	//Temporary to show true results
+							}
 
-									       
-											                	if ($i == $page) {
-							            						 $class = 'pagingCurrent'; // PAGINATION CURRENT Page COLOR
-							            						
-							            						}else
-																	{ 
-																	$class = 'paging'; // PAGINATION COLOR
-																	}
+							$card = DB::query($sqlquery, array(), "READ");
 
+							if(!empty($card)) 
+								displayAll(99, $card);
+							else { //This works if return items from SQL is empty due to search not found
+								$card = DB::query("SELECT * FROM adventure", array(), "READ");
+								echo "Your search parameters are not found!";
+								displayAll(99, $card);
+							}	
 
-																if($page > $i && $page > 2) { //CONTROL VISIBLE PAGINATION START NUMBER PAGE 
+							$total_record = count($card);
+			                $total_page = ceil($total_record/$num_per_page);
 
-														          echo "<a href='adventures.php' class='".$class."'> 1 ... </a>";  
-																}
-														       
+			                if($page > 1)
+			                {
+			                    echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
+			                }
 
-														         		echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i   </a>"; 
+			                for($i=1;$i<=$total_page;$i++)
+			                {
+			                	 if ($i == $page) {
+        						 $class = 'pagingCurrent';
 
-															    if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE PAGINATION END NUMBER PAGE 
-															                    
-															       echo "<a href='adventures.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>"; 
+        						}else
+								{
+								$class = 'paging';
 
-															    } 
+								}
+			                    echo "<a href='adventures?page=" .$i. "' class='".$class."'>  $i </a>";
+			                }
 
+			                if(($i-1) > $page)
+			                {
+			                    echo "<a href='adventures?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
+			                }
 
-									                }
+						} //Aside Filter code ends here - Alexis Salvador
 
+						else 
+						{ //Index to Adventure Page Filter Code starts here - Alexis Salvador
+							if(isset($_GET['page']))
+							{
+								$page = $_GET['page'];
+							}
+							else
+							{
+								$page = 1;
+							}
 
-										        if(($i-1) > $page) // PAGINATION NEXT|ENDS
-										        { 
-										     
-										           echo " <a href='adventures.php?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' >  Next </a >";
-										        } 
-															             
-				            }   
-					
+							$num_per_page = 1;
+							$start_from = ($page-1) * $num_per_page;
+
+					        if(!empty($_SESSION['places'])) {
+								
+								$sqlquery = "SELECT * FROM adventure WHERE adv_address";
+
+								$arrlength = count($_SESSION['places']);
+
+								foreach($_SESSION['places'] as $index => $place) {
+									if($index != $arrlength-1)
+										$sqlquery = $sqlquery . " = '$place' OR adv_address";
+									else 
+										$sqlquery = $sqlquery . " = '$place'";
+								}								
+
+								if(!empty($_POST['activities'])) {
+
+									//	Concatenates string if 1 or more Activity 																checkbox is selected 
+
+									$sqlquery = $sqlquery . " OR adv_kind"; 
+
+									$arrlength = count($_POST['activities']);								
+
+									foreach($_POST['activities'] as $index => $activity) {
+										if($index != $arrlength-1)
+											$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
+										else 
+											$sqlquery = $sqlquery . " = '$activity'";
+									}
+
+										// $sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";	 
+										// Check commented code above
+										$sqlquery = $sqlquery . " ORDER BY adv_id";	 //Temporary to show true results
+								}													
+							}													
+
+							else if(!empty($_POST['activities'])) {
+
+								if(empty($_POST['places']))
+									$sqlquery = "SELECT * FROM adventure WHERE adv_kind"; 		
+									// 	New string query is created if no Place checkbox is selected
+
+								$arrlength = count($_POST['activities']);								
+
+								foreach($_POST['activities'] as $index => $activity) {
+									if($index != $arrlength-1)
+										$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
+									else 
+										$sqlquery = $sqlquery . " = '$activity'";
+								}
+
+								// $sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page"; 
+								// Check commented code above
+								$sqlquery = $sqlquery . " ORDER BY adv_id";	//Temporary to show true results
+							}
+
+							if(!empty($sqlquery))
+								$card = DB::query($sqlquery, array(), "READ");
+
+							if(!empty($card))
+								displayAll(99, $card);
+							else { //This works if return items from SQL is empty due to search not found
+								$card = DB::query("SELECT * FROM adventure", array(), "READ");
+								echo "Enter a search parameters OR no search parameters found!";
+								displayAll(99, $card);
+							}							
+
+							$total_record = count($card);
+			                $total_page = ceil($total_record/$num_per_page);
+
+			                if($page > 1)
+			                {
+			                    echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
+			                }
+
+			                for($i=1;$i<=$total_page;$i++)
+			                {
+			                	if ($i == $page) {
+        						 $class = 'pagingCurrent';
+        						}
+        						else {
+								$class = 'paging';
+								}
+
+			                    echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i </a>";
+			                }
+
+			                if(($i-1) > $page)
+			                {
+			                    echo "<a href='adventures.php?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
+			                }
+
+			                unset($_SESSION['places']);
+
+			                //Test
+
+				        } //Index to Adventure Page Filter Code starts here - Alexis Salvador
+
+						//Pagination code ends here - Kirk Albano
 					?>
 
 				</form>
-
-			
-
-
 			</main>
 		</div>
 
@@ -358,3 +474,5 @@
 <!--Footer -->
 <?php include("includes/footer.php"); ?>
 <!-- End Footer -->
+
+

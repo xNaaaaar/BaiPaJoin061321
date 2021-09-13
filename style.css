@@ -166,7 +166,7 @@ header{}
 	.rslides{border-radius:15px;box-shadow:15px 15px 10px -5px #cfcfcf;}
 
 	.bnr_info{max-width:100%;width:473px;position:absolute;top:330px;left:9px;z-index:50;}
-	.bnr_info h2{color:#fff;margin-bottom:30px;font:600 59px/100% Montserrat,sans-serif;}
+	.bnr_info h2{color:#fff;margin-bottom:30px;font:600 50px/100% Montserrat,sans-serif;}
 	.bnr_info h2 span{display:block;}
 	.bnr_info p{font-size:17px;color:#fff;line-height:26px;margin-left:2px;}
 	.bnr_info a{display:block;width:309px;height:61px;line-height:62px;background:#bf127a;color:#fff;text-align:center;margin:39px 0 0;font-weight:600;border-radius:50px;}
@@ -199,7 +199,7 @@ header{}
 	.main_images figure img{border-radius:20px;}
 
 	main{float:right;width:984px;height:529px;line-height:28px;max-width:100%;text-align:left;background:#f1fffd;color:#2f2f2f;margin-right:-265px;border-top-left-radius:300px;border-bottom-left-radius:300px;padding:97px 0 0 156px;}
-	main .h1_title{margin-bottom:35px;font:600 40px/100% Montserrat,sans-serif;color:#313131;}
+	main .h1_title{margin-bottom:35px;font:600 45px/100% Montserrat,sans-serif;color:#313131;}
 	main .h1_title span{display:block;font-size:28px;color:#989898;}
 	main p{margin:0 0 30px 2px;max-width:100%;width:552px;}
 	main p:last-of-type{width:502px;}
@@ -256,7 +256,7 @@ header{}
   .fa-star{color:#ffac33;}
 
   .place_title{width:100%;text-align:left;}
-  .place_title h1{font:600 59px/100% Montserrat,sans-serif;color:#313131;}
+  .place_title h1{font:600 50px/100% Montserrat,sans-serif;color:#313131;}
   .place_title h1 span{font-size:35px !important;}
   .place_title .title_info1{list-style:none;margin-bottom:20px;font:600 18px/100% Montserrat,sans-serif;color:gray;}
   .place_title .title_info1 li{display:inline-block;}
@@ -268,9 +268,9 @@ header{}
   .main_info{width:65%;padding-right:50px;}
   .main_info p{width:100% !important;text-align:left;font:400 20px/35px Montserrat,sans-serif;}
 
-  .book_info{width:486px;min-height:250px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;text-align:right;margin:25px auto;border:1px solid #cfcfcf;}
-  .book_info h2{margin:0 0 30px;text-align:right;font-size:45px;}
-  .book_info h2 span{font:600 30px/100% Montserrat,sans-serif;color:gray;display:block;margin-top:5px;}
+  .book_info{width:486px;min-height:250px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;}
+  .book_info h2{margin:0 0 30px;text-align:center;font-size:35px;}
+  .book_info h2 span{font:600 25px/100% Montserrat,sans-serif;color:gray;display:block;margin-top:5px;}
   .book_info a{display:block;width:80%;}
 
   .place_reviews{margin:40px 0 0;}
@@ -305,7 +305,7 @@ header{}
  	.btm1_con{min-height:1092px;padding:200px 5px 0;text-align:center;}
 
  	.btm1_info{width:755px;max-width:100%;margin:0 auto;}
- 	.btm1_info h2{margin-bottom:15px;font:600 40px/100% Montserrat,sans-serif;color:#3c3c3c;}
+ 	.btm1_info h2{margin-bottom:15px;font:600 45px/100% Montserrat,sans-serif;color:#3c3c3c;}
  	.btm1_info p{color:#2f2f2f;line-height:28px;}
 
 	.btm1_boxes{display:flex;justify-content:center;margin-top:110px;}
