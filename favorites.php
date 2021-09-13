@@ -51,13 +51,13 @@
 		.sidebar ul li a:hover{color:#bf127a;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+		main h2{font:600 59px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h2 span{font-size:30px;}
 		main h2 span a:hover{color:#313131;text-decoration:none;}
 		main h3{font:600 30px/100% Montserrat,sans-serif;color:#ff4444;margin-bottom:10px;text-align:center;}
 		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
 		main button:first-of-type{right:67px;}
-		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:127px;right:15px;z-index:5;font-size:20px;}
+		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:142px;right:15px;z-index:5;font-size:20px;}
 
 		.card-link{text-decoration:none !important;}
 		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 125px 30px 215px;line-height:35px;text-align:left;margin:25px auto;border:1px solid #cfcfcf;}
@@ -79,6 +79,23 @@
 		@media only screen and (max-width:1000px) {
 			main{padding:50px 0 0 25px;}
 		}
+
+//=============================== UPDATES =====================================//
+		/* PAGINATION COLORS */
+		<style type="text/css">	
+		a.paging:visited {background-color: none;   color:none;}
+		a.paging:active {background-color: #FFCC00; text-decoration: none;  color:#FFFFFF}
+		a.paging:hover {background-color: wheat; font-weight:bold; color:#bf127a;}
+		
+		a.pagingCurrent:visited {color:#bf127a;}
+		a.pagingCurrent:active {background: #FF0000; color:#FFFFFF;}
+		a.pagingCurrent:hover {background: wheat; font-weight:bold; color: none;}
+		</style>
+
+	</style>
+
+
+
 	</style>
 
 	<!--?php wp_head(); ?-->
@@ -116,23 +133,166 @@
 				<form method="post" >
 					<h2>Favorite Adventures</h2>
 					<input type="text" name="txtSearch" placeholder="Search any...">
-					<button type="submit" name="btnSearch"><i class="fas fa-search"></i></button>
-					<button type="submit" name="btnRestart"><i class="fas fa-undo-alt"></i></button>
+
+					<!-- DIRECT LINK FOR UNDO|RESET BUTTON --> 
+					<form>
+					    <button type="submit" formaction="favorites.php" name="btnSearch"><i class="fas fa-search"></i></button>
+						<button formaction="favorites.php" ><i class="fas fa-undo-alt"></i></button>
+				   </form>
+
 
 					<?php
 						// DISPLAY ALL ADVENTURE
-						if(isset($_POST['btnSearch'])){
+						if(isset($_POST['btnSearch']))
+						{
 							$txtSearch = trim(ucwords($_POST['txtSearch']));
 
-							$card = DB::query("SELECT * FROM adventure INNER JOIN favorite ON favorite.adv_id = adventure.adv_id WHERE joiner_id = ? AND adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%'", array($_SESSION['joiner']), "READ");
+//=============================== UPDATES =====================================//
 
-							displayAll(4, $card);
-						}
-						else if(isset($_POST['btnRestart'])){
-							displayAll(4);
+								if(isset($_GET['page'])) 
+									{
+										$page = $_GET['page'];
+									}
+									else
+										{
+											$page = 1;
+										}
+
+										$num_per_page = 1; //NUMBER per Page
+										$start_from = ($page-1) * $num_per_page; // Page STARTED						
+
+									    $card = DB::query("SELECT * FROM adventure INNER JOIN favorite ON favorite.adv_id = adventure.adv_id WHERE joiner_id = ? AND adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' LIMIT $start_from,$num_per_page", array($_SESSION['joiner']), "READ"); // using LIMIT to limit SEARCH query display 
+
+									    displayAll(4, $card);
+
+									    $card1 = DB::query("SELECT * FROM adventure INNER JOIN favorite ON favorite.adv_id = adventure.adv_id WHERE joiner_id = ? AND adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%'", array($_SESSION['joiner']), "READ");
+
+
+										$total_record = count($card1); // COUNTS DATA IN Search query
+						                $total_page = ceil($total_record/$num_per_page); // DIVIDES TOTAL RECORD SEARCH USING ceil
+
+						                if($page > 1) // PAGINATION STARTS|PREVIOUS 
+						                {
+						                    echo "<a href='favorites.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
+						                } 
+
+							                    //LIMIT PAGINATION NUMBER PAGE VISIBLE
+												$numpage = 1; 
+												$startPage = max(1, $page - $numpage);
+												$endPage = min( $total_page, $page + $numpage);
+
+
+												for($i=$startPage;$i<=$endPage;$i++) // PAGINATION COUNTS|LOOPS
+												{
+
+												       
+													if($i == $page) {
+										            $class = 'pagingCurrent'; // PAGINATION CURRENT Page COLOR
+										            						
+										            }else
+														{ 
+														$class = 'paging'; // PAGINATION COLOR
+														}
+
+
+														if($page > $i && $page > 2) { //CONTROL VISIBLE PAGINATION START NUMBER PAGE 
+
+														 echo "<a href='favorites.php' class='".$class."'> 1 ... </a>";  
+														}
+																		       
+
+														echo "<a href='favorites.php?page=" .$i. "' class='".$class."'>  $i   </a>"; 
+
+														if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE PAGINATION END NUMBER PAGE 
+																			                    
+															echo "<a href='favorites.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>"; 
+
+														} 
+
+
+												 }
+
+						                if(($i-1) > $page) // PAGINATION NEXT|ENDS 
+						                {
+						                    echo "<a href='favorites.php?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
+						                } 
 						}
 						else
-							displayAll(4);
+						{
+//=============================== UPDATES =====================================//
+
+								if(isset($_GET['page'])) 
+									{
+										$page = $_GET['page'];
+									}
+									else
+										{
+											$page = 1;
+										}
+
+										$num_per_page = 1; //NUMBER per Page
+										$start_from = ($page-1) * $num_per_page; // Page STARTED
+
+								        $card1 = DB::query("SELECT * FROM adventure INNER JOIN favorite ON favorite.adv_id = adventure.adv_id WHERE joiner_id = ? LIMIT $start_from,$num_per_page", array($_SESSION['joiner']), "READ"); // USING LIMIT to limit query display 
+
+				    					displayAll(4, $card1);
+
+
+						                $card2 = DB::query("SELECT * FROM adventure INNER JOIN favorite ON favorite.adv_id = adventure.adv_id WHERE joiner_id = ?", array($_SESSION['joiner']), "READ");
+
+		 
+										$total_record = count($card2); // COUNTS DATA IN query
+						                $total_page = ceil($total_record/$num_per_page); // DIVIDES TOTAL RECORD USING ceil
+
+						                if($page > 1) // PAGINATION STARTS|PREVIOUS
+						                {
+						                    echo "<a href='favorites.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
+						                } 
+
+				                
+							                    //LIMIT PAGINATION NUMBER PAGE VISIBLE
+												$numpage = 1; 
+												$startPage = max(1, $page - $numpage);
+												$endPage = min( $total_page, $page + $numpage);
+
+
+												for($i=$startPage;$i<=$endPage;$i++) // PAGINATION COUNTS|LOOPS
+												{
+
+												       
+													if($i == $page) {
+										            $class = 'pagingCurrent'; // PAGINATION CURRENT Page COLOR
+										            						
+										            }else
+														{ 
+														$class = 'paging'; // PAGINATION COLOR
+														}
+
+
+														if($page > $i && $page > 2) { //CONTROL VISIBLE PAGINATION START NUMBER PAGE 
+
+														 echo "<a href='favorites.php' class='".$class."'> 1 ... </a>";  
+														}
+																		       
+
+														echo "<a href='favorites.php?page=" .$i. "' class='".$class."'>  $i   </a>"; 
+
+														if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE PAGINATION END NUMBER PAGE 
+																			                    
+															echo "<a href='favorites.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>"; 
+
+														} 
+
+
+												 }
+
+
+						                if(($i-1) > $page) // PAGINATION NEXT|ENDS
+						                {
+						                    echo "<a href='favorites.php?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
+						                } 
+				        }     
+
 					?>
 
 				</form>
