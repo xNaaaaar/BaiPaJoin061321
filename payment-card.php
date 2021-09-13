@@ -178,6 +178,7 @@
 							}
 
 							# MELNAR: REMOVED SOME REQUIRED IN INPUT TAG (TBD)
+							# payment-card.php?book_id=202183&id=4
 						?>
 
 						<section>
