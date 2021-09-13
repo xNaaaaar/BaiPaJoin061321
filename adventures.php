@@ -83,16 +83,16 @@
 
 
 //=============================== UPDATES =====================================//
-
-		<style type="text/css">
-		a.paging:visited {background-color: none;   color:none;}
-		a.paging:active {background-color: #FFCC00; text-decoration: none;  color:#FFFFFF}
+		/* PAGINATION COLORS */
+		<style type="text/css">	
+		a.paging:visited {background-color: black;   color:black;}
+		a.paging:active {background-color: black; color:black}
 		a.paging:hover {background-color: wheat; font-weight:bold; color:#bf127a;}
-
+		
 		a.pagingCurrent:visited {color:#bf127a;}
-		a.pagingCurrent:active {background: #FF0000; color:#FFFFFF; text-decoration-line: underline;}
 		a.pagingCurrent:hover {background: wheat; font-weight:bold; color: none;}
 		</style>
+
 
 	</style>
 
@@ -169,7 +169,7 @@
 						<li><input type="number" name="" placeholder="Minimum price"></li>
 						<li><input type="number" name="" placeholder="Maximum price"></li>
 					</ul>
-					<button type="submit" name="btnSave" formaction="adventures.php">Save Changes</button>
+					<button type="submit" formaction="adventures.php" name="btnSave">Save Changes</button>
 					<button type="submit" name="btnReset" formaction="adventures.php">Reset</button>
 				</div>
 				</form>
@@ -180,12 +180,13 @@
 				<form method="post" >
 					<h2>Adventures</h2>
 					<input type="text" name="txtSearch" placeholder="Search any...">
-					<button type="submit" name="btnSearch"><i class="fas fa-search"></i></button>
-					<button type="submit" formaction="adventures.php" ><i class="fas fa-undo-alt"></i></button>
+					<!-- DIRECT LINK FOR UNDO|RESET BUTTON --> 
+					<button type="submit" formaction="adventures.php" name="btnSearch"><i class="fas fa-search"></i></button>
+					<button formaction="adventures.php" ><i class="fas fa-undo-alt"></i></button>
 
 					<?php
 
-						//Pagination code  starts here - Kirk Albano
+			        //Pagination code  starts here - Kirk Albano
 
 						if(isset($_POST['btnSearch']))
 						{
@@ -218,19 +219,41 @@
 			                    echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
 			                }
 
+			                		//LIMIT PAGINATION NUMBER PAGE VISIBLE
+									$numpage = 1; 
+									$startPage = max(1, $page - $numpage);
+									$endPage = min( $total_page, $page + $numpage);
 
-			                for($i=1;$i<=$total_page;$i++)
-			                {
-			                	 if ($i == $page) {
-        						 $class = 'pagingCurrent';
+									for($i=$startPage;$i<=$endPage;$i++) // PAGINATION COUNTS|LOOPS
+									{
 
-        						}else
-								{
-								$class = 'paging';
+									       
+										if ($i == $page) {
+							            $class = 'pagingCurrent'; // PAGINATION CURRENT Page COLOR
+							            						
+							            }else
+											{ 
+											$class = 'paging'; // PAGINATION COLOR
+											}
 
-								}
-			                    echo "<a href='adventures?page=" .$i. "' class='".$class."'>  $i </a>";
-			                }
+
+										if($page > $i && $page > 2) { //CONTROL VISIBLE PAGINATION START NUMBER PAGE 
+
+											echo "<a href='adventures.php' class='".$class."'> 1 ... </a>";  
+										}
+														       
+
+											echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i   </a>"; 
+
+										if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE PAGINATION END NUMBER PAGE 
+															                    
+											echo "<a href='adventures.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>"; 
+
+										} 
+
+
+									}
+
 
 			                if(($i-1) > $page)
 			                {
@@ -241,113 +264,141 @@
 						else if(isset($_POST['btnSave']))
 						{ //Aside Filter code  starts here - Alexis Salvador
 
-							unset($_SESSION['places']);
+								unset($_SESSION['places']);
 
-							if(isset($_GET['page']))
-							{
-								$page = $_GET['page'];
-							}
-							else
-							{
-								$page = 1;
-							}
-
-							$num_per_page = 1;
-							$start_from = ($page-1) * $num_per_page;
-
-							if(!empty($_POST['places'])) {
-
-								$sqlquery = "SELECT * FROM adventure WHERE adv_address";
-
-								$arrlength = count($_POST['places']);
-
-								foreach($_POST['places'] as $index => $place) {
-									if($index != $arrlength-1)
-										$sqlquery = $sqlquery . " = '$place' OR adv_address";
-									else
-										$sqlquery = $sqlquery . " = '$place'";
-								}
-
-								if(!empty($_POST['activities'])) {
-
-									//	Concatenates string if 1 or more Activity 																checkbox is selected
-
-									$sqlquery = $sqlquery . " OR adv_kind";
-
-									$arrlength = count($_POST['activities']);
-
-									foreach($_POST['activities'] as $index => $activity) {
-										if($index != $arrlength-1)
-											$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
-										else
-											$sqlquery = $sqlquery . " = '$activity'";
-									}
-
-										// $sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";
-										// Check commented code above
-										$sqlquery = $sqlquery . " ORDER BY adv_id";	 //Temporary to show true results
+								if(isset($_GET['page']))
+								{
+									$page = $_GET['page'];
 								}
 								else
-									$sqlquery = $sqlquery . " ORDER BY adv_id";
-							}
-
-							else if(!empty($_POST['activities'])) {
-
-								if(empty($_POST['places']))
-									$sqlquery = "SELECT * FROM adventure WHERE adv_kind";
-									// 	New string query is created if no Place checkbox is selected
-
-								$arrlength = count($_POST['activities']);
-
-								foreach($_POST['activities'] as $index => $activity) {
-									if($index != $arrlength-1)
-										$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
-									else
-										$sqlquery = $sqlquery . " = '$activity'";
-								}
-
-								// $sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";
-								// Check commented code above
-								$sqlquery = $sqlquery . " ORDER BY adv_id";	//Temporary to show true results
-							}
-
-							$card = DB::query($sqlquery, array(), "READ");
-
-							if(!empty($card)) 
-								displayAll(99, $card);
-							else { //This works if return items from SQL is empty due to search not found
-								$card = DB::query("SELECT * FROM adventure", array(), "READ");
-								echo "Your search parameters are not found!";
-								displayAll(99, $card);
-							}	
-
-							$total_record = count($card);
-			                $total_page = ceil($total_record/$num_per_page);
-
-			                if($page > 1)
-			                {
-			                    echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
-			                }
-
-			                for($i=1;$i<=$total_page;$i++)
-			                {
-			                	 if ($i == $page) {
-        						 $class = 'pagingCurrent';
-
-        						}else
 								{
-								$class = 'paging';
-
+									$page = 1;
 								}
-			                    echo "<a href='adventures?page=" .$i. "' class='".$class."'>  $i </a>";
-			                }
 
-			                if(($i-1) > $page)
-			                {
-			                    echo "<a href='adventures?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
-			                }
+									$num_per_page = 1;
+									$start_from = ($page-1) * $num_per_page;
 
-						} //Aside Filter code ends here - Alexis Salvador
+									if(!empty($_POST['places'])) {
+
+										$sqlquery = "SELECT * FROM adventure WHERE adv_address";
+
+										$arrlength = count($_POST['places']);
+
+										foreach($_POST['places'] as $index => $place) {
+											if($index != $arrlength-1)
+												$sqlquery = $sqlquery . " = '$place' OR adv_address";
+											else
+												$sqlquery = $sqlquery . " = '$place'";
+										}
+
+										if(!empty($_POST['activities'])) {
+
+											//	Concatenates string if 1 or more Activity 																checkbox is selected
+
+											$sqlquery = $sqlquery . " OR adv_kind";
+
+											$arrlength = count($_POST['activities']);
+
+											foreach($_POST['activities'] as $index => $activity) {
+												if($index != $arrlength-1)
+													$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
+												else
+													$sqlquery = $sqlquery . " = '$activity'";
+											}
+
+												 //$sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";
+												// Check commented code above
+												$sqlquery = $sqlquery . " ORDER BY adv_id";	 //Temporary to show true results
+										}
+										else
+											$sqlquery = $sqlquery . " ORDER BY adv_id"; 
+									}
+
+									else if(!empty($_POST['activities'])) {
+
+										if(empty($_POST['places']))
+											$sqlquery = "SELECT * FROM adventure WHERE adv_kind  LIMIT $start_from,$num_per_page";
+											// 	New string query is created if no Place checkbox is selected
+
+										$arrlength = count($_POST['activities']);
+
+										foreach($_POST['activities'] as $index => $activity) {
+											if($index != $arrlength-1)
+												$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
+											else
+												$sqlquery = $sqlquery . " = '$activity'";
+										}
+
+										//$sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";
+										// Check commented code above
+										$sqlquery = $sqlquery . " ORDER BY adv_id";	//Temporary to show true results
+									}
+
+									$card = DB::query($sqlquery, array(), "READ");
+
+									if(!empty($card)) 
+										displayAll(99, $card);
+									else { //This works if return items from SQL is empty due to search not found
+										$card1 = DB::query("SELECT * FROM adventure LIMIT $start_from,$num_per_page", array(), "READ");
+										$card = DB::query("SELECT * FROM adventure", array(), "READ");
+										echo "Your search parameters are not found!";
+										displayAll(99, $card1);
+									}	
+
+								// PAGINATION Kirk	
+
+								$total_record = count($card);
+				                $total_page = ceil($total_record/$num_per_page);
+
+				                if($page > 1)
+				                {
+				                    echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
+				                }
+
+								        //LIMIT PAGINATION NUMBER PAGE VISIBLE
+										$numpage = 1; 
+										$startPage = max(1, $page - $numpage);
+										$endPage = min( $total_page, $page + $numpage);
+
+
+									    for($i=$startPage;$i<=$endPage;$i++) // PAGINATION COUNTS|LOOPS
+									    {
+
+									       
+											if ($i == $page) {
+							            		$class = 'pagingCurrent'; // PAGINATION CURRENT Page COLOR
+							            						
+							            	}else
+												{ 
+													$class = 'paging'; // PAGINATION COLOR
+												}
+
+
+											if($page > $i && $page > 2) { //CONTROL VISIBLE PAGINATION START NUMBER PAGE 
+
+												echo "<a href='adventures.php' class='".$class."'> 1 ... </a>";  
+											}
+														       
+
+												echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i   </a>"; 
+
+											if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE PAGINATION END NUMBER PAGE 
+															                    
+												echo "<a href='adventures.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>"; 
+
+											} 
+
+
+									    }
+
+				                if(($i-1) > $page)
+				                {
+				                    echo "<a href='adventures?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
+				                }
+
+						} 
+
+						//Aside Filter code ends here - Alexis Salvador
 
 						else 
 						{ //Index to Adventure Page Filter Code starts here - Alexis Salvador
@@ -391,7 +442,7 @@
 											$sqlquery = $sqlquery . " = '$activity'";
 									}
 
-										// $sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";	 
+										//$sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";	 
 										// Check commented code above
 										$sqlquery = $sqlquery . " ORDER BY adv_id";	 //Temporary to show true results
 								}													
@@ -412,7 +463,7 @@
 										$sqlquery = $sqlquery . " = '$activity'";
 								}
 
-								// $sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page"; 
+								//$sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page"; 
 								// Check commented code above
 								$sqlquery = $sqlquery . " ORDER BY adv_id";	//Temporary to show true results
 							}
@@ -424,9 +475,12 @@
 								displayAll(99, $card);
 							else { //This works if return items from SQL is empty due to search not found
 								$card = DB::query("SELECT * FROM adventure", array(), "READ");
+								$card1 = DB::query("SELECT * FROM adventure LIMIT $start_from,$num_per_page", array(), "READ");
 								echo "Enter a search parameters OR no search parameters found!";
-								displayAll(99, $card);
+								displayAll(99, $card1);
 							}							
+
+							// PAGINATION Kirk 
 
 							$total_record = count($card);
 			                $total_page = ceil($total_record/$num_per_page);
@@ -436,17 +490,41 @@
 			                    echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
 			                }
 
-			                for($i=1;$i<=$total_page;$i++)
-			                {
-			                	if ($i == $page) {
-        						 $class = 'pagingCurrent';
-        						}
-        						else {
-								$class = 'paging';
-								}
+										//LIMIT PAGINATION NUMBER PAGE VISIBLE
+										$numpage = 1; 
+										$startPage = max(1, $page - $numpage);
+										$endPage = min( $total_page, $page + $numpage);
 
-			                    echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i </a>";
-			                }
+
+									    for($i=$startPage;$i<=$endPage;$i++) // PAGINATION COUNTS|LOOPS
+									    {
+
+									       
+											if ($i == $page) {
+							            		$class = 'pagingCurrent'; // PAGINATION CURRENT Page COLOR
+							            						
+							            	}else
+												{ 
+													$class = 'paging'; // PAGINATION COLOR
+												}
+
+
+											if($page > $i && $page > 2) { //CONTROL VISIBLE PAGINATION START NUMBER PAGE 
+
+												echo "<a href='adventures.php' class='".$class."'> 1 ... </a>";  
+											}
+														       
+
+												echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i   </a>"; 
+
+											if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE PAGINATION END NUMBER PAGE 
+															                    
+												echo "<a href='adventures.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>"; 
+
+											} 
+
+
+									    }
 
 			                if(($i-1) > $page)
 			                {
