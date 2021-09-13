@@ -1112,7 +1112,55 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 
 	//Paymongo attach card PAYMENT DETAILS + PAYMENT METHOD code ENDS here
 
+	$attach = json_decode($payment_attach,true);
+
+	foreach($attach as $key => $value) {
+		if($key == 'data') {
+			if($attach['data']['attributes']['status'] == 'succeeded') {
+				$message = "Hooray! Thank you! Your payment for " . ($attach['data']['attributes']['amount'] / 100) . " " . $attach['data']['attributes']['currency'] . " thru card number ending in " . $attach['data']['attributes']['payments'][0]['attributes']['source']['last4'] . " was SUCCESSFUL!";
+				send_sms('09359520107', $message);
+			}
+		}
+		elseif($key == 'errors') {			
+			echo $attach['errors'][0]['detail'];
+		}
+	}
+
 	curl_close($curl);
 }
+
+##### CODE START HERE @SMS METHODS #####
+function send_sms($mobile, $message) {
+
+	$curl = curl_init();
+
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+	curl_setopt_array($curl, array(
+      CURLOPT_URL => 'https://www.itexmo.com/php_api/api.php',
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => '',
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 0,
+      CURLOPT_FOLLOWLOCATION => true,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => 'POST',
+      CURLOPT_POSTFIELDS => array('1' => $mobile ,'2' => $message,'3' => 'TR-ALEXI688932_MPXBC','passwd' => '&9in[7}wh3'),
+    ));
+
+    $response = curl_exec($curl);
+
+    if(!empty($response)) {
+		$log_filename = "logs\sms";
+		if(!file_exists($log_filename)) {
+			mkdir($log_filename, 0777, true);
+		}
+		$log_file_data = 'logs\\sms\\log_' . date('d-M-Y') . '.log';
+		file_put_contents($log_file_data, date('h:i:sa').' => '. json_decode($response) . "\n" . "\n", FILE_APPEND);
+	} 	//This code will a log.txt file to get the response of the cURL command
+
+    curl_close($curl);
+ }
 
 ##### END OF CODES #####
