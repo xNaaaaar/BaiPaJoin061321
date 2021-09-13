@@ -125,7 +125,17 @@
 		}
 
 		function displayTotalPrice(guest=1){
-			document.getElementById("totalPrice").value = (guest * <?php echo $_SESSION['price']; ?>).toFixed(2);
+			<?php if(isset($_SESSION['price'])) { ?>
+				document.getElementById("totalPrice").value = (guest * <?php echo $_SESSION['price']; ?>).toFixed(2);
+			<?php } ?>
+		}
+
+		function copy_voucher_code(code){
+		  /* Copy the text inside the text field */
+		  navigator.clipboard.writeText(code);
+
+		  /* Alert the copied text */
+		  alert("Voucher code " + code + " successfully copied!");
 		}
 	</script>
 </body>

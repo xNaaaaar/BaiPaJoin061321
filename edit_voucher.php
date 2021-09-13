@@ -36,11 +36,12 @@
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h3{font:600 30px/100% Montserrat,sans-serif;color:#ff4444;margin-bottom:10px;text-align:center;}
 		main .form{display:flex;justify-content:center;flex-wrap:wrap;margin-bottom:40px;position:relative;}
-		main .form input, main .form select, main .form textarea{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 30px;margin:15px auto;border:1px solid #cfcfcf;}
+		main .form input, main .form select{display:inline-block;width:67%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 30px;margin:15px auto;border:1px solid #cfcfcf;}
 		main .form input:nth-of-type(2){width:49%;}
 		main .form input:nth-of-type(3){width:49%;}
 		main .form input:nth-of-type(4){width:49%;}
 		main .form input:nth-of-type(5){width:49%;}
+		main .form select{width:31.5%;}
 
 		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 30px 30px 200px;line-height:35px;text-align:left;margin:15px 0;border:1px solid #cfcfcf;}
 		.card figure{width:140px;height:140px;position:absolute;top:30px;left:30px;border:1px solid #1a1a1a;}
@@ -102,6 +103,26 @@
 
 					<div class="form form2">
 						<input type="text" name="txtName" value="<?php echo $voucher['vouch_name']; ?>" placeholder="Name" required>
+						<select name="cboAdv" required>
+							<option>-- SELECT ADVENTURE --</option>
+							<?php
+							// DISPLAY ALL ADVENTURES CREATED BY CURRENT ORGANIZER
+							$adv = DB::query("SELECT * FROM adventure WHERE orga_id=?", array($_SESSION['organizer']), "READ");
+
+							if(count($adv)>0){
+								foreach ($adv as $result) {
+									$selected = "";
+									// SELECTED ADVENTURE
+									if($voucher['adv_id'] == $result['adv_id'])
+										$selected = "selected";
+									else
+										$selected = "";
+									//
+									echo "<option value='".$result['adv_id']."' ".$selected.">".$result['adv_name']."</option>";
+								}
+							}
+							?>
+						</select>
 						<input type="date" name="dateStartDate" value="<?php echo $voucher['vouch_startdate']; ?>" placeholder="Start Date" required>
 						<input type="date" name="dateEndDate" value="<?php echo $voucher['vouch_enddate']; ?>" placeholder="End Date" required>
 						<input type="number" name="numDiscount" value="<?php echo $voucher['vouch_discount']; ?>" placeholder="Discount" required>

@@ -90,7 +90,7 @@
 					$displayImage = rand(1,$totalImagesNum);
 		?>
 		<div class="breadcrumbs">
-			<a href="index.php">Home</a> &#187; <a href="adventures.php">Adventures</a> &#187; <a href="delete.php?table=booking&id=<?php echo $pendingBooking['book_id']; ?>&adv=<?php echo $_GET['id']; ?>">Book</a> &#187; Guests
+			<a href="index.php">Home</a> &#187; <a href="adventures.php">Adventures</a> &#187; Booking
 		</div>
 		<div class="main_con">
 			<main>

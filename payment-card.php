@@ -19,7 +19,7 @@
 		/* Main Area */
 		.main_con{display:flex;justify-content:space-between;}
 
-		.sidebar{flex:1;height:500px;padding:50px 30px 30px 0;position:relative;}
+		.sidebar{flex:1;height:400px;padding:100px 30px 30px 0;position:relative;}
 		.sidebar:before{content:'';width:2px;height:70%;background:#cdcdcd;position:absolute;top:50%;right:0;transform:translateY(-50%);}
 		.sidebar h2{font-size:25px;line-height:100%;}
 		.sidebar ul{display:flex;height:100%;flex-direction:column;justify-content:flex-start;font:600 25px/100% Montserrat,sans-serif;list-style:none;margin:35px 0 0;}
@@ -32,6 +32,7 @@
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+		main .edit{width:350px;}
 
 		.sub-breadcrumbs{text-align:right;margin-bottom:30px;}
 		.sub-breadcrumbs li{display:inline;margin-left:10px;color:gray;}
@@ -49,6 +50,13 @@
 		.payment_method input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
 		.payment_method label span{color:red;}
 
+		.voucher{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
+		.voucher h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
+		.voucher h2 span{color:gray;font-size:25px;}
+		.voucher section{display:flex;justify-content:space-between;}
+		.voucher input{display:inline-block;width:80%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
+		.voucher .edit{width:18% !important;margin:0 auto;}
+
 		.price_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
 		.price_details h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
 		.price_details section{position:relative;}
@@ -57,8 +65,6 @@
 		.price_details section table tr td{width:70%;}
 		.price_details section table tr:last-child td{padding:40px 0 0;}
 		.price_details section table tr td:last-child{text-align:right;width:30%;}
-
-		main .edit{width:350px;}
 
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
@@ -127,7 +133,7 @@
 						<h2>
 							<?php
 							echo $joiner['joiner_fname']." ".$joiner['joiner_mi'].". ".$joiner['joiner_lname'];
-							if($_SESSION['bookOption'] == "someone"){
+							if(isset($_SESSION['bookOption']) && $_SESSION['bookOption'] == "someone"){
 								echo "<em>Booking for someone else.</em>";
 							} else {
 								echo "<em>Booking as a guest.</em>";
@@ -144,15 +150,41 @@
 					<div class="payment_method">
 						<h2>Card Details <span><i class="far fa-credit-card"></i> <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i></span> </h2>
 						<label>Card name <span>*</span> </label>
-						<input type="text" name="card_name" value="" placeholder="Your name (as it appears on your card)" required>
+						<input type="text" name="card_name" value="" placeholder="Your name (as it appears on your card)">
 						<label>Card number <span>*</span> </label>
-						<input type="text" name="card_num" value="" placeholder="16 digit card number" maxlength="16" minlength="16" required>
+						<input type="text" name="card_num" value="" placeholder="16 digit card number" maxlength="16" minlength="16">
 						<label>Valid until <span>*</span> </label>
-						<input type="text" name="card_expiry" value="" placeholder="MM/YY" maxlength="5" minlength="5" required>
+						<input type="text" name="card_expiry" value="" placeholder="MM/YY" maxlength="5" minlength="5">
 						<label>CVV <span>*</span> </label>
-						<input type="text" name="card_cvv" value="" placeholder="3 digit code (at the back of the card)" maxlength="3" minlength="3" required>
+						<input type="text" name="card_cvv" value="" placeholder="3 digit code (at the back of the card)" maxlength="3" minlength="3">
 					</div>
 
+					<div class="voucher">
+						<h2>Add Voucher <span><a href="voucher.php" target="_blank" >look for voucher</a></span> </h2>
+
+						<?php
+							if(isset($_POST['btnVerify'])){
+								$voucher_code = trim($_POST['txtCode']);
+								# CHECK IF VOUCHER EXIST
+								$voucher_exist = DB::query("SELECT * FROM voucher WHERE vouch_code=?", array($voucher_code), "READ");
+
+								if(count($voucher_exist)>0){
+									# CHECK IF VOUCHER EXPIRED
+									# CHECK IF VOUCHER MATCH THE SPECIFIC ADVENTURE
+									# CHECK IF VOUCHER MIN. SPEND ATTAINED BY SPECIFIC ADVENTURE PRICE
+								} else {
+									echo "<script>alert('Voucher does not exist!')</script>";
+								}
+							}
+
+							# MELNAR: REMOVED SOME REQUIRED IN INPUT TAG (TBD)
+						?>
+
+						<section>
+							<input type="text" name="txtCode" placeholder="Input voucher code">
+							<button class="edit" type="submit" name="btnVerify">Verify</button>
+						</section>
+					</div>
 
 					<div class="price_details">
 						<h2>Price Details</h2>
@@ -175,7 +207,7 @@
 					</div>
 
 					<button class="edit" type="submit" name="btnPayCard">Pay with Credit/Debit Card</button>
-					
+
 					<?php
 						if(isset($_POST['btnPayCard'])) {
 							$payment_desc = "This payment is for Booking ID ".$booked['book_id']." under Mr/Ms. " . $_POST['card_name'];
@@ -183,7 +215,7 @@
 							process_paymongo_card_payment($_POST['card_name'],$_POST['card_num'],$_POST['card_expiry'],$_POST['card_cvv'],$final_price, $payment_desc);
 						}
 					?>
-					
+
 				</form>
 			</main>
 			<?php

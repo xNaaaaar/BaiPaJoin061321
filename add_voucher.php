@@ -35,11 +35,12 @@
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main .form{display:flex;justify-content:center;flex-wrap:wrap;margin-bottom:40px;position:relative;}
-		main .form input, main .form select, main .form textarea{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 30px;margin:15px auto;border:1px solid #cfcfcf;}
+		main .form input, main .form select{display:inline-block;width:67%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 30px;margin:15px auto;border:1px solid #cfcfcf;}
 		main .form input:nth-of-type(2){width:49%;}
 		main .form input:nth-of-type(3){width:49%;}
 		main .form input:nth-of-type(4){width:49%;}
 		main .form input:nth-of-type(5){width:49%;}
+		main .form select{width:31.5%;}
 
 		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 30px 30px 200px;line-height:35px;text-align:left;margin:15px 0;border:1px solid #cfcfcf;}
 		.card figure{width:140px;height:140px;position:absolute;top:30px;left:30px;border:1px solid #1a1a1a;}
@@ -93,13 +94,24 @@
 
 					<div class="form form2">
 						<input type="text" name="txtName" value="" placeholder="Name" required>
-						<input type="date" name="dateStartDate" value="" placeholder="Start Date" required>
-						<input type="date" name="dateEndDate" value="" placeholder="End Date" required>
-						<input type="number" name="numDiscount" value="" placeholder="Discount" required>
-						<input type="number" name="numMinSpent" value="" placeholder="Minimum Spent" required>
-					</div>
+						<select name="cboAdv" required>
+							<option>-- SELECT ADVENTURE --</option>
+							<?php
+							// DISPLAY ALL ADVENTURES CREATED BY CURRENT ORGANIZER
+							$adv = DB::query("SELECT * FROM adventure WHERE orga_id=?", array($_SESSION['organizer']), "READ");
 
-					<!-- SHOW ALL THE ORGANIZERS LEGAL DOCUMENT -->
+							if(count($adv)>0){
+								foreach ($adv as $result) {
+									echo "<option value='".$result['adv_id']."'>".$result['adv_name']."</option>";
+								}
+							}
+							?>
+						</select>
+						<input type="text" name="dateStartDate" placeholder="Start Date" onfocus="(this.type='date')" required>
+						<input type="text" name="dateEndDate" placeholder="End Date" onfocus="(this.type='date')" required>
+						<input type="number" name="numDiscount" placeholder="Discount" required>
+						<input type="number" name="numMinSpent" placeholder="Minimum Spent" required>
+					</div>
 
 					<button class="edit" type="submit" name="btnAdd">Add</button>
 					<a class="edit" href="voucher.php">Back</a>
