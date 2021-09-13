@@ -954,9 +954,12 @@ function bookingProcess($name, $phone, $email, $status, $book_id) {
 
 
 ##### CODE START HERE @PAYMENT METHODS #####
-function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $card_cvv, $amount,$description) {
+function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $card_cvv, $amount, $description) {
 
 	$curl = curl_init();
+
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
 	//Paymongo create card PAYMENT INTENT code STARTS here
 
@@ -995,8 +998,19 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 	));
 
 	$payment_intent = curl_exec($curl);
+	$err = curl_error($curl);
 
-	echo $payment_intent;
+	if(!empty($err))
+		echo $err;
+
+	if(!empty($payment_intent)) {
+		$log_filename = "logs\payment_intent";
+		if(!file_exists($log_filename)) {
+			mkdir($log_filename, 0777, true);
+		}
+		$log_file_data = 'logs\\payment_intent\\log_' . date('d-M-Y') . '.log';
+    	file_put_contents($log_file_data, date('h:i:sa').' => '.$payment_intent . "\n" . "\n", FILE_APPEND);
+	} //This code will a log.txt file to get the response of the cURL command
 	
 	//Paymongo create card PAYMENT INTENT code ENDS here
 
@@ -1033,8 +1047,19 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 	));
 
 	$payment_method = curl_exec($curl);
+	$err = curl_error($curl);
 
-	echo $payment_method;
+	if(!empty($err))
+		echo $err;
+
+	if(!empty($payment_method)) {
+		$log_filename = "logs\payment_method";
+		if(!file_exists($log_filename)) {
+			mkdir($log_filename, 0777, true);
+		}
+		$log_file_data = 'logs\\payment_method\\log_' . date('d-M-Y') . '.log';
+    	file_put_contents($log_file_data, date('h:i:sa').' => '.$payment_method . "\n" . "\n", FILE_APPEND);
+	} //This code will a log.txt file to get the response of the cURL command
 
 	//Paymongo add card PAYMENT DETAILS code ENDS here
 
@@ -1071,8 +1096,19 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 	));
 
 	$payment_attach = curl_exec($curl);
+	$err = curl_error($curl);
 
-	echo $payment_attach;
+	if(!empty($err))
+		echo $err;
+	
+	if(!empty($payment_attach)) {
+		$log_filename = "logs\payment_attach";
+		if(!file_exists($log_filename)) {
+			mkdir($log_filename, 0777, true);
+		}
+		$log_file_data = 'logs\\payment_attach\\log_' . date('d-M-Y') . '.log';
+		file_put_contents($log_file_data, date('h:i:sa').' => '.$payment_attach . "\n" . "\n", FILE_APPEND);
+	} 	//This code will a log.txt file to get the response of the cURL command
 
 	//Paymongo attach card PAYMENT DETAILS + PAYMENT METHOD code ENDS here
 

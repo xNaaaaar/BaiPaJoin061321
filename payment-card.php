@@ -178,7 +178,7 @@
 					
 					<?php
 						if(isset($_POST['btnPayCard'])) {
-							$payment_desc = "This payment is for Booking ID 123456 under Mr/Ms. " . $_POST['card_name'];
+							$payment_desc = "This payment is for Booking ID ".$booked['book_id']." under Mr/Ms. " . $_POST['card_name'];
 							$final_price = number_format($final_price, 2, '', '');
 							process_paymongo_card_payment($_POST['card_name'],$_POST['card_num'],$_POST['card_expiry'],$_POST['card_cvv'],$final_price, $payment_desc);
 						}
