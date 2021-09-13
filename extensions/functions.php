@@ -1119,13 +1119,72 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 		if($key == 'data') {
 			if($attach['data']['attributes']['status'] == 'succeeded') {
 				$message = "Hooray! Thank you! Your payment for " . ($attach['data']['attributes']['amount'] / 100) . " " . $attach['data']['attributes']['currency'] . " thru card number ending in " . $attach['data']['attributes']['payments'][0]['attributes']['source']['last4'] . " was SUCCESSFUL!";
-				send_sms('09359520107', $message);
+				send_sms('09239688932', $message);
 			}
 		}
 		elseif($key == 'errors') {
 			echo $attach['errors'][0]['detail'];
 		}
 	}
+
+	curl_close($curl);
+}
+
+function process_paymongo_ewallet_payment($ewallet_type, $final_price, $joiner) {
+
+	$curl = curl_init();
+
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+	$ewallet_body_params = '{
+	    "data": {
+	        "attributes": {
+	            "amount": '.$final_price.',
+	            "redirect": {
+	                "success": "http://localhost/BaiPaJoin/payment-gcash.php",
+	                "failed": "http://localhost/BaiPaJoin/index.php"
+	            },
+	            "billing": {
+	                "name": "'.$joiner[1].' '.$joiner[2].'",
+	                "phone": "'.$joiner[5].'",
+	                "email": "'.$joiner[6].'"
+	            },
+	            "type": "'.$ewallet_type.'",
+	            "currency": "PHP"
+	        }
+	    }
+	}';
+
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => 'https://api.paymongo.com/v1/sources',
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'POST',
+	  CURLOPT_POSTFIELDS => $ewallet_body_params,
+	  CURLOPT_HTTPHEADER => array(
+	    'Authorization: Basic cGtfdGVzdF82RDZ4TGk3OHRORGtOWU1WR3RlZEtkcWg6',
+	    'Content-Type: application/json'
+	  ),
+	));
+
+	$ewallet_source = curl_exec($curl);
+	$err = curl_error($curl);
+
+	if(!empty($err))
+		echo $err;
+
+	if(!empty($ewallet_source)) {
+		if(!file_exists('logs\ewallet_source')) {
+			mkdir('logs\ewallet_source', 0777, true);
+		}
+		$log_file_data = 'logs\\ewallet_source\\log_' . date('d-M-Y') . '.log';
+    	file_put_contents($log_file_data, date('h:i:sa').' => '. $ewallet_source . "\n" . "\n", FILE_APPEND);
+	} //This code will a log.txt file to get the response of the cURL command
 
 	curl_close($curl);
 }
@@ -1150,6 +1209,7 @@ function send_sms($mobile, $message) {
       CURLOPT_POSTFIELDS => array('1' => $mobile ,'2' => $message,'3' => 'TR-ALEXI688932_MPXBC','passwd' => '&9in[7}wh3'),
   ));
 
+<<<<<<< Updated upstream
   $response = curl_exec($curl);
 
   if(!empty($response)) {
@@ -1160,6 +1220,17 @@ function send_sms($mobile, $message) {
 		$log_file_data = 'logs\\sms\\log_' . date('d-M-Y') . '.log';
 		file_put_contents($log_file_data, date('h:i:sa').' => '. json_decode($response) . "\n" . "\n", FILE_APPEND);
 	} 	//This code will a log.txt file to get the response of the cURL command
+=======
+    $response = curl_exec($curl);
+    
+	$log_filename = "logs\sms";
+	if(!file_exists($log_filename)) {
+		mkdir($log_filename, 0777, true);
+	}
+	$log_file_data = 'logs\\sms\\log_' . date('d-M-Y') . '.log';
+	file_put_contents($log_file_data, date('h:i:sa').' => Response Code: '. json_decode($response) . "\n" . " + + + Message Sent: ". $message . "\n" . "\n", FILE_APPEND);
+ 	//This code will a log.txt file to get the response of the cURL command
+>>>>>>> Stashed changes
 
   curl_close($curl);
 }
