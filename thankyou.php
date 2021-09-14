@@ -26,6 +26,7 @@
 		.main_info section i{font-size:120px;}
 		.main_info section p{font:400 35px/30px Montserrat,sans-serif;text-align:center;margin:10px 0 0;}
 		.main_info section ul{margin:70px 0 0;}
+		.main_info section ul li{display:inline-block;}
 	</style>
 
 	<!--?php wp_head(); ?-->
@@ -53,22 +54,23 @@
 			<main>
 				<div class="place_info">
 					<div class="main_info">
-						<h1>Thank you!</h1>
+						<h1>Spontaneous. Thank you!</h1>
 						<section>
 							<?php
-								if(isset($_GET['card'])){
+								if(isset($_GET['card'])) {
 									echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru card!</p>";
 								} else if(isset($_GET['gcash']) && $_GET['gcash'] == 1) {
 									echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru gcash!</p>";
-								} else if(isset($_GET['grabpay']) && $_GET['grabpay'] == 1){
+								} else if(isset($_GET['grabpay']) && $_GET['grabpay'] == 1) {
 									echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru grabpay!</p>";
 								} else if(isset($_GET['gcash']) && $_GET['gcash'] == 0) {
 									echo "<i class='far fa-times-circle error'></i><p class='error'>Error paying thru gcash!</p>";
-								} else if(isset($_GET['grabpay']) && $_GET['grabpay'] == 0){
+								} else if(isset($_GET['grabpay']) && $_GET['grabpay'] == 0) {
 									echo "<i class='far fa-times-circle error'></i><p class='error'>Error paying thru grabpay!</p>";
 								}
 							?>
 							<ul>
+								<li><a href="#">Back to Home</a> | </li>
 								<li><a href="#">View Payment Reports</a> | </li>
 							</ul>
 						</section>
