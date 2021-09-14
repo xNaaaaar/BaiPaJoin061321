@@ -1025,7 +1025,15 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 	                "exp_year": '.substr($card_expiry, 3,4).',
 	                "cvc": "'.$card_cvv.'"
 	            },
-	            "type": "card"
+	            "billing": {
+	                "address": {
+	                    "line1": "'.$joiner[4].'"
+	                },
+	                "name": "'.$joiner[1]." ".$joiner[2].'",
+	                "email": "'.$joiner[6].'",
+	                "phone": "'.$joiner[5].'"
+	           		},
+	        	"type": "card"
 	        }
 	    }
 	}'; //This is to setup the query for paymongo add payment method
@@ -1098,6 +1106,8 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 	$payment_attach = curl_exec($curl);
 	$err = curl_error($curl);
 
+	curl_close($curl);
+
 	if(!empty($err))
 		echo $err;
 
@@ -1117,18 +1127,16 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 	foreach($attach as $key => $value) {
 		if($key == 'data') {
 			if($attach['data']['attributes']['status'] == 'succeeded') {
+				$mobile = $attach['data']['attributes']['payments'][0]['attributes']['billing']['phone'];
 				$message = "Hooray! Thank you! Your payment for " . ($attach['data']['attributes']['amount'] / 100) . " " . $attach['data']['attributes']['currency'] . " thru card number ending in " . $attach['data']['attributes']['payments'][0]['attributes']['source']['last4'] . " was SUCCESSFUL!";
-				send_sms('09239688932', $message);
+				send_sms($mobile, $message);
 			}
 			return $attach['data']['attributes']['status'];
 		}
 		elseif($key == 'errors') {
-			//echo $attach['errors'][0]['detail'];
 			return $attach['errors'][0]['detail'];
 		}
-	}
-
-	curl_close($curl);
+	}	
 }
 
 function process_paymongo_ewallet_source($ewallet_type, $final_price, $joiner) {
@@ -1325,17 +1333,41 @@ function send_sms($mobile, $message) {
   curl_close($curl);
 }
 
+##### CODE START HERE @OPENWEATHERMAP API #####
+function get_current_weather_location($location) {
 
+	$curl = curl_init();
 
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
+    $query = 'api.openweathermap.org/data/2.5/weather?q='.$location.'&units=metric&appid=162cd8759db84c387321be37f9a939d4';
 
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => $query,
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'GET',
+	));
 
+	$response = curl_exec($curl);
+	$err = curl_error($curl);
 
+	curl_close($curl);
 
+	if(!empty($response)) {
+      if(!file_exists('logs\openweathermap')) {
+        mkdir('logs\openweathermap', 0777, true);
+      }
+      $log_file_data = 'logs\\openweathermap\\log_' . date('d-M-Y') . '.log';
+      file_put_contents($log_file_data, date('h:i:sa').' => '. $response . "\n" . "\n", FILE_APPEND);
+    } //This code will a log.txt file to get the response of the cURL command
 
-
-
-
-
+	return $response;
+}
 
 ##### END OF CODES #####

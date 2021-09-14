@@ -131,6 +131,11 @@
 					</div>
 					<!-- BOOKED INFORMATION -->
 					<div class="book_info">
+						<?php
+							//This method will return the current weather at a certain location
+							$weather = get_current_weather_location($adv[15]);
+							echo $weather;
+						?>
 						<figure>
 							<?php
 								# DISPLAY RANDOM IMAGE
