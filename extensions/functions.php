@@ -953,7 +953,6 @@ function bookingProcess($name, $phone, $email, $status, $book_id) {
 	}
 }
 
-
 ##### CODE START HERE @PAYMONGO API #####
 function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $card_cvv, $amount, $description) {
 
@@ -1200,7 +1199,7 @@ function process_paymongo_ewallet_payment($amount, $source_id) {
     $fields = array("data" => array ("attributes" => array ("amount" => $amount, "source" => array ("id" => $source_id, "type" => "source"), "currency" => "PHP")));
 
     $jsonFields = json_encode($fields);
-      
+
     curl_setopt_array($curl, [
       CURLOPT_URL => "https://api.paymongo.com/v1/payments",
       CURLOPT_RETURNTRANSFER => true,
@@ -1285,7 +1284,7 @@ function retrieve_paymongo_ewallet_payment($payment_id) {
 	));
 
 	$response = curl_exec($curl);
-	
+
 	curl_close($curl);
 
 	return $response;
@@ -1312,7 +1311,7 @@ function send_sms($mobile, $message) {
   ));
 
     $response = curl_exec($curl);
-    
+
 	$log_filename = "logs\sms";
 	if(!file_exists($log_filename)) {
 		mkdir($log_filename, 0777, true);
@@ -1323,5 +1322,18 @@ function send_sms($mobile, $message) {
 
   curl_close($curl);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ##### END OF CODES #####

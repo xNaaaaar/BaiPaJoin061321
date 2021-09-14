@@ -1,6 +1,7 @@
 <?php
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
+	ob_start();
 
 	if(isset($_POST['btnCont2']) && isset($_GET['book_id'])){
 		booking("waiting for payment", $_GET['book_id']);
@@ -132,79 +133,80 @@
 					<li class="ongoing success"><i class="far fa-check-circle"></i> Fill in Guest Information <span>&#187;</span></li>
 					<li class="ongoing"><i class="far fa-check-circle"></i> Review & Payment</li>
 				</ul>
-				<form method="post">
-					<h2>Payment</h2>
+				<h2>Payment</h2>
 
-					<div class="booking_details">
-						<h2>
-							<?php
-							echo $joiner['joiner_fname']." ".$joiner['joiner_mi'].". ".$joiner['joiner_lname'];
-							if(isset($_SESSION['bookOption']) && $_SESSION['bookOption'] == "someone"){
-								echo "<em>Booking for someone else.</em>";
-							} else {
-								echo "<em>Booking as a guest.</em>";
-							}
-							?>
-						</h2>
-						<ul>
-							<li>Book ID: <?php echo $booked['book_id']; ?></li>
-							<li>Total guest/s: <?php echo $booked['book_guests']; ?></li>
-							<li>on <?php echo date('l - M. j, Y', strtotime($adv['adv_date'])); ?></li>
-						</ul>
-					</div>
-
-					<div class="payment_method">
-						<h2>Card Details <span><i class="far fa-credit-card"></i> <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i></span> </h2>
-						<label>Card name <span>*</span> </label>
-						<input type="text" name="card_name" value="" placeholder="Your name (as it appears on your card)">
-						<label>Card number <span>*</span> </label>
-						<input type="text" name="card_num" value="" placeholder="16 digit card number" maxlength="16" minlength="16">
-						<label>Valid until <span>*</span> </label>
-						<input type="text" name="card_expiry" value="" placeholder="MM/YY" maxlength="5" minlength="5">
-						<label>CVV <span>*</span> </label>
-						<input type="text" name="card_cvv" value="" placeholder="3 digit code (at the back of the card)" maxlength="3" minlength="3">
-					</div>
-
-					<div class="voucher">
-						<h2>Add Voucher <span><a href="voucher.php" target="_blank" >look for voucher</a></span> </h2>
-
+				<div class="booking_details">
+					<h2>
 						<?php
-							if(isset($_POST['btnVerify'])){
-								$voucher_code = trim($_POST['txtCode']);
-								# CHECK IF VOUCHER EXIST
-								$voucher_exist = DB::query("SELECT * FROM voucher WHERE vouch_code=?", array($voucher_code), "READ");
-
-								if(count($voucher_exist)>0){
-									$voucher_exist = $voucher_exist[0];
-									# CHECK IF VOUCHER EXPIRED
-									if($voucher_exist['vouch_enddate'] < date('Y-m-d')){
-										echo "<p class='error'>Voucher expired!</p>";
-
-									# CHECK IF VOUCHER MATCH THE SPECIFIC ADVENTURE
-									} elseif($voucher_exist['adv_id'] != $_GET['id']){
-										echo "<p class='error'>Cannot use voucher in this adventure!</p>";
-
-									# CHECK IF VOUCHER MIN. SPEND ATTAINED BY SPECIFIC ADVENTURE PRICE
-									} elseif($voucher_exist['vouch_minspent'] > $booked['book_totalcosts']){
-										echo "<p class='error'>Not enough price to use this voucher!</p>";
-									} else {
-										$discount = $booked['book_totalcosts'] * ($voucher_exist['vouch_discount']/100);
-										$final_price -= $discount;
-										echo "<p class='success'>Voucher added successfully!</p>";
-									}
-								} else {
-									echo "<p class='error'>Voucher does not exist!</p>";
-								}
-							}
-
-							# MELNAR: REMOVED SOME REQUIRED IN INPUT TAG (TBD)
-							# payment-card.php?book_id=202183&id=4
+						echo $joiner['joiner_fname']." ".$joiner['joiner_mi'].". ".$joiner['joiner_lname'];
+						if(isset($_SESSION['bookOption']) && $_SESSION['bookOption'] == "someone"){
+							echo "<em>Booking for someone else.</em>";
+						} else {
+							echo "<em>Booking as a guest.</em>";
+						}
 						?>
+					</h2>
+					<ul>
+						<li>Book ID: <?php echo $booked['book_id']; ?></li>
+						<li>Total guest/s: <?php echo $booked['book_guests']; ?></li>
+						<li>on <?php echo date('l - M. j, Y', strtotime($adv['adv_date'])); ?></li>
+					</ul>
+				</div>
 
+				<div class="voucher">
+					<h2>Add Voucher <span><a href="voucher.php" target="_blank" >look for voucher</a></span> </h2>
+
+					<?php
+						if(isset($_POST['btnVerify'])){
+							$voucher_code = trim($_POST['txtCode']);
+							# CHECK IF VOUCHER EXIST
+							$voucher_exist = DB::query("SELECT * FROM voucher WHERE vouch_code=?", array($voucher_code), "READ");
+
+							if(count($voucher_exist)>0){
+								$voucher_exist = $voucher_exist[0];
+								# CHECK IF VOUCHER EXPIRED
+								if($voucher_exist['vouch_enddate'] < date('Y-m-d')){
+									echo "<p class='error'>Voucher expired!</p>";
+
+								# CHECK IF VOUCHER MATCH THE SPECIFIC ADVENTURE
+								} elseif($voucher_exist['adv_id'] != $_GET['id']){
+									echo "<p class='error'>Cannot use voucher in this adventure!</p>";
+
+								# CHECK IF VOUCHER MIN. SPEND ATTAINED BY SPECIFIC ADVENTURE PRICE
+								} elseif($voucher_exist['vouch_minspent'] > $booked['book_totalcosts']){
+									echo "<p class='error'>Not enough price to use this voucher!</p>";
+								} else {
+									$discount = $booked['book_totalcosts'] * ($voucher_exist['vouch_discount']/100);
+									$final_price -= $discount;
+									echo "<p class='success'>Voucher added successfully!</p>";
+								}
+							} else {
+								echo "<p class='error'>Voucher does not exist!</p>";
+							}
+						}
+
+						# MELNAR: REMOVED SOME REQUIRED IN INPUT TAG (TBD)
+						# payment-card.php?book_id=202183&id=4
+					?>
+					<form method="post">
 						<section>
 							<input type="text" name="txtCode" placeholder="Input voucher code">
 							<button class="edit" type="submit" name="btnVerify">Verify</button>
 						</section>
+					</form>
+				</div>
+
+				<form method="post">
+					<div class="payment_method">
+						<h2>Card Details <span><i class="far fa-credit-card"></i> <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i></span> </h2>
+						<label>Card name <span>*</span> </label>
+						<input type="text" name="card_name" value="" placeholder="Your name (as it appears on your card)" required>
+						<label>Card number <span>*</span> </label>
+						<input type="text" name="card_num" value="" placeholder="16 digit card number" maxlength="16" minlength="16" required>
+						<label>Valid until <span>*</span> </label>
+						<input type="text" name="card_expiry" value="" placeholder="MM/YY" maxlength="5" minlength="5" required>
+						<label>CVV <span>*</span> </label>
+						<input type="number" name="card_cvv" value="" placeholder="3 digit code (at the back of the card)" maxlength="3" minlength="3" required>
 					</div>
 
 					<div class="price_details">
@@ -220,7 +222,15 @@
 									<td class="success">+ ₱ <?php echo number_format($price_fee, 2, '.', ''); ?></td>
 								</tr>
 								<tr>
-									<td>Voucher Discount (<?php echo $voucher_exist['vouch_discount']."%" ?>)</td>
+									<td>Voucher Discount (
+										<?php
+											if(isset($voucher_exist) && count($voucher_exist)>0)
+												echo $voucher_exist['vouch_discount']."%";
+											else
+												echo "0%";
+										?>
+										)
+									</td>
 									<td class="error">- ₱ <?php echo number_format($discount, 2, '.', ''); ?></td>
 								</tr>
 								<tr>
@@ -235,19 +245,25 @@
 
 					<?php
 						if(isset($_POST['btnPayCard'])) {
-							// ERROR TRAPPINGS
-							if($_POST['card_name'] == ""){
-								echo "<script>alert('Card name is required!')</script>";
-							} else if($_POST['card_num'] == ""){
-								echo "<script>alert('Card num is required!')</script>";
-							} else if($_POST['card_expiry'] == ""){
-								echo "<script>alert('Card expiry is required!')</script>";
-							} else if($_POST['card_cvv'] == ""){
-								echo "<script>alert('Card cvv is required!')</script>";
+							// LIST OF VALID TEST CARD
+							$test_card_list = array(4343434343434345, 4571736000000075, 4009930000001421, 4404520000001439, 5555444444444457, 5455590000000009, 5339080000000003, 5240050000001440, 5577510000001446);
+							$valid_card = in_array($_POST['card_num'], $test_card_list);
+
+							// CHECK IF INPUTTED CARD NUMBER IS VALID
+							if(!$valid_card){
+								echo "<script>alert('Invalid card number!')</script>";
+
+							// CHECK IF INPUTTED EXPIRY DATE IS FUTURE DATE
+							} elseif($_POST['card_expiry'] < date("m/y")) {
+								echo "<script>alert('Expiry date must be future dates!')</script>";
+
+							// IF NO ERROR
 							} else {
 								$payment_desc = "This payment is for Booking ID ".$booked['book_id']." under Mr/Ms. " . $_POST['card_name'];
 								$final_price = number_format($final_price, 2, '', '');
 								process_paymongo_card_payment($_POST['card_name'],$_POST['card_num'],$_POST['card_expiry'],$_POST['card_cvv'],$final_price, $payment_desc);
+
+								header("Location: thankyou.php?card");
 							}
 						}
 					?>
@@ -264,5 +280,5 @@
 <!-- End Main -->
 
 <!--Footer -->
-<?php include("includes/footer.php"); ?>
+<?php include("includes/footer.php"); ob_end_flush();?>
 <!-- End Footer -->
