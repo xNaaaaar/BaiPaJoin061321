@@ -392,7 +392,7 @@ function displayAll($num, $query = NULL){
 	}
 	// FOR VOUCHER DISPLAYING ALL CARDS FOR JOINER
 	else if($num === 3){
-		$card = DB::query("SELECT * FROM voucher WHERE orga_id = ?", array($_SESSION['organizer']), "READ");
+		$card = DB::query("SELECT * FROM voucher", array(), "READ");
 		if($query != NULL) $card = $query;
 
 		if(count($card)>0){
@@ -417,8 +417,7 @@ function displayAll($num, $query = NULL){
 					<p>Valid Until: <q>".date('M. j, Y', strtotime($result['vouch_enddate']))."</q></p>
 
 					<ul class='icons'>
-						<li><a href='edit_voucher.php?id=".$result['vouch_code']."'><i class='fas fa-edit'></i></a></li>
-						<li><a href='delete.php?table=voucher&id=".$result['vouch_code']."' onclick='return confirm(\"Are you sure you want to delete this voucher?\");'><i class='far fa-trash-alt'></i></a></li>
+						<li><a onclick='copy_voucher_code(\"".$result['vouch_code']."\")'><i class='far fa-copy'></i></a></li>
 					</ul>
 				</div>
 				";
@@ -722,6 +721,7 @@ function updateAdventure(){
 ##### CODE START HERE @ADD USER VOUCHER (ORGANIZER) #####
 function addVoucher(){
 	$txtName = trim(ucwords($_POST['txtName']));
+	$cboAdv = $_POST['cboAdv'];
 	$dateStartDate = date("Y-m-d", strtotime($_POST['dateStartDate']));
 	$dateEndDate = date("Y-m-d", strtotime($_POST['dateEndDate']));
 	$numDiscount = trim($_POST['numDiscount']);
@@ -733,7 +733,7 @@ function addVoucher(){
 		echo "<script>alert('Start date cannot be greater than end date!')</script>";
 	}
 	else {
-		DB::query("INSERT INTO voucher(vouch_code, vouch_discount, vouch_name, vouch_minspent, vouch_startdate, vouch_enddate, orga_id) VALUES(?,?,?,?,?,?,?)", array($vouchCode, $numDiscount, $txtName, $numMinSpent, $dateStartDate, $dateEndDate, $_SESSION['organizer']), "CREATE");
+		DB::query("INSERT INTO voucher(vouch_code, vouch_discount, vouch_name, vouch_minspent, vouch_startdate, vouch_enddate, orga_id, adv_id) VALUES(?,?,?,?,?,?,?,?)", array($vouchCode, $numDiscount, $txtName, $numMinSpent, $dateStartDate, $dateEndDate, $_SESSION['organizer'], $cboAdv), "CREATE");
 
 		header("Location: voucher.php?added=1");
 	}
@@ -743,6 +743,7 @@ function addVoucher(){
 function updateVoucher(){
 	// DECLARING
 	$txtName = trim(ucwords($_POST['txtName']));
+	$cboAdv = $_POST['cboAdv'];
 	$dateStartDate = date("Y-m-d", strtotime($_POST['dateStartDate']));
 	$dateEndDate = date("Y-m-d", strtotime($_POST['dateEndDate']));
 	$numDiscount = trim($_POST['numDiscount']);
@@ -753,7 +754,7 @@ function updateVoucher(){
 		echo "<script>alert('Start date cannot be greater than end date!')</script>";
 	}
 	else {
-		DB::query("UPDATE voucher SET vouch_name=?, vouch_startdate=?, vouch_enddate=?, vouch_discount=?, vouch_minspent=? WHERE vouch_code=?", array($txtName, $dateStartDate, $dateEndDate, $numDiscount, $numMinSpent, $_GET['id']), "UPDATE");
+		DB::query("UPDATE voucher SET vouch_name=?, vouch_startdate=?, vouch_enddate=?, vouch_discount=?, vouch_minspent=?, adv_id=? WHERE vouch_code=?", array($txtName, $dateStartDate, $dateEndDate, $numDiscount, $numMinSpent, $cboAdv, $_GET['id']), "UPDATE");
 
 		header("Location: voucher.php?updated=1");
 	}
@@ -1011,7 +1012,7 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 		$log_file_data = 'logs\\payment_intent\\log_' . date('d-M-Y') . '.log';
     	file_put_contents($log_file_data, date('h:i:sa').' => '.$payment_intent . "\n" . "\n", FILE_APPEND);
 	} //This code will a log.txt file to get the response of the cURL command
-	
+
 	//Paymongo create card PAYMENT INTENT code ENDS here
 
 	//Paymongo add card PAYMENT DETAILS code STARTS here
@@ -1100,7 +1101,7 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 
 	if(!empty($err))
 		echo $err;
-	
+
 	if(!empty($payment_attach)) {
 		$log_filename = "logs\payment_attach";
 		if(!file_exists($log_filename)) {
@@ -1112,7 +1113,132 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 
 	//Paymongo attach card PAYMENT DETAILS + PAYMENT METHOD code ENDS here
 
+	$attach = json_decode($payment_attach,true);
+
+	foreach($attach as $key => $value) {
+		if($key == 'data') {
+			if($attach['data']['attributes']['status'] == 'succeeded') {
+				$message = "Hooray! Thank you! Your payment for " . ($attach['data']['attributes']['amount'] / 100) . " " . $attach['data']['attributes']['currency'] . " thru card number ending in " . $attach['data']['attributes']['payments'][0]['attributes']['source']['last4'] . " was SUCCESSFUL!";
+				send_sms('09239688932', $message);
+			}
+		}
+		elseif($key == 'errors') {
+			echo $attach['errors'][0]['detail'];
+		}
+	}
+
 	curl_close($curl);
 }
+
+function process_paymongo_ewallet_payment($ewallet_type, $final_price, $joiner) {
+
+	$curl = curl_init();
+
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+	$ewallet_body_params = '{
+	    "data": {
+	        "attributes": {
+	            "amount": '.$final_price.',
+	            "redirect": {
+	                "success": "http://localhost/BaiPaJoin/payment-gcash.php",
+	                "failed": "http://localhost/BaiPaJoin/index.php"
+	            },
+	            "billing": {
+	                "name": "'.$joiner[1].' '.$joiner[2].'",
+	                "phone": "'.$joiner[5].'",
+	                "email": "'.$joiner[6].'"
+	            },
+	            "type": "'.$ewallet_type.'",
+	            "currency": "PHP"
+	        }
+	    }
+	}';
+
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => 'https://api.paymongo.com/v1/sources',
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'POST',
+	  CURLOPT_POSTFIELDS => $ewallet_body_params,
+	  CURLOPT_HTTPHEADER => array(
+	    'Authorization: Basic cGtfdGVzdF82RDZ4TGk3OHRORGtOWU1WR3RlZEtkcWg6',
+	    'Content-Type: application/json'
+	  ),
+	));
+
+	$ewallet_source = curl_exec($curl);
+	$err = curl_error($curl);
+
+	if(!empty($err))
+		echo $err;
+
+	if(!empty($ewallet_source)) {
+		if(!file_exists('logs\ewallet_source')) {
+			mkdir('logs\ewallet_source', 0777, true);
+		}
+		$log_file_data = 'logs\\ewallet_source\\log_' . date('d-M-Y') . '.log';
+    	file_put_contents($log_file_data, date('h:i:sa').' => '. $ewallet_source . "\n" . "\n", FILE_APPEND);
+	} //This code will a log.txt file to get the response of the cURL command
+
+	curl_close($curl);
+}
+
+##### CODE START HERE @SMS METHODS #####
+function send_sms($mobile, $message) {
+
+	$curl = curl_init();
+
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+	curl_setopt_array($curl, array(
+      CURLOPT_URL => 'https://www.itexmo.com/php_api/api.php',
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => '',
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 0,
+      CURLOPT_FOLLOWLOCATION => true,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => 'POST',
+      CURLOPT_POSTFIELDS => array('1' => $mobile ,'2' => $message,'3' => 'TR-ALEXI688932_MPXBC','passwd' => '&9in[7}wh3'),
+  ));
+
+    $response = curl_exec($curl);
+
+	$log_filename = "logs\sms";
+	if(!file_exists($log_filename)) {
+		mkdir($log_filename, 0777, true);
+	}
+	$log_file_data = 'logs\\sms\\log_' . date('d-M-Y') . '.log';
+	file_put_contents($log_file_data, date('h:i:sa').' => Response Code: '. json_decode($response) . "\n" . " + + + Message Sent: ". $message . "\n" . "\n", FILE_APPEND);
+ 	//This code will a log.txt file to get the response of the cURL command
+
+  curl_close($curl);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ##### END OF CODES #####

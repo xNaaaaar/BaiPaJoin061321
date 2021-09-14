@@ -19,7 +19,7 @@
 		/* Main Area */
 		.main_con{display:flex;justify-content:space-between;}
 
-		.sidebar{flex:1;height:500px;padding:50px 30px 30px 0;position:relative;}
+		.sidebar{flex:1;height:400px;padding:100px 30px 30px 0;position:relative;}
 		.sidebar:before{content:'';width:2px;height:70%;background:#cdcdcd;position:absolute;top:50%;right:0;transform:translateY(-50%);}
 		.sidebar h2{font-size:25px;line-height:100%;}
 		.sidebar ul{display:flex;height:100%;flex-direction:column;justify-content:flex-start;font:600 25px/100% Montserrat,sans-serif;list-style:none;margin:35px 0 0;}
@@ -32,12 +32,14 @@
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+		main .edit{width:350px;}
 
 		.sub-breadcrumbs{text-align:right;margin-bottom:30px;}
 		.sub-breadcrumbs li{display:inline;margin-left:10px;color:gray;}
 		.sub-breadcrumbs li span{margin-left:10px;}
 		.ongoing{color:#000 !important;}
 		.success{color:#5cb85c !important;}
+		.error{color:red;}
 
 		.booking_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
 		.booking_details h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
@@ -49,6 +51,15 @@
 		.payment_method input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
 		.payment_method label span{color:red;}
 
+		.voucher{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
+		.voucher h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
+		.voucher h2 span{color:gray;font-size:25px;}
+		.voucher p{margin:0 0 5px 5px;width:100%;}
+		.voucher .error{color:red;}
+		.voucher section{display:flex;justify-content:space-between;}
+		.voucher input{display:inline-block;width:80%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
+		.voucher .edit{width:18% !important;margin:0 auto;}
+
 		.price_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
 		.price_details h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
 		.price_details section{position:relative;}
@@ -57,8 +68,6 @@
 		.price_details section table tr td{width:70%;}
 		.price_details section table tr:last-child td{padding:40px 0 0;}
 		.price_details section table tr td:last-child{text-align:right;width:30%;}
-
-		main .edit{width:350px;}
 
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
@@ -113,6 +122,9 @@
 					// JOINER FEES CALCULATION
 					$price_fee = $booked['book_totalcosts'] * 0.035 + 15;
 					$final_price = $booked['book_totalcosts'] + $price_fee;
+					//
+					$verified = false;
+					$discount = 0;
 			?>
 			<main>
 				<ul class="sub-breadcrumbs">
@@ -127,7 +139,7 @@
 						<h2>
 							<?php
 							echo $joiner['joiner_fname']." ".$joiner['joiner_mi'].". ".$joiner['joiner_lname'];
-							if($_SESSION['bookOption'] == "someone"){
+							if(isset($_SESSION['bookOption']) && $_SESSION['bookOption'] == "someone"){
 								echo "<em>Booking for someone else.</em>";
 							} else {
 								echo "<em>Booking as a guest.</em>";
@@ -144,15 +156,56 @@
 					<div class="payment_method">
 						<h2>Card Details <span><i class="far fa-credit-card"></i> <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i></span> </h2>
 						<label>Card name <span>*</span> </label>
-						<input type="text" name="card_name" value="" placeholder="Your name (as it appears on your card)" required>
+						<input type="text" name="card_name" value="" placeholder="Your name (as it appears on your card)">
 						<label>Card number <span>*</span> </label>
-						<input type="text" name="card_num" value="" placeholder="16 digit card number" maxlength="16" minlength="16" required>
+						<input type="text" name="card_num" value="" placeholder="16 digit card number" maxlength="16" minlength="16">
 						<label>Valid until <span>*</span> </label>
-						<input type="text" name="card_expiry" value="" placeholder="MM/YY" maxlength="5" minlength="5" required>
+						<input type="text" name="card_expiry" value="" placeholder="MM/YY" maxlength="5" minlength="5">
 						<label>CVV <span>*</span> </label>
-						<input type="text" name="card_cvv" value="" placeholder="3 digit code (at the back of the card)" maxlength="3" minlength="3" required>
+						<input type="text" name="card_cvv" value="" placeholder="3 digit code (at the back of the card)" maxlength="3" minlength="3">
 					</div>
 
+					<div class="voucher">
+						<h2>Add Voucher <span><a href="voucher.php" target="_blank" >look for voucher</a></span> </h2>
+
+						<?php
+							if(isset($_POST['btnVerify'])){
+								$voucher_code = trim($_POST['txtCode']);
+								# CHECK IF VOUCHER EXIST
+								$voucher_exist = DB::query("SELECT * FROM voucher WHERE vouch_code=?", array($voucher_code), "READ");
+
+								if(count($voucher_exist)>0){
+									$voucher_exist = $voucher_exist[0];
+									# CHECK IF VOUCHER EXPIRED
+									if($voucher_exist['vouch_enddate'] < date('Y-m-d')){
+										echo "<p class='error'>Voucher expired!</p>";
+
+									# CHECK IF VOUCHER MATCH THE SPECIFIC ADVENTURE
+									} elseif($voucher_exist['adv_id'] != $_GET['id']){
+										echo "<p class='error'>Cannot use voucher in this adventure!</p>";
+
+									# CHECK IF VOUCHER MIN. SPEND ATTAINED BY SPECIFIC ADVENTURE PRICE
+									} elseif($voucher_exist['vouch_minspent'] > $booked['book_totalcosts']){
+										echo "<p class='error'>Not enough price to use this voucher!</p>";
+									} else {
+										$discount = $booked['book_totalcosts'] * ($voucher_exist['vouch_discount']/100);
+										$final_price -= $discount;
+										echo "<p class='success'>Voucher added successfully!</p>";
+									}
+								} else {
+									echo "<p class='error'>Voucher does not exist!</p>";
+								}
+							}
+
+							# MELNAR: REMOVED SOME REQUIRED IN INPUT TAG (TBD)
+							# payment-card.php?book_id=202183&id=4
+						?>
+
+						<section>
+							<input type="text" name="txtCode" placeholder="Input voucher code">
+							<button class="edit" type="submit" name="btnVerify">Verify</button>
+						</section>
+					</div>
 
 					<div class="price_details">
 						<h2>Price Details</h2>
@@ -164,7 +217,11 @@
 								</tr>
 								<tr>
 									<td>Fees</td>
-									<td>₱ <?php echo number_format($price_fee, 2, '.', ''); ?></td>
+									<td class="success">+ ₱ <?php echo number_format($price_fee, 2, '.', ''); ?></td>
+								</tr>
+								<tr>
+									<td>Voucher Discount (<?php echo $voucher_exist['vouch_discount']."%" ?>)</td>
+									<td class="error">- ₱ <?php echo number_format($discount, 2, '.', ''); ?></td>
 								</tr>
 								<tr>
 									<td>Total Price</td>
@@ -175,15 +232,26 @@
 					</div>
 
 					<button class="edit" type="submit" name="btnPayCard">Pay with Credit/Debit Card</button>
-					
+
 					<?php
 						if(isset($_POST['btnPayCard'])) {
-							$payment_desc = "This payment is for Booking ID ".$booked['book_id']." under Mr/Ms. " . $_POST['card_name'];
-							$final_price = number_format($final_price, 2, '', '');
-							process_paymongo_card_payment($_POST['card_name'],$_POST['card_num'],$_POST['card_expiry'],$_POST['card_cvv'],$final_price, $payment_desc);
+							// ERROR TRAPPINGS
+							if($_POST['card_name'] == ""){
+								echo "<script>alert('Card name is required!')</script>";
+							} else if($_POST['card_num'] == ""){
+								echo "<script>alert('Card num is required!')</script>";
+							} else if($_POST['card_expiry'] == ""){
+								echo "<script>alert('Card expiry is required!')</script>";
+							} else if($_POST['card_cvv'] == ""){
+								echo "<script>alert('Card cvv is required!')</script>";
+							} else {
+								$payment_desc = "This payment is for Booking ID ".$booked['book_id']." under Mr/Ms. " . $_POST['card_name'];
+								$final_price = number_format($final_price, 2, '', '');
+								process_paymongo_card_payment($_POST['card_name'],$_POST['card_num'],$_POST['card_expiry'],$_POST['card_cvv'],$final_price, $payment_desc);
+							}
 						}
 					?>
-					
+
 				</form>
 			</main>
 			<?php

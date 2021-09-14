@@ -64,7 +64,7 @@
 <div id="main_area">
 	<div class="wrapper">
 		<div class="breadcrumbs">
-			<a href="index.php">Home</a> &#187; <a href="adventures.php">Adventures</a> &#187; Book
+			<a href="index.php">Home</a> &#187; <a href="adventures.php">Adventures</a> &#187; Booking
 		</div>
 		<div class="main_con">
 			<?php

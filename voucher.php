@@ -44,7 +44,7 @@
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h2 span{font-size:30px;}
 		main h2 span a:hover{color:#313131;text-decoration:none;}
-		main h3{font:600 30px/100% Montserrat,sans-serif;color:#ff4444;margin-bottom:10px;text-align:center;}
+		main h3{font:600 20px/100% Montserrat,sans-serif;color:gray;margin-bottom:10px;}
 		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
 		main button:first-of-type{right:67px;}
 		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:134px;right:15px;z-index:5;font-size:20px;}
@@ -60,7 +60,7 @@
 		.card ul{position:absolute;top:20px;right:20px;font-size:30px;}
 		.card ul li{display:inline-block;margin:0;}
 		.card ul li a{color:#313131;}
-		.card ul li a:hover{color:#bf127a;}
+		.card ul li a:hover{color:#bf127a;cursor:pointer;}
 		.card h2{font:600 35px/100% Montserrat,sans-serif;color:#313131;margin-bottom:15px;}
 		.card h2 span{display:block;font-size:18px;color:gray;line-height:100%;}
 		.card h2 span i{color:#ffac33;}
@@ -110,19 +110,25 @@
 
 			<main>
 				<form method="post" >
+
 					<h2>Vouchers <span>
 						<?php
 							// CHECK IF ORGANIZER IS VERIFIED TO ADD VOUCHER
-							if($_SESSION['verified'] == 1)
-								echo "<a class='btn' href='add_voucher.php'><i class='fas fa-plus-circle'></i></a>";
-							else
-								echo "<a class='btn disable' style='background:#313131;'><i class='fas fa-plus-circle'></i></a>";
+							if(isset($_SESSION['organizer'])){
+								if($_SESSION['verified'] == 1)
+									echo "<a class='btn' href='add_voucher.php'><i class='fas fa-plus-circle'></i></a>";
+								else
+									echo "<a class='btn disable' style='background:#313131;'><i class='fas fa-plus-circle'></i></a>";
+							}
 						?>
 					</span> </h2>
+
 					<input type="text" name="txtSearch" placeholder="Search any...">
 					<button type="submit" name="btnSearch"><i class="fas fa-search"></i></button>
 					<button type="submit" name="btnRestart"><i class="fas fa-undo-alt"></i></button>
 
+					<!-- FOR ORGANIZER -->
+					<?php if(isset($_SESSION['organizer'])){ ?>
 					<div class="card-div">
 						<?php
 						// DISPLAY ALL VOUCHER ADDED BY SPECIFIC ORGANIZER
@@ -140,6 +146,28 @@
 							displayAll(2);
 						?>
 					</div>
+					<?php } else { ?>
+
+					<!-- FOR JOINER -->
+					<h3>Note: Copy voucher code by clicking the copy icon.</h3>
+					<div class="card-div">
+						<?php
+						// DISPLAY ALL VOUCHER
+						if(isset($_POST['btnSearch'])){
+							$txtSearch = trim(ucwords($_POST['txtSearch']));
+
+							$card = DB::query("SELECT * FROM voucher WHERE vouch_discount LIKE '%{$txtSearch}%' || vouch_name LIKE '%{$txtSearch}%' || vouch_startdate LIKE '%{$txtSearch}%' || vouch_enddate LIKE '%{$txtSearch}%' || vouch_minspent LIKE '%{$txtSearch}%'", array(), "READ");
+
+							displayAll(3, $card);
+						}
+						else if(isset($_POST['btnRestart'])){
+							displayAll(3);
+						}
+						else
+							displayAll(3);
+						?>
+					</div>
+					<?php } ?>
 				</form>
 
 
