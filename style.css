@@ -272,6 +272,7 @@ header{}
   .book_info h2{margin:0 0 30px;text-align:center;font-size:35px;}
   .book_info h2 span{font:600 25px/100% Montserrat,sans-serif;color:gray;display:block;margin-top:5px;}
   .book_info a{display:block;width:80%;}
+  .book_info button{display:block;width:80% !important;}
 
   .place_reviews{margin:40px 0 0;}
   .place_reviews h2{font:600 40px/100% Montserrat,sans-serif;}

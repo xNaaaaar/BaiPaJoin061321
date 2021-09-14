@@ -269,7 +269,6 @@
 									echo "<script>alert('Invalid card number!')</script>";
 								else
 									echo "<script>alert('".$result."')</script>";
-
 							}
 						}
 					?>

@@ -1,6 +1,7 @@
 <?php
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
+	ob_start();
 
 	if(isset($_POST['btnRate'])){
 		rateAdventure();
@@ -10,6 +11,10 @@
 	if(isset($_GET['rated']) && $_GET['rated'] == 1){
 		echo "<script>alert('This adventure is successfully rated!')</script>";
 	}
+
+	// IF ADVENTURE IS FULL
+	if(isset($_GET['full']))
+		echo "<script>alert('This adventure is full!')</script>";
 ?>
 
 <!-- Head -->
@@ -81,7 +86,7 @@
 						for($i = 1; $i < count($advImages); $i++){
 							echo "
 							<div class='carousel-cell'>
-								<img src='images/organizers/".$place['orga_id']."/".$advImages[$i]."' alt='".$advImages[$i]."'>
+								<img src='images/organizers/".$place['orga_id']."/".$advImages[$i]."'>
 							</div>
 							";
 						}
@@ -96,11 +101,30 @@
 					<div class="book_info">
 						<h2>On <?php echo date('M. j, Y', strtotime($place['adv_date'])); ?> <span><?php echo "₱ ".number_format((float)$price, 2, '.', '')." / guest"; ?></span> </h2>
 
-						<?php if(isset($_SESSION['joiner'])) { ?>
-							<a class="edit" href="book.php?id=<?php echo $_GET['id']; ?>">Book</a>
-						<?php	} else { ?>
-							<a class="edit" href="login.php" onclick='return confirm("Login to book adventure!");'>Book</a>
-						<?php	} ?>
+						<form method="post">
+							<?php if(isset($_SESSION['joiner'])) { ?>
+								<!-- <a class="edit" href="book.php?id=<?php echo $_GET['id']; ?>">Book</a> -->
+								<button class="edit" type="submit" name="btnBook">Book</button>
+							<?php	} else { ?>
+								<a class="edit" href="login.php" onclick='return confirm("Login to book adventure!");'>Book</a>
+							<?php	} ?>
+						</form>
+
+						<?php
+							// WHEN BUTTON IS CLICKED
+							if(isset($_POST['btnBook'])){
+								// CHECK ADVENTURE IF FULL
+								$adv_checker = DB::query('SELECT * FROM adventure WHERE adv_id=?', array($_GET['id']), "READ");
+								if(count($adv_checker)>0){
+									$adv_checker = $adv_checker[0];
+									//
+									if($adv_checker['adv_status'] == 'not full')
+										header("Location: book.php?id=".$_GET['id']."");
+									else
+										header("Location: place.php?id=".$_GET['id']."&full");
+								}
+							}
+						?>
 
 						<a class="edit" href="#">Lend</a>
 					</div>
@@ -168,5 +192,5 @@
 <!-- End Main -->
 
 <!--Footer -->
-<?php include("includes/footer.php"); ?>
+<?php include("includes/footer.php"); ob_end_flush();?>
 <!-- End Footer -->

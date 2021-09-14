@@ -81,18 +81,13 @@
 		.card p{font-size:23px;color:#989898;width:100% !important;margin:0 0 10px 2px;}
 		.card p:last-of-type{color:#111;font-size:30px;font-weight:500;margin:0 0 0 2px;}
 
-
-//=============================== UPDATES =====================================//
 		/* PAGINATION COLORS */
-		<style type="text/css">	
 		a.paging:visited {background-color: black;   color:black;}
 		a.paging:active {background-color: black; color:black}
 		a.paging:hover {background-color: wheat; font-weight:bold; color:#bf127a;}
-		
+
 		a.pagingCurrent:visited {color:#bf127a;}
 		a.pagingCurrent:hover {background: wheat; font-weight:bold; color: none;}
-		</style>
-
 
 	</style>
 
@@ -180,7 +175,7 @@
 				<form method="post" >
 					<h2>Adventures</h2>
 					<input type="text" name="txtSearch" placeholder="Search any...">
-					<!-- DIRECT LINK FOR UNDO|RESET BUTTON --> 
+					<!-- DIRECT LINK FOR UNDO|RESET BUTTON -->
 					<button type="submit" formaction="adventures.php" name="btnSearch"><i class="fas fa-search"></i></button>
 					<button formaction="adventures.php" ><i class="fas fa-undo-alt"></i></button>
 
@@ -221,36 +216,36 @@
 			                }
 
 			                		//LIMIT VISIBLE NUMBER PAGE
-									$numpage = 1; 
+									$numpage = 1;
 									$startPage = max(1, $page - $numpage);
 									$endPage = min( $total_page, $page + $numpage);
 
 									for($i=$startPage;$i<=$endPage;$i++) // PAGINATION COUNTS|LOOPS
 									{
 
-									       
+
 										if ($i == $page) {
 							            $class = 'pagingCurrent'; // PAGINATION CURRENT Page COLOR
-							            						
+
 							            }else
-											{ 
+											{
 											$class = 'paging'; // PAGINATION COLOR
 											}
 
 
-										if($page > $i && $page > 2) { //CONTROL VISIBLE START NUMBER PAGE 
+										if($page > $i && $page > 2) { //CONTROL VISIBLE START NUMBER PAGE
 
-											echo "<a href='adventures.php' class='".$class."'> 1 ... </a>";  
+											echo "<a href='adventures.php' class='".$class."'> 1 ... </a>";
 										}
-														       
 
-											echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i   </a>"; 
 
-										if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE END NUMBER PAGE 
-															                    
-											echo "<a href='adventures.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>"; 
+											echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i   </a>";
 
-										} 
+										if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE END NUMBER PAGE
+
+											echo "<a href='adventures.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>";
+
+										}
 
 
 									}
@@ -312,7 +307,7 @@
 												$sqlquery = $sqlquery . " ORDER BY adv_id";	 //Temporary to show true results
 										}
 										else
-											$sqlquery = $sqlquery . " ORDER BY adv_id"; 
+											$sqlquery = $sqlquery . " ORDER BY adv_id";
 									}
 
 									else if(!empty($_POST['activities'])) {
@@ -337,16 +332,16 @@
 
 									$card = DB::query($sqlquery, array(), "READ");
 
-									if(!empty($card)) 
+									if(!empty($card))
 										displayAll(99, $card);
 									else { //This works if return items from SQL is empty due to search not found
 										$card1 = DB::query("SELECT * FROM adventure LIMIT $start_from,$num_per_page", array(), "READ");
 										$card = DB::query("SELECT * FROM adventure", array(), "READ");
 										echo "Your search parameters are not found!";
 										displayAll(99, $card1);
-									}	
+									}
 
-								// PAGINATION Kirk	
+								// PAGINATION Kirk
 
 								$total_record = count($card);
 				                $total_page = ceil($total_record/$num_per_page);
@@ -357,7 +352,7 @@
 				                }
 
 								        //LIMIT VISIBLE NUMBER PAGE
-										$numpage = 1; 
+										$numpage = 1;
 										$startPage = max(1, $page - $numpage);
 										$endPage = min( $total_page, $page + $numpage);
 
@@ -365,29 +360,29 @@
 									    for($i=$startPage;$i<=$endPage;$i++) // PAGINATION COUNTS|LOOPS
 									    {
 
-									       
+
 											if ($i == $page) {
 							            		$class = 'pagingCurrent'; // PAGINATION CURRENT Page COLOR
-							            						
+
 							            	}else
-												{ 
+												{
 													$class = 'paging'; // PAGINATION COLOR
 												}
 
 
-											if($page > $i && $page > 2) { //CONTROL VISIBLE START NUMBER PAGE 
+											if($page > $i && $page > 2) { //CONTROL VISIBLE START NUMBER PAGE
 
-												echo "<a href='adventures.php' class='".$class."'> 1 ... </a>";  
+												echo "<a href='adventures.php' class='".$class."'> 1 ... </a>";
 											}
-														       
 
-												echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i   </a>"; 
 
-											if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE PAGINATION END NUMBER PAGE 
-															                    
-												echo "<a href='adventures.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>"; 
+												echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i   </a>";
 
-											} 
+											if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE PAGINATION END NUMBER PAGE
+
+												echo "<a href='adventures.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>";
+
+											}
 
 
 									    }
@@ -397,11 +392,11 @@
 				                    echo "<a href='adventures?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
 				                }
 
-						} 
+						}
 
 						//Aside Filter code ends here - Alexis Salvador
 
-						else 
+						else
 						{ //Index to Adventure Page Filter Code starts here - Alexis Salvador
 							if(isset($_GET['page']))
 							{
@@ -416,7 +411,7 @@
 							$start_from = ($page-1) * $num_per_page;
 
 					        if(!empty($_SESSION['places'])) {
-								
+
 								$sqlquery = "SELECT * FROM adventure WHERE adv_address";
 
 								$arrlength = count($_SESSION['places']);
@@ -424,47 +419,47 @@
 								foreach($_SESSION['places'] as $index => $place) {
 									if($index != $arrlength-1)
 										$sqlquery = $sqlquery . " = '$place' OR adv_address";
-									else 
+									else
 										$sqlquery = $sqlquery . " = '$place'";
-								}								
+								}
 
 								if(!empty($_POST['activities'])) {
 
-									//	Concatenates string if 1 or more Activity 																checkbox is selected 
+									//	Concatenates string if 1 or more Activity 																checkbox is selected
 
-									$sqlquery = $sqlquery . " OR adv_kind"; 
+									$sqlquery = $sqlquery . " OR adv_kind";
 
-									$arrlength = count($_POST['activities']);								
+									$arrlength = count($_POST['activities']);
 
 									foreach($_POST['activities'] as $index => $activity) {
 										if($index != $arrlength-1)
 											$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
-										else 
+										else
 											$sqlquery = $sqlquery . " = '$activity'";
 									}
 
-										//$sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";	 
+										//$sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";
 										// Check commented code above
 										$sqlquery = $sqlquery . " ORDER BY adv_id";	 //Temporary to show true results
-								}													
-							}													
+								}
+							}
 
 							else if(!empty($_POST['activities'])) {
 
 								if(empty($_POST['places']))
-									$sqlquery = "SELECT * FROM adventure WHERE adv_kind"; 		
+									$sqlquery = "SELECT * FROM adventure WHERE adv_kind";
 									// 	New string query is created if no Place checkbox is selected
 
-								$arrlength = count($_POST['activities']);								
+								$arrlength = count($_POST['activities']);
 
 								foreach($_POST['activities'] as $index => $activity) {
 									if($index != $arrlength-1)
 										$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
-									else 
+									else
 										$sqlquery = $sqlquery . " = '$activity'";
 								}
 
-								//$sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page"; 
+								//$sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";
 								// Check commented code above
 								$sqlquery = $sqlquery . " ORDER BY adv_id";	//Temporary to show true results
 							}
@@ -479,9 +474,9 @@
 								$card1 = DB::query("SELECT * FROM adventure LIMIT $start_from,$num_per_page", array(), "READ");
 								echo "Enter a search parameters OR no search parameters found!";
 								displayAll(99, $card1);
-							}							
+							}
 
-							// PAGINATION Kirk 
+							// PAGINATION Kirk
 
 							$total_record = count($card);
 			                $total_page = ceil($total_record/$num_per_page);
@@ -492,7 +487,7 @@
 			                }
 
 										//LIMIT VISIBLE NUMBER PAGE
-										$numpage = 1; 
+										$numpage = 1;
 										$startPage = max(1, $page - $numpage);
 										$endPage = min( $total_page, $page + $numpage);
 
@@ -500,29 +495,29 @@
 									    for($i=$startPage;$i<=$endPage;$i++) // PAGINATION COUNTS|LOOPS
 									    {
 
-									       
+
 											if ($i == $page) {
 							            		$class = 'pagingCurrent'; // PAGINATION CURRENT Page COLOR
-							            						
+
 							            	}else
-												{ 
+												{
 													$class = 'paging'; // PAGINATION COLOR
 												}
 
 
-											if($page > $i && $page > 2) { //CONTROL VISIBLE START NUMBER PAGE 
+											if($page > $i && $page > 2) { //CONTROL VISIBLE START NUMBER PAGE
 
-												echo "<a href='adventures.php' class='".$class."'> 1 ... </a>";  
+												echo "<a href='adventures.php' class='".$class."'> 1 ... </a>";
 											}
-														       
 
-												echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i   </a>"; 
 
-											if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE END NUMBER PAGE 
-															                    
-												echo "<a href='adventures.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>"; 
+												echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i   </a>";
 
-											} 
+											if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE END NUMBER PAGE
+
+												echo "<a href='adventures.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>";
+
+											}
 
 
 									    }
@@ -553,5 +548,3 @@
 <!--Footer -->
 <?php include("includes/footer.php"); ?>
 <!-- End Footer -->
-
-
