@@ -149,7 +149,7 @@
 					<?php } else { ?>
 
 					<!-- FOR JOINER -->
-					<h3>Note: To copy voucher code please click the copy icon.</h3>
+					<h3>Note: Copy voucher code by clicking the copy icon.</h3>
 					<div class="card-div">
 						<?php
 						// DISPLAY ALL VOUCHER

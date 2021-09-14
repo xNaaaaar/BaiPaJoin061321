@@ -1210,7 +1210,7 @@ function send_sms($mobile, $message) {
   ));
 
     $response = curl_exec($curl);
-    
+
 	$log_filename = "logs\sms";
 	if(!file_exists($log_filename)) {
 		mkdir($log_filename, 0777, true);
@@ -1218,7 +1218,6 @@ function send_sms($mobile, $message) {
 	$log_file_data = 'logs\\sms\\log_' . date('d-M-Y') . '.log';
 	file_put_contents($log_file_data, date('h:i:sa').' => Response Code: '. json_decode($response) . "\n" . " + + + Message Sent: ". $message . "\n" . "\n", FILE_APPEND);
  	//This code will a log.txt file to get the response of the cURL command
-
 
   curl_close($curl);
 }
