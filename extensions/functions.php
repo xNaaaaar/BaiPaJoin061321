@@ -954,7 +954,7 @@ function bookingProcess($name, $phone, $email, $status, $book_id) {
 }
 
 ##### CODE START HERE @PAYMONGO API #####
-function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $card_cvv, $amount, $description) {
+function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $card_cvv, $amount, $description, $joiner) {
 
 	$curl = curl_init();
 
@@ -1120,9 +1120,11 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 				$message = "Hooray! Thank you! Your payment for " . ($attach['data']['attributes']['amount'] / 100) . " " . $attach['data']['attributes']['currency'] . " thru card number ending in " . $attach['data']['attributes']['payments'][0]['attributes']['source']['last4'] . " was SUCCESSFUL!";
 				send_sms('09239688932', $message);
 			}
+			return $attach['data']['attributes']['status'];
 		}
 		elseif($key == 'errors') {
-			echo $attach['errors'][0]['detail'];
+			//echo $attach['errors'][0]['detail'];
+			return $attach['errors'][0]['detail'];
 		}
 	}
 

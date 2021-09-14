@@ -249,21 +249,27 @@
 							$test_card_list = array(4343434343434345, 4571736000000075, 4009930000001421, 4404520000001439, 5555444444444457, 5455590000000009, 5339080000000003, 5240050000001440, 5577510000001446);
 							$valid_card = in_array($_POST['card_num'], $test_card_list);
 
-							// CHECK IF INPUTTED CARD NUMBER IS VALID
-							if(!$valid_card){
-								echo "<script>alert('Invalid card number!')</script>";
+							// CHECK IF INPUTTED CARD NAME HAS NUMBER
+							if(preg_match('~[0-9]+~', $_POST['card_name'])){
+								echo "<script>alert('Card name cannot consist a number!')</script>";
 
 							// CHECK IF INPUTTED EXPIRY DATE IS FUTURE DATE
-							} elseif($_POST['card_expiry'] < date("m/y")) {
+							} else if($_POST['card_expiry'] < date("m/y")) {
 								echo "<script>alert('Expiry date must be future dates!')</script>";
 
 							// IF NO ERROR
 							} else {
 								$payment_desc = "This payment is for Booking ID ".$booked['book_id']." under Mr/Ms. " . $_POST['card_name'];
 								$final_price = number_format($final_price, 2, '', '');
-								process_paymongo_card_payment($_POST['card_name'],$_POST['card_num'],$_POST['card_expiry'],$_POST['card_cvv'],$final_price, $payment_desc);
+								$result = process_paymongo_card_payment($_POST['card_name'],$_POST['card_num'],$_POST['card_expiry'],$_POST['card_cvv'],$final_price, $payment_desc, $joiner);
 
-								header("Location: thankyou.php?card");
+								if($result == 'succeeded')
+									header("Location: thankyou.php?card");
+								elseif($result == "The value for payment_method cannot be blank.")
+									echo "<script>alert('Invalid card number!')</script>";
+								else
+									echo "<script>alert('".$result."')</script>";
+
 							}
 						}
 					?>
