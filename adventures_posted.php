@@ -154,7 +154,7 @@
 											$page = 1;
 										}
 
-								$num_per_page = 1; //NUMBER per Page
+								$num_per_page = 5; //LIMIT NUMBER per PAGE
 								$start_from = ($page-1) * $num_per_page; // Page STARTED
 
 
@@ -164,6 +164,7 @@
 
 							$card1 = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' AND orga_id = ?", array($_SESSION['organizer']), "READ"); 
 
+								//PAGINATION Kirk
 
 								$total_record = count($card1); // COUNTS DATA IN Search query
 				                $total_page = ceil($total_record/$num_per_page); // DIVIDES TOTAL RECORD SEARCH USING ceil
@@ -174,7 +175,7 @@
 				                } 
 
 				                
-       									//LIMIT PAGINATION NUMBER PAGE VISIBLE
+       									//LIMIT VISIBLE NUMBER PAGE
 										$numpage = 1; 
 										$startPage = max(1, $page - $numpage);
 										$endPage = min( $total_page, $page + $numpage);
@@ -193,7 +194,7 @@
 												}
 
 
-											if($page > $i && $page > 2) { //CONTROL VISIBLE PAGINATION START NUMBER PAGE 
+											if($page > $i && $page > 2) { //CONTROL VISIBLE START NUMBER PAGE 
 
 											echo "<a href='adventures_posted.php' class='".$class."'> 1 ... </a>";  
 											}
@@ -201,7 +202,7 @@
 
 												echo "<a href='adventures_posted.php?page=" .$i. "' class='".$class."'>  $i   </a>"; 
 
-											if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE PAGINATION END NUMBER PAGE 
+											if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE END NUMBER PAGE 
 											echo "<a href='adventures_posted.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>"; 
 
 											} 
@@ -227,7 +228,7 @@
 											$page = 1;
 										}
 
-								$num_per_page = 1; //NUMBER per Page
+								$num_per_page = 5; //LIMIT NUMBER per PAGE
 								$start_from = ($page-1) * $num_per_page; // Page STARTED
 
 						        $card1 = DB::query("SELECT * FROM adventure WHERE orga_id = ? ORDER BY adv_id DESC LIMIT $start_from,$num_per_page", array($_SESSION['organizer']), "READ"); // USING LIMIT to limit query display
@@ -237,7 +238,8 @@
 
 				                $card2 = DB::query("SELECT * FROM adventure WHERE orga_id = ?", array($_SESSION['organizer']), "READ");
 
- 
+ 								//PAGINATION Kirk
+
 								$total_record = count($card2); // COUNTS DATA IN query
 				                $total_page = ceil($total_record/$num_per_page); // DIVIDES TOTAL RECORD USING ceil
 
@@ -246,7 +248,7 @@
 				                    echo "<a href='adventures_posted.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
 				                } 
 
-       									//LIMIT PAGINATION NUMBER PAGE VISIBLE
+       									//LIMIT VISIBLE NUMBER PAGE
 										$numpage = 1; 
 										$startPage = max(1, $page - $numpage);
 										$endPage = min( $total_page, $page + $numpage);
@@ -265,7 +267,7 @@
 												}
 
 
-											if($page > $i && $page > 2) { //CONTROL VISIBLE PAGINATION START NUMBER PAGE 
+											if($page > $i && $page > 2) { //CONTROL VISIBLE START NUMBER PAGE 
 
 											echo "<a href='adventures_posted.php' class='".$class."'> 1 ... </a>";  
 											}
@@ -273,7 +275,7 @@
 
 												echo "<a href='adventures_posted.php?page=" .$i. "' class='".$class."'>  $i   </a>"; 
 
-											if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE PAGINATION END NUMBER PAGE 
+											if($page < $i && $page < ($total_page-1)) { //CONTROL VISIBLE END NUMBER PAGE 
 											echo "<a href='adventures_posted.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>"; 
 
 											} 

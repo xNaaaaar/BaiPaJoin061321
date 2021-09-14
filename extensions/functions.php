@@ -954,7 +954,7 @@ function bookingProcess($name, $phone, $email, $status, $book_id) {
 }
 
 
-##### CODE START HERE @PAYMENT METHODS #####
+##### CODE START HERE @PAYMONGO API #####
 function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $card_cvv, $amount, $description) {
 
 	$curl = curl_init();
@@ -1130,7 +1130,7 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 	curl_close($curl);
 }
 
-function process_paymongo_ewallet_payment($ewallet_type, $final_price, $joiner) {
+function process_paymongo_ewallet_source($ewallet_type, $final_price, $joiner) {
 
 	$curl = curl_init();
 
@@ -1189,7 +1189,109 @@ function process_paymongo_ewallet_payment($ewallet_type, $final_price, $joiner) 
 	curl_close($curl);
 }
 
-##### CODE START HERE @SMS METHODS #####
+function process_paymongo_ewallet_payment($amount, $source_id) {
+
+	$curl = curl_init();
+
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+
+    $fields = array("data" => array ("attributes" => array ("amount" => $amount, "source" => array ("id" => $source_id, "type" => "source"), "currency" => "PHP")));
+
+    $jsonFields = json_encode($fields);
+      
+    curl_setopt_array($curl, [
+      CURLOPT_URL => "https://api.paymongo.com/v1/payments",
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => "",
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 30,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => "POST",
+      CURLOPT_POSTFIELDS => $jsonFields,
+      CURLOPT_HTTPHEADER => array(
+          'Authorization: Basic c2tfdGVzdF9ITFJ0NHRmYUZlMjNGUE5iZVppcmtyZXA6',
+          'Content-Type: application/json'
+        ),
+    ]);
+
+    $response = curl_exec($curl);
+    $err = curl_error($curl);
+
+    if(!empty($response)) {
+      if(!file_exists('logs\ewallet_payment')) {
+        mkdir('logs\ewallet_payment', 0777, true);
+      }
+      $log_file_data = 'logs\\ewallet_payment\\log_' . date('d-M-Y') . '.log';
+      file_put_contents($log_file_data, date('h:i:sa').' => '. $response . "\n" . "\n", FILE_APPEND);
+    } //This code will a log.txt file to get the response of the cURL command
+
+    curl_close($curl);
+
+}
+
+function retrieve_paymongo_card_payment($payment_intent_id) {
+
+	$curl = curl_init();
+
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+    $query = 'https://api.paymongo.com/v1/payment_intents/'.$payment_intent_id.'';
+
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => $query,
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'GET',
+	  CURLOPT_HTTPHEADER => array(
+	    'Authorization: Basic c2tfdGVzdF9ITFJ0NHRmYUZlMjNGUE5iZVppcmtyZXA6'
+	  ),
+	));
+
+	$response = curl_exec($curl);
+
+	curl_close($curl);
+
+	return $response;
+}
+
+function retrieve_paymongo_ewallet_payment($payment_id) {
+
+	$curl = curl_init();
+
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+    $query = 'https://api.paymongo.com/v1/payments/'.$payment_id.'';
+
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => $query,
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'GET',
+	  CURLOPT_HTTPHEADER => array(
+	    'Authorization: Basic c2tfdGVzdF9ITFJ0NHRmYUZlMjNGUE5iZVppcmtyZXA6'
+	  ),
+	));
+
+	$response = curl_exec($curl);
+	
+	curl_close($curl);
+
+	return $response;
+}
+
+##### CODE START HERE @ITEXMO API #####
 function send_sms($mobile, $message) {
 
 	$curl = curl_init();
@@ -1210,35 +1312,16 @@ function send_sms($mobile, $message) {
   ));
 
     $response = curl_exec($curl);
-
+    
 	$log_filename = "logs\sms";
 	if(!file_exists($log_filename)) {
 		mkdir($log_filename, 0777, true);
 	}
 	$log_file_data = 'logs\\sms\\log_' . date('d-M-Y') . '.log';
-	file_put_contents($log_file_data, date('h:i:sa').' => Response Code: '. json_decode($response) . "\n" . " + + + Message Sent: ". $message . "\n" . "\n", FILE_APPEND);
+	file_put_contents($log_file_data, date('h:i:sa').' => Response Code: '. json_decode($response) . "\n" . "              Message Sent: ". $message . "\n" . "\n", FILE_APPEND);
  	//This code will a log.txt file to get the response of the cURL command
 
   curl_close($curl);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ##### END OF CODES #####

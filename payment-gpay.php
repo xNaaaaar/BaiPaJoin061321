@@ -161,7 +161,14 @@
 						</section>
 					</div>
 
-					<button class="edit" type="button" name="button">Pay with Grab Pay</button>
+					<button class="edit" type="submit" name="btnGrabPayEWallet">Pay with Grab Pay</button>
+
+					<?php
+						if(isset($_POST['btnGrabPayEWallet'])) {
+							$final_price = number_format($final_price, 2, '', '');
+							process_paymongo_ewallet_source('grab_pay', $final_price, $joiner);
+						}
+					?>
 				</form>
 			</main>
 			<?php

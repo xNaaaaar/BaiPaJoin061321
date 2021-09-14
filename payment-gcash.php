@@ -161,13 +161,13 @@
 						</section>
 					</div>
 
-					<button class="edit" type="submit" name="btnPayEWallet">Pay with Gcash</button>
+					<button class="edit" type="submit" name="btnGCashEWallet">Pay with Gcash</button>
 
 					<?php
-						if(isset($_POST['btnPayEWallet'])) {
+						if(isset($_POST['btnGCashEWallet'])) {
 							/*$payment_desc = "This payment is for Booking ID ".$booked['book_id']." under Mr/Ms. " . $_POST['card_name'];*/
 							$final_price = number_format($final_price, 2, '', '');
-							process_paymongo_ewallet_payment('gcash', $final_price, $joiner);
+							process_paymongo_ewallet_source('gcash', $final_price, $joiner);
 						}
 					?>
 				</form>
