@@ -206,13 +206,14 @@
 					<div class="payment_method">
 						<h2>Card Details <span><i class="far fa-credit-card"></i> <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i></span> </h2>
 						<label>Card name <span>*</span> </label>
-						<input type="text" name="card_name" value="" placeholder="Your name (as it appears on your card)" required>
+						<input type="text" name="card_name" placeholder="Your name (as it appears on your card)" required>
 						<label>Card number <span>*</span> </label>
-						<input type="text" name="card_num" value="" placeholder="16 digit card number" maxlength="16" minlength="16" required>
+						<input type="text" name="card_num" placeholder="16 digit card number" maxlength="16" minlength="16" required>
 						<label>Valid until <span>*</span> </label>
-						<input type="month" name="card_expiry" value="" placeholder="MM/YY"  required>
+						<!-- INPUT TYPE MONTH FORMAT: 2025-12 -->
+						<input type="month" name="card_expiry" min="<?php echo date("Y-m"); ?>" required>
 						<label>CVV <span>*</span> </label>
-						<input type="number" name="card_cvv" value="" placeholder="3 digit code (at the back of the card)" maxlength="3" minlength="3" required>
+						<input type="text" name="card_cvv" placeholder="3 digit code (at the back of the card)" maxlength="3" minlength="3" required>
 					</div>
 
 					<div class="price_details">
@@ -254,28 +255,20 @@
 							// LIST OF VALID TEST CARD
 							$test_card_list = array(4343434343434345, 4571736000000075, 4009930000001421, 4404520000001439, 5555444444444457, 5455590000000009, 5339080000000003, 5240050000001440, 5577510000001446);
 
-							// DATES
-							$exp_date = date("F y", strtotime($_POST['card_expiry']));
-							$today = date("F y");
-
 							// CHECK IF INPUTTED CARD NAME HAS NUMBER
 							if(preg_match('~[0-9]+~', $_POST['card_name'])){
 								echo "<script>alert('Card name cannot consist a number!')</script>";
-
-							// CHECK IF INPUTTED EXPIRY DATE IS FUTURE DATE
-							} else if($exp_date < $today) {
-								echo "<script>alert('Expiry date must be future dates! ".$exp_date." ".$today."')</script>";
 
 							// IF NO ERROR
 							} else {
 								$payment_desc = "This payment is for Booking ID ".$booked['book_id']." under Mr/Ms. " . $joiner[1] . " " . $joiner[2];
 								$final_price = number_format($final_price, 2, '', '');
-								$result = process_paymongo_card_payment($_POST['card_name'],$_POST['card_num'],$_POST['card_expiry'],$_POST['card_cvv'],$final_price, $payment_desc, $joiner);
+								$result = process_paymongo_card_payment($_POST['card_name'], $_POST['card_num'], str_replace("-","",$_POST['card_expiry']), $_POST['card_cvv'], $final_price, $payment_desc, $joiner);
 
 								if($result[1] == 'succeeded')
 									header("Location: thankyou.php?card&book_id=".$booked['book_id']."&intentid=".$result[0]."");
 								else
-									echo "<script>alert('".$result."')</script>";
+									echo "<script>alert('".$result[1]."')</script>";
 							}
 						}
 					?>

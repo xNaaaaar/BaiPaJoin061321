@@ -1019,8 +1019,8 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 	        "attributes": {
 	            "details": {
 	                "card_number": "'.$card_num.'",
-	                "exp_month": '.substr($card_expiry, 0,1).',
-	                "exp_year": '.substr($card_expiry, 3,4).',
+	                "exp_month": '.substr($card_expiry, 4).',
+	                "exp_year": '.substr($card_expiry, 2, 2).',
 	                "cvc": "'.$card_cvv.'"
 	            },
 	            "billing": {
