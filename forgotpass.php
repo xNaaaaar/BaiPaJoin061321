@@ -25,8 +25,8 @@
 				</div>
 
 				<form method="post">
-					<input type="email" name="" placeholder="sample@gmail.com">
-					<button type="button" name="button">Reset</button>
+					<input type="text" name="txtEmailAdd" placeholder="sample@gmail.com">
+					<button type="submit" name="btnReset">Reset</button>
 					<a href="login.php">&#171; Back to Login</a>
 				</form>
 			</main>
@@ -36,6 +36,47 @@
 	</div>
 </div>
 <!-- End Main -->
+
+<?php
+
+	if(isset($_POST['btnReset'])) {
+
+		$email_add = trim($_POST['txtEmailAdd']);
+
+		$joiner_db = DB::query("SELECT * FROM joiner WHERE joiner_email=?", array($email_add), "READ");
+		$organizer_db = DB::query("SELECT * FROM organizer WHERE orga_email=?", array($email_add), "READ");
+
+		$joiner = $joiner_db[0];
+		$organizer = $organizer_db[0];
+
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    	$charactersLength = strlen($characters);
+    	$randomString = '';
+   		for ($i = 0; $i < 8; $i++)
+        	$randomString = $randomString . $characters[rand(0, $charactersLength - 1)];
+
+		if(count($joiner) == 0 && count($organizer) == 0) 
+			echo "<script>alert('EMAIL NOT FOUND! Please make sure email address is CORRECT!')</script>";
+		else if(count($joiner) > 0) {
+			$email_subject = 'PASSWORD RESET';
+    		$email_message = 'Dear '.$joiner['joiner_fname'].', We have received a request to reset the password of your BaiPaJoin Account. Here\'s a temporary password: '.$randomString.' , you can use to access your account. You\'re advised to change the immediately. Thank you! THIS IS A TEST. DO NOT REPLY!';
+
+			send_email($email_add, $email_subject, $email_message);
+			$hash_pass = md5($randomString);
+
+			DB::query("UPDATE joiner SET joiner_password=? WHERE joiner_id=?", array($hash_pass, $joiner['joiner_id']), "UPDATE");
+		}
+		else if(count($organizer) > 0) {
+			$email_subject = 'PASSWORD RESET';
+    		$email_message = 'Dear '.$organizer['orga_fname'].', We have received a request to reset the password of your BaiPaJoin Account. Here\'s a temporary password: '.$randomString.' , you can use to access your account. You\'re advised to change the immediately. Thank you! THIS IS A TEST. DO NOT REPLY!';
+
+			send_email($email_add, $email_subject, $email_message);
+			$hash_pass = md5($randomString);
+
+			DB::query("UPDATE organizer SET orga_password=? WHERE orga_id=?", array($hash_pass, $organizer['orga_id']), "UPDATE");
+		}
+	}
+?>
 
 <!--Footer -->
 	<span class="back_top"></span>

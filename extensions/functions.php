@@ -1384,7 +1384,7 @@ function send_email($to, $subject, $message) {
         	mkdir('logs\phpmailer', 0777, true);
       }
       $log_file_data = 'logs\\phpmailer\\success_log_' . date('d-M-Y') . '.log';
-      file_put_contents($log_file_data, date('h:i:sa').' => Sent to: ' . $to . "\n" . '               Subject: ' . $subject . "\n" . '               Message: ' . $message . "\n" . "\n", FILE_APPEND);
+      file_put_contents($log_file_data, date('h:i:sa').' =>  Sent to: ' . $to . "\n" . '               Subject: ' . $subject . "\n" . '               Message: ' . $message . "\n" . "\n", FILE_APPEND);
 
     } //This code will a log.txt file to get the response of the PHPMailers
 }
