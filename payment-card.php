@@ -175,9 +175,15 @@
 								# CHECK IF VOUCHER MIN. SPEND ATTAINED BY SPECIFIC ADVENTURE PRICE
 								} elseif($voucher_exist['vouch_minspent'] > $booked['book_totalcosts']){
 									echo "<p class='error'>Not enough price to use this voucher!</p>";
+
+								# SUCCESS
 								} else {
 									$discount = $booked['book_totalcosts'] * ($voucher_exist['vouch_discount']/100);
 									$final_price -= $discount;
+
+									# KEEP TRACK OF USED VOUCHER
+									$_SESSION['used_voucher_code'] = $voucher_exist['vouch_code'];
+
 									echo "<p class='success'>Voucher added successfully!</p>";
 								}
 							} else {
@@ -204,7 +210,7 @@
 						<label>Card number <span>*</span> </label>
 						<input type="text" name="card_num" value="" placeholder="16 digit card number" maxlength="16" minlength="16" required>
 						<label>Valid until <span>*</span> </label>
-						<input type="text" name="card_expiry" value="" placeholder="MM/YY" maxlength="5" minlength="5" required>
+						<input type="month" name="card_expiry" value="" placeholder="MM/YY"  required>
 						<label>CVV <span>*</span> </label>
 						<input type="number" name="card_cvv" value="" placeholder="3 digit code (at the back of the card)" maxlength="3" minlength="3" required>
 					</div>
@@ -247,15 +253,18 @@
 						if(isset($_POST['btnPayCard'])) {
 							// LIST OF VALID TEST CARD
 							$test_card_list = array(4343434343434345, 4571736000000075, 4009930000001421, 4404520000001439, 5555444444444457, 5455590000000009, 5339080000000003, 5240050000001440, 5577510000001446);
-							$valid_card = in_array($_POST['card_num'], $test_card_list);
+
+							// DATES
+							$exp_date = date("F y", strtotime($_POST['card_expiry']));
+							$today = date("F y");
 
 							// CHECK IF INPUTTED CARD NAME HAS NUMBER
 							if(preg_match('~[0-9]+~', $_POST['card_name'])){
 								echo "<script>alert('Card name cannot consist a number!')</script>";
 
 							// CHECK IF INPUTTED EXPIRY DATE IS FUTURE DATE
-							} else if($_POST['card_expiry'] < date("m/y")) {
-								echo "<script>alert('Expiry date must be future dates!')</script>";
+							} else if($exp_date < $today) {
+								echo "<script>alert('Expiry date must be future dates! ".$exp_date." ".$today."')</script>";
 
 							// IF NO ERROR
 							} else {
@@ -263,10 +272,8 @@
 								$final_price = number_format($final_price, 2, '', '');
 								$result = process_paymongo_card_payment($_POST['card_name'],$_POST['card_num'],$_POST['card_expiry'],$_POST['card_cvv'],$final_price, $payment_desc, $joiner);
 
-								if($result == 'succeeded')
-									header("Location: thankyou.php?card");
-								elseif($result == "The value for payment_method cannot be blank.")
-									echo "<script>alert('Invalid card number!')</script>";
+								if($result[1] == 'succeeded')
+									header("Location: thankyou.php?card&book_id=".$booked['book_id']."&intentid=".$result[0]."");
 								else
 									echo "<script>alert('".$result."')</script>";
 							}

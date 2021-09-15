@@ -892,7 +892,6 @@ function booking($status, $book_id=null) {
 		// header("Location: book-guest.php?id={$_GET['id']}");
 	// IF STATUS IS WAITING FOR PAYMENT
 	} else if($status === "waiting for payment") {
-		$bool = false;
 		// BOOK AS A GUEST: 1 JOINER 1:M GUESTS
 		if($_SESSION['cboGuests'] > 1 && $_SESSION['bookOption'] == "guest"){
 			for($i=0; $i<$_SESSION['cboGuests']-1; $i++){
@@ -900,8 +899,9 @@ function booking($status, $book_id=null) {
 				$txtPhone = $_POST['txtPhone'][$i];
 				$emEmail = trim($_POST['emEmail'][$i]);
 				//
-				bookingProcess($txtName, $txtPhone, $emEmail, $status, $book_id);
+				booking_with_guest($txtName, $txtPhone, $emEmail, $status, $book_id);
 			}
+
 		// BOOK FOR SOMEONE: 1:M GUESTS
 		} else if($_SESSION['cboGuests'] > 1 && $_SESSION['bookOption'] == "someone"){
 			for($i=0; $i<$_SESSION['cboGuests']; $i++){
@@ -909,27 +909,28 @@ function booking($status, $book_id=null) {
 				$txtPhone = $_POST['txtPhone'][$i];
 				$emEmail = trim($_POST['emEmail'][$i]);
 				//
-				bookingProcess($txtName, $txtPhone, $emEmail, $status, $book_id);
+				booking_with_guest($txtName, $txtPhone, $emEmail, $status, $book_id);
 			}
-			if($bool)
-				echo $result = "<script>confirm('Successfully booked! Proceed to payment?')</script>";
+
 		// BOOK FOR SOMEONE: 1 GUEST
 		} else if($_SESSION['cboGuests'] == 1 && $_SESSION['bookOption'] == "someone"){
 			$txtName = trim(ucwords($_POST['txtName'][0]));
 			$txtPhone = $_POST['txtPhone'][0];
 			$emEmail = trim($_POST['emEmail'][0]);
 			//
-			bookingProcess($txtName, $txtPhone, $emEmail, $status, $book_id);
+			booking_with_guest($txtName, $txtPhone, $emEmail, $status, $book_id);
+
 		// BOOK AS A GUEST: 1 JOINER (KUWANG)
 		} else {
 			// UPDATE JOINER BOOKING STATUS
 			DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array($status, $book_id), "UPDATE");
+
 			// UPDATE ADVENTURE TABLE'S CURRENT GUEST
-			DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($_SESSION['cboGuests'], $_GET['id']), "UPDATE");
-			//
-			$bool = true;
-			//
+			$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($_GET['id']), "READ");
+			$adv = $adv[0];
+			DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($adv['adv_currentGuest'] + $_SESSION['cboGuests'], $adv['adv_id']), "UPDATE");
 		}
+
 	// IF STATUS (TBD)
 	} else {
 
@@ -937,20 +938,17 @@ function booking($status, $book_id=null) {
 }
 
 ##### CODE START HERE @BOOKING PROCESS OF ADVENTURE #####
-function bookingProcess($name, $phone, $email, $status, $book_id) {
-	// ERROR TRAPPINGS
-	if(preg_match('/\d/', $name))
-		echo "<script>alert('Name cannot have a number!')</script>";
-	else {
-		// INSERT GUEST INFO TO TABLE
-		DB::query("INSERT INTO guest(book_id, guest_name, guest_phone, guest_email) VALUES(?,?,?,?)", array($book_id, $name, $phone, $email), "CREATE");
-		// UPDATE JOINER BOOKING STATUS
-		DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array($status, $book_id), "UPDATE");
-		// UPDATE ADVENTURE TABLE'S CURRENT GUEST
-		DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($_SESSION['cboGuests'], $_GET['id']), "UPDATE");
-		//
-		return $bool = true;
-	}
+function booking_with_guest($name, $phone, $email, $status, $book_id) {
+	// INSERT GUEST INFO TO TABLE
+	DB::query("INSERT INTO guest(book_id, guest_name, guest_phone, guest_email) VALUES(?,?,?,?)", array($book_id, $name, $phone, $email), "CREATE");
+
+	// UPDATE JOINER BOOKING STATUS
+	DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array($status, $book_id), "UPDATE");
+
+	// UPDATE ADVENTURE TABLE'S CURRENT GUEST
+	$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($_GET['id']), "READ");
+	$adv = $adv[0];
+	DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($adv['adv_currentGuest'] + $_SESSION['cboGuests'], $adv['adv_id']), "UPDATE");
 }
 
 ##### CODE START HERE @PAYMONGO API #####
@@ -1127,7 +1125,7 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 	foreach($attach as $key => $value) {
 		if($key == 'data') {
 			if($attach['data']['attributes']['status'] == 'succeeded') {
-				
+
 				$name = $attach['data']['attributes']['payments'][0]['attributes']['billing']['name'];
 				$mobile = $attach['data']['attributes']['payments'][0]['attributes']['billing']['phone'];
 				$email = $attach['data']['attributes']['payments'][0]['attributes']['billing']['email'];
@@ -1141,17 +1139,18 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 				$sms_message = "Hooray! Thank you! Your payment for " . $amount . " " . $currency . " thru card number ending in " . $card_last_num . " was SUCCESSFUL!";
 
 				$email_subject = 'BOOKING CONFIRMATION';
-    			$email_message = ' Dear '.$name.', Hooray! Your payment for '.$amount.' '.$currency.' thru '.$card_brand.' ending in '. $card_last_num. ' was successful. Your transaction id is '.$id.' . Enjoy your BaiPaJoin Adventure! Thank you! THIS IS A TEST. DO NOT REPLY!';  
-				
+    			$email_message = ' Dear '.$name.', Hooray! Your payment for '.$amount.' '.$currency.' thru '.$card_brand.' ending in '. $card_last_num. ' was successful. Your transaction id is '.$id.' . Enjoy your BaiPaJoin Adventure! Thank you! THIS IS A TEST. DO NOT REPLY!';
+
 				send_sms($mobile, $sms_message);
 				send_email($email, $email_subject, $email_message);
 			}
-			return $attach['data']['attributes']['status'];
+			$intent_id_status = [$intent['data']['id'], $attach['data']['attributes']['status']];
+			return $intent_id_status;
 		}
 		elseif($key == 'errors') {
-			return $attach['errors'][0]['detail'];
+			return [0, $attach['errors'][0]['detail']];
 		}
-	}	
+	}
 }
 
 function process_paymongo_ewallet_source($ewallet_type, $final_price, $joiner) {
@@ -1366,7 +1365,7 @@ function send_email($to, $subject, $message) {
 	$mail->Port = 587;                                    	// TCP port to connect to
 	$mail->setFrom('inflatedimpressionscebu@gmail.com', 'BAIPAJOIN');
 	$mail->addAddress($to);     							// Add a recipient
-	$mail->addReplyTo('inflatedimpressionscebu@gmail.com'); 
+	$mail->addReplyTo('inflatedimpressionscebu@gmail.com');
 	//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Add attachment + name (optional)
 	//$mail->isHTML(true);                                  // Set email format to HTML
 
@@ -1379,7 +1378,7 @@ function send_email($to, $subject, $message) {
       }
       $log_file_data = 'logs\\phpmailer\\error_log_' . date('d-M-Y') . '.log';
       file_put_contents($log_file_data, date('h:i:sa').' => Error: '. $mail->ErrorInfo . "\n" . "\n", FILE_APPEND);
-    } 
+    }
     else {
     	if(!file_exists('logs\phpmailer')) {
         	mkdir('logs\phpmailer', 0777, true);
@@ -1425,6 +1424,11 @@ function get_current_weather_location($location) {
     } //This code will a log.txt file to get the response of the cURL command
 
 	return $response;
+}
+
+##### CODE START HERE @NECESSARY UPDATES WHEN BOOKING IS PAID #####
+function booking_paid_updates(){
+
 }
 
 
