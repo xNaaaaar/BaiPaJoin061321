@@ -11,6 +11,7 @@
   //This code will allow you to view the JSON object payload.
 
   $type = $payload['data']['attributes']['type'];
+  $pay_method = $payload['data']['attributes']['data']['attributes']['source']['type'];
 
   if(!empty($request)) {
     if(!file_exists('logs\ewallet_webhook')) {
@@ -30,20 +31,21 @@
     process_paymongo_ewallet_payment($amount, $id);
   }
 
-  if($type == 'payment.paid') {
-
-    $mobile = '09755315755';
-    $name = 'Melnar Ancit';
-    
-    /*$mobile = $payload['data']['attributes']['data']['attributes']['billing']['phone'];   
-    $name = $payload['data']['attributes']['data']['attributes']['billing']['name'];  */  
-    $amount = $payload['data']['attributes']['data']['attributes']['amount'];
+  if($type == 'payment.paid' && $pay_method != 'card') {
+      
+    $name = $payload['data']['attributes']['data']['attributes']['billing']['name']; 
+    $mobile = $payload['data']['attributes']['data']['attributes']['billing']['phone']; 
+    $email = $payload['data']['attributes']['data']['attributes']['billing']['email'];    
+    $amount = ($payload['data']['attributes']['data']['attributes']['amount'] / 100);
     $currency = $payload['data']['attributes']['data']['attributes']['currency'];
     $method = $payload['data']['attributes']['data']['attributes']['source']['type'];
-
-    $amount = number_format($amount, 2, '', '');
+    $transaction_id = $payload['data']['attributes']['data']['id'];
     
-    $message = "Hello " . $name . "! Your payment for " . $amount . " " . $currency . " thru " . $method . " was successful. Thank you.";
+    $sms_message = "Hello " . $name . "! Your payment for " . $amount . " " . $currency . " thru " . $method . " was successful. Thank you.";
 
-    send_sms($mobile, $message);
+    $email_subject = 'BOOKING CONFIRMATION';
+    $email_message = 'Dear '.$name.',  Hooray! Your payment for '.$amount.' '.$currency.' thru '.$method. ' was successful. Transaction id '.$transaction_id.' . Enjoy your BaiPaJoin Adventure! Thank you! THIS IS A TEST. DO NOT REPLY!';    
+
+    send_sms($mobile, $sms_message);
+    send_email($email, $email_subject, $email_message);
   }

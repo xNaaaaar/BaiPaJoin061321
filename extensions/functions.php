@@ -1127,9 +1127,24 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 	foreach($attach as $key => $value) {
 		if($key == 'data') {
 			if($attach['data']['attributes']['status'] == 'succeeded') {
+				
+				$name = $attach['data']['attributes']['payments'][0]['attributes']['billing']['name'];
 				$mobile = $attach['data']['attributes']['payments'][0]['attributes']['billing']['phone'];
-				$message = "Hooray! Thank you! Your payment for " . ($attach['data']['attributes']['amount'] / 100) . " " . $attach['data']['attributes']['currency'] . " thru card number ending in " . $attach['data']['attributes']['payments'][0]['attributes']['source']['last4'] . " was SUCCESSFUL!";
-				send_sms($mobile, $message);
+				$email = $attach['data']['attributes']['payments'][0]['attributes']['billing']['email'];
+
+				$amount = ($attach['data']['attributes']['amount'] / 100);
+				$currency = $attach['data']['attributes']['currency'];
+				$card_brand = $attach['data']['attributes']['payments'][0]['attributes']['source']['brand'];
+				$card_last_num = $attach['data']['attributes']['payments'][0]['attributes']['source']['last4'];
+				$id = $attach['data']['id'];
+
+				$sms_message = "Hooray! Thank you! Your payment for " . $amount . " " . $currency . " thru card number ending in " . $card_last_num . " was SUCCESSFUL!";
+
+				$email_subject = 'BOOKING CONFIRMATION';
+    			$email_message = ' Dear '.$name.', Hooray! Your payment for '.$amount.' '.$currency.' thru '.$card_brand.' ending in '. $card_last_num. ' was successful. Your transaction id is '.$id.' . Enjoy your BaiPaJoin Adventure! Thank you! THIS IS A TEST. DO NOT REPLY!';  
+				
+				send_sms($mobile, $sms_message);
+				send_email($email, $email_subject, $email_message);
 			}
 			return $attach['data']['attributes']['status'];
 		}
@@ -1151,7 +1166,7 @@ function process_paymongo_ewallet_source($ewallet_type, $final_price, $joiner) {
 	        "attributes": {
 	            "amount": '.$final_price.',
 	            "redirect": {
-	                "success": "http://localhost/BaiPaJoin/payment-gcash.php",
+	                "success": "http://localhost/api_test/mongo_payload+phpmailer.php",
 	                "failed": "http://localhost/BaiPaJoin/index.php"
 	            },
 	            "billing": {
@@ -1300,6 +1315,7 @@ function retrieve_paymongo_ewallet_payment($payment_id) {
 	return $response;
 }
 
+
 ##### CODE START HERE @ITEXMO API #####
 function send_sms($mobile, $message) {
 
@@ -1327,10 +1343,51 @@ function send_sms($mobile, $message) {
 		mkdir($log_filename, 0777, true);
 	}
 	$log_file_data = 'logs\\sms\\log_' . date('d-M-Y') . '.log';
-	file_put_contents($log_file_data, date('h:i:sa').' => Response Code: '. json_decode($response) . "\n" . "              Message Sent: ". $message . "\n" . "\n", FILE_APPEND);
+	file_put_contents($log_file_data, date('h:i:sa').' => Response Code: '. json_decode($response) . "\n" . "              Sent To: ". $mobile . "\n" . "              Message Sent: ". $message . "\n" . "\n", FILE_APPEND);
  	//This code will a log.txt file to get the response of the cURL command
 
   curl_close($curl);
+}
+
+##### CODE START HERE @PHPMAILER API #####
+function send_email($to, $subject, $message) {
+
+	require 'PHPMailerAutoload.php';
+
+	$mail = new PHPMailer;
+
+	//$mail->SMTPDebug = 4;                               	// Enable verbose debug output
+	$mail->isSMTP();                                      	// Set mailer to use SMTP
+	$mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+	$mail->SMTPAuth = true;                               	// Enable SMTP authentication
+	$mail->Username = 'inflatedimpressionscebu@gmail.com';  // SMTP username
+	$mail->Password = 'b@ll00ns';                          	// SMTP password
+	$mail->SMTPSecure = 'tls';                             	// Enable TLS encryption, `ssl` also accepted
+	$mail->Port = 587;                                    	// TCP port to connect to
+	$mail->setFrom('inflatedimpressionscebu@gmail.com', 'BAIPAJOIN');
+	$mail->addAddress($to);     							// Add a recipient
+	$mail->addReplyTo('inflatedimpressionscebu@gmail.com'); 
+	//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Add attachment + name (optional)
+	//$mail->isHTML(true);                                  // Set email format to HTML
+
+	$mail->Subject = $subject;
+	$mail->Body = $message;
+
+	if(!$mail->send()) {
+    	if(!file_exists('logs\phpmailer')) {
+        	mkdir('logs\phpmailer', 0777, true);
+      }
+      $log_file_data = 'logs\\phpmailer\\error_log_' . date('d-M-Y') . '.log';
+      file_put_contents($log_file_data, date('h:i:sa').' => Error: '. $mail->ErrorInfo . "\n" . "\n", FILE_APPEND);
+    } 
+    else {
+    	if(!file_exists('logs\phpmailer')) {
+        	mkdir('logs\phpmailer', 0777, true);
+      }
+      $log_file_data = 'logs\\phpmailer\\success_log_' . date('d-M-Y') . '.log';
+      file_put_contents($log_file_data, date('h:i:sa').' => Sent to: ' . $to . "\n" . '               Subject: ' . $subject . "\n" . '               Message: ' . $message . "\n" . "\n", FILE_APPEND);
+
+    } //This code will a log.txt file to get the response of the PHPMailers
 }
 
 ##### CODE START HERE @OPENWEATHERMAP API #####
@@ -1369,5 +1426,6 @@ function get_current_weather_location($location) {
 
 	return $response;
 }
+
 
 ##### END OF CODES #####
