@@ -40,6 +40,7 @@
 		.sidebar{flex:1;height:500px;padding:30px 30px 30px 0;position:relative;}
 		.sidebar:before{content:'';width:2px;height:70%;background:#cdcdcd;position:absolute;top:50%;right:0;transform:translateY(-50%);}
 		.sidebar h2{font-size:30px;line-height:100%;}
+		.sidebar p{margin-bottom:20px;}
 		.sidebar ul{display:flex;height:100%;flex-direction:column;justify-content:flex-start;font:600 30px/100% Montserrat,sans-serif;list-style:none;margin:35px 0 0;}
 		.sidebar ul li{line-height:45px;}
 		.sidebar ul li i{width:40px;position:relative;}
