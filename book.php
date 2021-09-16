@@ -24,7 +24,7 @@
 
 		.place_info{margin:0;}
 
-		.main_info section{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;}
+		.main_info section, .weather{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;}
 		.main_info h1{font:600 50px/100% Montserrat,sans-serif;text-align:left;margin:0 0 20px;}
 		.main_info h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
 		.main_info ul{text-align:left;font-size:20px;}
@@ -33,7 +33,10 @@
 		.main_info form input, .main_info form select{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
 		.main_info form button, .main_info form a{margin:15px 5px 0 0;}
 
-		.book_info{text-align:left;height:100%;min-height:0;margin:75px auto 0;}
+		.side_info{width:35%;}
+		.weather{margin:75px auto 25px;}
+
+		.book_info{text-align:left;height:auto;min-height:0;margin:0;width:100%;}
 		.book_info figure img{width:100%;height:200px;border-radius:10px;}
 		.book_info h2{text-align:left;margin:20px 0 10px;}
 		.book_info .title_info1{list-style:none;margin-bottom:30px;font:600 18px/100% Montserrat,sans-serif;color:gray;}
@@ -129,32 +132,39 @@
 							<a href="place.php?id=<?php echo $_GET['id']; ?>" class="edit">Back</a>
 						</form>
 					</div>
-					<!-- BOOKED INFORMATION -->
-					<div class="book_info">
-						<?php
-							//This method will return the current weather at a certain location
-							$weather = get_current_weather_location($adv[15]);
-							echo $weather;
-						?>
-						<figure>
+
+					<div class="side_info">
+						<!-- WEATHER INFORMATION -->
+						<div class="weather">
 							<?php
-								# DISPLAY RANDOM IMAGE
-								echo "<img src='images/organizers/".$adv['orga_id']."/$image[$displayImage]' alt=''>";
+								//This method will return the current weather at a certain location
+								$result = get_current_weather_location($adv[6]);
+								$weather = json_decode($result);
+								print_r($weather);
 							?>
-						</figure>
-						<section>
-							<h2><?php echo $adv['adv_name']." (".$adv['adv_type'].")"; ?> <span><?php echo $adv['adv_kind']; ?></span> </h2>
-							<ul class="title_info1">
-								<li>5 <i class="fas fa-star"></i> <q>(25 reviews)</q></li>
-								<li><i class="fas fa-map-marker-alt"></i> <address><?php echo $adv['adv_address']; ?></address></li>
-							</ul>
-							<p>₱<?php echo $_SESSION['price']; ?> / guest</p>
-						</section>
-						<section>
-							<h2>Overview</h2>
-							<!-- ADVENTURE DESCRIPTION LIMITED TO 30 WORDS -->
-							<p><?php echo limit_text($adv['adv_details'], 30) ?></p>
-						</section>
+						</div>
+						<!-- BOOKED INFORMATION -->
+						<div class="book_info">
+							<figure>
+								<?php
+									# DISPLAY RANDOM IMAGE
+									echo "<img src='images/organizers/".$adv['orga_id']."/$image[$displayImage]' alt=''>";
+								?>
+							</figure>
+							<section>
+								<h2><?php echo $adv['adv_name']." (".$adv['adv_type'].")"; ?> <span><?php echo $adv['adv_kind']; ?></span> </h2>
+								<ul class="title_info1">
+									<li>5 <i class="fas fa-star"></i> <q>(25 reviews)</q></li>
+									<li><i class="fas fa-map-marker-alt"></i> <address><?php echo $adv['adv_address']; ?></address></li>
+								</ul>
+								<p>₱<?php echo $_SESSION['price']; ?> / guest</p>
+							</section>
+							<section>
+								<h2>Overview</h2>
+								<!-- ADVENTURE DESCRIPTION LIMITED TO 30 WORDS -->
+								<p><?php echo limit_text($adv['adv_details'], 30) ?></p>
+							</section>
+						</div>
 					</div>
 				</div>
 			</main>
