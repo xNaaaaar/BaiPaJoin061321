@@ -140,7 +140,7 @@
 						<li><input class="checkbox1" type="checkbox" name="places[]" value="Badian" <?php checkPlaces("Badian"); ?>> <label for="">Badian</label></li>
 						<li><input class="checkbox1" type="checkbox" name="places[]" value="Oslob" <?php checkPlaces("Oslob"); ?>> <label for="">Oslob</label></li>
 						<li><input class="checkbox1" type="checkbox" name="places[]" value="Alcoy" <?php checkPlaces("Alcoy"); ?>> <label for="">Alcoy</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" value="Aloginsan" <?php checkPlaces("Aloginsan"); ?>> <label for="">Aloginsan</label></li>
+						<li><input class="checkbox1" type="checkbox" name="places[]" value="Aloguinsan" <?php checkPlaces("Aloguinsan"); ?>> <label for="">Aloginsan</label></li>
 						<li><input class="checkbox1" type="checkbox" name="places[]" value="Santander" <?php checkPlaces("Santander"); ?>> <label for="">Santander</label></li>
 						<li><input class="checkbox1" type="checkbox" name="places[]" value="Alegria" <?php checkPlaces("Alegria"); ?>> <label for="">Alegria</label></li>
 						<li><input class="checkbox1" type="checkbox" name="places[]" value="Dalaguete" <?php checkPlaces("Dalaguete"); ?>> <label for="">Dalaguete</label></li>

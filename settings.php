@@ -50,13 +50,13 @@
 		.sidebar ul li a:hover{color:#bf127a;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
-		main h3{font:600 30px/100% Montserrat,sans-serif;color:#ff4444;margin-bottom:10px;text-align:left;}
+		main h2, main h3{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h2 span{font-size:25px;}
 		main h2 .legal{font-size:30px;}
 		main h2 span a:hover{color:#313131;text-decoration:none;}
+		main h3{font-size:20px;color:red;margin-left:1px;}
 		main .form{display:flex;justify-content:center;flex-wrap:wrap;margin-bottom:40px;position:relative;}
-		main .form input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 30px;margin:15px auto;}
+		main .form input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 30px;margin:15px auto;border:1px solid #cfcfcf;}
 		main .form input:nth-child(2){width:41%;}
 		main .form input:nth-child(3){width:41%;}
 		main .form input:nth-child(4){width:16%;}
@@ -120,6 +120,7 @@
 					<h2>Profile <span><a href="edit_profile.php"><i class='fas fa-edit'></i></a></span></h2>
 					<!-- FOR ORGANIZER -->
 					<?php if(isset($_SESSION['organizer'])){ ?>
+					<h3>Note: Please add legal documents below to post adventure upon verification.</h3>
 					<div class="form form1">
 						<input type="text" value="<?php echo "{$_SESSION['company']}"; ?>" placeholder="Company Name" disabled>
 						<input type="text" value="<?php echo "{$_SESSION['fname']}"; ?>" placeholder="Firstname" disabled>

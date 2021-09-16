@@ -41,10 +41,10 @@
 		.sidebar ul li a:hover{color:#bf127a;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+		main h2, main h3{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h2 span{font-size:30px;}
 		main h2 span a:hover{color:#313131;text-decoration:none;}
-		main h3{font:600 20px/100% Montserrat,sans-serif;color:gray;margin-bottom:10px;}
+		main h3{font-size:20px;color:gray;}
 		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
 		main button:first-of-type{right:67px;}
 		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:134px;right:15px;z-index:5;font-size:20px;}
@@ -116,9 +116,9 @@
 							// CHECK IF ORGANIZER IS VERIFIED TO ADD VOUCHER
 							if(isset($_SESSION['organizer'])){
 								if($_SESSION['verified'] == 1)
-									echo "<a class='btn' href='add_voucher.php'><i class='fas fa-plus-circle'></i></a>";
+									echo "<a href='add_voucher.php'><i class='fas fa-plus-circle'></i></a>";
 								else
-									echo "<a class='btn disable' style='background:#313131;'><i class='fas fa-plus-circle'></i></a>";
+									echo "<a class='disable'><i class='fas fa-plus-circle'></i></a>";
 							}
 						?>
 					</span> </h2>

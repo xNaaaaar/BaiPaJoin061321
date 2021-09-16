@@ -128,7 +128,7 @@
 							<option value="Badian">Badian</option>
 							<option value="Oslob">Oslob</option>
 							<option value="Alcoy">Alcoy</option>
-							<option value="Aloginsan">Aloginsan</option>
+							<option value="Aloguinsan">Aloguinsan</option>
 							<option value="Santander">Santander</option>
 							<option value="Alegria">Alegria</option>
 							<option value="Dalaguete">Dalaguete</option>

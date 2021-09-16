@@ -19,7 +19,7 @@
 		/* Main Area */
 		.main_con{display:flex;justify-content:space-between;}
 
-		.sidebar{flex:1;height:500px;padding:50px 30px 30px 0;position:relative;}
+		.sidebar{flex:1;height:500px;padding:100px 30px 30px 0;position:relative;}
 		.sidebar:before{content:'';width:2px;height:70%;background:#cdcdcd;position:absolute;top:50%;right:0;transform:translateY(-50%);}
 		.sidebar h2{font-size:25px;line-height:100%;}
 		.sidebar ul{display:flex;height:100%;flex-direction:column;justify-content:flex-start;font:600 25px/100% Montserrat,sans-serif;list-style:none;margin:35px 0 0;}
@@ -38,6 +38,7 @@
 		.sub-breadcrumbs li span{margin-left:10px;}
 		.ongoing{color:#000 !important;}
 		.success{color:#5cb85c !important;}
+		.error{color:red;}
 
 		.booking_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
 		.booking_details h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
@@ -48,6 +49,15 @@
 		.payment_method h2 span{margin:0 0 0 20px;}
 		.payment_method input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
 		.payment_method label span{color:red;}
+
+		.voucher{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
+		.voucher h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
+		.voucher h2 span{color:gray;font-size:25px;}
+		.voucher p{margin:0 0 5px 5px;width:100%;}
+		.voucher .error{color:red;}
+		.voucher section{display:flex;justify-content:space-between;}
+		.voucher input{display:inline-block;width:80%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
+		.voucher .edit{width:18% !important;margin:0 auto;}
 
 		.price_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
 		.price_details h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
@@ -113,6 +123,9 @@
 					// JOINER FEES CALCULATION
 					$price_fee = $booked['book_totalcosts'] * 0.035 + 15;
 					$final_price = $booked['book_totalcosts'] + $price_fee;
+					//
+					$verified = false;
+					$discount = 0;
 			?>
 			<main>
 				<ul class="sub-breadcrumbs">
@@ -120,25 +133,82 @@
 					<li class="ongoing success"><i class="far fa-check-circle"></i> Fill in Guest Information <span>&#187;</span></li>
 					<li class="ongoing"><i class="far fa-check-circle"></i> Review & Payment</li>
 				</ul>
-				<form method="post">
-					<h2>Payment</h2>
+				<h2>Payment</h2>
+				<!-- BOOKING DETAILS SECTION -->
+				<div class="booking_details">
+					<h2>
+						<?php
+						echo $joiner['joiner_fname']." ".$joiner['joiner_mi'].". ".$joiner['joiner_lname'];
+						if(isset($_SESSION['bookOption']) && $_SESSION['bookOption'] == "someone"){
+							echo "<em>Booking for someone else.</em>";
+						} else {
+							echo "<em>Booking as a guest.</em>";
+						}
+						?>
+					</h2>
+					<ul>
+						<li>Book ID: <?php echo $booked['book_id']; ?></li>
+						<li>Total guest/s: <?php echo $booked['book_guests']; ?></li>
+						<li>on <?php echo date('l - M. j, Y', strtotime($adv['adv_date'])); ?></li>
+					</ul>
+				</div>
+				<!-- VOUCHER SECTION -->
+				<div class="voucher">
+					<h2>Add Voucher <span><a href="voucher.php" target="_blank" >look for voucher</a></span> </h2>
 
-					<div class="booking_details">
-						<h2>
-							<?php
-							echo $joiner['joiner_fname']." ".$joiner['joiner_mi'].". ".$joiner['joiner_lname'];
-							if($_SESSION['bookOption'] == "someone"){
-								echo "<em>Booking for someone else.</em>";
+					<?php
+					if(isset($_POST['btnVerify'])){
+						$voucher_code = trim($_POST['txtCode']);
+						# CHECK IF VOUCHER EXIST
+						$voucher_exist = DB::query("SELECT * FROM voucher WHERE vouch_code=?", array($voucher_code), "READ");
+
+						if(count($voucher_exist)>0){
+							$voucher_exist = $voucher_exist[0];
+							# CHECK IF VOUCHER EXPIRED
+							if($voucher_exist['vouch_enddate'] < date('Y-m-d')){
+								echo "<p class='error'>Voucher expired!</p>";
+
+							# CHECK IF VOUCHER MATCH THE SPECIFIC ADVENTURE
+							} elseif($voucher_exist['adv_id'] != $_GET['id']){
+								echo "<p class='error'>Cannot use voucher in this adventure!</p>";
+
+							# CHECK IF VOUCHER MIN. SPEND ATTAINED BY SPECIFIC ADVENTURE PRICE
+							} elseif($voucher_exist['vouch_minspent'] > $booked['book_totalcosts']){
+								echo "<p class='error'>Not enough price to use this voucher!</p>";
+
+							# SUCCESS
 							} else {
-								echo "<em>Booking as a guest.</em>";
+								$discount = $booked['book_totalcosts'] * ($voucher_exist['vouch_discount']/100);
+								$final_price -= $discount;
+
+								# KEEP TRACK OF USED VOUCHER
+								$_SESSION['used_voucher_code'] = $voucher_exist['vouch_code'];
+
+								echo "<p class='success'>Voucher added successfully!</p>";
 							}
-							?>
-						</h2>
-						<ul>
-							<li>Book ID: <?php echo $booked['book_id']; ?></li>
-							<li>Total guest/s: <?php echo $booked['book_guests']; ?></li>
-							<li>on <?php echo date('l - M. j, Y', strtotime($adv['adv_date'])); ?></li>
-						</ul>
+						} else {
+							echo "<p class='error'>Voucher does not exist!</p>";
+						}
+					}
+					?>
+					<form method="post">
+						<section>
+							<input type="text" name="txtCode" placeholder="Input voucher code">
+							<button class="edit" type="submit" name="btnVerify">Verify</button>
+						</section>
+					</form>
+				</div>
+
+				<form method="post">
+					<div class="payment_method">
+						<h2>Gcash</h2>
+						<label>Gcash name <span>*</span> </label>
+						<input type="text" name="gcash_name" placeholder="Your name (as it appears on your card)" required>
+						<label>Gcash number <span>*</span> </label>
+						<input type="text" name="gcash_num" placeholder="16 digit card number" maxlength="16" minlength="16" required>
+						<label>Email address <span>*</span> </label>
+						<!-- INPUT TYPE MONTH FORMAT: 2025-12 -->
+						<input type="month" name="card_expiry" min="<?php echo date("Y-m"); ?>" required>
 					</div>
 
 					<div class="price_details">
@@ -151,7 +221,19 @@
 								</tr>
 								<tr>
 									<td>Fees</td>
-									<td>₱ <?php echo number_format($price_fee, 2, '.', ''); ?></td>
+									<td class="success">+ ₱ <?php echo number_format($price_fee, 2, '.', ''); ?></td>
+								</tr>
+								<tr>
+									<td>Voucher Discount (
+										<?php
+											if(isset($voucher_exist) && count($voucher_exist)>0)
+												echo $voucher_exist['vouch_discount']."%";
+											else
+												echo "0%";
+										?>
+										)
+									</td>
+									<td class="error">- ₱ <?php echo number_format($discount, 2, '.', ''); ?></td>
 								</tr>
 								<tr>
 									<td>Total Price</td>
@@ -170,7 +252,13 @@
 							process_paymongo_ewallet_source('gcash', $final_price, $joiner);
 						}
 					?>
+
+
 				</form>
+
+
+
+
 			</main>
 			<?php
 				}

@@ -135,7 +135,7 @@
 							<option value="Badian" <?php echo $adv['adv_address'] == "Badian" ? "selected='selected'":""; ?>>Badian</option>
 							<option value="Oslob" <?php echo $adv['adv_address'] == "Oslob" ? "selected='selected'":""; ?>>Oslob</option>
 							<option value="Alcoy" <?php echo $adv['adv_address'] == "Alcoy" ? "selected='selected'":""; ?>>Alcoy</option>
-							<option value="Aloginsan" <?php echo $adv['adv_address'] == "Aloginsan" ? "selected='selected'":""; ?>>Aloginsan</option>
+							<option value="Aloguinsan" <?php echo $adv['adv_address'] == "Aloguinsan" ? "selected='selected'":""; ?>>Aloguinsan</option>
 							<option value="Santander" <?php echo $adv['adv_address'] == "Santander" ? "selected='selected'":""; ?>>Santander</option>
 							<option value="Alegria" <?php echo $adv['adv_address'] == "Alegria" ? "selected='selected'":""; ?>>Alegria</option>
 							<option value="Dalaguete" <?php echo $adv['adv_address'] == "Dalaguete" ? "selected='selected'":""; ?>>Dalaguete</option>

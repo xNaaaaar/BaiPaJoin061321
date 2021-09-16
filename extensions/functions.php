@@ -303,9 +303,6 @@ function displayAll($num, $query = NULL){
 				";
 			}
 		}
-		else {
-			echo "<h3>No legal documents added! Please add legal documents to be verified and can post adventures...</h3>";
-		}
 	}
 	// FOR ADVENTURE POSTED DISPLAYING CARDS
 	else if($num === 1){
@@ -349,7 +346,7 @@ function displayAll($num, $query = NULL){
 			}
 		}
 		else {
-			echo "<h3>No posted adventures yet...</h3>";
+			echo "<h3>Click + to post an adventure!!</h3>";
 		}
 	}
 	// FOR VOUCHER ADDED DISPLAYING CARDS
@@ -387,7 +384,7 @@ function displayAll($num, $query = NULL){
 			}
 		}
 		else {
-			echo "<h3>No added voucher yet...</h3>";
+			echo "<h3>Click + to add a voucher!</h3>";
 		}
 	}
 	// FOR VOUCHER DISPLAYING ALL CARDS FOR JOINER
@@ -615,6 +612,7 @@ function postAdventure(){
 	$dateDate = date("Y-m-d", strtotime($_POST['dateDate']));
 	$txtDetails = trim(ucwords($_POST['txtDetails']));
 	$numPrice = trim($_POST['numPrice']);
+	$town = "";
 
 	// ERROR TRAPPINGS
 	if(!$numMaxGuests == "" && !is_numeric($numMaxGuests)){
@@ -644,7 +642,12 @@ function postAdventure(){
 			echo "<script>alert('File type is not allowed!')</script>";
 		}
 		else {
-			DB::query('INSERT INTO adventure(adv_images, adv_name, adv_kind, adv_type, adv_address, adv_totalcostprice, adv_date, adv_details, adv_postedDate, adv_maxguests, adv_currentGuest, adv_itineraryImg, adv_status, orga_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)', array($fileAdvImgs, $txtName, $cboKind, $cboType, $cboLoc, $numPrice, $dateDate, $txtDetails, date('Y-m-d'), $numMaxGuests, 0, $fileItineraryImg, 'not full', $_SESSION['organizer']), "CREATE");
+			if($cboLoc == "Bantayan Island") $town = "Bantayan";
+			elseif($cboLoc == "Malapascua Island") $town = "Daanbantayan";
+			elseif($cboLoc == "Camotes Island") $town = "Camotes";
+			else $town = $cboLoc;
+
+			DB::query('INSERT INTO adventure(adv_images, adv_name, adv_kind, adv_type, adv_address, adv_town, adv_totalcostprice, adv_date, adv_details, adv_postedDate, adv_maxguests, adv_currentGuest, adv_itineraryImg, adv_status, orga_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', array($fileAdvImgs, $txtName, $cboKind, $cboType, $cboLoc, $town, $numPrice, $dateDate, $txtDetails, date('Y-m-d'), $numMaxGuests, 0, $fileItineraryImg, 'not full', $_SESSION['organizer']), "CREATE");
 
 			header('Location: adventures_posted.php?added=1');
 		}
@@ -662,6 +665,7 @@ function updateAdventure(){
 	$dateDate = date("Y-m-d", strtotime($_POST['dateDate']));
 	$txtDetails = trim(ucwords($_POST['txtDetails']));
 	$numPrice = trim($_POST['numPrice']);
+	$town = "";
 
 	// ERROR TRAPPINGS
 	if(!$numMaxGuests == "" && !is_numeric($numMaxGuests)){
@@ -709,8 +713,13 @@ function updateAdventure(){
 				echo "<script>alert('File type is not allowed!')</script>";
 			}
 			else {
+				if($cboLoc == "Bantayan Island") $town = "Bantayan";
+				elseif($cboLoc == "Malapascua Island") $town = "Daanbantayan";
+				elseif($cboLoc == "Camotes Island") $town = "Camotes";
+				else $town = $cboLoc;
+
 				// UPDATE
-				DB::query('UPDATE adventure SET adv_images = ?, adv_name = ?, adv_kind = ?, adv_type = ?, adv_address = ?, adv_totalcostprice = ?, adv_date = ?, adv_details = ?, adv_postedDate = ?, adv_maxguests = ?, adv_itineraryImg = ? WHERE adv_id = ?', array($fileAdvImgs, $txtName, $cboKind, $cboType, $cboLoc, $numPrice, $dateDate, $txtDetails, date('Y-m-d'), $numMaxGuests, $fileItineraryImg, $_GET['id']), "UPDATE");
+				DB::query('UPDATE adventure SET adv_images = ?, adv_name = ?, adv_kind = ?, adv_type = ?, adv_address = ?, adv_town = ?, adv_totalcostprice = ?, adv_date = ?, adv_details = ?, adv_postedDate = ?, adv_maxguests = ?, adv_itineraryImg = ? WHERE adv_id = ?', array($fileAdvImgs, $txtName, $cboKind, $cboType, $cboLoc, $town, $numPrice, $dateDate, $txtDetails, date('Y-m-d'), $numMaxGuests, $fileItineraryImg, $_GET['id']), "UPDATE");
 
 				header('Location: adventures_posted.php?updated=1');
 			}
@@ -1427,9 +1436,42 @@ function get_current_weather_location($location) {
 }
 
 ##### CODE START HERE @NECESSARY UPDATES WHEN BOOKING IS PAID #####
-function booking_paid_updates(){
+function booking_paid_updates($method, $book_id, $intent_id){
+	# IF PAYMENT METHOD IS THRU CARD
+	if($method == "card"){
+		# UPDATE VOUCHER USERS
+		if(isset($_SESSION['used_voucher_code'])){
+			$voucher = DB::query("SELECT * FROM voucher WHERE vouch_code=?", array($_SESSION['used_voucher_code']), "READ");
+			$voucher = $voucher[0];
+			DB::query("UPDATE voucher SET vouch_user=? WHERE vouch_code=?", array($voucher['vouch_user'] + 1, $voucher['vouch_code']), "UPDATE");
+		}
 
+		# UPDATE BOOKING STATUS
+		$booked = DB::query("SELECT * FROM booking WHERE book_id=?", array($book_id), "READ");
+		$booked = $booked[0];
+		DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array("paid", $booked['book_id']), "UPDATE");
+
+		# UPDATE ADVENTURE STATUS
+		$adv_booked = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($booked['adv_id']), "READ");
+		$adv_booked = $adv_booked[0];
+		if($adv_booked['adv_maxguests'] == $adv_booked['adv_currentGuest'])
+			DB::query("UPDATE adventure SET adv_status=? WHERE adv_id=?", array("full", $adv_booked['adv_id']), "UPDATE");
+
+		# INSERT DATA TO PAYMENT TABLE
+		DB::query("INSERT INTO payment(payment_id, payment_method, payment_datetime, book_id) VALUES(?,?,?,?)", array($intent_id, $method, date("Y-m-d H:i:s"), $book_id), "CREATE");
+
+	# IF PAYMENT METHOD IS THRU GCASH
+	} elseif($method == "gcash") {
+
+	# IF PAYMENT METHOD IS THRU GRAB PAY
+	} elseif($method == "grabpay") {
+
+	}
+
+	# SUCCESSFUL MESSAGE
+	echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru ".$method."!</p>";
 }
+
 
 
 ##### END OF CODES #####
