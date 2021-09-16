@@ -10,6 +10,7 @@
 
 	<title><?php //echo get_bloginfo('name');?>BaiPaJoin: An Online Joiner Platform for Tourists</title>
 
+	<link rel="icon" href="images/baipajoin.ico" type="image/ico">
 	<link rel="stylesheet" href="style.min.css">
 	<link rel="stylesheet" href="css/hamburgers.min.css">
 	<link rel="stylesheet" href="css/media.min.css">
