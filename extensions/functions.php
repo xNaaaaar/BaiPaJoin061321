@@ -90,6 +90,34 @@ function loginAccount(){
 	}
 }
 
+function loginCreateAccountSocial(){
+	
+	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    	$charactersLength = strlen($characters);
+    	$randomString = '';
+   		for ($i = 0; $i < 8; $i++)
+        	$randomString = $randomString . $characters[rand(0, $charactersLength - 1)];
+
+	$pwPassword = md5($randomString);
+
+	$email_subject = 'WELCOME TO BAIPAJOIN';
+	$email_message = 'Dear '.$_SESSION['google_data']['name'].', Thank you for signing up BaiPaJoin! Your USERNAME is "'.$_SESSION['google_data']['email'].'" and your TEMPORARY PASSWORD is "'.$randomString.'" , you any access your account anytime but you\'re advised to change the password immediately. Thank you! THIS IS A TEST. DO NOT REPLY!';
+
+	send_email($_SESSION['google_data']['email'] , $email_subject, $email_message);
+
+	DB::query("INSERT INTO joiner(joiner_fname, joiner_lname, joiner_email, joiner_password) VALUES(?,?,?,?)", array($_SESSION['google_data']['given_name'], $_SESSION['google_data']['family_name'], $_SESSION['google_data']['email'], $pwPassword), "CREATE");
+
+	$joinerAccount = DB::query('SELECT * FROM joiner WHERE joiner_email=? AND joiner_password=?', array($_SESSION['google_data']['email'], $pwPassword), "READ");
+
+	if(count($joinerAccount)>0){
+		$joinerAccount = $joinerAccount[0];
+		$_SESSION['joiner'] = $joinerAccount['joiner_id'];
+
+		header('Location: index.php');
+		exit;
+	}
+}
+
 ##### CODE START HERE @LOGOUT ACCOUNT (JOINER or ORGANIZER) #####
 function checkIfThereAreUsers(){
 	if(!isset($_SESSION['joiner']) || !isset($_SESSION['organizer'])){
@@ -1367,8 +1395,8 @@ function send_email($to, $subject, $message) {
 	$mail->isSMTP();                                      	// Set mailer to use SMTP
 	$mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
 	$mail->SMTPAuth = true;                               	// Enable SMTP authentication
-	$mail->Username = 'inflatedimpressionscebu@gmail.com';  // SMTP username
-	$mail->Password = 'b@ll00ns';                          	// SMTP password
+	$mail->Username = 'teambaipajoincebu@gmail.com';  // SMTP username
+	$mail->Password = 'capstone42';                          	// SMTP password
 	$mail->SMTPSecure = 'tls';                             	// Enable TLS encryption, `ssl` also accepted
 	$mail->Port = 587;                                    	// TCP port to connect to
 	$mail->setFrom('inflatedimpressionscebu@gmail.com', 'BAIPAJOIN');

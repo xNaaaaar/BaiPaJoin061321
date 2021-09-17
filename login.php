@@ -1,10 +1,14 @@
 <?php
+	
+	include("google_login/config.php");
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
 
 	if(isset($_POST['btnLogin'])){
 		loginAccount();
 	}
+
+	$login_url = '<a href = "'.$google_client -> createAuthUrl().'"><img src = "google_login/images/1x/btn_google_signin_dark_normal_web.png"/></a>';
 
 ?>
 
@@ -35,6 +39,7 @@
 					<button type="submit" name="btnLogin">Login</button>
 					<a href="create.php">Create</a>
 				</form>
+				<?php echo $login_url; ?>
 			</main>
 		</div>
 

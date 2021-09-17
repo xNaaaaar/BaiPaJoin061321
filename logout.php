@@ -1,5 +1,10 @@
 <?php
+
+	include("google_login/config.php");
 	include("extensions/functions.php");
+
+	unset($_SESSION['access_token']); //unset google access token
+	$google_client -> revokeToken();  //unset google access token
 
 	$_SESSION = array(); //empty the session variables
 	session_unset();	//unset all session variables
