@@ -135,7 +135,7 @@
 
 					<div class="side_info">
 						<!-- WEATHER INFORMATION -->
-						<div class="weather">
+						<div class="weather" style="background:gray;">
 							<?php
 								//This method will return the current weather at a certain location
 								$result = get_current_weather_location($adv[6]);

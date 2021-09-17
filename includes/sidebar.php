@@ -41,9 +41,6 @@
 		<?php
 			if($_SESSION['current_user'] == 'Joiner') {
 				echo "<li class='";
-					if($currentSidebarPage == 'bookings') echo 'current_sidebar';
-				echo "'><a href=''><i class='fas fa-plus-circle'></i> <q>Bookings</q></a></li>
-				<li class='";
 					if($currentSidebarPage == 'favorites') echo 'current_sidebar';
 				echo "'><a href='favorites.php'><i class='fas fa-bookmark'></i> <q>Favorites</q></a></li>
 				";

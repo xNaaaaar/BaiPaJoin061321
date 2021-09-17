@@ -458,8 +458,7 @@ function displayAll($num, $query = NULL){
 					<h2>".$result['adv_name']." - ".$result['adv_kind']." <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
 					<p>".$result['adv_address']."</p>
 					<p>₱ ".number_format((float)$price, 2, '.', '')." / guest</p>
-					<ul class='icons'>
-						<li><a href='#'><i class='fas fa-book'></i></a></li>";
+					<ul class='icons'>";
 
 			  if(isset($_SESSION['joiner'])){
 					$favAdv = DB::query("SELECT * FROM favorite WHERE joiner_id = ? AND adv_id = ?", array($_SESSION['joiner'], $result['adv_id']), "READ");
