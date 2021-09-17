@@ -90,8 +90,9 @@ function loginAccount(){
 	}
 }
 
+##### CODE START HERE @LOGIN ACCOUNT USING GMAIL FOR JOINER #####
 function loginCreateAccountSocial(){
-	
+
 	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     	$charactersLength = strlen($characters);
     	$randomString = '';
@@ -1189,8 +1190,8 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 	}
 }
 
-function process_paymongo_ewallet_source($ewallet_type, $final_price, $joiner) {
-
+function process_paymongo_ewallet_source($ewallet_type, $final_price, $joiner, $book_id) {
+	$_SESSION['book_id'] = $book_id;
 	$curl = curl_init();
 
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
@@ -1201,8 +1202,8 @@ function process_paymongo_ewallet_source($ewallet_type, $final_price, $joiner) {
 	        "attributes": {
 	            "amount": '.$final_price.',
 	            "redirect": {
-	                "success": "http://localhost/api_test/mongo_payload+phpmailer.php",
-	                "failed": "http://localhost/BaiPaJoin/index.php"
+	                "success": "https://6b1c-180-190-172-59.ngrok.io/Melnar%20Ancit/BaiPaJoin061321/thankyou.php?gcash=1",
+	                "failed": "https://6b1c-180-190-172-59.ngrok.io/Melnar%20Ancit/BaiPaJoin061321/thankyou.php?gcash=0"
 	            },
 	            "billing": {
 	                "name": "'.$joiner[1].' '.$joiner[2].'",
@@ -1233,6 +1234,7 @@ function process_paymongo_ewallet_source($ewallet_type, $final_price, $joiner) {
 
 	$ewallet_source = curl_exec($curl);
 	$err = curl_error($curl);
+	$ewallet_data = json_decode($ewallet_source, true);
 
 	if(!empty($err))
 		echo $err;
@@ -1243,6 +1245,10 @@ function process_paymongo_ewallet_source($ewallet_type, $final_price, $joiner) {
 		}
 		$log_file_data = 'logs\\ewallet_source\\log_' . date('d-M-Y') . '.log';
     	file_put_contents($log_file_data, date('h:i:sa').' => '. $ewallet_source . "\n" . "\n", FILE_APPEND);
+
+			$redirect = "Location: " . $ewallet_data['data']['attributes']['redirect']['checkout_url']."";
+
+	    	header($redirect);
 	} //This code will a log.txt file to get the response of the cURL command
 
 	curl_close($curl);
@@ -1277,6 +1283,7 @@ function process_paymongo_ewallet_payment($amount, $source_id) {
 
     $response = curl_exec($curl);
     $err = curl_error($curl);
+		$ewallet_payment = json_decode($response, true);
 
     if(!empty($response)) {
       if(!file_exists('logs\ewallet_payment')) {
@@ -1284,7 +1291,14 @@ function process_paymongo_ewallet_payment($amount, $source_id) {
       }
       $log_file_data = 'logs\\ewallet_payment\\log_' . date('d-M-Y') . '.log';
       file_put_contents($log_file_data, date('h:i:sa').' => '. $response . "\n" . "\n", FILE_APPEND);
-    } //This code will a log.txt file to get the response of the cURL command
+			//
+			$payment_id = $ewallet_payment['data']['id'];
+			$ewallet_type = $ewallet_payment['data']['attributes']['source']['type'];
+			//
+			file_put_contents("test.log", date('h:i:sa').' => '. $payment_id . "\n" .$ewallet_type. "\n ".$_SESSION['book_id']."", FILE_APPEND);
+			//
+			booking_paid_updates($ewallet_type, $_SESSION['book_id'], $payment_id);
+		} //This code will a log.txt file to get the response of the cURL command
 
     curl_close($curl);
 

@@ -62,7 +62,7 @@
 		main h3{font:600 30px/100% Montserrat,sans-serif;color:#ff4444;margin-bottom:10px;text-align:center;}
 		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
 		main button:first-of-type{right:67px;}
-		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:142px;right:15px;z-index:5;font-size:20px;}
+		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50%;color:#fff;position:absolute;top:126px;right:15px;z-index:5;font-size:22px;}
 		main button:hover{background:#8c0047;}
 
 		.card-link{text-decoration:none !important;}
@@ -133,31 +133,31 @@
 				<div class="filters">
 					<ul class="places">
 						<li><h3>Places</h3></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" value="Bantayan Island" <?php checkPlaces("Bantayan Island"); ?>> <label for="">Bantayan Island</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" value="Malapascua Island" <?php checkPlaces("Malapascua Island"); ?>> <label for="">Malapascua Island</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" value="Camotes Island" <?php checkPlaces("Camotes Island"); ?>> <label for="">Camotes Island</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" value="Moalboal" <?php checkPlaces("Moalboal"); ?>> <label for="">Moalboal</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" value="Badian" <?php checkPlaces("Badian"); ?>> <label for="">Badian</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" value="Oslob" <?php checkPlaces("Oslob"); ?>> <label for="">Oslob</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" value="Alcoy" <?php checkPlaces("Alcoy"); ?>> <label for="">Alcoy</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" value="Aloguinsan" <?php checkPlaces("Aloguinsan"); ?>> <label for="">Aloginsan</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" value="Santander" <?php checkPlaces("Santander"); ?>> <label for="">Santander</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" value="Alegria" <?php checkPlaces("Alegria"); ?>> <label for="">Alegria</label></li>
-						<li><input class="checkbox1" type="checkbox" name="places[]" value="Dalaguete" <?php checkPlaces("Dalaguete"); ?>> <label for="">Dalaguete</label></li>
+
+						<?php
+							// DISPLAY PLACES
+							$places = array("Bantayan Island", "Malapascua Island", "Camotes Island", "Moalboal", "Badian", "Oslob", "Alcoy", "Aloguinsan", "Santander", "Alegria", "Dalaguete");
+
+							for($i=0; $i<count($places); $i++){
+								echo "
+								<li><input class='checkbox-places' type='checkbox' name='places[]' value='".$places[$i]."' ".checkPlaces($places[$i])."><label>".$places[$i]."</label></li>
+								";
+							}
+						?>
 					</ul>
 					<ul class="activites">
 						<li><h3>Activities</h3></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Packaged" <?php checkActivities("Packaged") ?>> <label for="">Packaged</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Swimming" <?php checkActivities("Swimming") ?>> <label for="">Swimming</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Camping" <?php checkActivities("Camping") ?>> <label for="">Camping</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Island Hopping" <?php checkActivities("Island Hopping") ?>> <label for="">Island Hopping</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Mountain Hiking" <?php checkActivities("Mountain Hiking") ?>> <label for="">Mountain Hiking</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Snorkeling" <?php checkActivities("Snorkeling") ?>> <label for="">Snorkeling</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Canyoneering" <?php checkActivities("Canyoneering") ?>> <label for="">Canyoneering</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Biking" <?php checkActivities("Biking") ?>> <label for="">Biking</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Diving" <?php checkActivities("Diving") ?>> <label for="">Diving</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Jetski" <?php checkActivities("Jetski") ?>> <label for="">Jetski</label></li>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" value="Banana Boat" <?php checkActivities("Banana Boat") ?>> <label for="">Banana Boat</label></li>
+
+						<?php
+							// DISPLAY ACTIVITIES
+							$activities = array("Packaged", "Swimming", "Camping", "Island Hopping", "Mountain Hiking", "Snorkeling", "Canyoneering", "Biking", "Diving", "Jetski", "Banana Boat");
+
+							for($i=0; $i<count($activities); $i++){
+								echo "
+								<li><input class='checkbox-activities' type='checkbox' name='activities[]' value='".$activities[$i]."' ".checkActivities($activities[$i])."><label>".$activities[$i]."</label></li>
+								";
+							}
+						?>
 					</ul>
 					<ul class="prices">
 						<li><h3>Prices</h3></li>
@@ -181,7 +181,7 @@
 
 					<?php
 
-			        //Pagination code  starts here - Kirk Albano
+			      //Pagination code  starts here - Kirk Albano
 
 						if(isset($_POST['btnSearch']))
 						{

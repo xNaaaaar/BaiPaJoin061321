@@ -21,7 +21,9 @@
 						echo "<a href='adventures_posted.php' class='wow fadeInLeft' data-wow-duration='1s' data-wow-delay='.6s'>Search Now &#187;</a>";
 					else
 						echo "<a href='islands.php' class='wow fadeInLeft' data-wow-duration='1s' data-wow-delay='.6s'>Search Now &#187;</a>";
+						echo "<a href='#' class='wow fadeInLeft' data-wow-duration='1.5s' data-wow-delay='1s'>Book Me &#187;</a>";
 				?>
+
 			</div>
 
 		</div>

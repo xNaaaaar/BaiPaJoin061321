@@ -1,10 +1,7 @@
 <?php
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
-
-	if(isset($_POST['btnCont2']) && isset($_GET['book_id'])){
-		booking("waiting for payment", $_GET['book_id']);
-	}
+	ob_start();
 ?>
 
 <!-- Head -->
@@ -126,6 +123,7 @@
 					//
 					$verified = false;
 					$discount = 0;
+					//
 			?>
 			<main>
 				<ul class="sub-breadcrumbs">
@@ -133,6 +131,7 @@
 					<li class="ongoing success"><i class="far fa-check-circle"></i> Fill in Guest Information <span>&#187;</span></li>
 					<li class="ongoing"><i class="far fa-check-circle"></i> Review & Payment</li>
 				</ul>
+				<?php echo $_SESSION['book_id']; ?>
 				<h2>Payment</h2>
 				<!-- BOOKING DETAILS SECTION -->
 				<div class="booking_details">
@@ -203,12 +202,11 @@
 					<div class="payment_method">
 						<h2>Gcash</h2>
 						<label>Gcash name <span>*</span> </label>
-						<input type="text" name="gcash_name" placeholder="Your name (as it appears on your card)" required>
+						<input type="text" name="gcash_name" placeholder="Account name" required>
 						<label>Gcash number <span>*</span> </label>
-						<input type="text" name="gcash_num" placeholder="16 digit card number" maxlength="16" minlength="16" required>
+						<input type="text" name="gcash_num" placeholder="11 digit number" maxlength="11" minlength="11" required>
 						<label>Email address <span>*</span> </label>
-						<!-- INPUT TYPE MONTH FORMAT: 2025-12 -->
-						<input type="month" name="card_expiry" min="<?php echo date("Y-m"); ?>" required>
+						<input type="email" name="emEmail" placeholder="sample@gmail.com" required>
 					</div>
 
 					<div class="price_details">
@@ -249,7 +247,7 @@
 						if(isset($_POST['btnGCashEWallet'])) {
 							/*$payment_desc = "This payment is for Booking ID ".$booked['book_id']." under Mr/Ms. " . $_POST['card_name'];*/
 							$final_price = number_format($final_price, 2, '', '');
-							process_paymongo_ewallet_source('gcash', $final_price, $joiner);
+							process_paymongo_ewallet_source('gcash', $final_price, $joiner, $_GET['book_id']);
 						}
 					?>
 
@@ -270,5 +268,5 @@
 <!-- End Main -->
 
 <!--Footer -->
-<?php include("includes/footer.php"); ?>
+<?php include("includes/footer.php"); ob_end_flush();?>
 <!-- End Footer -->

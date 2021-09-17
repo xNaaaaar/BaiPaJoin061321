@@ -75,8 +75,8 @@
 								}
 							?>
 							<ul>
-								<li><a href="#">Back to Home</a> | </li>
-								<li><a href="#">View Payment Reports</a> | </li>
+								<li><a href="index.php">Back to Home</a> | </li>
+								<li><a href="#">View Payment Reports</a></li>
 							</ul>
 						</section>
 					</div>
