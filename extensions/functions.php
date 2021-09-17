@@ -1513,6 +1513,28 @@ function booking_paid_updates($method, $book_id, $intent_id){
 	echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru ".$method."!</p>";
 }
 
+##### CODE START HERE @WEATHER BACKGROUND #####
+function weather_bg($weather){
+	$bg_color = "";
+
+	if($weather == "Clear")
+		$bg_color = "background:linear-gradient(to right, rgba(246,161,32,1), rgba(249,218,46,1));";
+	elseif($weather == "Clouds")
+		$bg_color = "background:linear-gradient(to right, rgba(64,178,205,1), rgba(205,223,87,1));";
+	elseif($weather == "Snow")
+		$bg_color = "background:linear-gradient(to right, rgba(64,178,205,1), rgba(205,223,87,1));";
+	elseif($weather == "Rain")
+		$bg_color = "background:linear-gradient(to right, rgba(41,62,157,1), rgba(10,148,219,1));";
+	elseif($weather == "Drizzle")
+		$bg_color = "background:linear-gradient(to right, rgba(41,62,157,1), rgba(10,148,219,1));";
+	elseif($weather == "Thunderstorm")
+		$bg_color = "background:linear-gradient(to right, rgba(36,60,74,1), rgba(38,153,200,1));";
+	else
+		$bg_color = "background:linear-gradient(to right, rgba(36,60,74,1), rgba(38,153,200,1));";
+
+	return $bg_color;
+}
+
 
 
 ##### END OF CODES #####

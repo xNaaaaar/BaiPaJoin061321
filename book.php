@@ -25,7 +25,7 @@
 		.place_info{margin:0;}
 
 		.main_info section, .weather{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;}
-		.main_info h1{font:600 50px/100% Montserrat,sans-serif;text-align:left;margin:0 0 20px;}
+		.main_info h1{font:600 45px/100% Montserrat,sans-serif;text-align:left;margin:0 0 20px;}
 		.main_info h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
 		.main_info ul{text-align:left;font-size:20px;}
 		.main_info form{margin-bottom:40px;position:relative;}
@@ -33,8 +33,18 @@
 		.main_info form input, .main_info form select{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
 		.main_info form button, .main_info form a{margin:15px 5px 0 0;}
 
-		.side_info{width:35%;}
-		.weather{margin:75px auto 25px;}
+		.side_info{width:35%;position:absolute;right:0;}
+
+		.weather{margin:70px auto 25px;border:none;min-height:100px;padding:20px;}
+		.weather ul{display:flex;justify-content:space-between;text-align:left;color:#fff;font:600 30px/100% Montserrat,sans-serif;}
+		.weather ul li{width:33%;position:relative;}
+		.weather ul li:first-child:before{content:"";height:80%;width:2px;background:#fff;position:absolute;top:50%;right:11px;transform:translateY(-50%);}
+		.weather ul li:first-child{padding:13px 0 0;}
+		.weather ul li:first-child span{font-size:70px;margin-top:30px;}
+		.weather ul li:nth-child(2){width:36%;font-size:18px;padding:35px 0 0 0px;}
+		.weather ul li:last-child{width:28%;}
+		.weather ul li span{display:block;}
+		.weather ul li img{width:100%;}
 
 		.book_info{text-align:left;height:auto;min-height:0;margin:0;width:100%;}
 		.book_info figure img{width:100%;height:200px;border-radius:10px;}
@@ -79,14 +89,21 @@
 					if(count($user)>0 && count($adv)>0){
 						$user = $user[0];
 						$adv = $adv[0];
+
 						# PRICE FOR EACH GUEST
 						$price = $adv['adv_totalcostprice'] / $adv['adv_maxguests'];
 						$_SESSION['price'] = number_format((float)$price, 2, '.', '');
+
 						# CHOOSING RANDOM IMAGE
 						$images = $adv['adv_images'];
 						$image = explode(",", $images);
 						$totalImagesNum = count($image) - 1;
 						$displayImage = rand(1,$totalImagesNum);
+
+						# CURRENT WEATHER OF A CERTAIN LOCATION
+						$result = get_current_weather_location($adv[6]);
+						$weather = json_decode($result, true);
+						$style = weather_bg($weather['weather'][0]['main']);
 			?>
 			<main>
 				<ul class="sub-breadcrumbs">
@@ -95,6 +112,44 @@
 					<li><i class="far fa-check-circle"></i> Review & Payment</li>
 				</ul>
 				<div class="place_info">
+					<div class="side_info">
+						<!-- WEATHER INFORMATION -->
+						<div class="weather" style="<?php echo $style; ?>">
+							<?php
+								echo "
+								<ul>
+									<li>".$weather['weather'][0]['main']." <span>".ceil($weather['main']['temp'])."°</span></li>
+									<li>".date("F j")." <span><i class='fas fa-map-marker-alt'></i> ".$adv[6]."</span></li>
+									<li><img src='http://openweathermap.org/img/wn/{$weather['weather'][0]['icon']}@2x.png'></li>
+								</ul>
+								";
+							?>
+
+						</div>
+						<!-- BOOKED INFORMATION -->
+						<div class="book_info">
+							<figure>
+								<?php
+									# DISPLAY RANDOM IMAGE
+									echo "<img src='images/organizers/".$adv['orga_id']."/$image[$displayImage]' alt=''>";
+								?>
+							</figure>
+							<section>
+								<h2><?php echo $adv['adv_name']." (".$adv['adv_type'].")"; ?> <span><?php echo $adv['adv_kind']; ?></span> </h2>
+								<ul class="title_info1">
+									<li>5 <i class="fas fa-star"></i> <q>(25 reviews)</q></li>
+									<li><i class="fas fa-map-marker-alt"></i> <address><?php echo $adv['adv_address']; ?></address></li>
+								</ul>
+								<p>₱<?php echo $_SESSION['price']; ?> / guest</p>
+							</section>
+							<section>
+								<h2>Overview</h2>
+								<!-- ADVENTURE DESCRIPTION LIMITED TO 30 WORDS -->
+								<p><?php echo limit_text($adv['adv_details'], 30) ?></p>
+							</section>
+						</div>
+					</div>
+
 					<div class="main_info">
 						<h1>Your Information</h1>
 						<section>
@@ -133,41 +188,7 @@
 						</form>
 					</div>
 
-					<div class="side_info">
-						<!-- WEATHER INFORMATION -->
-						<div class="weather" style="background:gray;">
-							<?php
-								//This method will return the current weather at a certain location
-								$result = get_current_weather_location($adv[6]);
-								$weather = json_decode($result, true);
-								echo $weather['weather'][0]['main'];
-								echo $weather['weather'][0]['icon'];
-								echo $weather['main']['temp'];
-							?>
-						</div>
-						<!-- BOOKED INFORMATION -->
-						<div class="book_info">
-							<figure>
-								<?php
-									# DISPLAY RANDOM IMAGE
-									echo "<img src='images/organizers/".$adv['orga_id']."/$image[$displayImage]' alt=''>";
-								?>
-							</figure>
-							<section>
-								<h2><?php echo $adv['adv_name']." (".$adv['adv_type'].")"; ?> <span><?php echo $adv['adv_kind']; ?></span> </h2>
-								<ul class="title_info1">
-									<li>5 <i class="fas fa-star"></i> <q>(25 reviews)</q></li>
-									<li><i class="fas fa-map-marker-alt"></i> <address><?php echo $adv['adv_address']; ?></address></li>
-								</ul>
-								<p>₱<?php echo $_SESSION['price']; ?> / guest</p>
-							</section>
-							<section>
-								<h2>Overview</h2>
-								<!-- ADVENTURE DESCRIPTION LIMITED TO 30 WORDS -->
-								<p><?php echo limit_text($adv['adv_details'], 30) ?></p>
-							</section>
-						</div>
-					</div>
+
 				</div>
 			</main>
 			<?php
