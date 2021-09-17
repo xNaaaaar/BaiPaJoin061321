@@ -140,7 +140,9 @@
 								//This method will return the current weather at a certain location
 								$result = get_current_weather_location($adv[6]);
 								$weather = json_decode($result, true);
-								$echo $weather['weather'][0]['main'];
+								echo $weather['weather'][0]['main'];
+								echo $weather['weather'][0]['icon'];
+								echo $weather['main']['temp'];
 							?>
 						</div>
 						<!-- BOOKED INFORMATION -->
