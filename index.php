@@ -1,6 +1,7 @@
 <?php
 	
 	include("google_login/config.php");
+	include("facebook_login/config.php");
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
 
@@ -10,25 +11,39 @@
 
 	if(isset($_GET['code'])) {
 
-		$token = $google_client -> fetchAccessTokenWithAuthCode($_GET['code']);
+		$google_token = $google_client -> fetchAccessTokenWithAuthCode($_GET['code']);			
 		
-		if(!isset($token['error'])) {
+		if(!isset($google_token['error'])) {
 			
-			$google_client -> setAccessToken($token['access_token']);					
+			$google_client -> setAccessToken($google_token['access_token']);					
 			$google_service = new Google_Service_Oauth2($google_client);
 			$data = $google_service -> userinfo -> get();
 
-			$_SESSION['access_token'] = $token['access_token'];	
-			$_SESSION['google_data'] = $data;
+			$_SESSION['access_token'] = $google_token['access_token'];	
 
 			if(!empty($data)) {
 			    if(!file_exists('logs\google_login')) 
 			      mkdir('logs\google_login', 0777, true);				   
 			    $log_file_data = 'logs\\google_login\\log_' . date('d-M-Y') . '.log';
-			    file_put_contents($log_file_data, date('h:i:sa').' => ' . $data['name'] . ' ' . $data['email'] . ' ' . $data['given_name'] .' ' . $data['family_name'] . ' ' . $data['picture'] . ' ' . $data['locale'] . "\n" . "\n", FILE_APPEND);
+			    file_put_contents($log_file_data, date('h:i:sa').' => '. $data['name'] . ' ' . $data['email'] . ' ' . $data['given_name'] .' ' . $data['family_name'] . ' ' . $data['picture'] . ' ' . $data['locale'] . "\n" . "\n", FILE_APPEND);
 			}
 
-			loginCreateAccountSocial();
+			loginCreateAccountSocial($data['given_name'], $data['family_name'], $data['email']);
+		}
+		elseif($google_token['error']) {
+
+			$facebook_token = $_SESSION['facebook_helper']->getAccessToken();
+			$facebook->setDefaultAccessToken($facebook_token);
+			$graph_response = $facebook->get("/me?fields=first_name,last_name,email", $facebook_token);
+			$user_data = $graph_response->getGraphUser();
+			if(!empty($user_data)) {
+			    if(!file_exists('logs\facebook_login')) 
+			      mkdir('logs\facebook_login', 0777, true);				   
+			    $log_file_data = 'logs\\facebook_login\\log_' . date('d-M-Y') . '.log';
+			    file_put_contents($log_file_data, date('h:i:sa').' => '. $user_data['first_name'] . ' ' . $user_data['last_name'] . ' ' . $user_data['email'] . "\n" . "\n", FILE_APPEND);
+			}
+
+			loginCreateAccountSocial($user_data['first_name'], $user_data['last_name'], $user_data['email']);
 		}
 	}
 ?>

@@ -91,7 +91,7 @@ function loginAccount(){
 }
 
 ##### CODE START HERE @LOGIN ACCOUNT USING GMAIL FOR JOINER #####
-function loginCreateAccountSocial(){
+function loginCreateAccountSocial($first_name, $last_name, $email){
 
 	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     	$charactersLength = strlen($characters);
@@ -102,13 +102,13 @@ function loginCreateAccountSocial(){
 	$pwPassword = md5($randomString);
 
 	$email_subject = 'WELCOME TO BAIPAJOIN';
-	$email_message = 'Dear '.$_SESSION['google_data']['name'].', Thank you for signing up BaiPaJoin! Your USERNAME is "'.$_SESSION['google_data']['email'].'" and your TEMPORARY PASSWORD is "'.$randomString.'" , you any access your account anytime but you\'re advised to change the password immediately. Thank you! THIS IS A TEST. DO NOT REPLY!';
+	$email_message = 'Dear '.$first_name.', Thank you for signing up BaiPaJoin! Your USERNAME is "'.$email.'" and your TEMPORARY PASSWORD is "'.$randomString.'" , you any access your account anytime but you\'re advised to change the password immediately. Thank you! THIS IS A TEST. DO NOT REPLY!';
 
-	send_email($_SESSION['google_data']['email'] , $email_subject, $email_message);
+	send_email($email, $email_subject, $email_message);
 
-	DB::query("INSERT INTO joiner(joiner_fname, joiner_lname, joiner_email, joiner_password) VALUES(?,?,?,?)", array($_SESSION['google_data']['given_name'], $_SESSION['google_data']['family_name'], $_SESSION['google_data']['email'], $pwPassword), "CREATE");
+	DB::query("INSERT INTO joiner(joiner_fname, joiner_lname, joiner_email, joiner_password) VALUES(?,?,?,?)", array($first_name, $last_name, $email, $pwPassword), "CREATE");
 
-	$joinerAccount = DB::query('SELECT * FROM joiner WHERE joiner_email=? AND joiner_password=?', array($_SESSION['google_data']['email'], $pwPassword), "READ");
+	$joinerAccount = DB::query('SELECT * FROM joiner WHERE joiner_email=? AND joiner_password=?', array($email, $pwPassword), "READ");
 
 	if(count($joinerAccount)>0){
 		$joinerAccount = $joinerAccount[0];
