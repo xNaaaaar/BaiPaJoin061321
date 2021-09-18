@@ -925,8 +925,7 @@ function booking($status, $book_id=null) {
 		$currentDateTime = date("Y-m-d H:i:s");
 		// INSERT BOOKED ADVENTURE
 		DB::query("INSERT INTO booking(book_guests, book_datetime, book_totalcosts, book_status, joiner_id, adv_id) VALUES(?,?,?,?,?,?)", array($_SESSION['cboGuests'], $currentDateTime, $_SESSION['numTotal'], $status, $_SESSION['joiner'], $_GET['id']), "CREATE");
-		// GO TO
-		// header("Location: book-guest.php?id={$_GET['id']}");
+
 	// IF STATUS IS WAITING FOR PAYMENT
 	} else if($status === "waiting for payment") {
 		// BOOK AS A GUEST: 1 JOINER 1:M GUESTS
@@ -1297,7 +1296,7 @@ function process_paymongo_ewallet_payment($amount, $source_id) {
 			//
 			file_put_contents("test.log", date('h:i:sa').' => '. $payment_id . "\n" .$ewallet_type. "\n ".$_SESSION['book_id']."", FILE_APPEND);
 			//
-			booking_paid_updates($ewallet_type, $_SESSION['book_id'], $payment_id);
+			booking_paid_updates($ewallet_type, $_SESSION['book_id'], $payment_id, $amount);
 		} //This code will a log.txt file to get the response of the cURL command
 
     curl_close($curl);
@@ -1477,29 +1476,32 @@ function get_current_weather_location($location) {
 }
 
 ##### CODE START HERE @NECESSARY UPDATES WHEN BOOKING IS PAID #####
-function booking_paid_updates($method, $book_id, $intent_id){
+function booking_paid_updates($method, $book_id, $intent_id, $total=null){
+	# UPDATE VOUCHER USERS
+	if(isset($_SESSION['used_voucher_code'])){
+		$voucher = DB::query("SELECT * FROM voucher WHERE vouch_code=?", array($_SESSION['used_voucher_code']), "READ");
+		$voucher = $voucher[0];
+		DB::query("UPDATE voucher SET vouch_user=? WHERE vouch_code=?", array($voucher['vouch_user'] + 1, $voucher['vouch_code']), "UPDATE");
+	}
+
+	# UPDATE BOOKING STATUS
+	$booked = DB::query("SELECT * FROM booking WHERE book_id=?", array($book_id), "READ");
+	$booked = $booked[0];
+	DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array("paid", $booked['book_id']), "UPDATE");
+
+	# UPDATE ADVENTURE STATUS
+	$adv_booked = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($booked['adv_id']), "READ");
+	$adv_booked = $adv_booked[0];
+	if($adv_booked['adv_maxguests'] <= $adv_booked['adv_currentGuest'])
+		DB::query("UPDATE adventure SET adv_status=? WHERE adv_id=?", array("full", $adv_booked['adv_id']), "UPDATE");
+
+	# INSERT DATA TO PAYMENT TABLE
+	DB::query("INSERT INTO payment(payment_id, payment_method, payment_total, payment_datetime, book_id) VALUES(?,?,?,?,?)", array($intent_id, $method, $total, date("Y-m-d H:i:s"), $book_id), "CREATE");
+
 	# IF PAYMENT METHOD IS THRU CARD
 	if($method == "card"){
-		# UPDATE VOUCHER USERS
-		if(isset($_SESSION['used_voucher_code'])){
-			$voucher = DB::query("SELECT * FROM voucher WHERE vouch_code=?", array($_SESSION['used_voucher_code']), "READ");
-			$voucher = $voucher[0];
-			DB::query("UPDATE voucher SET vouch_user=? WHERE vouch_code=?", array($voucher['vouch_user'] + 1, $voucher['vouch_code']), "UPDATE");
-		}
-
-		# UPDATE BOOKING STATUS
-		$booked = DB::query("SELECT * FROM booking WHERE book_id=?", array($book_id), "READ");
-		$booked = $booked[0];
-		DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array("paid", $booked['book_id']), "UPDATE");
-
-		# UPDATE ADVENTURE STATUS
-		$adv_booked = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($booked['adv_id']), "READ");
-		$adv_booked = $adv_booked[0];
-		if($adv_booked['adv_maxguests'] == $adv_booked['adv_currentGuest'])
-			DB::query("UPDATE adventure SET adv_status=? WHERE adv_id=?", array("full", $adv_booked['adv_id']), "UPDATE");
-
-		# INSERT DATA TO PAYMENT TABLE
-		DB::query("INSERT INTO payment(payment_id, payment_method, payment_datetime, book_id) VALUES(?,?,?,?)", array($intent_id, $method, date("Y-m-d H:i:s"), $book_id), "CREATE");
+		# SUCCESSFUL MESSAGE
+		echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru ".$method."!</p>";
 
 	# IF PAYMENT METHOD IS THRU GCASH
 	} elseif($method == "gcash") {
@@ -1509,8 +1511,7 @@ function booking_paid_updates($method, $book_id, $intent_id){
 
 	}
 
-	# SUCCESSFUL MESSAGE
-	echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru ".$method."!</p>";
+
 }
 
 ##### CODE START HERE @WEATHER BACKGROUND #####

@@ -175,7 +175,7 @@
 								<select name="cboGuests" id="cboGuests" onclick="displayTotalPrice(this.value)" required>
 									<?php
 										# SHOW ALL MAXIMUM NUMBER OF GUEST IN OPTIONS
-										for($i=1; $i<=$adv['adv_maxguests']; $i++){
+										for($i=1; $i<=$adv['adv_maxguests']-$adv['adv_currentGuest']; $i++){
 											echo "<option value='".$i."'>".$i."</option>";
 										}
 									?>

@@ -200,13 +200,7 @@
 							<a href="delete.php?table=booking&id=<?php echo $pendingBooking['book_id']; ?>&adv=<?php echo $_GET['id']; ?>" class="edit">Back</a>
 						</div>
 						</form>
-						<!-- WHEN BUTTON IS CLICKED -->
-						<?php
-
-						?>
 					</div>
-
-
 				</div>
 			</main>
 			<?php

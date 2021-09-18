@@ -263,7 +263,7 @@
 								$result = process_paymongo_card_payment($_POST['card_name'], $_POST['card_num'], str_replace("-","",$_POST['card_expiry']), $_POST['card_cvv'], $final_price, $payment_desc, $joiner);
 
 								if($result[1] == 'succeeded')
-									header("Location: thankyou.php?card&book_id=".$booked['book_id']."&intentid=".$result[0]."");
+									header("Location: thankyou.php?card&book_id=".$booked['book_id']."&intentid=".$result[0]."&total=".$final_price);
 								else
 									echo "<script>alert('".$result[1]."')</script>";
 							}
