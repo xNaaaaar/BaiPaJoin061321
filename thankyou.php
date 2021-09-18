@@ -57,9 +57,9 @@
 						<h1>Spontaneous. Thank you!</h1>
 						<section>
 							<?php
-								if(isset($_GET['card']) && isset($_GET['book_id']) && isset($_GET['intentid'])) {
+								if(isset($_GET['card']) && isset($_GET['book_id']) && isset($_GET['intentid']) && isset($_GET['total'])) {
 									# NECESSARY UPDATES
-									booking_paid_updates("card", $_GET['book_id'], $_GET['intentid']);
+									booking_paid_updates("card", $_GET['book_id'], $_GET['intentid'], $_GET['total']/100);
 
 								} else if(isset($_GET['gcash']) && $_GET['gcash'] == 1) {
 									echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru gcash!</p>";

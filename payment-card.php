@@ -179,7 +179,7 @@
 								# SUCCESS
 								} else {
 									$discount = $booked['book_totalcosts'] * ($voucher_exist['vouch_discount']/100);
-									$final_price -= $discount;
+									$_SESSION['discounted'] = $final_price - $discount;
 
 									# KEEP TRACK OF USED VOUCHER
 									$_SESSION['used_voucher_code'] = $voucher_exist['vouch_code'];
@@ -239,7 +239,14 @@
 								</tr>
 								<tr>
 									<td>Total Price</td>
-									<td>₱ <?php echo number_format($final_price, 2, '.', ''); ?></td>
+									<td>₱
+										<?php
+										// IF NO VOUCHER USED
+										if(!isset($_SESSION['discounted'])) $_SESSION['discounted'] = $final_price;
+
+										echo number_format($_SESSION['discounted'], 2, '.', '');
+										?>
+									</td>
 								</tr>
 							</table>
 						</section>
@@ -258,14 +265,19 @@
 
 							// IF NO ERROR
 							} else {
+								// DISCOUNTED PRICE
+								$_SESSION['discounted'] = number_format($_SESSION['discounted'], 2, '', '');
+
+								// PAYMENT FUNCTION
 								$payment_desc = "This payment is for Booking ID ".$booked['book_id']." under Mr/Ms. " . $joiner[1] . " " . $joiner[2];
-								$final_price = number_format($final_price, 2, '', '');
-								$result = process_paymongo_card_payment($_POST['card_name'], $_POST['card_num'], str_replace("-","",$_POST['card_expiry']), $_POST['card_cvv'], $final_price, $payment_desc, $joiner);
+								$result = process_paymongo_card_payment($_POST['card_name'], $_POST['card_num'], str_replace("-","",$_POST['card_expiry']), $_POST['card_cvv'], $_SESSION['discounted'], $payment_desc, $joiner);
 
 								if($result[1] == 'succeeded')
-									header("Location: thankyou.php?card&book_id=".$booked['book_id']."&intentid=".$result[0]."&total=".$final_price);
+									header("Location: thankyou.php?card&book_id=".$booked['book_id']."&intentid=".$result[0]."&total=".$_SESSION['discounted']);
 								else
 									echo "<script>alert('".$result[1]."')</script>";
+
+								unset($_SESSION['discounted']);
 							}
 						}
 					?>

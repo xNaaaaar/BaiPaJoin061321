@@ -960,11 +960,6 @@ function booking($status, $book_id=null) {
 		} else {
 			// UPDATE JOINER BOOKING STATUS
 			DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array($status, $book_id), "UPDATE");
-
-			// UPDATE ADVENTURE TABLE'S CURRENT GUEST
-			$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($_GET['id']), "READ");
-			$adv = $adv[0];
-			DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($adv['adv_currentGuest'] + $_SESSION['cboGuests'], $adv['adv_id']), "UPDATE");
 		}
 
 	// IF STATUS (TBD)
@@ -980,11 +975,6 @@ function booking_with_guest($name, $phone, $email, $status, $book_id) {
 
 	// UPDATE JOINER BOOKING STATUS
 	DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array($status, $book_id), "UPDATE");
-
-	// UPDATE ADVENTURE TABLE'S CURRENT GUEST
-	$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($_GET['id']), "READ");
-	$adv = $adv[0];
-	DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($adv['adv_currentGuest'] + $_SESSION['cboGuests'], $adv['adv_id']), "UPDATE");
 }
 
 ##### CODE START HERE @PAYMONGO API #####
@@ -1487,11 +1477,12 @@ function booking_paid_updates($method, $book_id, $intent_id, $total=null){
 	# UPDATE BOOKING STATUS
 	$booked = DB::query("SELECT * FROM booking WHERE book_id=?", array($book_id), "READ");
 	$booked = $booked[0];
-	DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array("paid", $booked['book_id']), "UPDATE");
+	DB::query("UPDATE booking SET book_status=?, book_totalcosts=? WHERE book_id=?", array("paid", $total, $booked['book_id']), "UPDATE");
 
 	# UPDATE ADVENTURE STATUS
 	$adv_booked = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($booked['adv_id']), "READ");
 	$adv_booked = $adv_booked[0];
+	DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($adv_booked['adv_currentGuest'] + $booked['book_guests'], $adv_booked['adv_id']), "UPDATE");
 	if($adv_booked['adv_maxguests'] <= $adv_booked['adv_currentGuest'])
 		DB::query("UPDATE adventure SET adv_status=? WHERE adv_id=?", array("full", $adv_booked['adv_id']), "UPDATE");
 
