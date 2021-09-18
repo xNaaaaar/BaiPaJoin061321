@@ -154,7 +154,7 @@
 
 							for($i=0; $i<count($activities); $i++){
 								echo "
-								<li><input class='checkbox-activities' type='checkbox' name='activities[]' value='".$activities[$i]."' ".checkActivities($activities[$i])."><label>".$activities[$i]."</label></li>
+								<li><input class='checkbox-activities' type='checkbox' name='activities[]' value='".$activities[$i]."' ".checkActivities($activities[$i])."><label for=''>".$activities[$i]."</label></li>
 								";
 							}
 						?>

@@ -7,19 +7,17 @@
 <?php include("includes/head.php"); ?>
 <!-- End of Head -->
 	<style>
-		.main_logo{}
-
 		.user_area{background:#88dfd8 !important;}
 		.user_area main{width:100%;height:100vh;background:none;color:#2f2f2f;border-radius:0;padding:0;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
 		.user_area main .main_logo{left:-4px;transform:none;}
 		.user_area main form{width:95%;display:block;position:absolute;top:55%;left:50%;transform:translate(-50%,-50%);height:60vh;text-align:left;}
 		.user_area main form h2{font:600 45px/100% Montserrat,sans-serif;color:#fff;}
 		.user_area main form h2 span{display:block;color:#fff;font-size:25px;}
-		.user_area main form ul{margin:25px 0 0;}
-		.user_area main form ul li{line-height:50px;}
-	  .user_area main form input{display:inline-block;width:25px;height:25px;margin:0;border:none;padding:0;border-radius:5px;}
-	  .user_area main form label{display:inline-block;font:normal 30px/20px Montserrat,sans-serif;color:#fff;}
-	  .user_area main form button{width:170px;height:50px;margin:0;background:none;border-radius:0;position:absolute;bottom:0;right:0;font-size:30px;}
+		.user_area main form ul{margin:25px 10px 0;}
+		.user_area main form ul li{line-height:40px;}
+	  .user_area main form input{display:inline-block;width:20px;height:20px;margin:0 10px 0 0;border:none;padding:0;border-radius:5px;}
+	  .user_area main form label{display:inline-block;font:normal 25px/20px Montserrat,sans-serif;color:#fff;}
+	  .user_area main form button{width:170px;margin:0;background:none;border-radius:0;position:absolute;bottom:-60px;right:0;font-size:25px;}
 	  .user_area main form button:hover{background:none;text-decoration:underline;}
 	</style>
 </head>
