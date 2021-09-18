@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 17, 2021 at 03:27 AM
+-- Generation Time: Sep 18, 2021 at 03:20 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.3.28
 
@@ -74,7 +74,7 @@ CREATE TABLE `adventure` (
 --
 
 INSERT INTO `adventure` (`adv_id`, `adv_images`, `adv_name`, `adv_kind`, `adv_type`, `adv_address`, `adv_town`, `adv_totalcostprice`, `adv_date`, `adv_details`, `adv_postedDate`, `adv_maxguests`, `adv_currentGuest`, `adv_itineraryImg`, `adv_status`, `orga_id`) VALUES
-(4, ',610a6ddb4b7d77.05444535.jpg,610a6ddb4bbd00.93179917.jpg,610a6ddb4bf4d5.75726548.jpg,610a6ddb4c2a81.44878891.jpg', 'Adventure Sample Name 1', 'Island Hopping', 'Packaged', 'Bantayan Island', 'Bantayan', '9000.00', '2021-08-18', 'Sample Details For This Specific Adventure', '2021-08-04', 10, 0, '610a6ddb4accf4.33141146.jpg', 'not full', 1),
+(4, ',610a6ddb4b7d77.05444535.jpg,610a6ddb4bbd00.93179917.jpg,610a6ddb4bf4d5.75726548.jpg,610a6ddb4c2a81.44878891.jpg', 'Adventure Sample Name 1', 'Island Hopping', 'Packaged', 'Bantayan Island', 'Bantayan', '9000.00', '2021-08-18', 'Sample Details For This Specific Adventure', '2021-08-04', 10, 2, '610a6ddb4accf4.33141146.jpg', 'not full', 1),
 (5, ',610a6e35ba74c0.97995878.jpg,610a6e35baca15.67750987.jpg', 'Adventure Sample Name 2', 'Canyoneering', 'Not Packaged', 'Bantayan Island', 'Bantayan', '1200.00', '2021-08-19', 'Sample Details For This Specific Adventure', '2021-08-04', 1, 0, '610a6e35ba32b1.85947545.jpg', 'not full', 1),
 (6, ',610a6e7bad99c2.28812658.jpg,610a6e7badd352.95263461.jpg', 'Adventure Sample Name 3', 'Snorkeling', 'Not Packaged', 'Malapascua Island', 'Daanbantayan', '888.00', '2021-08-27', 'Sample Details For This Specific Adventure', '2021-08-04', 1, 0, '610a6e7bad5d30.22130229.jpg', 'not full', 1),
 (7, ',61209ae1ad4045.81969567.jpg,61209ae1ad83b8.77585375.jpg,61209ae1af2f29.68859817.jpg', 'Adventure Sample Name 4', 'Biking', 'Packaged', 'Aloguinsan', 'Aloguinsan', '5000.00', '2021-08-30', 'This Is A Sample Details For Adventure Sample No. 4', '2021-08-21', 6, 0, '61209ae1acda87.00494230.jpg', 'not full', 3);
@@ -94,6 +94,15 @@ CREATE TABLE `booking` (
   `joiner_id` int(11) NOT NULL,
   `adv_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`book_id`, `book_guests`, `book_datetime`, `book_totalcosts`, `book_status`, `joiner_id`, `adv_id`) VALUES
+(202198, 1, '2021-09-17 15:22:50', '900.00', 'waiting for payment', 1, 4),
+(202199, 1, '2021-09-17 19:17:44', '900.00', 'paid', 1, 4),
+(202200, 1, '2021-09-17 20:50:12', '900.00', 'paid', 1, 4);
 
 -- --------------------------------------------------------
 
@@ -138,7 +147,7 @@ CREATE TABLE `joiner` (
   `joiner_id` int(11) NOT NULL,
   `joiner_fname` varchar(25) NOT NULL,
   `joiner_lname` varchar(25) NOT NULL,
-  `joiner_mi` char(1) NOT NULL,
+  `joiner_mi` char(1) DEFAULT NULL,
   `joiner_address` varchar(50) DEFAULT NULL,
   `joiner_phone` varchar(11) DEFAULT NULL,
   `joiner_email` varchar(50) NOT NULL,
@@ -151,7 +160,8 @@ CREATE TABLE `joiner` (
 
 INSERT INTO `joiner` (`joiner_id`, `joiner_fname`, `joiner_lname`, `joiner_mi`, `joiner_address`, `joiner_phone`, `joiner_email`, `joiner_password`) VALUES
 (1, 'Melnar', 'Ancit', 'B', 'Sitio Granada Quiot Pardo', '09458756665', 'melnar.a@gmail.com', 'e07ac1db65fbdd768477e5c79e3642d0'),
-(2, 'Aancit', 'Nar', 'H', '', '', 'narancit@gmail.com', 'd0c17cda0d533f36e2091ddd2aa50053');
+(3, 'Melnar', 'Ancit', NULL, NULL, NULL, 'narancit@gmail.com', '62218af4bcc6fc833feb5636a6f2255a'),
+(4, 'Melnar', 'Ancit', NULL, NULL, NULL, 'narancit@gmail.com', '430ac657aee37e11d428277e204fa691');
 
 -- --------------------------------------------------------
 
@@ -174,22 +184,6 @@ CREATE TABLE `legal_document` (
 INSERT INTO `legal_document` (`orga_id`, `docu_type`, `docu_description`, `docu_image`, `docu_dateadded`) VALUES
 (1, 'Docu Type2', 'sample document info 2', '610504665c7d40.98140871.jpg', '2021-07-31'),
 (1, 'Docu Type4', 'Sample Documents', '610e15d7755132.76321047.jpg', '2021-08-07');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `notification`
---
-
-CREATE TABLE `notification` (
-  `notif_id` int(11) NOT NULL,
-  `payment_id` int(11) NOT NULL,
-  `joiner_id` int(11) NOT NULL,
-  `orga_id` int(11) NOT NULL,
-  `notif_message` varchar(50) NOT NULL,
-  `notif_date` date NOT NULL,
-  `notif_status` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -229,9 +223,18 @@ INSERT INTO `organizer` (`orga_id`, `orga_company`, `orga_fname`, `orga_lname`, 
 CREATE TABLE `payment` (
   `payment_id` varchar(50) NOT NULL,
   `payment_method` varchar(10) NOT NULL,
+  `payment_total` decimal(7,2) NOT NULL,
   `payment_datetime` datetime NOT NULL,
   `book_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `payment`
+--
+
+INSERT INTO `payment` (`payment_id`, `payment_method`, `payment_total`, `payment_datetime`, `book_id`) VALUES
+('pi_Ai5JjMgp4rs65LuF3PpKNpqd', 'card', '0.00', '2021-09-17 20:01:01', 202199),
+('pi_EdmnNWTsADBBuqJ8a7SboQCJ', 'card', '94650.00', '2021-09-18 20:00:47', 202200);
 
 -- --------------------------------------------------------
 
@@ -343,7 +346,7 @@ CREATE TABLE `voucher` (
 
 INSERT INTO `voucher` (`vouch_code`, `vouch_discount`, `vouch_name`, `vouch_startdate`, `vouch_enddate`, `vouch_minspent`, `vouch_user`, `orga_id`, `adv_id`) VALUES
 ('6105117e8e5b22.86114507', 11, 'Updater Voucher 1', '2021-08-02', '2021-08-03', '700.00', 0, 1, 5),
-('610bba08e12692.05886862', 10, 'Voucher 2', '2021-08-24', '2021-12-15', '500.00', 0, 1, 4),
+('610bba08e12692.05886862', 10, 'Voucher 2', '2021-08-24', '2021-12-15', '500.00', 3, 1, 4),
 ('613f4cf83ef5e2.51282272', 8, 'Voucher 3', '2021-08-30', '2021-11-18', '800.00', 0, 1, 6);
 
 --
@@ -394,15 +397,6 @@ ALTER TABLE `joiner`
 -- Indexes for table `legal_document`
 --
 ALTER TABLE `legal_document`
-  ADD KEY `orga_id` (`orga_id`);
-
---
--- Indexes for table `notification`
---
-ALTER TABLE `notification`
-  ADD PRIMARY KEY (`notif_id`),
-  ADD KEY `payment_id` (`payment_id`),
-  ADD KEY `joiner_id` (`joiner_id`),
   ADD KEY `orga_id` (`orga_id`);
 
 --
@@ -476,19 +470,13 @@ ALTER TABLE `adventure`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `book_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=202198;
+  MODIFY `book_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=202234;
 
 --
 -- AUTO_INCREMENT for table `joiner`
 --
 ALTER TABLE `joiner`
-  MODIFY `joiner_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `notification`
---
-ALTER TABLE `notification`
-  MODIFY `notif_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `joiner_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `organizer`
@@ -549,14 +537,6 @@ ALTER TABLE `guest`
 --
 ALTER TABLE `legal_document`
   ADD CONSTRAINT `legal_document_ibfk_1` FOREIGN KEY (`orga_id`) REFERENCES `organizer` (`orga_id`);
-
---
--- Constraints for table `notification`
---
-ALTER TABLE `notification`
-  ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`payment_id`),
-  ADD CONSTRAINT `notification_ibfk_2` FOREIGN KEY (`joiner_id`) REFERENCES `joiner` (`joiner_id`),
-  ADD CONSTRAINT `notification_ibfk_3` FOREIGN KEY (`orga_id`) REFERENCES `organizer` (`orga_id`);
 
 --
 -- Constraints for table `rating`
