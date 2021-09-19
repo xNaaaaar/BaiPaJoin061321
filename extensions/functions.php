@@ -56,6 +56,11 @@ function createAccount(){
 					if(!file_exists($adventurePathImages)) mkdir($adventurePathImages,0777,true);
 				}
 			}
+			
+			$email_subject = 'WELCOME TO BAIPAJOIN';
+			$email_message = 'Hello Alexis, This is only a test!';
+			//$email_message_html = html_welcome_message();
+			send_email($emEmail, $email_subject, $email_message);
 
 			//SUCCESSFUL MESSAGE
 			echo "<script>alert('Account created successfully!')</script>";
@@ -1406,7 +1411,7 @@ function send_email($to, $subject, $message) {
 	$mail->addAddress($to);     							// Add a recipient
 	$mail->addReplyTo('inflatedimpressionscebu@gmail.com');
 	//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Add attachment + name (optional)
-	//$mail->isHTML(true);                                  // Set email format to HTML
+	$mail->isHTML(true);                                  // Set email format to HTML
 
 	$mail->Subject = $subject;
 	$mail->Body = $message;
@@ -1525,6 +1530,14 @@ function weather_bg($weather){
 		$bg_color = "background:linear-gradient(to right, rgba(36,60,74,1), rgba(38,153,200,1));";
 
 	return $bg_color;
+}
+
+function html_welcome_message() {
+	$message = '
+		//Place your html email template here
+	';
+	
+	return $message;
 }
 
 

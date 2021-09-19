@@ -48,7 +48,7 @@
 				</form>
 				<?php 
 					echo $google_login_url; 
-					echo '<a href="'.$facebook_login_url.'">Log in with Facebook!</a>';
+					//echo '<a href="'.$facebook_login_url.'">Log in with Facebook!</a>';
 				?>
 				
 			</main>

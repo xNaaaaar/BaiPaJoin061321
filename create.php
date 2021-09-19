@@ -1,6 +1,9 @@
 <?php
+	include("facebook_login/config.php");
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
+
+	unset($_SESSION['helper']); //This will unset FB session variable to solve error on settings.php
 
 	if(isset($_POST['btnCreate'])){
 		createAccount();
