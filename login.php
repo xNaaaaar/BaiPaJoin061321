@@ -1,11 +1,12 @@
 <?php
-	
-	include("google_login/config.php");
-	//include("facebook_login/config.php");
-	include("extensions/functions.php");
+
+	include("facebook_login/config.php");
+	include("google_login/config.php");	
+	include("extensions/functions.php");	
 	require_once("extensions/db.php");
 
 	if(isset($_POST['btnLogin'])){
+		unset($_SESSION['helper']); //This will unset FB session variable to solve error on settings.php
 		loginAccount();
 	}
 
@@ -14,9 +15,8 @@
 
 	/* $helper = $facebook->getRedirectLoginHelper();
 	$permissions = ['email'];
-	$facebook_login_url = $helper->getLoginUrl('https://b89e-49-145-165-0.ngrok.io/BaiPaJoin/index.php', $permissions);
-	$_SESSION['facebook_helper'] = $helper;
-	//This is for facebook OAuth */
+	$facebook_login_url = $helper->getLoginUrl('https://de9e-49-145-165-0.ngrok.io/BaiPaJoin/index.php', $permissions);	
+	$_SESSION['helper'] = $helper; */
 ?>
 
 <!-- Head -->
@@ -48,7 +48,7 @@
 				</form>
 				<?php 
 					echo $google_login_url; 
-					//echo '<a href="'.$facebook_login_url.'">Log in with Facebook!</a>';
+					echo '<a href="'.$facebook_login_url.'">Log in with Facebook!</a>';
 				?>
 				
 			</main>
