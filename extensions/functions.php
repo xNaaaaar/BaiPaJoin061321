@@ -60,7 +60,7 @@ function createAccount(){
 					if(!file_exists($adventurePathImages)) mkdir($adventurePathImages,0777,true);
 				}
 			}
-			
+
 			$email_subject = 'WELCOME TO BAIPAJOIN';
 			$email_message = 'Hello Alexis, This is only a test!';
 			//$email_message_html = html_welcome_message();
@@ -83,12 +83,11 @@ function create_admin_account(){
 	$check_orga = DB::query("SELECT * FROM organizer WHERE orga_email=?", array($emEmail), "READ");
 
 	if(count($check_admin)>0 || count($check_joiner)>0 || count($check_orga)>0)
-		echo "<script>alert('Email already exists!')</script>";
+		header("Location: admin.php?exists");
 	else {
 		DB::query("INSERT INTO admin(admin_name, admin_email, admin_pass) VALUES(?,?,?)", array($txtName, $emEmail, $pwPass), "CREATE");
 
-		//SUCCESSFUL MESSAGE
-		echo "<script>alert('Account created successfully!')</script>";
+		header("Location: admin.php?added");
 	}
 }
 
@@ -887,15 +886,15 @@ function changePassword(){
 			$user = $user[0];
 			// ERROR TRAPPINGS
 			if($pass != $user['admin_pass']){
-				echo "<script>alert('Current password do not match!')</script>";
+				header("Location: admin.php?wrong");
 			}
 			else if($newPass != $retypeNewPass){
-				echo "<script>alert('New password must match retype password!')</script>";
+				header("Location: admin.php?not_match");
 			}
 			else {
 				DB::query('UPDATE admin SET admin_pass=? WHERE admin_id=?', array(md5($newPass), $_SESSION['admin']), 'UPDATE');
 				//
-				echo "<script>alert('Admin ".$user['admin_name']." changed password successfully!')</script>";
+				header("Location: admin.php?changed");
 			}
 		}
 
@@ -1571,8 +1570,6 @@ function booking_paid_updates($method, $book_id, $intent_id, $total=null){
 	} elseif($method == "grabpay") {
 
 	}
-
-
 }
 
 ##### CODE START HERE @WEATHER BACKGROUND #####
@@ -1601,8 +1598,27 @@ function html_welcome_message() {
 	$message = '
 		//Place your html email template here
 	';
-	
+
 	return $message;
+}
+
+##### CODE START HERE @DELETING ADMIN #####
+function delete_admin_account($admin_id){
+	// DELETE ADMIN ACCOUNT
+	DB::query("DELETE FROM admin WHERE admin_id=?", array($admin_id), "DELETE");
+
+	header("Location: admin.php?deleted");
+}
+
+##### CODE START HERE @UPDATING ADMIN #####
+function update_admin_account(){
+	$txtName = trim(ucwords($_POST['txtName']));
+	$emEmail = trim($_POST['emEmail']);
+
+	// UPDATE ADMIN ACCOUNT
+	DB::query("UPDATE admin SET admin_name=?, admin_email=? WHERE admin_id=?", array($txtName, $emEmail, $_GET['admin_id']), "UPDATE");
+
+	header("Location: admin.php?updated");
 }
 
 

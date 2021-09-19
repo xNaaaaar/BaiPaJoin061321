@@ -8,32 +8,11 @@
   // CHANGING ADMIN PASS
   if(isset($_POST['btnChange'])) changePassword();
 
-  // CREATING ADMIN ACCOUNT
-  if(isset($_POST['btnAdd'])) create_admin_account();
+  // UPDATING ADMIN ACCOUNT
+  if(isset($_POST['btnUpdate'])) update_admin_account();
 
   // DELETING ADMIN
   if(isset($_GET['delete'])) delete_admin_account($_GET['delete']);
-
-  // SUCCESSFUL MESSAGE FOR DELETION
-  if(isset($_GET['deleted'])) echo "<script>alert('Admin deleted successfully!')</script>";
-
-  // SUCCESSFUL MESSAGE FOR ADDED
-  if(isset($_GET['added'])) echo "<script>alert('Admin account created successfully!')</script>";
-
-  // SUCCESSFUL MESSAGE FOR UPDATED
-  if(isset($_GET['updated'])) echo "<script>alert('Admin account updated successfully!')</script>";
-
-  // ERROR MESSAGE FOR EXISTING EMAIL
-  if(isset($_GET['exists'])) echo "<script>alert('Email already exists!')</script>";
-
-  // SUCCESSFUL MESSAGE FOR CHANGING PASS
-  if(isset($_GET['changed'])) echo "<script>alert('Password changed successfully!')</script>";
-
-  // ERROR MESSAGE FOR CHANGING PASS
-  if(isset($_GET['wrong'])) echo "<script>alert('Wrong password!')</script>";
-
-  // ERROR MESSAGE FOR CHANGING PASS
-  if(isset($_GET['not_match'])) echo "<script>alert('New and retype password must match!')</script>";
 
 ?>
 <!-- Head -->
@@ -146,13 +125,21 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;}
               </table>
             </div>
             <div class="adding">
+							<?php
+							if(isset($_GET['admin_id'])){
+								$edit_admin = DB::query("SELECT * FROM admin WHERE admin_id=?", array($_GET['admin_id']), "READ");
+								$edit_admin = $edit_admin[0];
+							?>
               <form method="post">
-                <h3>Add Admin User</h3>
-                <input type="text" name="txtName" placeholder="Name" required>
-                <input type="email" name="emEmail" placeholder="Email" required>
-                <input type="password" name="pwPass" placeholder="Password" minlength="8" required>
-                <button class="edit" type="submit" name="btnAdd">Add</button>
+                <h3>Update Admin User</h3>
+                <input type="text" name="txtName" value="<?php echo $edit_admin['admin_name']; ?>" placeholder="Name" required>
+                <input type="email" name="emEmail" value="<?php echo $edit_admin['admin_email']; ?>" placeholder="Email" required>
+                <button class="edit" type="submit" name="btnUpdate">Update</button>
+								<a class="edit" href="admin.php">Back</a>
               </form>
+							<?php
+							}
+							?>
               <form method="post">
                 <h3>Change Password</h3>
                 <input type="password" name="pass" placeholder="Current Password" required>
