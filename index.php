@@ -1,7 +1,7 @@
 <?php
 	
 	include("google_login/config.php");
-	include("facebook_login/config.php");
+	//include("facebook_login/config.php");
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
 
@@ -14,7 +14,7 @@
 		$google_token = $google_client -> fetchAccessTokenWithAuthCode($_GET['code']);			
 		
 		if(!isset($google_token['error'])) {
-			
+			////This is for Google OAuth
 			$google_client -> setAccessToken($google_token['access_token']);					
 			$google_service = new Google_Service_Oauth2($google_client);
 			$data = $google_service -> userinfo -> get();
@@ -30,8 +30,8 @@
 
 			loginCreateAccountSocial($data['given_name'], $data['family_name'], $data['email']);
 		}
-		elseif($google_token['error']) {
-
+		/* elseif($google_token['error']) {
+			//This is for Facebook OAuth
 			$facebook_token = $_SESSION['facebook_helper']->getAccessToken();
 			$facebook->setDefaultAccessToken($facebook_token);
 			$graph_response = $facebook->get("/me?fields=first_name,last_name,email", $facebook_token);
@@ -44,7 +44,7 @@
 			}
 
 			loginCreateAccountSocial($user_data['first_name'], $user_data['last_name'], $user_data['email']);
-		}
+		} */
 	}
 ?>
 

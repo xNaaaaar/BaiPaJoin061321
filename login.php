@@ -1,7 +1,7 @@
 <?php
 	
 	include("google_login/config.php");
-	include("facebook_login/config.php");
+	//include("facebook_login/config.php");
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
 
@@ -12,11 +12,11 @@
 	$google_login_url = '<a href = "'.$google_client -> createAuthUrl().'"><img src = "google_login/images/1x/btn_google_signin_dark_normal_web.png"/></a>';
 	//This is for google OAuth
 
-	$helper = $facebook->getRedirectLoginHelper();
+	/* $helper = $facebook->getRedirectLoginHelper();
 	$permissions = ['email'];
 	$facebook_login_url = $helper->getLoginUrl('https://b89e-49-145-165-0.ngrok.io/BaiPaJoin/index.php', $permissions);
 	$_SESSION['facebook_helper'] = $helper;
-	//This is for facebook OAuth
+	//This is for facebook OAuth */
 ?>
 
 <!-- Head -->
@@ -48,7 +48,7 @@
 				</form>
 				<?php 
 					echo $google_login_url; 
-					echo '<a href="'.$facebook_login_url.'">Log in with Facebook!</a>';
+					//echo '<a href="'.$facebook_login_url.'">Log in with Facebook!</a>';
 				?>
 				
 			</main>
