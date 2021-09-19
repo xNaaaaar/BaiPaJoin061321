@@ -38,23 +38,6 @@
 		/* Main Area */
 		.main_con{display:flex;justify-content:space-between;}
 
-		.sidebar{flex:1;min-height:529px;padding:30px 30px 30px 0;position:relative;}
-		.sidebar:before{content:'';width:2px;height:50%;background:#cdcdcd;position:absolute;top:50%;right:0;transform:translateY(-50%);}
-		.sidebar h2{font-size:30px;line-height:100%;}
-		.sidebar h2 i{color:#00c851;}
-		/* .sidebar h2 i:nth-child(2){color:#33b5e5;}
-		.sidebar h2 i:last-child{color:#ff4444;} */
-		.sidebar p{margin-bottom:35px;}
-		.sidebar p q{color:#00c851;}
-		.sidebar ul{display:block;height:auto;font:600 20px/100% Montserrat,sans-serif;list-style:none;}
-		.sidebar .places li input, .sidebar .activites li input{width:20px;height:20px;}
-		.sidebar .prices li input{width:90%;height:30px;font-size:18px;}
-		.sidebar ul h3{font-size:25px;margin-top:15px;}
-		.sidebar ul li{line-height:35px;}
-		.sidebar ul li label{font-weight:400;}
-		.sidebar button{display:inline-block;vertical-align:top;width:100px;height:35px;background:#bf127a;border-radius:50px;color:#fff;margin:15px 5px;text-align:center;font:normal 15px/35px Montserrat,sans-serif;border:none;}
-		.sidebar button:hover{background:#8c0047;}
-
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;position:relative;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h2 span{font-size:30px;}

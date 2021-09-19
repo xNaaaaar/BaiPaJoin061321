@@ -11,13 +11,17 @@ function createAccount(){
 	$cboType = trim(ucwords($_POST['cboType']));
 	$emEmail = trim($_POST['emEmail']);
 	$pwPassword = trim(md5($_POST['pwPassword']));
-	//CHECK IF ACCOUNT USER TYPE
+
+	//CHECK IF ACCOUNT USER TYPE EXIST
 	if($cboType === "Joiner") {
 		//CHECK IF EMAIL ALREADY EXIST FOR JOINER
 		$checkEmail = DB::query("SELECT * FROM joiner WHERE joiner_email=?", array($emEmail), "READ");
-	} else {
+	} elseif($cboType === "Organizer") {
 		//CHECK IF EMAIL ALREADY EXIST FOR ORGANIZER
 		$checkEmail = DB::query("SELECT * FROM organizer WHERE orga_email=?", array($emEmail), "READ");
+	} else {
+		//CHECK IF EMAIL ALREADY EXIST FOR ADMIN
+		$checkEmail = DB::query("SELECT * FROM admin WHERE admin_email=?", array($emEmail), "READ");
 	}
 	//
 	if(count($checkEmail)>0){
@@ -68,6 +72,26 @@ function createAccount(){
 	}
 }
 
+##### CODE START HERE @CREATING ACCOUNT FOR ADMIN #####
+function create_admin_account(){
+	$txtName = trim(ucwords($_POST['txtName']));
+	$emEmail = trim($_POST['emEmail']);
+	$pwPass = trim(md5($_POST['pwPass']));
+
+	$check_admin = DB::query("SELECT * FROM admin WHERE admin_email=?", array($emEmail), "READ");
+	$check_joiner = DB::query("SELECT * FROM joiner WHERE joiner_email=?", array($emEmail), "READ");
+	$check_orga = DB::query("SELECT * FROM organizer WHERE orga_email=?", array($emEmail), "READ");
+
+	if(count($check_admin)>0 || count($check_joiner)>0 || count($check_orga)>0)
+		echo "<script>alert('Email already exists!')</script>";
+	else {
+		DB::query("INSERT INTO admin(admin_name, admin_email, admin_pass) VALUES(?,?,?)", array($txtName, $emEmail, $pwPass), "CREATE");
+
+		//SUCCESSFUL MESSAGE
+		echo "<script>alert('Account created successfully!')</script>";
+	}
+}
+
 ##### CODE START HERE @LOGIN ACCOUNT (JOINER or ORGANIZER) #####
 function loginAccount(){
 	$emEmail = trim($_POST['emEmail']);
@@ -75,24 +99,34 @@ function loginAccount(){
 
 	$joinerAccount = DB::query('SELECT * FROM joiner WHERE joiner_email=? AND joiner_password=?', array($emEmail, $pwPassword), "READ");
 	$organizerAccount = DB::query('SELECT * FROM organizer WHERE orga_email=? AND orga_password=?', array($emEmail, $pwPassword), "READ");
+	$adminAccount = DB::query('SELECT * FROM admin WHERE admin_email=? AND admin_pass=?', array($emEmail, $pwPassword), "READ");
 
+	// JOINER ACCOUNT
 	if(count($joinerAccount)>0){
 		$joinerAccount = $joinerAccount[0];
 		$_SESSION['joiner'] = $joinerAccount['joiner_id'];
 
 		header('Location: index.php');
 		exit;
-	}
-	else if(count($organizerAccount)>0){
+
+	// ORGANIZER ACCOUNT
+	} else if(count($organizerAccount)>0){
 		$organizerAccount = $organizerAccount[0];
 		$_SESSION['organizer'] = $organizerAccount['orga_id'];
 
 		header('Location: index.php');
 		exit;
-	}
-	else {
+
+	// ADMIN ACCOUNT
+	} else if(count($adminAccount)>0){
+		$adminAccount = $adminAccount[0];
+		$_SESSION['admin'] = $adminAccount['admin_id'];
+
+		header('Location: admin.php');
+		exit;
+
+	} else
 		echo "<script>alert('Email address or password is incorrect!')</script>";
-	}
 }
 
 ##### CODE START HERE @LOGIN ACCOUNT USING GMAIL FOR JOINER #####
@@ -368,15 +402,28 @@ function displayAll($num, $query = NULL){
 					<figure>
 						<img src='images/organizers/".$_SESSION['organizer']."/$image[$displayImage]' alt='image'>
 					</figure>
-					<h2>".$result['adv_name']." - ".$result['adv_kind']." <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
+					<em> on ".date("F j, Y", strtotime($result['adv_date']))."</em>
+					<h2>".$result['adv_name']." - ".$result['adv_kind']."
+						<span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span>
+					</h2>
 					<p>".$result['adv_address']."</p>
 					<p>₱ ".number_format((float)$price, 2, '.', '')." / guest</p>
-					<ul class='icons'>
+					<ul class='icons'>";
+				#
+				if($result['adv_currentGuest'] == 0){
+					echo "
 						<li><a href='edit_adv.php?id=".$result['adv_id']."'><i class='fas fa-edit'></i></a></li>
 						<li><a href='delete.php?table=adventure&id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to delete this adventure?\");'><i class='far fa-trash-alt'></i></a></li>
+					";
+				}
+				#
+				$no_cancel_starting_date = date("Y-m-d", strtotime("-10 days", strtotime($result['adv_date'])));
+				if(date("Y-m-d") < $no_cancel_starting_date && $result['adv_currentGuest'] > 0){
+					echo "<li><a href='adventures_posted.php' onclick='return confirm(\"Are you sure you want to cancel this adventure? Joiner who are booked can process refund!\");'><i class='fas fa-ban'></i></a></li>";
+				}
+				echo "
 					</ul>
-				</div>
-				";
+				</div>";
 			}
 		}
 		else {
@@ -541,38 +588,37 @@ function displayAll($num, $query = NULL){
 				if($result['adv_type'] == 'Packaged')
 					$remainingGuestsText = "- ".$numRemainingGuests." guests remaining";
 
-				echo "
-				<a class='card-link' href='place.php?id=".$result['adv_id']."'>
-				<div class='card'>
-					<figure>
-						<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt=''>
-					</figure>
-					<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
-					<p>".$result['adv_address']."</p>
-					<p>₱ ".number_format((float)$price, 2, '.', '')." / guest</p>
-					<ul class='icons'>";
+				// DISPLAY ALL ADVENTURE WITH FUTURE DATES
+				if($result["adv_date"] > date("Y-m-d")){
+					echo "
+					<a class='card-link' href='place.php?id=".$result['adv_id']."'>
+					<div class='card'>
+						<figure>
+							<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt=''>
+						</figure>
+						<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
+						<p>".$result['adv_address']."</p>
+						<p>₱ ".number_format((float)$price, 2, '.', '')." / guest</p>
+						<ul class='icons'>";
 
-			  if(isset($_SESSION['joiner'])){
-					$favAdv = DB::query("SELECT * FROM favorite WHERE joiner_id = ? AND adv_id = ?", array($_SESSION['joiner'], $result['adv_id']), "READ");
+					if(isset($_SESSION['joiner'])){
+						$favAdv = DB::query("SELECT * FROM favorite WHERE joiner_id = ? AND adv_id = ?", array($_SESSION['joiner'], $result['adv_id']), "READ");
 
-					//echo "<li><a href='book.php?id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to book this adventure?\");'><i class='fas fa-book'></i></a></li>";
+						if(count($favAdv) > 0)
+							echo "<li><a id='saved' class='added' href='adventures.php?removeFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to remove this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+						else
+							echo "<li><a href='adventures.php?addFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to add this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
 
-					if(count($favAdv) > 0)
-						echo "<li><a id='saved' class='added' href='adventures.php?removeFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to remove this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
-					else
-						echo "<li><a href='adventures.php?addFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to add this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
-
-				} else {
-					//echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to book this adventures?\");'><i class='fas fa-book'></i></a></li>";
-					echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to add adventures to favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+					} else {
+						echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to add adventures to favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+					}
+					##
+					echo "
+						</ul>
+					</div>
+					</a>
+					";
 				}
-
-
-				echo "
-					</ul>
-				</div>
-				</a>
-				";
 			}
 		}
 		else {
@@ -833,9 +879,28 @@ function changePassword(){
 		else
 			echo "<script>alert('Organizer does not exist!')</script>";
 
+	// CURRENT LOGIN USER IS ADMIN
+	} elseif(isset($_SESSION['admin'])) {
+		$user = DB::query("SELECT * FROM admin WHERE admin_id=?", array($_SESSION['admin']), "READ");
+
+		if(count($user)>0){
+			$user = $user[0];
+			// ERROR TRAPPINGS
+			if($pass != $user['admin_pass']){
+				echo "<script>alert('Current password do not match!')</script>";
+			}
+			else if($newPass != $retypeNewPass){
+				echo "<script>alert('New password must match retype password!')</script>";
+			}
+			else {
+				DB::query('UPDATE admin SET admin_pass=? WHERE admin_id=?', array(md5($newPass), $_SESSION['admin']), 'UPDATE');
+				//
+				echo "<script>alert('Admin ".$user['admin_name']." changed password successfully!')</script>";
+			}
+		}
+
 	// CURRENT LOGIN USER IS JOINER
-	}
-	else {
+	} else {
 		$user = DB::query("SELECT * FROM joiner WHERE joiner_id=?", array($_SESSION['joiner']), "READ");
 
 		if(count($user)>0){

@@ -11,7 +11,6 @@
 		#
 		if($_SESSION['current_user'] == 'Organizer') {
 			currentOrganizer($_SESSION['organizer']);
-
 			#
 			echo "<h2> {$_SESSION['fname']} {$_SESSION['lname']} ";
 			#IF ORGANIZER SENDS LEGAL DOCU STATUS: PENDING
@@ -60,7 +59,17 @@
 			}
 		?>
 		<li class="<?php if($currentSidebarPage == 'voucher') echo 'current_sidebar'; ?>"><a href="voucher.php"><i class="fas fa-tags"></i> <q>Voucher</q></a></li>
-		<li class="<?php if($currentSidebarPage == 'reports') echo 'current_sidebar'; ?>"><a href=""><i class="fas fa-sticky-note"></i> <q>Reports</q></a></li>
+		<li class="<?php if($currentSidebarPage == 'reports') echo 'current_sidebar'; ?>"><a href="reports_booking.php"><i class="fas fa-sticky-note"></i> <q>Reports</q></a></li>
+			<ul>
+				<li class="<?php if($currentSidebarPage == 'reports') echo 'current_sidebar'; ?>"><a href="reports_booking.php">Bookings</a></li>
+				<?php
+				if($_SESSION['current_user'] == 'Joiner'){
+					echo "<li><a href=''>Rebooking</a></li>";
+				}
+				?>
+				<li><a href="">Cancellation</a></li>
+				<li><a href="">Ratings</a></li>
+			</ul>
 		<li><a href="logout.php" onclick="return confirm('Are you sure you want to logout?');"><i class="fas fa-sign-out-alt"></i> <q>Logout</q></a></li>
 	</ul>
 </aside>

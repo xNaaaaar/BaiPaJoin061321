@@ -28,19 +28,6 @@
 		/* Main Area */
 		.main_con{display:flex;justify-content:space-between;}
 
-		.sidebar{flex:1;height:500px;padding:30px 30px 30px 0;position:relative;}
-		.sidebar:before{content:'';width:2px;height:70%;background:#cdcdcd;position:absolute;top:50%;right:0;transform:translateY(-50%);}
-		.sidebar h2{font-size:30px;line-height:100%;}
-		.sidebar p{margin-bottom:20px;}
-		.sidebar ul{display:flex;height:100%;flex-direction:column;justify-content:flex-start;font:600 30px/100% Montserrat,sans-serif;list-style:none;margin:35px 0 0;}
-		.sidebar ul li{line-height:45px;}
-		.sidebar ul li i{width:40px;position:relative;}
-		.sidebar ul li i:before{position:absolute;top:-25px;left:50%;transform:translateX(-50%);}
-		.sidebar ul li:last-child{margin:auto 0;}
-		.sidebar ul li a{color:#454545;position:relative;}
-		.sidebar ul li a small{color:#fff;font-size:15px;position:absolute;top:0;right:-20px;background:#bf127a;height:25px;width:25px;text-align:center;border-radius:50px;line-height:25px;}
-		.sidebar ul li a:hover{color:#bf127a;}
-
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;position:relative;}
 		main h2, main h3{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h2 span{font-size:30px;}
@@ -48,7 +35,7 @@
 		main h3{font-size:20px;color:gray;text-align:center;}
 		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
 		main button:first-of-type{right:67px;}
-		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:152px;right:15px;z-index:5;font-size:20px;}
+		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:132px;right:15px;z-index:5;font-size:20px;}
 
 		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 125px 30px 215px;line-height:35px;text-align:left;margin:25px auto;border:1px solid #cfcfcf;}
 		.card:hover{border:1px solid #bf127a;}
@@ -67,7 +54,6 @@
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
 			main{padding:50px 0 0 25px;}
-
 		}
 
 		/* PAGINATION COLORS */

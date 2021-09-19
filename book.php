@@ -153,13 +153,18 @@
 					<div class="main_info">
 						<h1>Your Information</h1>
 						<section>
-							<h2><?php echo $user['joiner_fname']." ".$user['joiner_mi'].". ".$user['joiner_lname']; ?></h2>
+							<?php
+							echo "
+							<h2>".$user['joiner_fname']." ".$user['joiner_mi'].". ".$user['joiner_lname']."</h2>
 							<ul>
-								<li><?php echo $user['joiner_address']; ?></li>
+								<li>".$user['joiner_address']."</li>
 								<li>Cebu City, Philippines</li>
-								<li><?php echo $user['joiner_phone']; ?></li>
-								<li><?php echo $user['joiner_email']; ?></li>
+								<li>".$user['joiner_phone']."</li>
+								<li>".$user['joiner_email']."</li>
 							</ul>
+							";
+							?>
+
 						</section>
 						<!--  -->
 						<form method="post" action="book-guest.php?id=<?php echo $_GET['id']; ?>">

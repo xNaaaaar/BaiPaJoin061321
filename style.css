@@ -44,14 +44,15 @@ table {border-collapse: collapse;border-spacing: 0;}
 button, html input[type=button], input[type=reset], input[type=submit] { -webkit-appearance: button; cursor: pointer; }
 input:not([type='radio']):not([type='checkbox']), textarea, select{-webkit-appearance: none;}
 form, label {-webkit-text-size-adjust: 100%;}
-mark {background-color: transparent;color:inherit;}
+mark {background-color:transparent;color:inherit;}
 /* end reset */
 
 /*preset*/
 body{font:normal 18px/20px Montserrat,sans-serif;color:#333;position:relative;background:#999;}
 body.active{overflow: hidden;width:100%;height:100%;position:fixed!important;}
-a{ text-decoration:none; -webkit-transition: all .3s linear;transition: all .3s linear;}
+a{ text-decoration:none !important; -webkit-transition: all .3s linear;transition: all .3s linear;}
 img{max-width: 100%; vertical-align: top; image-rendering: -webkit-optimize-contrast;}
+figure{margin:0 !important;}
 textarea { resize:vertical; }
 iframe{ border: none; width: 100%;}
 ul, h1, h2, h3, h4{ margin:0; padding:0; list-style:none; }
@@ -116,7 +117,7 @@ header{}
 .page_nav ul li a{display:block;color:#fff;line-height:58px;padding:0 19px;font-weight:600;}
 .page_nav ul li:first-child a{padding-left:0}
 .page_nav ul li:last-child a{padding-right:0;color:#bf127a;}
-.page_nav ul li a:hover, .page_nav ul li a:active, .page_nav ul li.current_page_item > a{text-decoration:underline;}
+.page_nav ul li a:hover, .page_nav ul li a:active, .page_nav ul li.current_page_item > a{color:#bf127a;}
 
 /*second level drop down*/
 .page_nav ul li:hover{position:relative;z-index:599;cursor:default;}
@@ -169,7 +170,7 @@ header{}
 	.bnr_info h2{color:#fff;margin-bottom:30px;font:600 50px/100% Montserrat,sans-serif;}
 	.bnr_info h2 span{display:block;}
 	.bnr_info p{font-size:17px;color:#fff;line-height:26px;margin-left:2px;}
-	.bnr_info a{display:inline-block;width:190px;height:50px;line-height:50px;background:#bf127a;color:#fff;text-align:center;margin:40px 10px 0 0;font-weight:600;border-radius:50px;font-size:16px;}
+	.bnr_info a{display:inline-block;width:190px;height:50px;line-height:50px;background:#bf127a;color:#fff !important;text-align:center;margin:40px 10px 0 0;font-weight:600;border-radius:50px;font-size:16px;}
 	.bnr_info a:hover{background:#8c0047;}
 /*end banner*/
 
@@ -218,6 +219,23 @@ header{}
 	.intro_txt{text-align:center;width:80%;margin:0 auto 34px;padding:15px;border-bottom:3px solid #7fdcd3;font-weight:bold;font-size:22px;}
 
   /*SideBar*/
+  .sidebar{flex:1;height:500px;padding:30px 30px 30px 0;position:relative;z-index:5;}
+  .sidebar:before{content:'';width:2px;height:70%;background:#cdcdcd;position:absolute;top:50%;right:0;transform:translateY(-50%);}
+  .sidebar h2{font-size:30px;line-height:100%;}
+  .sidebar p{margin-bottom:20px;}
+  .sidebar ul{display:flex;height:100%;flex-direction:column;justify-content:flex-start;font:600 30px/100% Montserrat,sans-serif;list-style:none;margin:35px 0 0;}
+  .sidebar ul li{line-height:45px;}
+  .sidebar ul li i{width:40px;position:relative;}
+  .sidebar ul li i:before{position:absolute;top:-25px;left:50%;transform:translateX(-50%);}
+  .sidebar ul li:last-child{margin:auto 0;}
+  .sidebar ul li a{color:#454545;position:relative;}
+  .sidebar ul li a small{color:#fff;font-size:15px;position:absolute;top:0;right:-20px;background:#bf127a;height:25px;width:25px;text-align:center;border-radius:50px;line-height:25px;}
+  .sidebar ul li a:hover{color:#bf127a;text-decoration:none;}
+  /*  */
+  .sidebar ul ul{font-size:25px;margin:0 0 0 48px;list-style:square;}
+  .sidebar ul ul li{line-height:35px;}
+  .sidebar ul ul li:last-child{margin:0;}
+
   .sidebar ul li.current_sidebar a{color:#bf127a;}
   .orga:hover + .orga-message{display:block;}
   .orga-message{background:#fff;border:1px solid #313131;font-size:18px;text-align:center;padding:5px;line-height:20px;display:none;}
@@ -278,10 +296,10 @@ header{}
   .place_reviews h2{font:600 40px/100% Montserrat,sans-serif;}
 
   .review_cards{display:flex;justify-content:space-between;margin:-20px 0 0;}
-  .review_cards .card{width:32%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px 30px 70px 90px;line-height:35px;text-align:left;margin:25px auto;border:1px solid #cfcfcf;}
+  .review_cards .card{width:32%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:80px 30px 70px;line-height:35px;text-align:left;margin:25px auto;border:1px solid #cfcfcf;}
   .review_cards .card .fa-quote-left{position:absolute;top:30px;left:30px;font-size:40px;color:#88dfd8;}
   .review_cards .card p{margin:0 0 25px;font:400 18px/30px Montserrat,sans-serif;}
-  .review_cards .card h3{font:600 italic 20px/100% Montserrat,sans-serif;position:absolute;bottom:30px;left:90px;}
+  .review_cards .card h3{font:600 italic 20px/100% Montserrat,sans-serif;position:absolute;bottom:30px;left:30px;}
   .review_cards .card h3 span{display:block;font:600 18px/100% Montserrat,sans-serif;color:gray;}
 
   .place_ratings{margin:40px 0 0;}
@@ -290,9 +308,9 @@ header{}
 
   .rating{position:absolute;top:-60px;left:0;transform:rotateY(180deg);display:flex;}
   .rating input{display:none;}
-  .rating label{display:block;width:40px;cursor:pointer;margin-left:5px;}
-  .rating label:before{content:"\f005";position:relative;display:block;font:900 40px/100% 'Font Awesome 5 Free';color:#1d1c1c;}
-  .rating label:after{content:"\f005";position:absolute;top:0;opacity:0;display:block;font:900 40px/100% 'Font Awesome 5 Free';color:#ffac33;transition:.5s;text-shadow:0 2px 5px rgba(0,0,0,0.5);}
+  .rating label{display:block;width:40px;cursor:pointer;margin-left:2px;}
+  .rating label:before{content:"\f005";position:relative;display:block;font:900 30px/100% 'Font Awesome 5 Free';color:#1d1c1c;}
+  .rating label:after{content:"\f005";position:absolute;top:0;opacity:0;display:block;font:900 30px/100% 'Font Awesome 5 Free';color:#ffac33;transition:.5s;text-shadow:0 2px 5px rgba(0,0,0,0.5);}
   .rating label:hover:after,.rating label:hover ~ label:after, .rating input:checked ~ label:after{opacity:1;}
 
   .feedback{margin:80px 0 0;}
@@ -331,9 +349,9 @@ footer{}
 		.contact_info2 ul li{display:block;font-weight:600;font-size:22px;margin:15px 0 0 2px;}
 		.contact_info2 ul li address{display:block;font:normal 18px/28px Montserrat,sans-serif;margin-top:4px;}
 		.contact_info2 ul li address q{display:block;}
-		.contact_info2 ul li mark{font:normal 18px/20px Montserrat,sans-serif;display:block;margin-top:7px;}
+		.contact_info2 ul li mark{font:normal 18px/20px Montserrat,sans-serif;display:block;margin-top:7px;background:none;}
 		.contact_info2 ul li a{display:block;font:normal 18px/20px Montserrat,sans-serif;color:#fff;margin-top:7px;}
-		.contact_info2 ul li a:hover{text-decoration:underline;}
+		.contact_info2 ul li a:hover{text-decoration:underline !important;}
 
 		.social_media{margin:15px 0 0 -3px;}
 		.social_media h2{font:500 17px/100% Montserrat,sans-serif;margin-bottom:8px;}
@@ -349,7 +367,7 @@ footer{}
 		.footer_nav ul{margin:0;padding:0;columns:2;column-gap:75px;}
 		.footer_nav ul li{display:inline-block;vertical-align:top;position:relative;}
 		.footer_nav ul li a{display:block;padding:0 5px 0 0;color:#fff;line-height:45px;}
-		.footer_nav ul li a:hover, .footer_nav ul li a:active, .footer_nav ul li.current_page_item a{text-decoration:underline;}
+		.footer_nav ul li a:hover, .footer_nav ul li a:active, .footer_nav ul li.current_page_item a{color:#bf127a;}
 
 		.copyright{color:#fff;margin:0 auto;text-align:center;}
 		.copyright a{color:#fff;}
