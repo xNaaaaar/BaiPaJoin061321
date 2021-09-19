@@ -927,7 +927,10 @@ function changePassword(){
 function checkPlaces($place){
 	if(isset($_SESSION['places'])){
 		foreach($_SESSION['places'] as $result){
-			if($result == $place) echo "checked";
+			if($result == $place) {
+				return "checked";
+				break;
+			}
 		}
 	}
 }
@@ -936,7 +939,10 @@ function checkPlaces($place){
 function checkActivities($activity){
 	if(isset($_POST['activities'])){
 		foreach($_POST['activities'] as $result){
-			if($result == $activity) echo "checked";
+			if($result == $activity) {
+				return "checked";
+				break;
+			}
 		}
 	}
 }

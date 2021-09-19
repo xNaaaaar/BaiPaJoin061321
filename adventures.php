@@ -38,6 +38,10 @@
 		/* Main Area */
 		.main_con{display:flex;justify-content:space-between;}
 
+		.sidebar{height:auto;}
+		.sidebar ul li{line-height:25px;font-size:20px;font-weight:500;}
+		.sidebar ul li h3{font-size:25px;font-weight:600;}
+
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;position:relative;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h2 span{font-size:30px;}
@@ -147,8 +151,8 @@
 						<li><input type="number" name="" placeholder="Minimum price"></li>
 						<li><input type="number" name="" placeholder="Maximum price"></li>
 					</ul>
-					<button type="submit" formaction="adventures.php" name="btnSave">Save Changes</button>
-					<button type="submit" name="btnReset" formaction="adventures.php">Reset</button>
+					<button class="edit" type="submit" name="btnSave">Save Changes</button>
+					<button class="edit" type="submit" name="btnReset">Reset</button>
 				</div>
 				</form>
 			</aside>
