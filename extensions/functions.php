@@ -624,7 +624,6 @@ function displayAll($num, $query = NULL){
 			echo "<h3>Adventure does not exist...</h3>";
 		}
 	}
-
 }
 
 ##### CODE START HERE @DELETE SQL DATA IN SPECIFIED TABLE #####
