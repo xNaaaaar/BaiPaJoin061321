@@ -54,26 +54,27 @@
     	$randomString = '';
    		for ($i = 0; $i < 8; $i++)
         	$randomString = $randomString . $characters[rand(0, $charactersLength - 1)];
+        $hash_pass = md5($randomString);
 
-		if(count($joiner) == 0 && count($organizer) == 0) 
+		if(empty($joiner) && empty($organizer)) 
 			echo "<script>alert('EMAIL NOT FOUND! Please make sure email address is CORRECT!')</script>";
-		else if(count($joiner) > 0) {
+		else if(!empty($joiner)) {
 			$email_subject = 'PASSWORD RESET';
     		$email_message = 'Dear '.$joiner['joiner_fname'].', We have received a request to reset the password of your BaiPaJoin Account. Here\'s a temporary password: '.$randomString.' , you can use to access your account. You\'re advised to change the immediately. Thank you! THIS IS A TEST. DO NOT REPLY!';
 
 			send_email($email_add, $email_subject, $email_message);
-			$hash_pass = md5($randomString);
-
 			DB::query("UPDATE joiner SET joiner_password=? WHERE joiner_id=?", array($hash_pass, $joiner['joiner_id']), "UPDATE");
+
+			echo "<script>alert('Password reset successful! We've sent you an email. Please check your inbox')</script>";
 		}
-		else if(count($organizer) > 0) {
+		else if(!empty($organizers) > 0) {
 			$email_subject = 'PASSWORD RESET';
     		$email_message = 'Dear '.$organizer['orga_fname'].', We have received a request to reset the password of your BaiPaJoin Account. Here\'s a temporary password: '.$randomString.' , you can use to access your account. You\'re advised to change the immediately. Thank you! THIS IS A TEST. DO NOT REPLY!';
 
-			send_email($email_add, $email_subject, $email_message);
-			$hash_pass = md5($randomString);
-
+			send_email($email_add, $email_subject, $email_message);			
 			DB::query("UPDATE organizer SET orga_password=? WHERE orga_id=?", array($hash_pass, $organizer['orga_id']), "UPDATE");
+
+			echo "<script>alert('Password reset successful! We've sent you an email. Please check your inbox')</script>";
 		}
 	}
 ?>

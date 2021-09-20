@@ -29,8 +29,14 @@
 			    $log_file_data = 'logs\\google_login\\log_' . date('d-M-Y') . '.log';
 			    file_put_contents($log_file_data, date('h:i:sa').' => '. $data['name'] . ' ' . $data['email'] . ' ' . $data['given_name'] .' ' . $data['family_name'] . ' ' . $data['picture'] . ' ' . $data['locale'] . "\n" . "\n", FILE_APPEND);
 			}
-			echo "<script>alert('Login successfully!')</script>";
-			loginCreateAccountSocial($data['given_name'], $data['family_name'], $data['email']);
+
+			$joiner_db = DB::query("SELECT * FROM joiner WHERE joiner_email=?", array($data['email']), "READ");
+			if(!empty($joiner_db)) {
+				echo "<script>alert('Login successfully!')</script>";
+				loginCreateAccountSocial($data['given_name'], $data['family_name'], $data['email']);
+			}
+			else
+				echo "<script>alert('Your email address is already in our system! Please user another Google Account')</script>";
 		}
 		/* elseif($google_token['error']) {
 			//This is for Facebook OAuth'
@@ -47,8 +53,14 @@
 			    $log_file_data = 'logs\\facebook_login\\log_' . date('d-M-Y') . '.log';
 			    file_put_contents($log_file_data, date('h:i:sa').' => '. $user_data['first_name'] . ' ' . $user_data['last_name'] . ' ' . $user_data['email'] . "\n" . "\n", FILE_APPEND);
 			}
-			echo "<script>alert('Login successfully!')</script>";
-			loginCreateAccountSocial($user_data['first_name'], $user_data['last_name'], $user_data['email']);
+			$joiner_db = DB::query("SELECT * FROM joiner WHERE joiner_email=?", array($user_data['email']), "READ");
+			if(!empty($joiner_db)) {
+				echo "<script>alert('Login successfully!')</script>";
+				loginCreateAccountSocial($user_data['first_name'], $user_data['last_name'], $user_data['email']);
+			}
+			else
+				echo "<script>alert('Your email address is already in our system! Please user another Facebook Account')</script>";
+			
 		} */
 	}
 ?>
