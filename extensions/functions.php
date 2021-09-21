@@ -925,7 +925,17 @@ function changePassword(){
 ##### CODE START HERE @SPECIFIC CHECKBOX CHECK IN PLACES #####
 function checkPlaces($place){
 	if(isset($_SESSION['places'])){
-		foreach($_SESSION['places'] as $result){
+		if(!empty($_SESSION['places'])) {
+			foreach($_SESSION['places'] as $result){
+				if($result == $place) {
+					return "checked";
+					break;
+				}
+			}
+		}
+	}
+	elseif(isset($_POST['places'])) {
+		foreach($_POST['places'] as $result){
 			if($result == $place) {
 				return "checked";
 				break;

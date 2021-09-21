@@ -122,7 +122,7 @@
 						<li><h3>Places</h3></li>
 
 						<?php
-							// DISPLAY PLACES
+					
 							$places = array("Bantayan Island", "Malapascua Island", "Camotes Island", "Moalboal", "Badian", "Oslob", "Alcoy", "Aloguinsan", "Santander", "Alegria", "Dalaguete");
 
 							for($i=0; $i<count($places); $i++){
@@ -151,8 +151,8 @@
 						<li><input type="number" name="" placeholder="Minimum price"></li>
 						<li><input type="number" name="" placeholder="Maximum price"></li>
 					</ul>
-					<button class="edit" type="submit" name="btnSave">Save Changes</button>
-					<button class="edit" type="submit" name="btnReset">Reset</button>
+					<button class="edit" type="submit" name="btnSave">Search</button>
+					<button formaction="adventures.php">Reset</button>
 				</div>
 				</form>
 			</aside>
@@ -168,8 +168,8 @@
 
 					<?php
 
-			      //Pagination code  starts here - Kirk Albano
-
+			      		//Pagination code  starts here - Kirk Albano
+						
 						if(isset($_POST['btnSearch']))
 						{
 							$txtSearch = trim(ucwords($_POST['txtSearch']));
@@ -246,7 +246,6 @@
 
 						else if(isset($_POST['btnSave']))
 						{ //Aside Filter code  starts here - Alexis Salvador
-
 								unset($_SESSION['places']);
 
 								if(isset($_GET['page']))
@@ -276,7 +275,7 @@
 
 										if(!empty($_POST['activities'])) {
 
-											//	Concatenates string if 1 or more Activity 																checkbox is selected
+											//	Concatenates string if 1 or more Activity checkbox is selected
 
 											$sqlquery = $sqlquery . " OR adv_kind";
 
@@ -317,14 +316,14 @@
 										$sqlquery = $sqlquery . " ORDER BY adv_id";	//Temporary to show true results
 									}
 
-									$card = DB::query($sqlquery, array(), "READ");
-
-									if(!empty($card))
-										displayAll(99, $card);
+									if(!empty($sqlquery)) {
+										$card = DB::query($sqlquery, array(), "READ");
+										if(!empty($card))
+											displayAll(99, $card);
+									}					
 									else { //This works if return items from SQL is empty due to search not found
 										$card1 = DB::query("SELECT * FROM adventure LIMIT $start_from,$num_per_page", array(), "READ");
 										$card = DB::query("SELECT * FROM adventure", array(), "READ");
-										echo "Your search parameters are not found!";
 										displayAll(99, $card1);
 									}
 
@@ -379,9 +378,7 @@
 				                    echo "<a href='adventures?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
 				                }
 
-						}
-
-						//Aside Filter code ends here - Alexis Salvador
+						} //Aside Filter code ends here - Alexis Salvador					
 
 						else
 						{ //Index to Adventure Page Filter Code starts here - Alexis Salvador
@@ -412,7 +409,7 @@
 
 								if(!empty($_POST['activities'])) {
 
-									//	Concatenates string if 1 or more Activity 																checkbox is selected
+									//	Concatenates string if 1 or more Activity checkbox is selected
 
 									$sqlquery = $sqlquery . " OR adv_kind";
 
@@ -451,15 +448,15 @@
 								$sqlquery = $sqlquery . " ORDER BY adv_id";	//Temporary to show true results
 							}
 
-							if(!empty($sqlquery))
+							if(!empty($sqlquery)) {
 								$card = DB::query($sqlquery, array(), "READ");
-
-							if(!empty($card))
-								displayAll(99, $card);
+								if(!empty($card))
+									displayAll(99, $card);
+							}							
 							else { //This works if return items from SQL is empty due to search not found
 								$card = DB::query("SELECT * FROM adventure", array(), "READ");
 								$card1 = DB::query("SELECT * FROM adventure LIMIT $start_from,$num_per_page", array(), "READ");
-								echo "Enter a search parameters OR no search parameters found!";
+								//echo "Enter a search parameters OR no search parameters found!";
 								displayAll(99, $card1);
 							}
 
