@@ -1486,9 +1486,9 @@ function send_email($to, $subject, $message) {
 	$mail->Password = 'capstone42';                          	// SMTP password
 	$mail->SMTPSecure = 'tls';                             	// Enable TLS encryption, `ssl` also accepted
 	$mail->Port = 587;                                    	// TCP port to connect to
-	$mail->setFrom('inflatedimpressionscebu@gmail.com', 'BAIPAJOIN');
+	$mail->setFrom('teambaipajoincebu@gmail.com', 'BAIPAJOIN');
 	$mail->addAddress($to);     							// Add a recipient
-	$mail->addReplyTo('inflatedimpressionscebu@gmail.com');
+	$mail->addReplyTo('teambaipajoincebu@gmail.com');
 	//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Add attachment + name (optional)
 	$mail->isHTML(true);                                  // Set email format to HTML
 

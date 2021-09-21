@@ -67,7 +67,7 @@
 
 			echo "<script>alert('Password reset successful! We've sent you an email. Please check your inbox')</script>";
 		}
-		else if(!empty($organizers) > 0) {
+		else if(!empty($organizers)) {
 			$email_subject = 'PASSWORD RESET';
     		$email_message = 'Dear '.$organizer['orga_fname'].', We have received a request to reset the password of your BaiPaJoin Account. Here\'s a temporary password: '.$randomString.' , you can use to access your account. You\'re advised to change the immediately. Thank you! THIS IS A TEST. DO NOT REPLY!';
 
