@@ -48,7 +48,7 @@ mark {background-color:transparent;color:inherit;}
 /* end reset */
 
 /*preset*/
-body{font:normal 18px/20px Montserrat,sans-serif;color:#333;position:relative;background:#999;}
+body{font:normal 18px/20px Montserrat,sans-serif;color:#333;position:relative;}
 body.active{overflow: hidden;width:100%;height:100%;position:fixed!important;}
 a{ text-decoration:none; -webkit-transition: all .3s linear;transition: all .3s linear;}
 img{max-width: 100%; vertical-align: top; image-rendering: -webkit-optimize-contrast;}

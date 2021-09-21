@@ -46,11 +46,12 @@ html, body{height:100%;}
 /* Main Area */
 .main_con{display:flex;justify-content:space-between;height:100vh;}
 
-.sidebar{padding:30px;}
-.sidebar figure{width:150px;margin:0!important;}
-.sidebar h2{position:absolute;top:68px;left:180px;font-size:35px;}
-.sidebar h2 span{display:block;}
-.sidebar ul{margin:35px 0 0 20px;}
+.sidebar{padding:30px;background:#7fdcd3;height:100%;}
+.sidebar:before{display:none;}
+.sidebar figure{width:150px;margin:0 auto!important;}
+.sidebar h2{text-align:center;}
+.sidebar h2 span{display:block;font-size:15px;}
+.sidebar ul{margin:35px 0 0 25px;height:auto;}
 
 main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px;border-radius:0;text-align:center;}
 main h1{text-align:right;}
@@ -73,8 +74,8 @@ main .admins table td{padding:15px 10px;}
 main .admins table tr td:nth-child(4){padding:15px 0;text-align:center;}
 main .admins table tr td:nth-child(5){padding:15px 0;text-align:center;}
 
-main .adding{width:28%;}
-main .adding form{height:auto;padding:40px 25px;box-shadow:10px 10px 10px -5px #cfcfcf;border:1px solid #cfcfcf;border-radius:20px;margin:0 0 20px;}
+main .forms{width:28%;}
+main .forms form{height:auto;padding:40px 25px 25px;box-shadow:10px 10px 10px -5px #cfcfcf;border:1px solid #cfcfcf;border-radius:20px;margin:0 0 20px;}
 main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;}
 </style>
 
@@ -94,7 +95,7 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;}
           <figure>
             <img src="images/baipajoin.ico" alt="">
           </figure>
-          <h2>BaiPaJoin <span>Admin</span> </h2>
+          <h2>BaiPaJoin <span>an online joiner platform for tourists</span> </h2>
           <ul>
             <li><a href="admin-dashboard.php">Dashboard</a> </li>
             <li class="current_sidebar"><a href="admin.php">Admin</a> </li>
@@ -121,6 +122,7 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;}
                   </tr>
                 </thead>
                 <?php
+									// ALL ADMIN RESULTS
                   $admins = DB::query("SELECT * FROM admin", array(), "READ");
 
                   if(count($admins)>0){
@@ -145,7 +147,7 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;}
 
               </table>
             </div>
-            <div class="adding">
+            <div class="forms">
               <form method="post">
                 <h3>Add Admin User</h3>
                 <input type="text" name="txtName" placeholder="Name" required>
