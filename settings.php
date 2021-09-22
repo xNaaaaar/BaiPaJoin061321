@@ -2,6 +2,10 @@
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
 
+	// REDIRECT IF NOT LOGGED IN
+    if(!isset($_SESSION['joiner']) && !isset($_SESSION['organizer'])) header("Location: login.php");
+
+
 	// IF PROFILE IS UPDATED SUCCESSFULLY
 	if(isset($_GET['updated']) && $_GET['updated'] == 1){
 		echo "<script>alert('Profile successfully updated!')</script>";
