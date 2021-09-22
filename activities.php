@@ -42,7 +42,6 @@
 				<form method="post" action="adventures.php">
 					<h2>Activities you're looking forward to? <span>Check all that applies:</span> </h2>
 					<ul>
-						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Packaged"> <label for="">Packaged</label></li>
 						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Swimming"> <label for="">Swimming</label></li>
 						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Camping"> <label for="">Camping</label></li>
 						<li><input class="checkboxes" type="checkbox" name="activities[]" required value="Island Hopping"> <label for="">Island Hopping</label></li>

@@ -626,6 +626,172 @@ function displayAll($num, $query = NULL){
 	}
 }
 
+##### CODE START HERE @PAGINATION #####
+function pagination($page, $card, $num_per_page){
+
+	$total_record = count($card);
+    $total_page = ceil($total_record/$num_per_page);
+
+    if($page > 1)  
+        echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
+
+				//LIMIT VISIBLE NUMBER PAGE
+				$numpage = 1;
+				$startPage = max(1, $page - $numpage);
+				$endPage = min( $total_page, $page + $numpage);
+
+
+    for($i=$startPage;$i<=$endPage;$i++) {
+		if ($i == $page) 
+    		$class = 'pagingCurrent';
+    	else						
+			$class = 'paging'; 
+
+		if($page > $i && $page > 2)
+			echo "<a href='adventures.php' class='".$class."'> 1 ... </a>";
+
+
+		echo "<a href='adventures.php?page=" .$i. "' class='".$class."'>  $i   </a>";
+
+		if($page < $i && $page < ($total_page-1))
+			echo "<a href='adventures.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>";
+    }
+
+    if(($i-1) > $page)			       
+        echo "<a href='adventures.php?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
+}
+
+##### CODE START HERE @FILTER SQL / ALGORITHM #####
+function create_filter_sql($places, $activities, $min, $max) {
+	
+	$sqlquery = '';
+
+	if(!empty($places)) {
+
+		//This will trigger if PLACES is PRESENT
+
+		$sqlquery = "SELECT * FROM adventure WHERE adv_address";
+
+		$arrlength = count($places);
+
+		foreach($places as $index => $place) {
+			if($index != $arrlength-1)
+				$sqlquery = $sqlquery . " = '$place' OR adv_address";
+			else
+				$sqlquery = $sqlquery . " = '$place'";
+		}
+
+		if(!empty($activities)) {
+
+			// This will trigger if ACTIVITIES is PRESENT including PLACES
+
+			$sqlquery = $sqlquery . " OR adv_kind";
+
+			$arrlength = count($activities);
+
+			foreach($activities as $index => $activity) {
+				if($index != $arrlength-1)
+					$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
+				else
+					$sqlquery = $sqlquery . " = '$activity'";
+			}
+
+			if(!empty($min) && !empty($max)) {
+				//BOTH MIN, MAX is present including ACTIVITIES and PLACES 
+				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1) AND (adv_totalcostprice /adv_maxguests) < ($max+1) ORDER BY adv_id";
+
+			}
+			else if(!empty($min) && empty($max)) {
+				//ONLY MIN is present including ACTIVITIES and PLACES but MAX is absent
+				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1) ORDER BY adv_id";
+			}
+			else if(empty($min) && !empty($max)) {
+				//ONLY MAX is present including ACTIVITIES and PLACES but MIN is absent
+				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($max+1) ORDER BY adv_id";
+			}
+			else {
+				//BOTH ACTIVITIES and PLACES is present but BOTH MAX & MIN is absent
+				$sqlquery = $sqlquery . " ORDER BY adv_id";
+			}
+		}
+
+		else {
+
+			// This will trigger if ACTIVITES is ABSENT
+
+			if(!empty($min) && !empty($max)) {
+				//BOTH MIN and MAX is present including PLACES but ACTIVITIES is absent 
+				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1) AND (adv_totalcostprice /adv_maxguests) < ($max+1) ORDER BY adv_id";
+			}
+			else if(!empty($min) && empty($max)) {
+				//ONLY MIN is present including PLACES but ACTIVITIES and MAX is absent
+				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1) ORDER BY adv_id";
+			}
+			else if(empty($min) && !empty($max)) {
+				//ONLY MAX is present including PLACES but ACTIVITIES and MIN is absent
+				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) < ($max+1) ORDER BY adv_id";
+			}
+			else{
+				//ONLY PLACES is present but ACTIVITIES, MIN and MAX is absent
+				$sqlquery = $sqlquery . " ORDER BY adv_id";
+			}
+		}
+	}
+
+	else if(!empty($activities)) {
+		
+		//This will trigger only if ACTIVITIES is PRESENT but PLACES is ABSENT
+
+		if(empty($places))
+			$sqlquery = "SELECT * FROM adventure WHERE adv_kind";
+
+		$arrlength = count($activities);
+
+		foreach($activities as $index => $activity) {
+			if($index != $arrlength-1)
+				$sqlquery = $sqlquery . " = '$activity' OR adv_kind";
+			else
+				$sqlquery = $sqlquery . " = '$activity'";
+		}
+
+		if(!empty($min) && !empty($max)) {
+			//BOTH MIN, MAX is present including ACTIVITIES but PLACES is absent
+			$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1) AND (adv_totalcostprice /adv_maxguests) < ($max+1) ORDER BY adv_id";
+		}
+		else if(!empty($min) && empty($max)) {
+			//ONLY MIN is present including ACTIVITIES but PLACES is absent
+			$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1) ORDER BY adv_id";
+		}
+		else if(empty($min) && !empty($max)) {
+			//ONLY MAX is present including ACTIVITIES but PLACES is absent
+			$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) < ($max+1) ORDER BY adv_id";
+		}
+		else  {
+			//ONLY ACTIVITIES is present PLACES, MAX & MIN is absent
+			$sqlquery = $sqlquery . " ORDER BY adv_id";
+		}
+	}
+
+	else if(!empty($min) && !empty($max)) { 
+			//BOTH MIN & MAX is present but PLACES and ACTIVITIES is absent
+			$sqlquery = "SELECT * from adventure WHERE (adv_totalcostprice /adv_maxguests) > ($min+1) AND (adv_totalcostprice /adv_maxguests) < ($max+1) ORDER BY adv_id";
+	}
+
+	else if(!empty($min) && empty($max)) {
+		//ONLY MIN is present but PLACES and ACTIVITIES is absent
+		$sqlquery = "SELECT * from adventure WHERE (adv_totalcostprice /adv_maxguests) > ($min-1) ORDER BY adv_id";
+	}
+
+	else if(empty($min) && !empty($max)) {
+		//ONLY MAX is present but PLACES and ACTIVITIES is absent
+		$sqlquery = "SELECT * from adventure WHERE (adv_totalcostprice /adv_maxguests) < ($max+1) ORDER BY adv_id";
+	}
+
+	//file_put_contents('debug.log', date('h:i:sa').' => ' .$sqlquery. "\n" . "\n", FILE_APPEND);
+
+	return $sqlquery;
+}
+
 ##### CODE START HERE @DELETE SQL DATA IN SPECIFIED TABLE #####
 function deleteSQLDataTable($table, $id){
 	// DELETE LEGAL DOCUMENT
