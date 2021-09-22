@@ -53,11 +53,12 @@
 					<a href="forgotpass.php">Forgot Password &#187;</a>
 					<button type="submit" name="btnLogin">Login</button>
 					<a href="create.php">Create</a>
-				</form>
+					<label>or login Joiner as:</label>
 				<?php
 					echo $google_login_url;
 					//echo '<a href="'.$facebook_login_url.'">Log in with Facebook!</a>';
 				?>
+				</form>
 
 			</main>
 		</div>

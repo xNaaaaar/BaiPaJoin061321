@@ -221,11 +221,13 @@ and (max-width : 1000px) {
       .sidebar:after{content:'\203A';width:40px;height:80px;background:#7fdcd3;color:#fff;font-size:50px;position:absolute;top:0;left:0;display:flex;justify-content:center;align-items:center;border-top-right-radius:5px;border-bottom-right-radius:5px;font-weight:bold;}
       .sidebar:hover{background:#fff;width:280px;box-shadow:10px 10px 10px -5px gray;cursor:pointer;}
       .sidebar:hover:after{display:none;}
+      .sidebar:hover figure{display:block;width:50%;}
       .sidebar:hover h2{display:block;}
       .sidebar:hover p{display:block;}
       .sidebar:hover ul{display:flex;}
       .sidebar:hover ul li{display:block;}
       .sidebar:before{display:none;}
+  		.sidebar figure{display:none;font-size:30px !important;}
   		.sidebar h2{display:none;font-size:30px !important;}
   		.sidebar p{display:none;}
   		.sidebar ul{display:none;font-size:25px !important;}
