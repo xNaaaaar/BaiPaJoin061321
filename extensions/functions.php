@@ -1290,12 +1290,18 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 
 	//Paymongo add card PAYMENT DETAILS code STARTS here
 
+	if(substr($card_expiry,4,1) == 0){
+		$expiry_month = substr($card_expiry,5,1);
+	}		
+	else
+		$expiry_month = substr($card_expiry,4,2);
+
 	$method_body_params = '{
 	    "data": {
 	        "attributes": {
 	            "details": {
 	                "card_number": "'.$card_num.'",
-	                "exp_month": '.substr($card_expiry, 4).',
+	                "exp_month": '.$expiry_month.',
 	                "exp_year": '.substr($card_expiry, 2, 2).',
 	                "cvc": "'.$card_cvv.'"
 	            },
@@ -1311,6 +1317,8 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 	        }
 	    }
 	}'; //This is to setup the query for paymongo add payment method
+
+	file_put_contents('debug.log', date('h:i:sa').' => '.$method_body_params . "\n" . "\n", FILE_APPEND);
 
 	curl_setopt_array($curl, array(
 	  CURLOPT_URL => 'https://api.paymongo.com/v1/payment_methods',
