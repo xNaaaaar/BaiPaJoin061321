@@ -7,6 +7,7 @@
 
 	if(isset($_POST['btnCreate'])){
 		createAccount();
+		header("Location: login.php?created");
 	}
 ?>
 
@@ -43,7 +44,7 @@
 					<input type="email" name="emEmail" placeholder="sample@gmail.com" required>
 					<input type="password" name="pwPassword" placeholder="Password" minlength="8" required>
 					<button type="submit" name="btnCreate">Create</button>
-					<a href="login.php">&#171; Back to Login</a>
+					<!-- <a href="login.php">&#171; Back to Login</a> -->
 				</form>
 			</main>
 		</div>

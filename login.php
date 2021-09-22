@@ -6,8 +6,13 @@
 	require_once("extensions/db.php");
 
 	if(isset($_GET['success'])){
-		echo "<script>alert('Successful')</script>";
+		echo "<script>alert('We've successfully reset your password. Please check your email inbox.)</script>";
 	}
+
+	if(isset($_GET['created'])){
+		echo "<script>alert('We've successfully created your account! Thank you!)</script>";
+	}
+
 	if(isset($_POST['btnLogin'])){
 		unset($_SESSION['helper']); //This will unset FB session variable to solve error on settings.php
 		loginAccount();
