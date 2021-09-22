@@ -25,6 +25,7 @@
 				</div>
 
 				<form method="post">
+					<label>Temporary password will be send to email: </label>
 					<input type="text" name="txtEmailAdd" placeholder="sample@gmail.com">
 					<button type="submit" name="btnReset">Reset</button>
 					<a href="login.php">&#171; Back to Login</a>

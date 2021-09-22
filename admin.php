@@ -39,44 +39,70 @@
 <!-- Head -->
 <?php include("includes/head.php"); ?>
 <!-- End of Head -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 
 <style media="screen">
 html, body{height:100%;}
 .wrapper{max-width:100%;}
 /* Main Area */
-.main_con{display:flex;justify-content:space-between;height:100vh;}
+.main_con{display:flex;justify-content:space-between;min-height:100vh;}
 
-.sidebar{padding:30px;background:#7fdcd3;height:100%;}
+.sidebar{padding:30px;background:#7fdcd3;height:auto;}
 .sidebar:before{display:none;}
 .sidebar figure{width:150px;margin:0 auto!important;}
 .sidebar h2{text-align:center;}
 .sidebar h2 span{display:block;font-size:15px;}
 .sidebar ul{margin:35px 0 0 25px;height:auto;}
 
-main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px;border-radius:0;text-align:center;}
-main h1{text-align:right;}
+main{flex:4;float:none;height:100%;background:none;margin:0;padding:50px 50px 0;border-radius:0;text-align:center;}
+main h1{text-align:right;font-size:20px;}
 main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin:15px 0;text-align:left;}
 main h2 span{font-size:30px;}
 main h2 span a:hover{color:#313131;text-decoration:none;}
 main h3{font:600 30px/100% Montserrat,sans-serif;;margin-bottom:10px;text-align:center;}
-main input{display:inline-block;width:99%;height:50px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 0 0 20px;margin:5px auto;border:1px solid #cfcfcf;}
+main input{display:inline-block;width:99%;height:50px;border:none;outline:none;font:normal 18px/20px Montserrat,sans-serif;padding:0 20px;margin:5px auto;border:1px solid #cfcfcf;}
 
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 
 main .admins{height:auto;width:70%;}
-main .admins table{width:100%;text-align:left;}
-main .admins table thead{background:#7fdcd3;color:#fff;}
-main .admins table thead tr:hover{background:#7fdcd3;}
-main .admins table thead th{padding:15px 10px;font-weight:bold;}
-main .admins table tr{border-bottom:1px solid gray;}
-main .admins table tr:hover{background:#fafafa;}
-main .admins table td{padding:15px 10px;}
-main .admins table tr td:nth-child(4){padding:15px 0;text-align:center;}
-main .admins table tr td:nth-child(5){padding:15px 0;text-align:center;}
 
 main .forms{width:28%;}
-main .forms form{height:auto;padding:40px 25px 25px;box-shadow:10px 10px 10px -5px #cfcfcf;border:1px solid #cfcfcf;border-radius:20px;margin:0 0 20px;}
-main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;}
+main .forms form{height:auto;padding:40px 25px 25px;box-shadow:10px 10px 10px -5px #cfcfcf;border:1px solid #cfcfcf;margin:0 0 20px;}
+main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;border-radius:0;}
+
+/* Responsive Design */
+@media only screen and (max-width: 1800px) {
+	.main_con{min-height:0;}
+	main{height:100%;}
+}
+
+@media only screen and (max-width: 1400px) {
+	.main_con{padding:0;}
+	main .contents{display:block;}
+	main .admins{width:100%;}
+	main .forms{width:100%;display:flex;justify-content:space-between;margin:30px 0 0;}
+	main .forms form{width:48%;}
+}
+
+@media only screen and (max-width: 1200px){
+	.sidebar ul{margin:35px 0 0;}
+}
+
+@media only screen and (max-width: 1000px){
+	main{padding:0 0 0 30px;}
+}
+
+@media only screen and (max-width: 800px){
+	main .forms{display:block;}
+	main .forms form{width:100%;}
+}
+
+@media only screen and (max-width: 600px){
+	main input{font-size:15px;}
+	main .admins{width:100%;clear:both;overflow-x:auto;}
+	main .admins table{min-width: rem-calc(640);}
+}
+
 </style>
 
 </head>
@@ -111,8 +137,8 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;}
           <h2>Admins</h2>
           <div class="contents">
             <div class="admins">
-              <table>
-                <thead>
+              <table class="table">
+                <thead class="table-dark">
                   <tr>
                     <th>ID#</th>
     								<th>Name</th>
