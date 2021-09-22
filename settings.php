@@ -27,6 +27,15 @@
 		echo "<script>alert('Password successfully changed!')</script>";
 	}
 
+	//
+	if(isset($_GET['sent'])){
+		DB::query("UPDATE organizer SET orga_status=? WHERE orga_id=?", array(2, $_SESSION['organizer']), "UPDATE");
+		$pending = DB::query("SELECT * FROM organizer WHERE orga_id=?", array($_SESSION['organizer']), "READ");
+		$pending = $pending[0];
+		$_SESSION['verified'] = $pending['orga_status'];
+		echo "<script>alert('Successfully sent. Please wait for admin\'s verification!')</script>";
+	}
+
 ?>
 
 <!-- Head -->
@@ -112,7 +121,7 @@
 					<h2>Profile <span><a href="edit_profile.php"><i class='fas fa-edit'></i></a></span></h2>
 					<!-- FOR ORGANIZER -->
 					<?php if(isset($_SESSION['organizer'])){ ?>
-					<h3>Note: Please add legal documents below to post adventure upon verification.</h3>
+					<h3>Note: Please add 2 legal documents below, to verify your account.</h3>
 					<div class="form form1">
 						<input type="text" value="<?php echo "{$_SESSION['company']}"; ?>" placeholder="Company Name" disabled>
 						<input type="text" value="<?php echo "{$_SESSION['fname']}"; ?>" placeholder="Firstname" disabled>
@@ -128,7 +137,18 @@
 						<input type="password" name="" value="" placeholder="**********" disabled>
 					</div>
 
-					<h2>Legal Documents <span class="legal" ><a href="add_docu.php"><i class='fas fa-plus-circle'></i></a></span></h2>
+					<h2>Legal Documents <span class="legal" >
+						<a href="add_docu.php"><i class='fas fa-plus-circle'></i></a>
+						<?php
+						$docu = DB::query("SELECT * FROM legal_document WHERE orga_id=?", array($_SESSION['organizer']), "READ");
+						## CHECK IF ORGANIZER STATUS IS NOT VERIFIED AND ADDED LEGAL IS GREATER THAN OR EQUAL TO TWO
+						if($_SESSION['verified'] == 0 && count($docu) >= 2){
+						?>
+						<a href="settings.php?sent" onclick="return confirm('Send legal document to admin for verification?');"><i class="fas fa-paper-plane"></i></a>
+						<?php
+						} ##
+						?>
+					</span></h2>
 
 					<!-- DISPLAY ALL LEGAL DOCUMENT ADDED -->
 					<?php displayAll(0);
@@ -163,5 +183,5 @@
 <!-- End Main -->
 
 <!--Footer -->
-<?php include("includes/footer.php"); ?>
+<?php include("includes/footer.php");?>
 <!-- End Footer -->

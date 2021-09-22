@@ -30,7 +30,7 @@
 			<div class="wrapper">
 				<ul>
 					<li class="<?php if($currentPage == 'index') echo 'current_page_item'; ?>"><a href="index.php">Home</a></li>
-					<li class="<?php if($currentPage == 'aboutus') echo 'current_page_item'; ?>"><a href="aboutus.php">About Us</a></li>
+					<li class="<?php if($currentPage == 'aboutus') echo 'current_page_item'; ?>"><a href="#main_area">About Us</a></li>
 					<!-- SHOW ALL ADVENTURES POSTED IF CURRENT USER IS JOINER -->
 					<?php
 						if(!isset($_SESSION['organizer'])){
@@ -39,7 +39,7 @@
 					<?php
 						}
 					?>
-					<li class="<?php if($currentPage == 'contactus') echo 'current_page_item'; ?>"><a href="contactus.php">Contact Us</a></li>
+					<li class="<?php if($currentPage == 'contactus') echo 'current_page_item'; ?>"><a href="#contact-us">Contact Us</a></li>
 					<!-- IF USER LOGIN OR NOT -->
 					<?php
 						$_SESSION['current_user'] = "";

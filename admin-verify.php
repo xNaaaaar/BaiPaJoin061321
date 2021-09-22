@@ -5,8 +5,15 @@
   // REDIRECT IF ADMIN NOT LOGGED IN
   if(!isset($_SESSION['admin'])) header("Location: login.php");
 
-	if(isset($_GET['success'])){
-		echo "<script>alert('Successfully verified!')</script>";
+	if(isset($_POST['btnVerify'])){
+		## UPDATE ORGANIZER STATUS
+		DB::query("UPDATE organizer SET orga_status=? WHERE orga_id=?", array(1, $_GET['orga_id']), "UPDATE");
+		$organizer = DB::query("SELECT * FROM organizer WHERE orga_id=?", array($_GET['orga_id']), "REAd");
+
+		if(count($organizer)>0){
+			$organizer = $organizer[0];
+			header("Location: admin-organizer.php?success");
+		}
 	}
 
 ?>
@@ -40,6 +47,7 @@ main input{display:inline-block;width:99%;height:50px;border:none;box-shadow:10p
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 
 main .admins{height:auto;width:100%;}
+main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;border-radius:0;vertical-align:top;}
 
 /* Responsive Design */
 @media only screen and (max-width: 1800px) {
@@ -108,56 +116,41 @@ main .admins{height:auto;width:100%;}
           <h2>Organizers</h2>
           <div class="contents">
             <div class="admins">
-              <table class="table-responsive table">
+							<table class="table-responsive table">
                 <thead class="table-dark">
                   <tr>
                     <th>ID#</th>
-    								<th>Company Name</th>
-    								<th>Name</th>
-    								<th>Address</th>
-    								<th>Phone</th>
-    								<th>Email Address</th>
-    								<th>Status</th>
-    								<th></th>
-    								<th></th>
+    								<th>Document Type</th>
+    								<th>Description</th>
+    								<th>Date Added</th>
+    								<th>Downloadable Resources</th>
                   </tr>
                 </thead>
 								<tbody>
-                <?php
-									// ALL ORGANIZERS RESULTS
-                  $organizer = DB::query("SELECT * FROM organizer", array(), "READ");
+	              <?php
+								$counter = 1;
+								$docu = DB::query("SELECT * FROM organizer o JOIN legal_document l ON o.orga_id = l.orga_id WHERE o.orga_id=?", array($_GET['orga_id']), "READ");
 
-                  if(count($organizer)>0){
-                    foreach ($organizer as $result) {
-                      echo "
-                      <tr>
-                        <td>".$result['orga_id']."</td>
-                        <td>".$result['orga_company']."</td>
-                        <td>".$result['orga_fname']." ".$result['orga_mi'].". ".$result['orga_lname']." </td>
-                        <td>".$result['orga_address']."</td>
-                        <td>".$result['orga_phone']."</td>
-                        <td>".$result['orga_email']."</td>
-											";
-
-											if($result['orga_status'] == 2) {
-												echo "<td style='color:#33b5e5;'><em>pending</em></td>";
-												echo "<td><a href='admin-verify.php?orga_id=".$result['orga_id']."'><i class='far fa-eye'></i></a></td>";
-											} elseif($result['orga_status'] == 1) {
-												echo "<td style='color:#00c851;'><em>verified</em></td>";
-												echo "<td></td>";
-											} else {
-												echo "<td style='color:#ff4444;'><em>not verified</em></td>";
-												echo "<td></td>";
-											}
-                      echo "
-												<td><i class='fas fa-user-slash'></i></td>
-											</tr>
-											";
-                    }
-                  }
-                ?>
+								if(count($docu)>0){
+									foreach ($docu as $result) {
+										echo "
+										<tr>
+											<td>".$result['orga_id']."</td>
+											<td>".$result['docu_type']."</td>
+											<td>".$result['docu_description']."</td>
+											<td>".date("F j, Y", strtotime($result['docu_dateadded']))."</td>
+											<td><a href='legal_docu/".$_GET['orga_id']."/".$result['docu_image']."' download='".$result['orga_fname']."-Legal-Documents".$counter."'>Download the file</a></td>
+										</tr>
+										";
+										$counter++;
+									}
+								}
+								?>
 								</tbody>
-              </table>
+							</table>
+							<form method="post">
+								<button class="edit" type="submit" name="btnVerify" onclick="return confirm('Are you sure you want to verify this organizer?');">Verify</button>
+							</form>
             </div>
           </div>
         </main>

@@ -4,28 +4,28 @@
 	include("google_login/config.php");
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
-	
+
 	if(isset($_GET['login']) && isset($_GET['login']) == 1){
 		echo "<script>alert('Login successfully!')</script>";
 	}
 
 	if(isset($_GET['code'])) {
 
-		$google_token = $google_client -> fetchAccessTokenWithAuthCode($_GET['code']);			
-		
+		$google_token = $google_client -> fetchAccessTokenWithAuthCode($_GET['code']);
+
 		if(!isset($google_token['error'])) {
 			//This is for Google OAuth
-			$google_client -> setAccessToken($google_token['access_token']);					
+			$google_client -> setAccessToken($google_token['access_token']);
 			$google_service = new Google_Service_Oauth2($google_client);
 			$data = $google_service -> userinfo -> get();
 
 			unset($_SESSION['helper']); //This will unset FB session variable to solve error on settings.php
 
-			$_SESSION['access_token'] = $google_token['access_token'];	
+			$_SESSION['access_token'] = $google_token['access_token'];
 
 			if(!empty($data)) {
-			    if(!file_exists('logs\google_login')) 
-			      mkdir('logs\google_login', 0777, true);				   
+			    if(!file_exists('logs\google_login'))
+			      mkdir('logs\google_login', 0777, true);
 			    $log_file_data = 'logs\\google_login\\log_' . date('d-M-Y') . '.log';
 			    file_put_contents($log_file_data, date('h:i:sa').' => '. $data['name'] . ' ' . $data['email'] . ' ' . $data['given_name'] .' ' . $data['family_name'] . ' ' . $data['picture'] . ' ' . $data['locale'] . "\n" . "\n", FILE_APPEND);
 			}
@@ -48,8 +48,8 @@
 			unset($_SESSION['helper']); //This will unset FB session variable to solve error on settings.php
 
 			if(!empty($user_data)) {
-			    if(!file_exists('logs\facebook_login')) 
-			      mkdir('logs\facebook_login', 0777, true);				   
+			    if(!file_exists('logs\facebook_login'))
+			      mkdir('logs\facebook_login', 0777, true);
 			    $log_file_data = 'logs\\facebook_login\\log_' . date('d-M-Y') . '.log';
 			    file_put_contents($log_file_data, date('h:i:sa').' => '. $user_data['first_name'] . ' ' . $user_data['last_name'] . ' ' . $user_data['email'] . "\n" . "\n", FILE_APPEND);
 			}
@@ -60,7 +60,7 @@
 			}
 			else
 				echo "<script>alert('Your email address is already in our system! Please user another Facebook Account')</script>";
-			
+
 		} */
 	}
 ?>

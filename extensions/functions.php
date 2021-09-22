@@ -44,7 +44,7 @@ function createAccount(){
 				DB::query("INSERT INTO joiner(joiner_fname, joiner_lname, joiner_mi, joiner_email, joiner_password) VALUES(?,?,?,?,?)", array($txtFirstname, $txtLastname, $txtMi, $emEmail, $pwPassword), "CREATE");
 			} else {
 				//ADD NEW ORGANIZER ACCOUNT
-				DB::query("INSERT INTO organizer(orga_fname, orga_lname, orga_mi, orga_email, orga_password) VALUES(?,?,?,?,?)", array($txtFirstname, $txtLastname, $txtMi, $emEmail, $pwPassword), "CREATE");
+				DB::query("INSERT INTO organizer(orga_fname, orga_lname, orga_mi, orga_email, orga_password, orga_status) VALUES(?,?,?,?,?,?)", array($txtFirstname, $txtLastname, $txtMi, $emEmail, $pwPassword, 0), "CREATE");
 
 				//GET THE ORGANIZER ID
 				$userid = DB::query("SELECT * FROM organizer WHERE orga_email = ?", array($emEmail), "READ");
@@ -111,10 +111,13 @@ function loginAccount(){
 	// ORGANIZER ACCOUNT
 	} else if(count($organizerAccount)>0){
 		$organizerAccount = $organizerAccount[0];
-		$_SESSION['organizer'] = $organizerAccount['orga_id'];
+		## CHECK IF ORGANIZER IS NOT BANNED
+		if($organizerAccount['orga_status'] <= 2){
+			$_SESSION['organizer'] = $organizerAccount['orga_id'];
 
-		header('Location: index.php');
-		exit;
+			header('Location: index.php');
+			exit;
+		}
 
 	// ADMIN ACCOUNT
 	} else if(count($adminAccount)>0){
@@ -197,7 +200,7 @@ function currentOrganizer($id){
 
 		if(isset($_SESSION['organizer'])) {
 			$_SESSION['company'] = $user['orga_company'];
-			$_SESSION['verified'] = $user['orga_verified'];
+			$_SESSION['verified'] = $user['orga_status'];
 		}
 	}
 }
@@ -363,8 +366,17 @@ function displayAll($num, $query = NULL){
 							<p>".$result['docu_description']."</p>
 						</div>
 						<ul class='icons'>
-							<li><a href='edit_docu.php?image=".$result['docu_image']."'><i class='fas fa-edit'></i></a></li>
-							<li><a href='delete.php?table=legal_document&image=".$result['docu_image']."' onclick='return confirm(\"Are you sure you want to delete this document?\");'><i class='far fa-trash-alt'></i></a></li>
+				";
+					if(!$_SESSION['verified'] == 1){
+						echo "<li><a href='edit_docu.php?image=".$result['docu_image']."'><i class='fas fa-edit'></i></a></li>";
+					}
+					
+					if(!$_SESSION['verified'] == 2){
+						echo "
+						<li><a href='delete.php?table=legal_document&image=".$result['docu_image']."' onclick='return confirm(\"Are you sure you want to delete this document?\");'><i class='far fa-trash-alt'></i></a></li>
+						";
+					}
+				echo "
 						</ul>
 				</div>
 				";
@@ -632,7 +644,7 @@ function pagination($page, $card, $num_per_page){
 	$total_record = count($card);
     $total_page = ceil($total_record/$num_per_page);
 
-    if($page > 1)  
+    if($page > 1)
         echo "<a href='adventures.php?page=" .($page-1). "' class='fas fa-angle-double-left pull-left' > Previous</a>";
 
 				//LIMIT VISIBLE NUMBER PAGE
@@ -642,10 +654,10 @@ function pagination($page, $card, $num_per_page){
 
 
     for($i=$startPage;$i<=$endPage;$i++) {
-		if ($i == $page) 
+		if ($i == $page)
     		$class = 'pagingCurrent';
-    	else						
-			$class = 'paging'; 
+    	else
+			$class = 'paging';
 
 		if($page > $i && $page > 2)
 			echo "<a href='adventures.php' class='".$class."'> 1 ... </a>";
@@ -657,13 +669,13 @@ function pagination($page, $card, $num_per_page){
 			echo "<a href='adventures.php?page=" .($total_page). "' class='".$class."'> ... $total_page </a>";
     }
 
-    if(($i-1) > $page)			       
+    if(($i-1) > $page)
         echo "<a href='adventures.php?page=" .($page+1). "' class='fas fa-angle-double-right pull-right' > Next </a >";
 }
 
 ##### CODE START HERE @FILTER SQL / ALGORITHM #####
 function create_filter_sql($places, $activities, $min, $max) {
-	
+
 	$sqlquery = '';
 
 	if(!empty($places)) {
@@ -697,7 +709,7 @@ function create_filter_sql($places, $activities, $min, $max) {
 			}
 
 			if(!empty($min) && !empty($max)) {
-				//BOTH MIN, MAX is present including ACTIVITIES and PLACES 
+				//BOTH MIN, MAX is present including ACTIVITIES and PLACES
 				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1) AND (adv_totalcostprice /adv_maxguests) < ($max+1) ORDER BY adv_id";
 
 			}
@@ -720,7 +732,7 @@ function create_filter_sql($places, $activities, $min, $max) {
 			// This will trigger if ACTIVITES is ABSENT
 
 			if(!empty($min) && !empty($max)) {
-				//BOTH MIN and MAX is present including PLACES but ACTIVITIES is absent 
+				//BOTH MIN and MAX is present including PLACES but ACTIVITIES is absent
 				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1) AND (adv_totalcostprice /adv_maxguests) < ($max+1) ORDER BY adv_id";
 			}
 			else if(!empty($min) && empty($max)) {
@@ -739,7 +751,7 @@ function create_filter_sql($places, $activities, $min, $max) {
 	}
 
 	else if(!empty($activities)) {
-		
+
 		//This will trigger only if ACTIVITIES is PRESENT but PLACES is ABSENT
 
 		if(empty($places))
@@ -772,7 +784,7 @@ function create_filter_sql($places, $activities, $min, $max) {
 		}
 	}
 
-	else if(!empty($min) && !empty($max)) { 
+	else if(!empty($min) && !empty($max)) {
 			//BOTH MIN & MAX is present but PLACES and ACTIVITIES is absent
 			$sqlquery = "SELECT * from adventure WHERE (adv_totalcostprice /adv_maxguests) > ($min+1) AND (adv_totalcostprice /adv_maxguests) < ($max+1) ORDER BY adv_id";
 	}
