@@ -119,6 +119,7 @@
 				if(count($joiner)>0 && count($adv)>0 && count($booked)>0){
 					$joiner = $joiner[0];
 					$adv = $adv[0];
+					//$adv_org = $adv[15];
 					$booked = $booked[0];
 					// JOINER FEES CALCULATION
 					$price_fee = $booked['book_totalcosts'] * 0.035 + 15;
@@ -154,7 +155,7 @@
 				</div>
 
 				<div class="voucher">
-					<h2>Add Voucher <span><a href="voucher.php" target="_blank" >look for voucher</a></span> </h2>
+					<h2>Add Voucher <span><a href="voucher.php?adv_id=<?php echo $adv[0]; ?>&adv_org=<?php echo $adv[15]; ?>&booking_total=<?php echo $final_price; ?>" target="_blank" >look for voucher</a></span> </h2>
 
 					<?php
 						if(isset($_POST['btnVerify'])){

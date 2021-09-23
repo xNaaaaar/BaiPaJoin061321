@@ -131,7 +131,7 @@
 					<li class="ongoing success"><i class="far fa-check-circle"></i> Fill in Guest Information <span>&#187;</span></li>
 					<li class="ongoing"><i class="far fa-check-circle"></i> Review & Payment</li>
 				</ul>
-				<?php echo $_SESSION['book_id']; ?>
+				<?php //echo $_SESSION['book_id']; ?>
 				<h2>Payment</h2>
 				<!-- BOOKING DETAILS SECTION -->
 				<div class="booking_details">
@@ -153,7 +153,7 @@
 				</div>
 				<!-- VOUCHER SECTION -->
 				<div class="voucher">
-					<h2>Add Voucher <span><a href="voucher.php" target="_blank" >look for voucher</a></span> </h2>
+					<h2>Add Voucher <span><a href="voucher.php?adv_id=<?php echo $adv[0]; ?>&adv_org=<?php echo $adv[15]; ?>&booking_total=<?php echo $final_price; ?>" target="_blank" >look for voucher</a></span> </h2>
 
 					<?php
 					if(isset($_POST['btnVerify'])){

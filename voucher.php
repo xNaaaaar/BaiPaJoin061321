@@ -144,7 +144,16 @@
 					<div class="card-div">
 						<?php
 						// DISPLAY ALL VOUCHER
-						if(isset($_POST['btnSearch'])){
+						if(!empty(isset($_GET['adv_id'])) && !empty(isset($_GET['adv_org'])) && !empty(isset($_GET['booking_total']))) {
+							$orga_id = $_GET['adv_org'];
+							$adv_id = $_GET['adv_id'];
+							$price = $_GET['booking_total'];
+
+							$card = DB::query("SELECT * FROM voucher WHERE orga_id = '$orga_id' AND adv_id = '$adv_id' AND vouch_minspent < ($price+1)", array(), "READ");
+
+							displayAll(3, $card);
+						}
+						else if(isset($_POST['btnSearch'])){
 							$txtSearch = trim(ucwords($_POST['txtSearch']));
 
 							$card = DB::query("SELECT * FROM voucher WHERE vouch_discount LIKE '%{$txtSearch}%' || vouch_name LIKE '%{$txtSearch}%' || vouch_startdate LIKE '%{$txtSearch}%' || vouch_enddate LIKE '%{$txtSearch}%' || vouch_minspent LIKE '%{$txtSearch}%'", array(), "READ");
