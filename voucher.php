@@ -150,8 +150,12 @@
 							$price = $_GET['booking_total'];
 
 							$card = DB::query("SELECT * FROM voucher WHERE orga_id = '$orga_id' AND adv_id = '$adv_id' AND vouch_minspent < ($price+1)", array(), "READ");
-
-							displayAll(3, $card);
+							if(!empty($card))
+								displayAll(3, $card);
+							else{
+								echo "<script>alert('Sorry! No available voucher for this adventure but these are the vouchers you may avail for other adventures.')</script>";
+								displayAll(3, $card);
+							}
 						}
 						else if(isset($_POST['btnSearch'])){
 							$txtSearch = trim(ucwords($_POST['txtSearch']));
