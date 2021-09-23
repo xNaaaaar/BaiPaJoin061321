@@ -2,11 +2,20 @@
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
 
+	if(isset($_GET['error']))
+		echo "<script>alert('ERROR! Please ensure that all fields are not blank or filled with spaces ONLY.')</script>";
+
 	if(isset($_POST['btnSaveOrganizer'])){
-		organizerSaveProfileChanges();
+		if(!empty(trim(ucwords($_POST['txtFirstname']))) && !empty(trim(ucwords($_POST['txtLastname']))) && !empty(trim(ucwords($_POST['txtMi']))) && !empty(trim(ucwords($_POST['txtAddress']))) && !empty(trim($_POST['txtPhone'])) && !empty(trim($_POST['emEmail'])) && !empty(trim(ucwords($_POST['txtCompName']))))
+			organizerSaveProfileChanges();
+		else
+			header("Location: edit_profile.php?error");
 	}
 	else if(isset($_POST['btnSaveJoiner'])){
-		joinerSaveProfileChanges();
+		if(!empty(trim(ucwords($_POST['txtFirstname']))) && !empty(trim(ucwords($_POST['txtLastname']))) && !empty(trim(ucwords($_POST['txtMi']))) && !empty(trim(ucwords($_POST['txtAddress']))) && !empty(trim($_POST['txtPhone'])) && !empty(trim($_POST['emEmail'])))
+			joinerSaveProfileChanges();
+		else
+			header("Location: edit_profile.php?error");
 	}
 ?>
 
