@@ -5,9 +5,17 @@
 
 	unset($_SESSION['helper']); //This will unset FB session variable to solve error on settings.php
 
+	if(isset($_GET['error']))
+		echo "<script>alert('Error! Please ensure that all fields are not blank or filled with spaces.')</script>";
+
 	if(isset($_POST['btnCreate'])){
-		createAccount();
-		header("Location: login.php?created");
+		if(!empty(trim(ucwords($_POST['txtFirstname']))) && !empty(trim(ucwords($_POST['txtLastname']))) && !empty(trim(ucwords($_POST['txtMi']))) && !empty(trim($_POST['emEmail'])) && !empty(trim($_POST['pwPassword']))) {
+			createAccount();
+			header("Location: login.php?created");
+		}
+		else {
+			header("Location: create.php?error");
+		}
 	}
 ?>
 

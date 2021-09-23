@@ -6,11 +6,11 @@
 	require_once("extensions/db.php");
 
 	if(isset($_GET['success'])){
-		echo "<script>alert('We've successfully reset your password. Please check your email inbox.)</script>";
+		echo "<script>alert('We have successfully reset your password. Please check your email inbox.')</script>";
 	}
 
 	if(isset($_GET['created'])){
-		echo "<script>alert('We've successfully created your account! Thank you!)</script>";
+		echo "<script>alert('We have successfully created your account! Thank you!')</script>";
 	}
 
 	if(isset($_POST['btnLogin'])){
