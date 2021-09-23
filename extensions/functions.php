@@ -367,10 +367,10 @@ function displayAll($num, $query = NULL){
 						</div>
 						<ul class='icons'>
 				";
-					if(!$_SESSION['verified'] == 1){
+					if(!$_SESSION['verified'] == 1 || $_SESSION['verified'] == 2){
 						echo "<li><a href='edit_docu.php?image=".$result['docu_image']."'><i class='fas fa-edit'></i></a></li>";
 					}
-					
+
 					if(!$_SESSION['verified'] == 2){
 						echo "
 						<li><a href='delete.php?table=legal_document&image=".$result['docu_image']."' onclick='return confirm(\"Are you sure you want to delete this document?\");'><i class='far fa-trash-alt'></i></a></li>
@@ -1304,7 +1304,7 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 
 	if(substr($card_expiry,4,1) == 0){
 		$expiry_month = substr($card_expiry,5,1);
-	}		
+	}
 	else
 		$expiry_month = substr($card_expiry,4,2);
 
