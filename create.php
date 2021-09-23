@@ -23,7 +23,11 @@
 <?php include("includes/head.php"); ?>
 <!-- End of Head -->
 
-	<!--?php wp_head(); ?-->
+<style >
+	.slider{width:100%;height:auto;top:0;right:0;left:0;z-index:3;}
+	.slider:after{display:none;}
+	.rslides{border-radius:0;box-shadow:none;}
+</style>
 </head>
 	<body>
 		<div class="protect-me">
@@ -31,6 +35,8 @@
 
 <!-- Main -->
 <div id="main_area" class="user_area create">
+	<!-- Images Slider -->
+	<?php include("includes/slider.php"); ?>
 	<div class="wrapper">
 		<div class="main_con">
 			<main>

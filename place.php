@@ -102,12 +102,29 @@
 						<h2>On <?php echo date('M. j, Y', strtotime($place['adv_date'])); ?> <span><?php echo "₱ ".number_format((float)$price, 2, '.', '')." / guest"; ?></span> </h2>
 
 						<form method="post">
-							<?php if(isset($_SESSION['joiner'])) { ?>
-								<!-- <a class="edit" href="book.php?id=<?php echo $_GET['id']; ?>">Book</a> -->
-								<button class="edit" type="submit" name="btnBook">Book</button>
-							<?php	} else { ?>
+							<?php
+							## IF JOINER LOGIN
+							if(isset($_SESSION['joiner'])) {
+								$isempty = false;
+								$details_empty = DB::query("SELECT * FROM joiner WHERE joiner_id=?", array($_SESSION['joiner']), "READ");
+								if(count($details_empty)>0){
+									foreach ($details_empty as $result) {
+										$isempty = ($result[0] == "" || $result[1] == "" || $result[2] == "" || $result[3] == "" || $result[4] == "" || $result[5] == "") ? true : false;
+									}
+								}
+
+								if($isempty)
+									echo "<a class='edit' href='settings.php' onclick='return confirm(\"You need to fill out all profile details!\");'>Book</a>";
+								else
+									echo "<button class='edit' type='submit' name='btnBook'>Book</button>";
+
+							## FOR GUESTS
+							} else {
+							?>
 								<a class="edit" href="login.php" onclick='return confirm("Login to book adventure!");'>Book</a>
-							<?php	} ?>
+							<?php
+							}
+							?>
 						</form>
 
 						<?php

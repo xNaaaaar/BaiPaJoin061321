@@ -47,7 +47,7 @@ main input{display:inline-block;width:99%;height:50px;border:none;box-shadow:10p
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 
 main .admins{height:auto;width:100%;}
-main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;border-radius:0;vertical-align:top;}
+main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;border-radius:0;vertical-align:top;margin:30px 5px;}
 
 /* Responsive Design */
 @media only screen and (max-width: 1800px) {
@@ -119,7 +119,6 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
 							<table class="table-responsive table">
                 <thead class="table-dark">
                   <tr>
-                    <th>ID#</th>
     								<th>Document Type</th>
     								<th>Description</th>
     								<th>Date Added</th>
@@ -135,7 +134,6 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
 									foreach ($docu as $result) {
 										echo "
 										<tr>
-											<td>".$result['orga_id']."</td>
 											<td>".$result['docu_type']."</td>
 											<td>".$result['docu_description']."</td>
 											<td>".date("F j, Y", strtotime($result['docu_dateadded']))."</td>
@@ -150,6 +148,7 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
 							</table>
 							<form method="post">
 								<button class="edit" type="submit" name="btnVerify" onclick="return confirm('Are you sure you want to verify this organizer?');">Verify</button>
+								<a class="edit" href="admin-organizer.php">Back</a>
 							</form>
             </div>
           </div>
