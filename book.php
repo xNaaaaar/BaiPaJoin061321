@@ -94,7 +94,7 @@
 
 						# PRICE FOR EACH GUEST
 						$price = $adv['adv_totalcostprice'] / $adv['adv_maxguests'];
-						$_SESSION['price'] = number_format((float)$price, 2, '.', '');
+						$_SESSION['price'] = number_format((float)$price, 2, '.', ',');
 
 						# CHOOSING RANDOM IMAGE
 						$images = $adv['adv_images'];

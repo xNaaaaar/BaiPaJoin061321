@@ -48,7 +48,6 @@
 		.sidebar ul li{line-height:45px;}
 		.sidebar ul li i{width:40px;position:relative;}
 		.sidebar ul li i:before{position:absolute;top:-25px;left:50%;transform:translateX(-50%);}
-		.sidebar ul li:last-child{margin:auto 0;}
 		.sidebar ul li a{color:#454545;position:relative;}
 		.sidebar ul li a small{color:#fff;font-size:15px;position:absolute;top:0;right:-20px;background:#bf127a;height:25px;width:25px;text-align:center;border-radius:50px;line-height:25px;}
 		.sidebar ul li a:hover{color:#bf127a;}

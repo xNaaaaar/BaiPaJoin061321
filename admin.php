@@ -117,19 +117,10 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
       ?>
       <div class="main_con">
         <!-- SIDEBAR -->
-        <aside class="sidebar">
-          <figure>
-            <img src="images/baipajoin.ico" alt="">
-          </figure>
-          <h2>BaiPaJoin <span>an online joiner platform for tourists</span> </h2>
-          <ul>
-            <li><a href="admin-dashboard.php">Dashboard</a> </li>
-            <li class="current_sidebar"><a href="admin.php">Admin</a> </li>
-            <li><a href="admin-organizer.php">Organizer</a> </li>
-            <li><a href="admin-joiner.php">Joiner</a> </li>
-            <li><a href="logout.php" onclick="return confirm('Are you sure you want to logout?');"><q>Logout</q></a></li>
-          </ul>
-        </aside>
+				<?php
+					$currentSidebarPage = 'admin';
+					include("includes/sidebar-admin.php");
+				?>
 
         <!-- MAIN -->
         <main>

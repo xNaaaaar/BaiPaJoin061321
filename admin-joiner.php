@@ -5,15 +5,8 @@
   // REDIRECT IF ADMIN NOT LOGGED IN
   if(!isset($_SESSION['admin'])) header("Location: login.php");
 
-	if(isset($_POST['btnVerify'])){
-		## UPDATE ORGANIZER STATUS
-		DB::query("UPDATE organizer SET orga_status=? WHERE orga_id=?", array(1, $_GET['orga_id']), "UPDATE");
-		$organizer = DB::query("SELECT * FROM organizer WHERE orga_id=?", array($_GET['orga_id']), "REAd");
-
-		if(count($organizer)>0){
-			$organizer = $organizer[0];
-			header("Location: admin-organizer.php?success");
-		}
+	if(isset($_GET['success'])){
+		echo "<script>alert('Successfully verified!')</script>";
 	}
 
 ?>
@@ -47,7 +40,6 @@ main input{display:inline-block;width:99%;height:50px;border:none;box-shadow:10p
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 
 main .admins{height:auto;width:100%;}
-main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;border-radius:0;vertical-align:top;margin:30px 5px;}
 
 /* Responsive Design */
 @media only screen and (max-width: 1800px) {
@@ -97,7 +89,7 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
       <div class="main_con">
         <!-- SIDEBAR -->
 				<?php
-					$currentSidebarPage = 'organizer';
+					$currentSidebarPage = 'joiner';
 					include("includes/sidebar-admin.php");
 				?>
 
@@ -107,40 +99,60 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
           <h2>Organizers</h2>
           <div class="contents">
             <div class="admins">
-							<table class="table-responsive table">
+              <table class="table-responsive table">
                 <thead class="table-dark">
                   <tr>
-    								<th>Document Type</th>
-    								<th>Description</th>
-    								<th>Date Added</th>
-    								<th>Downloadable Resources</th>
+                    <th>ID#</th>
+    								<th>Name</th>
+    								<th>Address</th>
+    								<th>Phone</th>
+    								<th>Email Address</th>
+    								<th>Total Bookings</th>
+    								<th>Total Paid</th>
+    								<th></th>
+    								<th></th>
                   </tr>
                 </thead>
 								<tbody>
-	              <?php
-								$counter = 1;
-								$docu = DB::query("SELECT * FROM organizer o JOIN legal_document l ON o.orga_id = l.orga_id WHERE o.orga_id=?", array($_GET['orga_id']), "READ");
+                <?php
+									// ALL ORGANIZERS RESULTS
+                  $joiner = DB::query("SELECT * FROM joiner", array(), "READ");
 
-								if(count($docu)>0){
-									foreach ($docu as $result) {
-										echo "
-										<tr>
-											<td>".$result['docu_type']."</td>
-											<td>".$result['docu_description']."</td>
-											<td>".date("F j, Y", strtotime($result['docu_dateadded']))."</td>
-											<td><a href='legal_docu/".$_GET['orga_id']."/".$result['docu_image']."' download='".$result['orga_fname']."-Legal-Documents".$counter."'>Download the file</a></td>
-										</tr>
-										";
-										$counter++;
-									}
-								}
-								?>
+                  if(count($joiner)>0){
+                    foreach ($joiner as $result) {
+											echo "
+                      <tr>
+                        <td>".$result['joiner_id']."</td>
+                        <td>".$result['joiner_fname']." ".$result['joiner_mi'].". ".$result['joiner_lname']." </td>
+                        <td>".$result['joiner_address']."</td>
+                        <td>".$result['joiner_phone']."</td>
+                        <td>".$result['joiner_email']."</td>
+											";
+
+											$booked = DB::query("SELECT * FROM booking WHERE joiner_id=? AND book_status=?", array($result['joiner_id'], "paid"), "READ");
+
+											if(count($booked)>0){
+												$total = 0;
+												foreach ($booked as $key) {
+													$total += $key['book_totalcosts'];
+												}
+												echo "
+												<td>".count($booked)."</td>
+												<td>".$total."</td>
+												";
+											} else {
+												echo "
+												<td>0</td>
+												<td>0</td>
+												";
+											}
+
+											echo "</tr>";
+                    }
+                  }
+                ?>
 								</tbody>
-							</table>
-							<form method="post">
-								<button class="edit" type="submit" name="btnVerify" onclick="return confirm('Are you sure you want to verify this organizer?');">Verify</button>
-								<a class="edit" href="admin-organizer.php">Back</a>
-							</form>
+              </table>
             </div>
           </div>
         </main>

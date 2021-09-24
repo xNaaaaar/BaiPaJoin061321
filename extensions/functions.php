@@ -418,7 +418,7 @@ function displayAll($num, $query = NULL){
 						<span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span>
 					</h2>
 					<p>".$result['adv_address']."</p>
-					<p>₱ ".number_format((float)$price, 2, '.', '')." / guest</p>
+					<p>₱".number_format((float)$price, 2, '.', ',')." / guest</p>
 					<ul class='icons'>";
 				#
 				if($result['adv_currentGuest'] == 0){
@@ -549,7 +549,7 @@ function displayAll($num, $query = NULL){
 					</figure>
 					<h2>".$result['adv_name']." - ".$result['adv_kind']." <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
 					<p>".$result['adv_address']."</p>
-					<p>₱ ".number_format((float)$price, 2, '.', '')." / guest</p>
+					<p>₱ ".number_format((float)$price, 2, '.', ',')." / guest</p>
 					<ul class='icons'>";
 
 			  if(isset($_SESSION['joiner'])){
@@ -597,7 +597,7 @@ function displayAll($num, $query = NULL){
 
 				// REMAINING GUEST IN TEXT
 				if($result['adv_type'] == 'Packaged')
-					$remainingGuestsText = "- ".$numRemainingGuests." guests remaining";
+					$remainingGuestsText = "- ".$numRemainingGuests." slots remaining";
 
 				// DISPLAY ALL ADVENTURE WITH FUTURE DATES
 				if($result["adv_date"] > date("Y-m-d")){
@@ -609,7 +609,7 @@ function displayAll($num, $query = NULL){
 						</figure>
 						<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
 						<p>".$result['adv_address']."</p>
-						<p>₱ ".number_format((float)$price, 2, '.', '')." / guest</p>
+						<p>₱".number_format((float)$price, 2, '.', ',')." / guest</p>
 						<ul class='icons'>";
 
 					if(isset($_SESSION['joiner'])){
@@ -1820,6 +1820,91 @@ function update_admin_account(){
 	DB::query("UPDATE admin SET admin_name=?, admin_email=? WHERE admin_id=?", array($txtName, $emEmail, $_GET['admin_id']), "UPDATE");
 
 	header("Location: admin.php?updated");
+}
+
+##### CODE START HERE @BOOKING REPOTS #####
+function booking_reports(){
+	// DISPLAY BOOKING REPORTS FOR ORGANIZER
+	if(isset($_SESSION['organizer'])){
+		echo "
+		<table>
+			<thead>
+				<tr>
+					<th>Adventure ID</th>
+					<th>Book ID</th>
+					<th>Book Guests</th>
+					<th>Book Date & Time</th>
+					<th>Book Price</th>
+					<th>Book Status</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+		";
+
+		$orga_bookings = DB::query("SELECT * FROM booking b INNER JOIN adventure a ON a.adv_id = b.adv_id WHERE orga_id=?", array($_SESSION['organizer']), "READ");
+
+		if(count($orga_bookings)>0){
+			foreach ($orga_bookings as $result) {
+				echo "
+				<tr>
+					<td>".$result['adv_id']."</td>
+					<td>".$result['book_id']."</td>
+					<td>".$result['book_guests']."</td>
+					<td>".date("M. j, Y g:i a", strtotime($result['book_datetime']))."</td>
+					<td>₱".number_format($result['book_totalcosts'], 2, ".", ",")."</td>
+					<td>".$result['book_status']."</td>
+					<td></td>
+					<td></td>
+				</tr>
+				";
+			}
+		}
+		echo "</table>";
+
+	// DISPLAY BOOKING REPORTS FOR JOINER
+	} else {
+		echo "
+		<table>
+			<thead>
+				<tr>
+					<th>Book ID</th>
+					<th>Book Guests</th>
+					<th>Book Date & Time</th>
+					<th>Book Price</th>
+					<th>Book Status</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+		";
+
+		$joiner_bookings = DB::query("SELECT * FROM booking b INNER JOIN adventure a ON a.adv_id = b.adv_id WHERE joiner_id=? ORDER BY book_datetime DESC", array($_SESSION['joiner']), "READ");
+
+		if(count($joiner_bookings)>0){
+			foreach ($joiner_bookings as $result) {
+				echo "
+				<tr>
+					<td>".$result['book_id']."</td>
+					<td>".$result['book_guests']."</td>
+					<td>".date("M. j, Y g:i a", strtotime($result['book_datetime']))."</td>
+					<td>₱".number_format($result['book_totalcosts'], 2, ".", ",")."</td>
+					<td>".$result['book_status']."</td>
+				";
+
+				if($result['book_status'] == "paid"){
+					echo "<td><i class='fas fa-ban'></i></td>";
+				} else {
+					echo "<td><a href='payment-card.php?book_id=".$result['book_id']."&id=".$result['adv_id']."' onclick='return confirm(\"Ready to pay now?\");'><i class='fas fa-hand-holding-usd'></i></a></td>";
+				}
+				echo "
+					<td><i class='far fa-eye'></i></td>
+				</tr>
+				";
+			}
+		}
+		echo "</table>";
+	}
 }
 
 
