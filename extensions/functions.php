@@ -997,7 +997,7 @@ function addVoucher(){
 		echo "<script>alert('Start date cannot be greater than end date!')</script>";
 	}
 	else {
-		DB::query("INSERT INTO voucher(vouch_code, vouch_discount, vouch_name, vouch_minspent, vouch_startdate, vouch_enddate, orga_id, adv_id) VALUES(?,?,?,?,?,?,?,?)", array($vouchCode, $numDiscount, $txtName, $numMinSpent, $dateStartDate, $dateEndDate, $_SESSION['organizer'], $cboAdv), "CREATE");
+		DB::query("INSERT INTO voucher(vouch_code, vouch_discount, vouch_name, vouch_minspent, vouch_startdate, vouch_enddate, orga_id, adv_id, vouch_user) VALUES(?,?,?,?,?,?,?,?,?)", array($vouchCode, $numDiscount, $txtName, $numMinSpent, $dateStartDate, $dateEndDate, $_SESSION['organizer'], $cboAdv, 0), "CREATE");
 
 		header("Location: voucher.php?added=1");
 	}
