@@ -36,6 +36,7 @@ main h2 span{font-size:30px;}
 main h2 span a:hover{color:#313131;text-decoration:none;}
 main h3{font:600 30px/100% Montserrat,sans-serif;;margin-bottom:10px;text-align:center;}
 main input{display:inline-block;width:99%;height:50px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 20px;margin:5px auto;border:1px solid #cfcfcf;}
+main p:last-of-type{width:100%;color:red;font-size:20px;}
 
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 
@@ -149,10 +150,16 @@ main .admins{height:auto;width:100%;}
 
 											echo "</tr>";
                     }
-                  }
+										echo "	</tbody>";
+										echo "</table>";
+
+									## IF NO EXISTING ORGANIZER
+									} else {
+										echo "	</tbody>";
+										echo "</table>";
+										echo "<p>No joiner exists!</p>";
+									}
                 ?>
-								</tbody>
-              </table>
             </div>
           </div>
         </main>

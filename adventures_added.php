@@ -95,7 +95,6 @@
 						<input type="text" name="txtName" placeholder="Adventure Name" required>
 						<select name="cboKind" required>
 							<option value="">Activities</option>
-							<option value="Packaged">Packaged</option>
 							<option value="Swimming">Swimming</option>
 							<option value="Camping">Camping</option>
 							<option value="Island Hopping">Island Hopping</option>

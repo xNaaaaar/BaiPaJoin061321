@@ -48,14 +48,7 @@
 			if($_SESSION['current_user'] == 'Organizer') {
 				echo "<li class='";
 					if($currentSidebarPage == 'adventures') echo 'current_sidebar';
-
-					if($_SESSION['verified'] == 1){
-						echo "'><a href='adventures_posted.php' ><i class='fas fa-plus-circle'></i> <q>Adventures</q></a></li>";
-					} else {
-						echo "'><a class='orga' href='adventures_posted.php' ><i class='fas fa-plus-circle'></i> <q>Adventures</q></a>
-							<p class='orga-message'>Please verify your account to post an adventure!</p>
-						</li>";
-					}
+				echo "'><a href='adventures_posted.php' ><i class='fas fa-plus-circle'></i> <q>Adventures</q></a></li>";
 			}
 		?>
 		<li class="<?php if($currentSidebarPage == 'voucher') echo 'current_sidebar'; ?>"><a href="voucher.php"><i class="fas fa-tags"></i> <q>Voucher</q></a></li>
@@ -70,7 +63,7 @@
 						echo "<li><a href=''>Rebooking</a></li>";
 					}
 					?>
-					<li><a href="reports_cancel.php">Cancellation</a></li>
+					<li><a href="reports_request.php">Request</a></li>
 					<li><a href="reports_rating.php">Ratings</a></li>
 				</ul>
 			<?php

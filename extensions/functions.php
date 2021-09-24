@@ -381,6 +381,8 @@ function displayAll($num, $query = NULL){
 				</div>
 				";
 			}
+		} else {
+			echo "<h3>Click + to add legal documents!</h3>";
 		}
 	}
 	// FOR ADVENTURE POSTED DISPLAYING CARDS
@@ -436,9 +438,12 @@ function displayAll($num, $query = NULL){
 					</ul>
 				</div>";
 			}
-		}
-		else {
-			echo "<h3>Click + to post an adventure!!</h3>";
+		## IF NO ADVENTURE POSTED EXISTS
+		} else {
+			if($_SESSION['verified'] == 1)
+				echo "<h3>Click + to post an adventure!</h3>";
+			else
+				echo "<h3>Must be verified to post an adventure!</h3>";
 		}
 	}
 	// FOR VOUCHER ADDED DISPLAYING CARDS
@@ -448,6 +453,9 @@ function displayAll($num, $query = NULL){
 
 		if(count($card)>0){
 			foreach($card as $result){
+				## GET THE ADVENTURE OF SPECIFIC VOUCHER
+				$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($result['adv_id']), "READ");
+				$adv = $adv[0];
 				if($result['vouch_enddate'] < date('Y-m-d')){
 					echo "
 					<div class='card'>
@@ -464,6 +472,7 @@ function displayAll($num, $query = NULL){
 					<figure>
 						<img src='images/voucher.jpg' alt='image'>
 					</figure>
+					<em>for ".$adv['adv_name']."</em>
 					<h2>".$result['vouch_discount']."% OFF <span>₱".$result['vouch_minspent']." min. spend</span> </h2>
 					<p>Valid Until: <q>".date('M. j, Y', strtotime($result['vouch_enddate']))."</q></p>
 
@@ -474,9 +483,12 @@ function displayAll($num, $query = NULL){
 				</div>
 				";
 			}
-		}
-		else {
-			echo "<h3>Click + to add a voucher!</h3>";
+		## IF NO VOUCHER POSTED EXISTS
+		} else {
+			if($_SESSION['verified'] == 1)
+				echo "<h3>Click + to add a voucher!</h3>";
+			else
+				echo "<h3>Must be verified to add a voucher!</h3>";
 		}
 	}
 	// FOR VOUCHER DISPLAYING ALL CARDS FOR JOINER
@@ -633,7 +645,7 @@ function displayAll($num, $query = NULL){
 			}
 		}
 		else {
-			echo "<h3>Adventure does not exist...</h3>";
+			echo "<h3>No adventure exists!</h3>";
 		}
 	}
 }
@@ -988,19 +1000,32 @@ function addVoucher(){
 	$cboAdv = $_POST['cboAdv'];
 	$dateStartDate = date("Y-m-d", strtotime($_POST['dateStartDate']));
 	$dateEndDate = date("Y-m-d", strtotime($_POST['dateEndDate']));
-	$numDiscount = trim($_POST['numDiscount']);
-	$numMinSpent = trim($_POST['numMinSpent']);
+	$numDiscount = $_POST['numDiscount'];
+	$numMinSpent = $_POST['numMinSpent'];
 	$vouchCode = uniqid('', true);
 
-	// ERROR TRAPPINGS
-	if($dateStartDate > $dateEndDate){
-		echo "<script>alert('Start date cannot be greater than end date!')</script>";
-	}
-	else {
-		DB::query("INSERT INTO voucher(vouch_code, vouch_discount, vouch_name, vouch_minspent, vouch_startdate, vouch_enddate, orga_id, adv_id, vouch_user) VALUES(?,?,?,?,?,?,?,?,?)", array($vouchCode, $numDiscount, $txtName, $numMinSpent, $dateStartDate, $dateEndDate, $_SESSION['organizer'], $cboAdv, 0), "CREATE");
+	// QUERY ADVENTURE FOR COMPARING DATE PURPOSES
+	$this_adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($cboAdv), "READ");
+	if(count($this_adv)>0){
+		$this_adv = $this_adv[0];
+		$adv_date = date("Y-m-d", strtotime($this_adv['adv_date']));
+		## CHECK IF VOUCHER STARTING DATE IS GREATER THAN ADV DATE
+		if($dateStartDate > $adv_date){
+			echo "<script>alert('Voucher start date cannot be greater than adventure date!')</script>";
+		## CHECK IF VOUCHER ENDING DATE IS GREATER THAN ADV DATE
+		} else if($dateEndDate > $adv_date){
+			echo "<script>alert('Voucher end date cannot be greater than adventure date!')</script>";
+		## CHECK IF VOUCHER STARTING DATE IS GREATER THAN VOUCHER ENDING DATE
+		} else if($dateStartDate > $dateEndDate){
+			echo "<script>alert('Start date cannot be greater than end date!')</script>";
+		// NO ERROR FOUND
+		} else {
+			DB::query("INSERT INTO voucher(vouch_code, vouch_discount, vouch_name, vouch_minspent, vouch_startdate, vouch_enddate, orga_id, adv_id, vouch_user) VALUES(?,?,?,?,?,?,?,?,?)", array($vouchCode, $numDiscount, $txtName, $numMinSpent, $dateStartDate, $dateEndDate, $_SESSION['organizer'], $cboAdv, 0), "CREATE");
 
-		header("Location: voucher.php?added=1");
+			header("Location: voucher.php?added=1");
+		}
 	}
+
 }
 
 ##### CODE START HERE @UPDATE A VOUCHER #####
@@ -1904,6 +1929,37 @@ function booking_reports(){
 			}
 		}
 		echo "</table>";
+	}
+}
+
+##### CODE START HERE @DISPLAY ALL ADMINS #####
+function display_admin(){
+	// ALL ADMIN RESULTS
+	$admins = DB::query("SELECT * FROM admin", array(), "READ");
+
+	if(count($admins)>0){
+		foreach ($admins as $result) {
+			echo "
+			<tr>
+				<td>".$result['admin_id']."</td>
+				<td>".$result['admin_name']."</td>
+				<td>".$result['admin_email']."</td>";
+
+			if($result['admin_id'] == $_SESSION['admin']){
+				echo "<td><a href='admin_edit.php?admin_id=".$result['admin_id']."' onclick='return confirm(\"Are you sure you want to edit this admin?\");'><i class='fas fa-edit'></i></a></td>";
+				echo "<td><a href='admin.php' onclick='return confirm(\"Admin logged in cannot be deleted!\");'><i class='far fa-trash-alt'></i></a></td>";
+			} else {
+				echo "<td></td>";
+				echo "<td><a href='admin.php?delete=".$result['admin_id']."' onclick='return confirm(\"Are you sure you want to delete this admin?\");'><i class='far fa-trash-alt'></i></a></td>
+				</tr>";
+			}
+		}
+		echo "</table>";
+
+	## IF NO ADMIN EXISTS
+	} else {
+		echo "</table>";
+		echo "<p>No admin exists!</p>";
 	}
 }
 

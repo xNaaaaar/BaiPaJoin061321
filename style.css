@@ -238,8 +238,6 @@ header{}
   .sidebar ul ul li:last-child{margin:0;}
 
   .sidebar ul li.current_sidebar a{color:#bf127a;}
-  .orga:hover + .orga-message{display:block;}
-  .orga-message{background:#fff;border:1px solid #313131;font-size:18px;text-align:center;padding:5px;line-height:20px;display:none;}
 
   .disable{cursor:no-drop;}
 

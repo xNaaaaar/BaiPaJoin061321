@@ -46,10 +46,11 @@
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h2 span{font-size:30px;}
 		main h2 span a:hover{color:#313131;text-decoration:none;}
-		main h3{font:600 30px/100% Montserrat,sans-serif;color:#ff4444;margin-bottom:10px;text-align:center;}
+		main h3{font:600 20px/100% Montserrat,sans-serif;color:red;margin-bottom:10px;text-align:center;}
 		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
+		main .form{position:relative;}
 		main button:first-of-type{right:67px;}
-		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50%;color:#fff;position:absolute;top:126px;right:15px;z-index:5;font-size:22px;}
+		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:50%;right:15px;transform:translateY(-50%);z-index:5;font-size:20px;}
 		main button:hover{background:#8c0047;}
 
 		.card-link{text-decoration:none !important;}
@@ -140,7 +141,7 @@
 									";
 								}
 							}
-							
+
 						?>
 					</ul>
 					<ul class="activites">
@@ -190,7 +191,7 @@
 								echo '<li><input type="number" name="txtMaxPrice" placeholder="Maximum price"></li>';
 							}
 						?>
-						
+
 					</ul>
 					<button class="edit" type="submit" name="btnSave" formaction="adventures.php">Search</button>
 					<button class="edit" type="submit" name="btnReset" formaction="adventures.php?reset">Reset</button>
@@ -202,11 +203,12 @@
 			<main>
 				<form method="post" >
 					<h2>Adventures</h2>
-					<input type="text" name="txtSearch" placeholder="Search any...">
-					<!-- DIRECT LINK FOR UNDO|RESET BUTTON -->
-					<button type="submit" formaction="adventures.php" name="btnSearch"><i class="fas fa-search"></i></button>
-					<button formaction="adventures.php" ><i class="fas fa-undo-alt"></i></button>
-
+					<div class="form">
+						<input type="text" name="txtSearch" placeholder="Search any...">
+						<!-- DIRECT LINK FOR UNDO|RESET BUTTON -->
+						<button type="submit" formaction="adventures.php" name="btnSearch"><i class="fas fa-search"></i></button>
+						<button formaction="adventures.php" ><i class="fas fa-undo-alt"></i></button>
+					</div>
 					<?php
 
 						if(isset($_POST['btnReset'])) {
@@ -215,10 +217,10 @@
 								$page = $_GET['page'];
 							else
 								$page = 1;
-							$num_per_page = 5; 
+							$num_per_page = 5;
 							$start_from = ($page-1) * $num_per_page;
 
-							$card = DB::query("SELECT * FROM adventure", array(), "READ");	
+							$card = DB::query("SELECT * FROM adventure", array(), "READ");
 							$card1 = DB::query("SELECT * FROM adventure LIMIT $start_from,$num_per_page", array(), "READ");
 							displayAll(99, $card1);
 							pagination($page, $card, $num_per_page);
@@ -230,7 +232,7 @@
 								$page = $_GET['page'];
 							else
 								$page = 1;
-							$num_per_page = 5; 
+							$num_per_page = 5;
 							$start_from = ($page-1) * $num_per_page;
 
 							$txtSearch = trim(ucwords($_POST['txtSearch']));
@@ -239,18 +241,18 @@
 
 							pagination($page, $card, $num_per_page);
 
-							$card1 = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' ", array(), "READ");     
+							$card1 = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' ", array(), "READ");
 
 							displayAll(99, $card1);
 						}
 
-						else if(isset($_POST['btnSave'])) { 
+						else if(isset($_POST['btnSave'])) {
 
 							if(isset($_GET['page']))
 								$page = $_GET['page'];
 							else
 								$page = 1;
-							$num_per_page = 5; 
+							$num_per_page = 5;
 							$start_from = ($page-1) * $num_per_page;
 
 							unset($_SESSION['places']);
@@ -273,11 +275,11 @@
 									$user_activities = $_POST['activities'];
 
 									if(!empty($min) && !empty($max))
-										$sqlquery = create_filter_sql($user_places, $user_activities, $min, $max);				
+										$sqlquery = create_filter_sql($user_places, $user_activities, $min, $max);
 									else if(!empty($min) && empty($max))
-										$sqlquery = create_filter_sql($user_places, $user_activities, $min, null);								
+										$sqlquery = create_filter_sql($user_places, $user_activities, $min, null);
 									else if(empty($min) && !empty($max))
-										$sqlquery = create_filter_sql($user_places, $user_activities, null, $max);										
+										$sqlquery = create_filter_sql($user_places, $user_activities, null, $max);
 									else
 										$sqlquery = create_filter_sql($user_places, $user_activities, null, null);
 								}
@@ -288,7 +290,7 @@
 										$sqlquery = create_filter_sql($user_places, null, $min, $max);
 									else if(!empty($min) && empty($max))
 										$sqlquery = create_filter_sql($user_places, null, $min, null);
-									else if(empty($min) && !empty($max)) 
+									else if(empty($min) && !empty($max))
 										$sqlquery = create_filter_sql($user_places, null, null, $max);
 									else
 										$sqlquery = create_filter_sql($user_places, null, null, null);
@@ -297,7 +299,7 @@
 
 							else if(!empty($_POST['activities'])) {
 
-								$user_activities = $_POST['activities'];				
+								$user_activities = $_POST['activities'];
 
 								if(!empty($min) && !empty($max))
 									$sqlquery = create_filter_sql(null, $user_activities, $min, $max);
@@ -305,7 +307,7 @@
 									$sqlquery = create_filter_sql(null, $user_activities, $min, null);
 								else if(empty($min) && !empty($max))
 									$sqlquery = create_filter_sql(null, $user_activities, null, $max);
-								else 
+								else
 									$sqlquery = create_filter_sql(null, $user_activities, null, null);
 							}
 
@@ -317,8 +319,8 @@
 
 							else if(empty($min) && !empty($max))
 								$sqlquery = create_filter_sql(null, null, null, $max);
-							
-								
+
+
 							if(!empty($sqlquery)) {
 								$card = DB::query($sqlquery, array(), "READ");
 								if(!empty($card))
@@ -327,23 +329,23 @@
 									$card = DB::query("SELECT * from adventure", array(), "READ");
 									displayAll(99, $card);
 								}
-								pagination($page, $card, $num_per_page);							
-							}					
+								pagination($page, $card, $num_per_page);
+							}
 							else { //This works if return items from SQL is empty due to search not found
 								$card1 = DB::query("SELECT * FROM adventure LIMIT $start_from,$num_per_page", array(), "READ");
 								displayAll(99, $card1);
 								$card = DB::query("SELECT * FROM adventure", array(), "READ");
 								pagination($page, $card, $num_per_page);
 							}
-						}				
+						}
 
-						else { 
+						else {
 							if(isset($_GET['page']))
 								$page = $_GET['page'];
 							else
 								$page = 1;
 
-							$num_per_page = 5; 
+							$num_per_page = 5;
 							$start_from = ($page-1) * $num_per_page;
 
 					        if(!empty($_SESSION['places'])) {
@@ -359,7 +361,7 @@
 										$sqlquery = $sqlquery . " = '$place'";
 								}
 
-								
+
 								if(!empty($_POST['activities'])) {
 									//	Concatenates string if 1 or more Activity checkbox is selected
 
@@ -405,7 +407,7 @@
 								if(!empty($card))
 									displayAll(99, $card);
 								pagination($page, $card, $num_per_page);
-							}							
+							}
 							else {
 								$card = DB::query("SELECT * FROM adventure", array(), "READ");
 								pagination($page, $card, $num_per_page);

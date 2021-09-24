@@ -36,6 +36,7 @@ main h2 span{font-size:30px;}
 main h2 span a:hover{color:#313131;text-decoration:none;}
 main h3{font:600 30px/100% Montserrat,sans-serif;;margin-bottom:10px;text-align:center;}
 main input{display:inline-block;width:99%;height:50px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 20px;margin:5px auto;border:1px solid #cfcfcf;}
+main p:last-of-type{width:100%;color:red;font-size:20px;}
 
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 
@@ -130,9 +131,15 @@ main .admins{height:auto;width:100%;}
                         <td>".$result['orga_email']."</td>
 											";
 
+											$empty_data = ($result['orga_company'] == "" || $result['orga_address'] == "" || $result['orga_phone'] == "") ? true : false;
+
 											if($result['orga_status'] == 2) {
 												echo "<td style='color:#33b5e5;'><em>pending</em></td>";
-												echo "<td><a href='admin-verify.php?orga_id=".$result['orga_id']."'><i class='far fa-eye'></i></a></td>";
+												## CHECK IF THERE ARE MISSING DATA IN ORGANIZER PROFILE
+												if($empty_data)
+													echo "<td><a href='' onclick='return confirm(\"Organizer must complete profile data to verify!\");'><i class='far fa-eye'></i></a></td>";
+												else
+													echo "<td><a href='admin-verify.php?orga_id=".$result['orga_id']."'><i class='far fa-eye'></i></a></td>";
 											} elseif($result['orga_status'] == 1) {
 												echo "<td style='color:#00c851;'><em>verified</em></td>";
 												echo "<td></td>";
@@ -145,10 +152,16 @@ main .admins{height:auto;width:100%;}
 											</tr>
 											";
                     }
-                  }
+										echo "	</tbody>";
+										echo "</table>";
+
+									## IF NO EXISTING ORGANIZER
+                  } else {
+										echo "	</tbody>";
+										echo "</table>";
+										echo "<p>No organizer exists!</p>";
+									}
                 ?>
-								</tbody>
-              </table>
             </div>
           </div>
         </main>

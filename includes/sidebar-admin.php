@@ -8,8 +8,7 @@
 		<li class="<?php if($currentSidebarPage == 'admin') echo 'current_sidebar'; ?>"><a href="admin.php">Admin</a> </li>
 		<li class="<?php if($currentSidebarPage == 'organizer') echo 'current_sidebar'; ?>"><a href="admin-organizer.php">Organizer</a> </li>
 		<li class="<?php if($currentSidebarPage == 'joiner') echo 'current_sidebar'; ?>"><a href="admin-joiner.php">Joiner</a> </li>
-		<li class="<?php if($currentSidebarPage == 'rescheduling') echo 'current_sidebar'; ?>"><a href="admin-joiner.php">Rescheduling</a> </li>
-		<li class="<?php if($currentSidebarPage == 'cancellation') echo 'current_sidebar'; ?>"><a href="admin-joiner.php">Cancellation</a> </li>
+		<li class="<?php if($currentSidebarPage == 'request') echo 'current_sidebar'; ?>"><a href="admin-joiner.php">Request</a> </li>
 		<li class="<?php if($currentSidebarPage == 'ratings') echo 'current_sidebar'; ?>"><a href="admin-joiner.php">Ratings</a> </li>
 		<li><a href="logout.php" onclick="return confirm('Are you sure you want to logout?');"><q>Logout</q></a></li>
 	</ul>

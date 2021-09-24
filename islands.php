@@ -1,8 +1,6 @@
 <?php
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
-
-	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
 ?>
 
 <!-- Head -->

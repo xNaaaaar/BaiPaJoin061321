@@ -40,6 +40,7 @@ main h2 span{font-size:30px;}
 main h2 span a:hover{color:#313131;text-decoration:none;}
 main h3{font:600 30px/100% Montserrat,sans-serif;;margin-bottom:10px;text-align:center;}
 main input{display:inline-block;width:99%;height:50px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;font:normal 18px/20px Montserrat,sans-serif;padding:0 20px;margin:5px auto;border:1px solid #cfcfcf;}
+main p:last-of-type{width:100%;color:red;font-size:20px;}
 
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 
@@ -119,26 +120,7 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
                 </thead>
                 <?php
 									// ALL ADMIN RESULTS
-                  $admins = DB::query("SELECT * FROM admin", array(), "READ");
-
-                  if(count($admins)>0){
-                    foreach ($admins as $result) {
-                      echo "
-                      <tr>
-                        <td>".$result['admin_id']."</td>
-                        <td>".$result['admin_name']."</td>
-                        <td>".$result['admin_email']."</td>";
-
-                      if($result['admin_id'] == $_SESSION['admin']){
-                        echo "<td><a href='admin_edit.php?admin_id=".$result['admin_id']."' onclick='return confirm(\"Are you sure you want to edit this admin?\");'><i class='fas fa-edit'></i></a></td>";
-                        echo "<td><a href='admin.php' onclick='return confirm(\"Admin logged in cannot be deleted!\");'><i class='far fa-trash-alt'></i></a></td>";
-                      } else {
-                        echo "<td></td>";
-                        echo "<td><a href='admin.php?delete=".$result['admin_id']."' onclick='return confirm(\"Are you sure you want to delete this admin?\");'><i class='far fa-trash-alt'></i></a></td>
-                        </tr>";
-                      }
-                    }
-                  }
+                  display_admin();
                 ?>
 
               </table>

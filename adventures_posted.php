@@ -3,7 +3,7 @@
 	require_once("extensions/db.php");
 
 	// REDIRECT IF NOT LOGGED IN
-    if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
+  if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
 
 	// IF ADVENTURE IS UPDATED SUCCESSFULLY
 	if(isset($_GET['updated']) && $_GET['updated'] == 1){
@@ -35,10 +35,12 @@
 		main h2, main h3{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h2 span{font-size:30px;}
 		main h2 span a:hover{color:#313131;text-decoration:none;}
-		main h3{font-size:20px;color:gray;text-align:center;}
+		main h3{font-size:20px;color:red;text-align:center;}
 		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
+		main form{position:relative;}
 		main button:first-of-type{right:67px;}
-		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:132px;right:15px;z-index:5;font-size:20px;}
+		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:50%;right:15px;transform:translateY(-50%);z-index:5;font-size:20px;}
+		main button:hover{background:#8c0047;}
 
 		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 125px 30px 215px;line-height:35px;text-align:left;margin:25px auto;border:1px solid #cfcfcf;}
 		.card:hover{border:1px solid #bf127a;}
@@ -101,23 +103,23 @@
 			<!-- End of Sub Navigation -->
 
 			<main>
-				<form method="post" >
-					<h2>Posted Adventures <span class="legal">
-						<?php
-						// CHECK IF ORGANIZER IS VERIFIED TO POST ADVENTURE
-						if($_SESSION['verified'] == 1)
-							echo "<a href='adventures_added.php'><i class='fas fa-plus-circle'></i></a>";
-						else
-							echo "<a class='disable'><i class='fas fa-plus-circle'></i></a>";
-						?>
-					</span></h2>
+				<h2>Posted Adventures <span class="legal">
+					<?php
+					// CHECK IF ORGANIZER IS VERIFIED TO POST ADVENTURE
+					if($_SESSION['verified'] == 1)
+						echo "<a href='adventures_added.php'><i class='fas fa-plus-circle'></i></a>";
+					else
+						echo "<a class='disable'><i class='fas fa-plus-circle'></i></a>";
+					?>
+				</span></h2>
+				<form method="post">
 					<input type="text" name="txtSearch" placeholder="Search any...">
 
-					<!-- DIRECT LINK FOR UNDO|RESET BUTTON -->
-					<form>
-						<button type="submit" formaction="adventures_posted.php" name="btnSearch"><i class="fas fa-search"></i></button>
-						<button formaction="adventures_posted.php" ><i class="fas fa-undo-alt"></i></button>
-				   </form>
+				<!-- DIRECT LINK FOR UNDO|RESET BUTTON -->
+
+					<button type="submit" formaction="adventures_posted.php" name="btnSearch"><i class="fas fa-search"></i></button>
+					<button formaction="adventures_posted.php" ><i class="fas fa-undo-alt"></i></button>
+				</form>
 
 					<?php
 						// DISPLAY ALL ADVENTURE POSTED BY SPECIFIC ORGANIZER
@@ -272,8 +274,6 @@
 				                }
 				            }
 					?>
-
-				</form>
 			</main>
 		</div>
 
