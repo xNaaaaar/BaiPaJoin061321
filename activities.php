@@ -2,6 +2,9 @@
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
 
+	// REDIRECT IF NOT LOGGED IN
+    if(!isset($_SESSION['joiner']) || !isset($_SESSION['organizer'])) header("Location: login.php");
+
 	if(isset($_POST['places'])){
 		$_SESSION['places'] = $_POST['places'];
 	}

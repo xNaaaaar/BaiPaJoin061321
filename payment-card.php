@@ -3,6 +3,8 @@
 	require_once("extensions/db.php");
 	ob_start();
 
+	if(!isset($_SESSION['joiner']) || !isset($_SESSION['organizer'])) header("Location: login.php");
+
 	if(isset($_POST['btnCont2']) && isset($_GET['book_id'])){
 		booking("waiting for payment", $_GET['book_id']);
 	}

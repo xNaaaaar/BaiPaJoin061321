@@ -3,7 +3,7 @@
 	require_once("extensions/db.php");
 
 	// REDIRECT IF NOT LOGGED IN
-    if(!isset($_SESSION['joiner']) && !isset($_SESSION['organizer'])) header("Location: login.php");
+    if(!isset($_SESSION['joiner']) || !isset($_SESSION['organizer'])) header("Location: login.php");
 
 
 	// IF PROFILE IS UPDATED SUCCESSFULLY

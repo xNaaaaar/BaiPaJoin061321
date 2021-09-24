@@ -2,6 +2,9 @@
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
 
+	// REDIRECT IF NOT LOGGED IN
+    if(!isset($_SESSION['joiner']) || !isset($_SESSION['organizer'])) header("Location: login.php");
+
 	if(isset($_POST['btnSave'])){
 		addLegalDocuments();
 		header("Location: settings.php?added=1");
