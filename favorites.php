@@ -3,7 +3,7 @@
 	require_once("extensions/db.php");
 
 	// REDIRECT IF NOT LOGGED IN
-    if(!isset($_SESSION['joiner']) || !isset($_SESSION['organizer'])) header("Location: login.php");
+    if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
 
 	// ADD ADVENTURE TO FAVORITES
 	if(isset($_GET['addFav'])) addToFavorites($_GET['addFav'], 'fave');

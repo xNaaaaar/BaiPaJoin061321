@@ -3,7 +3,7 @@
 	require_once("extensions/db.php");
 	ob_start();
 
-	if(!isset($_SESSION['joiner']) || !isset($_SESSION['organizer'])) header("Location: login.php");
+	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
 ?>
 
 <!-- Head -->

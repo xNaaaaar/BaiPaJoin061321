@@ -2,7 +2,7 @@
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
 
-	if(!isset($_SESSION['joiner']) || !isset($_SESSION['organizer'])) header("Location: login.php");
+	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
 
 	if(isset($_GET['error']))
 		echo "<script>alert('ERROR! Please ensure that all fields are not blank or filled with spaces ONLY.')</script>";
