@@ -62,7 +62,8 @@ function createAccount(){
 			}
 
 			$email_subject = 'WELCOME TO BAIPAJOIN';
-			$email_message = 'Hello Alexis, This is only a test!';
+			$email_message = 'Dear BaiPaJoin, Welcome to BaiPaJoin! We have come bearing great news: your account has been activated and you can now start sending booking your favorite adventures! Be sure, to apply or select a voucher when you book your 1st adventure to get a discount! We are excited for your BaiPaJoin adventure and experience. Have a look through our Terms and Condition to know what is in the store for you. For further information, and feel free to email us at teambaipajoincebu@gmail.com if you have any questions. Ahoy! Your adventure awaits! Welcome aboard!
+				Regards, BaiPaJoin Team';
 			//$email_message_html = html_welcome_message();
 			send_email($emEmail, $email_subject, $email_message);
 
