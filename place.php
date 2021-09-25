@@ -109,7 +109,7 @@
 								$details_empty = DB::query("SELECT * FROM joiner WHERE joiner_id=?", array($_SESSION['joiner']), "READ");
 								if(count($details_empty)>0){
 									foreach ($details_empty as $result) {
-										$isempty = ($result[0] == "" || $result[1] == "" || $result[2] == "" || $result[3] == "" || $result[4] == "" || $result[5] == "") ? true : false;
+										$isempty = ($result[4] == "" || $result[5] == "") ? true : false;
 									}
 								}
 
@@ -174,10 +174,14 @@
 				</div>
 				<!--  -->
 				<?php
-					if(isset($_SESSION['joiner'])){
-						$rateCheck = DB::query("SELECT * FROM rating WHERE joiner_id = ? AND adv_id = ?", array($_SESSION['joiner'], $_GET['id']), "READ");
+				if(isset($_SESSION['joiner'])){
+					## CHECK IF ADVENTURE DONE
+					$adv_done = DB::query("SELECT * FROM adventure WHERE adv_id=? AND adv_status=?", array($_GET['id'], "done"), "READ");
+					if(count($adv_done)>0){
+						## CHECK IF JOINER ALREADY RATE
+						$rateCheck = DB::query("SELECT * FROM rating WHERE joiner_id=? AND adv_id=?", array($_SESSION['joiner'], $_GET['id']), "READ");
 
-						if(count($rateCheck)<1){
+						if(count($rateCheck) == 0){
 				?>
 				<div class="place_ratings">
 					<h2>Ratings</h2>
@@ -196,10 +200,11 @@
 						</div>
 					</form>
 				</div>
-				<?php
+			<?php
 						}
 					}
-				?>
+				}
+			?>
 			</main>
 		</div>
 

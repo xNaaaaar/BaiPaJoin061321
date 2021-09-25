@@ -35,7 +35,7 @@
 		main h2, main h3{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h2 span{font-size:30px;}
 		main h2 span a:hover{color:#313131;text-decoration:none;}
-		main h3{font-size:20px;color:red;}
+		main h3{font-size:20px;color:red;text-align:center;}
 		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
 		main form{position:relative;}
 		main button:first-of-type{right:67px;}

@@ -498,6 +498,9 @@ function displayAll($num, $query = NULL){
 
 		if(count($card)>0){
 			foreach($card as $result){
+				## GET THE ADVENTURE OF SPECIFIC VOUCHER
+				$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($result['adv_id']), "READ");
+				$adv = $adv[0];
 				if($result['vouch_enddate'] < date('Y-m-d')){
 					echo "
 					<div class='card'>
@@ -514,6 +517,7 @@ function displayAll($num, $query = NULL){
 					<figure>
 						<img src='images/voucher.jpg' alt='image'>
 					</figure>
+					<em>for ".$adv['adv_name']."</em>
 					<h2>".$result['vouch_discount']."% OFF <span>₱".$result['vouch_minspent']." min. spend</span> </h2>
 					<p>Valid Until: <q>".date('M. j, Y', strtotime($result['vouch_enddate']))."</q></p>
 
@@ -523,9 +527,9 @@ function displayAll($num, $query = NULL){
 				</div>
 				";
 			}
-		}
-		else {
-			echo "<h3>No added voucher yet...</h3>";
+		## IF NO VOUCHER POSTED
+		} else {
+			echo "<h3>No available voucher!</h3>";
 		}
 	}
 	// FOR FAVORITES DISPLAYING CARDS
@@ -583,7 +587,7 @@ function displayAll($num, $query = NULL){
 			}
 		}
 		else {
-			echo "<h3>No adventure added to favorites...</h3>";
+			echo "<h3>You haven't added adventures to your favorites!</h3>";
 		}
 	}
 	// ELSE TO IFS AND DISPLAY ALL ADVENTURES

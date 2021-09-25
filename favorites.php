@@ -3,7 +3,7 @@
 	require_once("extensions/db.php");
 
 	// REDIRECT IF NOT LOGGED IN
-    if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
+  if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
 
 	// ADD ADVENTURE TO FAVORITES
 	if(isset($_GET['addFav'])) addToFavorites($_GET['addFav'], 'fave');
@@ -56,10 +56,12 @@
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h2 span{font-size:30px;}
 		main h2 span a:hover{color:#313131;text-decoration:none;}
-		main h3{font:600 30px/100% Montserrat,sans-serif;color:#ff4444;margin-bottom:10px;text-align:center;}
+		main h3{font:600 20px/100% Montserrat,sans-serif;color:red;margin-bottom:10px;text-align:center;}
 		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
+		main form{position:relative;}
 		main button:first-of-type{right:67px;}
-		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:142px;right:15px;z-index:5;font-size:20px;}
+		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:50%;right:15px;transform:translateY(-50%);z-index:5;font-size:20px;}
+		main button:hover{background:#8c0047;}
 
 		.card-link{text-decoration:none !important;}
 		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 125px 30px 215px;line-height:35px;text-align:left;margin:25px auto;border:1px solid #cfcfcf;}
@@ -129,15 +131,14 @@
 			<!-- End of Sub Navigation -->
 
 			<main>
+				<h2>Favorite Adventures</h2>
 				<form method="post" >
-					<h2>Favorite Adventures</h2>
 					<input type="text" name="txtSearch" placeholder="Search any...">
 
 					<!-- DIRECT LINK FOR UNDO|RESET BUTTON -->
-					<form>
-					    <button type="submit" formaction="favorites.php" name="btnSearch"><i class="fas fa-search"></i></button>
-						<button formaction="favorites.php" ><i class="fas fa-undo-alt"></i></button>
-				   </form>
+					<button type="submit" formaction="favorites.php" name="btnSearch"><i class="fas fa-search"></i></button>
+					<button formaction="favorites.php" ><i class="fas fa-undo-alt"></i></button>
+			  </form>
 
 
 					<?php
@@ -295,8 +296,6 @@
 				        }
 
 					?>
-
-				</form>
 			</main>
 		</div>
 
