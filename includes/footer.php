@@ -124,9 +124,17 @@
 					document.getElementById("display").style.opacity = 0;
 		}
 
-		function displayTotalPrice(guest=1){
+		function displayTotalPrice(guest=1, slots = null){
+			let price = 0;
+			let text = guest.concat("/");
 			<?php if(isset($_SESSION['price'])) { ?>
-				document.getElementById("totalPrice").value = (guest * <?php echo $_SESSION['price']; ?>).toFixed(2);
+				//document.getElementById("totalPrice").value = (guest * <?php echo $_SESSION['price']; ?>).toFixed(2);
+				price = numberWithCommas((guest * <?php echo $_SESSION['price']; ?>).toFixed(2));
+				document.getElementById("totalPrice").value = price;
+				text = text.concat(slots);
+				document.getElementById("label_slot").innerHTML = text;
+				console.log(text);
+
 			<?php } ?>
 		}
 
@@ -136,6 +144,10 @@
 
 		  /* Alert the copied text */
 		  alert("Voucher code " + code + " successfully copied!");
+		}
+
+		function numberWithCommas(x) {
+		  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		}
 	</script>
 </body>

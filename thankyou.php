@@ -13,20 +13,22 @@
 		/* Header Area */
 		header{background:url(images/header-bg.png) no-repeat center top/cover, #fff;}
 		.main_logo{position:static;margin-left:10px;}
+		.comp{color:#000;}
 
 		/* Main Area */
-		main{width:100%;flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0;border-radius:0;text-align:center;}
-		main h2{}
+		main{width:100%;flex:4;float:none;height:auto;background:none;margin:0;padding:0 0 50px;border-radius:0;text-align:center;}
 
 		.success{color:#5cb85c;}
 		.error{color:red;}
 
 		.place_info{margin:0;}
 		.main_info{width:100%;padding:0;}
-		.main_info h1{font:600 50px/100% Montserrat,sans-serif;margin:0 0 70px;}
+		.main_info h1{margin:0 0 50px;}
+		.main_info h1 span{display:block;font-size:40px;margin:20px 0 0;}
+		.main_info figure{width:70%;margin:0 auto;}
 		.main_info section{text-align:center;}
-		.main_info section i{font-size:120px;}
-		.main_info section p{font:400 35px/30px Montserrat,sans-serif;text-align:center;margin:10px 0 0;}
+		.main_info section i{font-size:110px;}
+		.main_info section p{font:400 20px/30px Montserrat,sans-serif;text-align:center;margin:10px auto 0;max-width:100%;width:50% !important;}
 		.main_info section ul{margin:70px 0 0;}
 		.main_info section ul li{display:inline-block;}
 	</style>
@@ -56,7 +58,9 @@
 			<main>
 				<div class="place_info">
 					<div class="main_info">
-						<h1>Spontaneous. Thank you!</h1>
+						<figure>
+							<img src="images/thankyou.jpg" alt="">
+						</figure>
 						<section>
 							<?php
 								if(isset($_GET['card']) && isset($_GET['book_id']) && isset($_GET['intentid']) && isset($_GET['total'])) {
@@ -76,8 +80,10 @@
 									echo "<i class='far fa-times-circle error'></i><p class='error'>Error paying thru grabpay!</p>";
 								}
 							?>
+
+							<p>Hooray! We appreciate your recent booking, please check email for your receipt. We hope you'll enjoy your adventure and meet new wonders. Stay safe and thank you for choosing BaiPaJoin.</p>
 							<ul>
-								<li><a href="index.php">Back to Home</a> | </li>
+								<li><a href="index.php">Back to Home</a> l </li>
 								<li><a href="#">View Payment Reports</a></li>
 							</ul>
 						</section>

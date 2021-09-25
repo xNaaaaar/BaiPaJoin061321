@@ -1216,7 +1216,7 @@ function booking($status, $book_id=null) {
 	// IF STATUS PENDING
 	if($status === "pending"){
 		$_SESSION['bookOption'] = $_POST['cboOption'];
-		$_SESSION['numTotal'] = $_POST['numTotal'];
+		$_SESSION['numTotal'] = str_replace(",","",$_POST['numTotal']);
 		$_SESSION['cboGuests'] = $_POST['cboGuests'];
 		$currentDateTime = date("Y-m-d H:i:s");
 		// INSERT BOOKED ADVENTURE
@@ -1796,7 +1796,7 @@ function booking_paid_updates($method, $book_id, $intent_id, $total=null){
 	# IF PAYMENT METHOD IS THRU CARD
 	if($method == "card"){
 		# SUCCESSFUL MESSAGE
-		echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru ".$method."!</p>";
+		echo "<h1><span class='success'>Thank you! Successfully paid thru ".$method.".</span></h1>";
 
 	# IF PAYMENT METHOD IS THRU GCASH
 	} elseif($method == "gcash") {

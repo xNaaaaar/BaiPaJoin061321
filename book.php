@@ -32,6 +32,7 @@
 		.main_info ul{text-align:left;font-size:20px;}
 		.main_info form{margin-bottom:40px;position:relative;}
 		.main_info form label{float:left;margin-left:5px;}
+		.main_info form label span{color:red;}
 		.main_info form input, .main_info form select{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
 		.main_info form button, .main_info form a{margin:15px 5px 0 0;}
 
@@ -96,6 +97,9 @@
 						$price = $adv['adv_totalcostprice'] / $adv['adv_maxguests'];
 						$_SESSION['price'] = number_format((float)$price, 2, '.', ',');
 
+						# SLOTS REMAINING
+						$slots = $adv['adv_maxguests']-$adv['adv_currentGuest'];
+
 						# CHOOSING RANDOM IMAGE
 						$images = $adv['adv_images'];
 						$image = explode(",", $images);
@@ -106,6 +110,7 @@
 						$result = get_current_weather_location($adv[6]);
 						$weather = json_decode($result, true);
 						$style = weather_bg($weather['weather'][0]['main']);
+
 			?>
 			<main>
 				<ul class="sub-breadcrumbs">
@@ -137,12 +142,12 @@
 								?>
 							</figure>
 							<section>
-								<h2><?php echo $adv['adv_name']." (".$adv['adv_type'].")"; ?> <span><?php echo $adv['adv_kind']; ?></span> </h2>
+								<h2><?php echo $adv['adv_name']; ?> <span><?php echo $adv['adv_kind']; ?></span> </h2>
 								<ul class="title_info1">
 									<li>5 <i class="fas fa-star"></i> <q>(25 reviews)</q></li>
 									<li><i class="fas fa-map-marker-alt"></i> <address><?php echo $adv['adv_address']; ?></address></li>
 								</ul>
-								<p>₱<?php echo $_SESSION['price']; ?> / guest</p>
+								<p>₱<?php echo $_SESSION['price']; ?> / person</p>
 							</section>
 							<section>
 								<h2>Overview</h2>
@@ -177,18 +182,18 @@
 									<option value="guest">I am booking as a guest</option>
 									<option value="someone">I am booking for someone</option>
 								</select>
-								<label>Add guest/s:</label>
+								<label>Slots Available: <span id="label_slot"></span> </label>
 								<!--  -->
-								<select name="cboGuests" id="cboGuests" onclick="displayTotalPrice(this.value)" required>
+								<select name="cboGuests" id="cboGuests" onclick="displayTotalPrice(this.value, <?php echo $slots; ?>)" required>
 									<?php
 										# SHOW ALL MAXIMUM NUMBER OF GUEST IN OPTIONS
-										for($i=1; $i<=$adv['adv_maxguests']-$adv['adv_currentGuest']; $i++){
+										for($i=1; $i<=$slots; $i++){
 											echo "<option value='".$i."'>".$i."</option>";
 										}
 									?>
 								</select>
 								<label>Total Price</label>
-								<input type="number" name="numTotal" id="totalPrice" value="<?php echo $_SESSION['price']; ?>" readonly required>
+								<input type="text" name="numTotal" id="totalPrice" value="<?php echo $_SESSION['price']; ?>" readonly required>
 							</section>
 							<button class="edit" type="submit" name="btnCont1">Continue</button>
 							<a href="place.php?id=<?php echo $_GET['id']; ?>" class="edit">Back</a>

@@ -39,6 +39,7 @@
 		.main_con{display:flex;justify-content:space-between;}
 
 		.sidebar{height:auto;}
+		.sidebar ul{height:auto;}
 		.sidebar ul li{line-height:25px;font-size:20px;font-weight:500;}
 		.sidebar ul li h3{font-size:25px;font-weight:600;}
 

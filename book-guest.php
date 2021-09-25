@@ -37,7 +37,7 @@
 		.main_info h2 em{display:block;font-size:20px;color:gray;}
 		.main_info h3{margin:0 0 20px;font:500 25px/100% Montserrat,sans-serif;text-align:left;}
 		.main_info ul{text-align:left;font-size:20px;margin:0 0 20px;}
-		.main_info ul li span{color:#d1375d;}
+		.main_info ul li span{color:red;}
 		.main_info .form{margin-bottom:40px;position:relative;}
 		.main_info .form label{float:left;margin-left:5px;}
 		.main_info .form input, .main_info select{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
@@ -146,12 +146,12 @@
 								?>
 							</figure>
 							<section>
-								<h2><?php echo $adv['adv_name']." (".$adv['adv_type'].")"; ?> <span><?php echo $adv['adv_kind']; ?></span> </h2>
+								<h2><?php echo $adv['adv_name']; ?> <span><?php echo $adv['adv_kind']; ?></span> </h2>
 								<ul class="title_info1">
 									<li>5 <i class="fas fa-star"></i> <q>(25 reviews)</q></li>
 									<li><i class="fas fa-map-marker-alt"></i> <address><?php echo $adv['adv_address']; ?></address></li>
 								</ul>
-								<p>₱<?php echo $_SESSION['price']; ?> / guest</p>
+								<p>₱<?php echo $_SESSION['price']; ?> / person</p>
 							</section>
 							<section>
 								<h2>Overview</h2>
@@ -177,9 +177,9 @@
 								?>
 							</h2>
 							<ul>
-								<li>Book ID: <?php echo $pendingBooking['book_id']; ?></li>
-								<li>Book Date: <?php echo date('M. j, Y H:i a', strtotime($pendingBooking['book_datetime'])); ?></li>
-								<li>Total Price: ₱<?php echo $_SESSION['numTotal']; ?></li>
+								<li>Book ID: <b><?php echo $pendingBooking['book_id']; ?></b></li>
+								<li>Book Date: <b><?php echo date('M. j, Y H:i a', strtotime($pendingBooking['book_datetime'])); ?></b></li>
+								<li>Total Price: <b>₱<?php echo number_format($_SESSION['numTotal'], 2, ".", ","); ?></b></li>
 								<li>Guest:
 									<?php
 									echo $pendingBooking['book_guests'];

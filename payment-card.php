@@ -47,6 +47,7 @@
 		.booking_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
 		.booking_details h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
 		.booking_details h2 em{display:block;font-size:20px;color:gray;}
+		.booking_details ul li span{color:red;}
 
 		.payment_method{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
 		.payment_method h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
@@ -107,8 +108,8 @@
 				<h2>Payment Method</h2>
 				<ul>
 					<li class="current_sidebar"><a href="payment-card.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Card</a> </li>
-					<li class=""><a href="payment-gcash.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Gcash</a> </li>
-					<li class=""><a href="payment-gpay.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Grab Pay</a> </li>
+					<li><a href="payment-gcash.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Gcash</a> </li>
+					<li><a href="payment-gpay.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Grab Pay</a> </li>
 				</ul>
 			</aside>
 			<!-- End of Sub Navigation -->
@@ -150,9 +151,15 @@
 						?>
 					</h2>
 					<ul>
-						<li>Book ID: <?php echo $booked['book_id']; ?></li>
-						<li>Total guest/s: <?php echo $booked['book_guests']; ?></li>
-						<li>on <?php echo date('l - M. j, Y', strtotime($adv['adv_date'])); ?></li>
+						<li>Book ID: <b><?php echo $booked['book_id']; ?></b></li>
+						<li>Total guest/s:
+							<?php
+							echo $booked['book_guests'];
+							$info = ($_SESSION['bookOption'] == "someone") ? "(Excludes you)" : "(Includes you)";
+							echo " <span>".$info."</span>";
+							?>
+						</li>
+						<li><?php echo date('l, M. j, Y', strtotime($adv['adv_date'])); ?></li>
 					</ul>
 				</div>
 
@@ -182,7 +189,7 @@
 								# SUCCESS
 								} else {
 									$discount = $booked['book_totalcosts'] * ($voucher_exist['vouch_discount']/100);
-									$_SESSION['discounted'] = $final_price - $discount;
+									$final_price = $final_price - $discount;
 
 									# KEEP TRACK OF USED VOUCHER
 									$_SESSION['used_voucher_code'] = $voucher_exist['vouch_code'];
@@ -222,11 +229,11 @@
 							<table>
 								<tr>
 									<td><?php echo $adv['adv_name']." - ".$adv['adv_kind']." (".$adv['adv_type'].")"; ?></td>
-									<td>₱ <?php echo $booked['book_totalcosts']; ?></td>
+									<td>₱ <?php echo number_format($booked['book_totalcosts'],2,'.',','); ?></td>
 								</tr>
 								<tr>
 									<td>Fees</td>
-									<td class="success">+ ₱ <?php echo number_format($price_fee, 2, '.', ''); ?></td>
+									<td class="success">+ ₱ <?php echo number_format($price_fee, 2, '.', ','); ?></td>
 								</tr>
 								<tr>
 									<td>Voucher Discount (
@@ -245,9 +252,7 @@
 									<td>₱
 										<?php
 										// IF NO VOUCHER USED
-										if(!isset($_SESSION['discounted'])) $_SESSION['discounted'] = $final_price;
-
-										echo number_format($_SESSION['discounted'], 2, '.', '');
+										echo number_format($final_price, 2, '.', '');
 										?>
 									</td>
 								</tr>
@@ -269,18 +274,16 @@
 							// IF NO ERROR
 							} else {
 								// DISCOUNTED PRICE
-								$_SESSION['discounted'] = number_format($_SESSION['discounted'], 2, '', '');
+								$final_price = number_format($final_price, 2, '', '');
 
 								// PAYMENT FUNCTION
 								$payment_desc = "This payment is for Booking ID ".$booked['book_id']." under Mr/Ms. " . $joiner[1] . " " . $joiner[2];
-								$result = process_paymongo_card_payment($_POST['card_name'], $_POST['card_num'], str_replace("-","",$_POST['card_expiry']), $_POST['card_cvv'], $_SESSION['discounted'], $payment_desc, $joiner);
+								$result = process_paymongo_card_payment($_POST['card_name'], $_POST['card_num'], str_replace("-","",$_POST['card_expiry']), $_POST['card_cvv'], $final_price, $payment_desc, $joiner);
 
 								if($result[1] == 'succeeded')
-									header("Location: thankyou.php?card&book_id=".$booked['book_id']."&intentid=".$result[0]."&total=".$_SESSION['discounted']);
+									header("Location: thankyou.php?card&book_id=".$booked['book_id']."&intentid=".$result[0]."&total=".$final_price);
 								else
 									echo "<script>alert('".$result[1]."')</script>";
-
-								unset($_SESSION['discounted']);
 							}
 						}
 					?>

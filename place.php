@@ -99,7 +99,7 @@
 						<p><?php echo $place['adv_details']; ?></p>
 					</div>
 					<div class="book_info">
-						<h2>On <?php echo date('M. j, Y', strtotime($place['adv_date'])); ?> <span><?php echo "₱ ".number_format((float)$price, 2, '.', ',')." / guest"; ?></span> </h2>
+						<h2>On <?php echo date('M. j, Y', strtotime($place['adv_date'])); ?> <span><?php echo "₱ ".number_format((float)$price, 2, '.', ',')." / person"; ?></span> </h2>
 
 						<form method="post">
 							<?php

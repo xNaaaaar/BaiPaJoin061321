@@ -2,16 +2,7 @@
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
 
-	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");s
-
-	if(isset($_POST['btnRate'])){
-		rateAdventure();
-	}
-
-	// IF RATED SUCCESSFULLY AN ADVENTURE
-	if(isset($_GET['rated']) && $_GET['rated'] == 1){
-		echo "<script>alert('This adventure is successfully rated!')</script>";
-	}
+	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
 ?>
 
 <!-- Head -->
