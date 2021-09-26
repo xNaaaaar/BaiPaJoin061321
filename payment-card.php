@@ -155,7 +155,7 @@
 						<li>Total guest/s:
 							<?php
 							echo $booked['book_guests'];
-							$info = ($_SESSION['bookOption'] == "someone") ? "(Excludes you)" : "(Includes you)";
+							$info = (isset($_SESSION['bookOption']) && $_SESSION['bookOption'] == "someone") ? "(Excludes you)" : "(Includes you)";
 							echo " <span>".$info."</span>";
 							?>
 						</li>
@@ -261,6 +261,7 @@
 					</div>
 
 					<button class="edit" type="submit" name="btnPayCard">Pay with Credit/Debit Card</button>
+					<a class="edit" href="reports_booking.php">Pay Later</a>
 
 					<?php
 						if(isset($_POST['btnPayCard'])) {

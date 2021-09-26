@@ -97,7 +97,7 @@ main .admins{height:auto;width:100%;}
         <!-- MAIN -->
         <main>
           <h1><i class="fas fa-user-circle"></i> Admin: <?php echo $current_admin['admin_name']; ?></h1>
-          <h2>Organizers</h2>
+          <h2>Joiners</h2>
           <div class="contents">
             <div class="admins">
               <table class="table-responsive table">
@@ -139,7 +139,7 @@ main .admins{height:auto;width:100%;}
 												}
 												echo "
 												<td>".count($booked)."</td>
-												<td>".$total."</td>
+												<td>₱".number_format($total,2,".",",")."</td>
 												";
 											} else {
 												echo "

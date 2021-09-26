@@ -140,10 +140,9 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
                   </tr>
                 </thead>
                 <?php
+									## DISPLAYS ALL ADMIN
 									display_admin();
                 ?>
-
-
             </div>
             <div class="forms">
               <form method="post">

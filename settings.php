@@ -121,7 +121,7 @@
 					<h2>Profile <span><a href="edit_profile.php"><i class='fas fa-edit'></i></a></span></h2>
 					<!-- FOR ORGANIZER -->
 					<?php if(isset($_SESSION['organizer'])){ ?>
-					<h3>Note: Please complete profile details and add 2 legal documents below, to verify your account.</h3>
+					<h3>Note: Please complete profile details and add atleast 2 legal documents below, to verify your account.</h3>
 					<div class="form form1">
 						<input type="text" value="<?php echo "{$_SESSION['company']}"; ?>" placeholder="Company Name" disabled>
 						<input type="text" value="<?php echo "{$_SESSION['fname']}"; ?>" placeholder="Firstname" disabled>
@@ -149,6 +149,11 @@
 						} ##
 						?>
 					</span></h2>
+					<?php
+					if($_SESSION['verified'] == 0 && count($docu) >= 2){
+						echo "<h3>Click <i class='fas fa-paper-plane'></i> to send verification to admin!</h3>";
+					}
+					?>
 
 					<!-- DISPLAY ALL LEGAL DOCUMENT ADDED -->
 					<?php displayAll(0);

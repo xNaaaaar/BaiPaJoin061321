@@ -6,3 +6,25 @@
 
 05:22:13pm => 1 : 1 : 1 : carylarciete@gmail.com : 
 
+10:12:14am => {
+	    "data": {
+	        "attributes": {
+	            "details": {
+	                "card_number": "4571736000000075",
+	                "exp_month": 1,
+	                "exp_year": 22,
+	                "cvc": "454"
+	            },
+	            "billing": {
+	                "address": {
+	                    "line1": "Sitio Granada"
+	                },
+	                "name": "Patricia Seares",
+	                "email": "patricia@gmail.com",
+	                "phone": "09755315755"
+	           		},
+	        	"type": "card"
+	        }
+	    }
+	}
+

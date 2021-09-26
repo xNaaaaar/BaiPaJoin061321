@@ -1252,7 +1252,7 @@ function booking($status, $book_id=null) {
 			//
 			booking_with_guest($txtName, $txtPhone, $emEmail, $status, $book_id);
 
-		// BOOK AS A GUEST: 1 JOINER (KUWANG)
+		// BOOK AS A GUEST: 1 JOINER
 		} else {
 			// UPDATE JOINER BOOKING STATUS
 			DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array($status, $book_id), "UPDATE");
@@ -1854,91 +1854,6 @@ function update_admin_account(){
 	DB::query("UPDATE admin SET admin_name=?, admin_email=? WHERE admin_id=?", array($txtName, $emEmail, $_GET['admin_id']), "UPDATE");
 
 	header("Location: admin.php?updated");
-}
-
-##### CODE START HERE @BOOKING REPOTS #####
-function booking_reports(){
-	// DISPLAY BOOKING REPORTS FOR ORGANIZER
-	if(isset($_SESSION['organizer'])){
-		echo "
-		<table>
-			<thead>
-				<tr>
-					<th>Adventure ID</th>
-					<th>Book ID</th>
-					<th>Book Guests</th>
-					<th>Book Date & Time</th>
-					<th>Book Price</th>
-					<th>Book Status</th>
-					<th></th>
-					<th></th>
-				</tr>
-			</thead>
-		";
-
-		$orga_bookings = DB::query("SELECT * FROM booking b INNER JOIN adventure a ON a.adv_id = b.adv_id WHERE orga_id=?", array($_SESSION['organizer']), "READ");
-
-		if(count($orga_bookings)>0){
-			foreach ($orga_bookings as $result) {
-				echo "
-				<tr>
-					<td>".$result['adv_id']."</td>
-					<td>".$result['book_id']."</td>
-					<td>".$result['book_guests']."</td>
-					<td>".date("M. j, Y g:i a", strtotime($result['book_datetime']))."</td>
-					<td>₱".number_format($result['book_totalcosts'], 2, ".", ",")."</td>
-					<td>".$result['book_status']."</td>
-					<td></td>
-					<td></td>
-				</tr>
-				";
-			}
-		}
-		echo "</table>";
-
-	// DISPLAY BOOKING REPORTS FOR JOINER
-	} else {
-		echo "
-		<table>
-			<thead>
-				<tr>
-					<th>Book ID</th>
-					<th>Book Guests</th>
-					<th>Book Date & Time</th>
-					<th>Book Price</th>
-					<th>Book Status</th>
-					<th></th>
-					<th></th>
-				</tr>
-			</thead>
-		";
-
-		$joiner_bookings = DB::query("SELECT * FROM booking b INNER JOIN adventure a ON a.adv_id = b.adv_id WHERE joiner_id=? ORDER BY book_datetime DESC", array($_SESSION['joiner']), "READ");
-
-		if(count($joiner_bookings)>0){
-			foreach ($joiner_bookings as $result) {
-				echo "
-				<tr>
-					<td>".$result['book_id']."</td>
-					<td>".$result['book_guests']."</td>
-					<td>".date("M. j, Y g:i a", strtotime($result['book_datetime']))."</td>
-					<td>₱".number_format($result['book_totalcosts'], 2, ".", ",")."</td>
-					<td>".$result['book_status']."</td>
-				";
-
-				if($result['book_status'] == "paid"){
-					echo "<td><i class='fas fa-ban'></i></td>";
-				} else {
-					echo "<td><a href='payment-card.php?book_id=".$result['book_id']."&id=".$result['adv_id']."' onclick='return confirm(\"Ready to pay now?\");'><i class='fas fa-hand-holding-usd'></i></a></td>";
-				}
-				echo "
-					<td><i class='far fa-eye'></i></td>
-				</tr>
-				";
-			}
-		}
-		echo "</table>";
-	}
 }
 
 ##### CODE START HERE @DISPLAY ALL ADMINS #####

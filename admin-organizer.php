@@ -33,7 +33,7 @@ main{flex:4;float:none;height:100%;background:none;margin:0;padding:50px 50px 0;
 main h1{text-align:right;font-size:20px;}
 main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin:15px 0;text-align:left;}
 main h2 span{font-size:30px;}
-main h2 span a:hover{color:#313131;text-decoration:none;}
+main h2 span a:hover, main a:hover{color:#313131;text-decoration:none;}
 main h3{font:600 30px/100% Montserrat,sans-serif;;margin-bottom:10px;text-align:center;}
 main input{display:inline-block;width:99%;height:50px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 20px;margin:5px auto;border:1px solid #cfcfcf;}
 main p:last-of-type{width:100%;color:red;font-size:20px;}
@@ -137,18 +137,18 @@ main .admins{height:auto;width:100%;}
 												echo "<td style='color:#33b5e5;'><em>pending</em></td>";
 												## CHECK IF THERE ARE MISSING DATA IN ORGANIZER PROFILE
 												if($empty_data)
-													echo "<td><a href='' onclick='return confirm(\"Organizer must complete profile data to verify!\");'><i class='far fa-eye'></i></a></td>";
+													echo "<td><a href='' onclick='return confirm(\"Organizer must complete profile data to verify!\");'>view</a></td>";
 												else
-													echo "<td><a href='admin-verify.php?orga_id=".$result['orga_id']."'><i class='far fa-eye'></i></a></td>";
+													echo "<td><a href='admin-verify.php?orga_id=".$result['orga_id']."'>view</a></td>";
 											} elseif($result['orga_status'] == 1) {
 												echo "<td style='color:#00c851;'><em>verified</em></td>";
-												echo "<td></td>";
+												echo "<td><a href=''>5 <i class='fas fa-star'></i></a></td>";
 											} else {
 												echo "<td style='color:#ff4444;'><em>not verified</em></td>";
-												echo "<td></td>";
+												echo "<td><em>no ratings</em></td>";
 											}
                       echo "
-												<td><i class='fas fa-user-slash'></i></td>
+												<td></td>
 											</tr>
 											";
                     }

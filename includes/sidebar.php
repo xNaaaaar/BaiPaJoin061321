@@ -57,13 +57,13 @@
 			if($currentSidebarPage == 'reports'){
 			?>
 				<ul>
-					<li class="<?php if($currentSidebarPage == 'reports') echo 'current_sidebar'; ?>"><a href="reports_booking.php">Bookings</a></li>
+					<li class="<?php if($currentSubMenu == 'reports') echo 'current_sidebar'; ?>"><a href="reports_booking.php">Bookings</a></li>
 					<?php
 					if($_SESSION['current_user'] == 'Joiner'){
 						echo "<li><a href=''>Rebooking</a></li>";
 					}
 					?>
-					<li><a href="reports_request.php">Request</a></li>
+					<li class="<?php if($currentSubMenu == 'request') echo 'current_sidebar'; ?>"><a href="reports_request.php">Request</a></li>
 					<li><a href="reports_rating.php">Ratings</a></li>
 				</ul>
 			<?php

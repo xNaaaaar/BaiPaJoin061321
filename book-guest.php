@@ -41,8 +41,8 @@
 		.main_info .form{margin-bottom:40px;position:relative;}
 		.main_info .form label{float:left;margin-left:5px;}
 		.main_info .form input, .main_info select{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
-		.main_info .form .radio{display:block;width:25px;height:25px;border:none;box-shadow:none;border-radius:0;padding:0;margin:10px auto 25px 5px;}
-		.main_info .form .terms_cond{position:absolute;bottom:97px;left:40px;}
+		.main_info .form .radio{display:block;width:20px;height:20px;border:none;box-shadow:none;border-radius:0;padding:0;margin:10px auto 25px 5px;}
+		.main_info .form .terms_cond{position:absolute;bottom:97px;left:35px;}
 		.main_info .form button, .main_info .form a{margin:15px 5px 0 0;}
 
 		.side_info{width:35%;float:right;}
@@ -167,13 +167,16 @@
 						<section>
 							<h2>
 								<?php
-									echo $joiner['joiner_fname']." ".$joiner['joiner_mi'].". ".$joiner['joiner_lname'];
-									if($_SESSION['bookOption'] == "someone"){
-										$_SESSION['cboGuests'] = $_SESSION['cboGuests'] + 1;
-										echo "<em>Booking for someone else.</em>";
-									} else {
-										echo "<em>Booking as a guest.</em>";
-									}
+								$guests = $_SESSION['cboGuests'];
+								echo $joiner['joiner_fname']." ".$joiner['joiner_mi'].". ".$joiner['joiner_lname'];
+								if($_SESSION['bookOption'] == "someone"){
+									//$_SESSION['cboGuests'] = $_SESSION['cboGuests'] + 1;
+									$guests = $_SESSION['cboGuests'] + 1;
+									echo "<em>Booking for someone else.</em>";
+								} else {
+
+									echo "<em>Booking as a guest.</em>";
+								}
 								?>
 							</h2>
 							<ul>
@@ -192,7 +195,7 @@
 						<!--  -->
 						<div class="form">
 							<?php
-								for($i=1; $i<$_SESSION['cboGuests']; $i++){
+								for($i=1; $i<$guests; $i++){
 									echo "
 									<section>
 										<h3>Guest ".$i."</h3>
@@ -204,7 +207,7 @@
 								}
 							?>
 							<a class="terms_cond" href="terms.php" target="_blank">Accept terms & condition</a>
-							<input class="radio" type="radio" name="radioTerms" required>
+							<input class="radio" type="checkbox" name="radioTerms" required>
 							<button class="edit" type="submit" name="btnCont2">Continue</button>
 							<a href="delete.php?table=booking&id=<?php echo $pendingBooking['book_id']; ?>&adv=<?php echo $_GET['id']; ?>" class="edit">Back</a>
 						</div>
