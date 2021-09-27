@@ -125,7 +125,6 @@
 						// DISPLAY ALL VOUCHER ADDED BY SPECIFIC ORGANIZER
 						if(isset($_POST['btnSearch'])){
 							$txtSearch = trim(ucwords($_POST['txtSearch']));
-
 							$card = DB::query("SELECT * FROM voucher WHERE vouch_discount LIKE '%{$txtSearch}%' || vouch_name LIKE '%{$txtSearch}%' || vouch_startdate LIKE '%{$txtSearch}%' || vouch_enddate LIKE '%{$txtSearch}%' || vouch_minspent LIKE '%{$txtSearch}%' AND orga_id = ?", array($_SESSION['organizer']), "READ");
 
 							displayAll(2, $card);
@@ -148,8 +147,9 @@
 							$orga_id = $_GET['adv_org'];
 							$adv_id = $_GET['adv_id'];
 							$price = $_GET['booking_total'];
+							$current_date = date('Y-m-d');
 
-							$card = DB::query("SELECT * FROM voucher WHERE orga_id = '$orga_id' AND adv_id = '$adv_id' AND vouch_minspent < ($price+1)", array(), "READ");
+							$card = DB::query("SELECT * FROM voucher WHERE orga_id = '$orga_id' AND adv_id = '$adv_id' AND vouch_minspent < ($price+1) AND vouch_enddate >= '$current_date' AND  vouch_startdate <= '$current_date' ", array(), "READ");
 							if(!empty($card))
 								displayAll(3, $card);
 							else{
@@ -159,8 +159,9 @@
 						}
 						else if(isset($_POST['btnSearch'])){
 							$txtSearch = trim(ucwords($_POST['txtSearch']));
+							$current_date = date('Y-m-d');
 
-							$card = DB::query("SELECT * FROM voucher WHERE vouch_discount LIKE '%{$txtSearch}%' || vouch_name LIKE '%{$txtSearch}%' || vouch_startdate LIKE '%{$txtSearch}%' || vouch_enddate LIKE '%{$txtSearch}%' || vouch_minspent LIKE '%{$txtSearch}%'", array(), "READ");
+							$card = DB::query("SELECT * FROM voucher WHERE vouch_discount LIKE '%{$txtSearch}%' || vouch_name LIKE '%{$txtSearch}%' || vouch_startdate LIKE '%{$txtSearch}%' || vouch_enddate LIKE '%{$txtSearch}%' || vouch_minspent LIKE '%{$txtSearch}%' AND vouch_enddate >= '$current_date' AND  vouch_startdate <= '$current_date'", array(), "READ");
 
 							displayAll(3, $card);
 						}
