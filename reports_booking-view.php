@@ -70,19 +70,62 @@
 			## JOINER BOOKING WANT TO VIEW
 			$booked = DB::query("SELECT * FROM booking WHERE book_id=?", array($_GET['book_id']), "READ");
 			$booked = $booked[0];
+
+			## 	RETRIEVE PAYMENT DETAILS
+			$payment_db = DB::query("SELECT * FROM payment WHERE book_id=?", array($_GET['book_id']), "READ");
+			$payment = $payment_db[0];
+			if($payment['payment_method'] == 'card') {
+				$payment_details = retrieve_paymongo_card_payment($payment['payment_id']);
+
+				$pay_id = $payment_details['data']['id'];
+				$pay_desc = $payment_details['data']['attributes']['description'];
+				$pay_type = $payment_details['data']['attributes']['payments'][0]['attributes']['source']['brand'];
+				$pay_lastdigit = $payment_details['data']['attributes']['payments'][0]['attributes']['source']['last4'];
+
+				## PER GUESTS COST
+				$per_guest = $payment_details['data']['attributes']['payments'][0]['attributes']['net_amount'];
+				$fee = $payment_details['data']['attributes']['payments'][0]['attributes']['fee'];
+				$total = $payment_details['data']['attributes']['payments'][0]['attributes']['amount'];
+
+				## NUMBER FORMAT
+				$per_guest = number_format(($per_guest/100),2,".",",");
+				$fee = number_format(($fee/100),2,".",",");
+				$total = number_format(($total/100),2,".",",");
+
+				## BILLING INFO
+				$bill_name = $payment_details['data']['attributes']['payments'][0]['attributes']['billing']['name'];
+				$bill_emailadd = $payment_details['data']['attributes']['payments'][0]['attributes']['billing']['email'];
+				$bill_phone = $payment_details['data']['attributes']['payments'][0]['attributes']['billing']['phone'];
+				$bill_address = $payment_details['data']['attributes']['payments'][0]['attributes']['billing']['address']['line1'];
+			}
+			else {
+				$payment_details = retrieve_paymongo_ewallet_payment($payment['payment_id']);
+
+				$pay_id = $payment_details['data']['id'];
+				$pay_desc = 'N/A';
+				$pay_type = $payment_details['data']['attributes']['source']['type']; 
+				$pay_lastdigit = 'N/A';
+
+				## PER GUESTS COST
+				$per_guest = $payment_details['data']['attributes']['net_amount'];
+				$fee = $payment_details['data']['attributes']['fee'];
+				$total = $payment_details['data']['attributes']['amount'];
+
+				## NUMBER FORMAT
+				$per_guest = number_format(($per_guest/100),2,".",",");
+				$fee = number_format(($fee/100),2,".",",");
+				$total = number_format(($total/100),2,".",",");
+
+				## BILLING INFO
+				$bill_name = $payment_details['data']['attributes']['billing']['name'];
+				$bill_emailadd = $payment_details['data']['attributes']['billing']['email'];
+				$bill_phone = $payment_details['data']['attributes']['billing']['phone'];
+				$bill_address = 'N/A';
+			}
+
 			## THE ADV JOINER BOOKED
 			$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($booked['adv_id']), "READ");
-			$adv = $adv[0];
-
-			## PER GUESTS COST
-			$per_guest = ($adv['adv_totalcostprice'] / $adv['adv_maxguests']) * $booked['book_guests'];
-			$fee = $per_guest * 0.035 + 15;
-			$total = $per_guest + $fee;
-
-			## NUMBER FORMAT
-			$per_guest = number_format($per_guest,2,".",",");
-			$fee = number_format($fee,2,".",",");
-			$total = number_format($total,2,".",",");
+			$adv = $adv[0];			
 
 			## JOINER DETAILS
 			$joiner = DB::query("SELECT * FROM joiner WHERE joiner_id=?", array($_SESSION['joiner']), "READ");
@@ -103,6 +146,10 @@
 						<tr>
 							<td>Booking Date : </td>
 							<td><b><?php echo date("M. j, Y", strtotime($adv['adv_date'])); ?></b></td>
+						</tr>
+						<tr>
+							<td>Adventure Name</td>
+							<td><b><?php echo $adv['adv_name']; ?></b></td>
 						</tr>
 						<tr>
 							<td>Status : </td>
@@ -144,19 +191,33 @@
 					<h2>Payment Details</h2>
 					<table>
 						<tr>
-							<td>Paid Thru</td>
-							<td><b>Card</b></td>
+							<td>Payment ID</td>
+							<td><b><?php echo $pay_id; ?></b></td>
 						</tr>
 						<tr>
-							<td>Adventure Name</td>
-							<td><b><?php echo $adv['adv_name']; ?></b></td>
+							<td>Payment Description</td>
+							<td><b><?php echo $pay_desc; ?></b></td>
 						</tr>
+						<tr><td><br></td></tr>
+						<tr>
+							<td>Paid Thru</td>
+							<td><b><?php echo $pay_type; ?></b></td>
+						</tr>
+						<tr>
+							<td>Last 4 Digits</td>
+							<td><b><?php echo $pay_lastdigit; ?></b></td>
+						</tr>
+						<tr>
+							<td>Payment Time</td>
+							<td><b><?php echo $payment['payment_datetime']; ?></b></td>
+						</tr>
+						<tr><td><br></td></tr>
 						<tr>
 							<td>Adventure Cost</td>
 							<td><b><?php echo "₱".$per_guest; ?></b></td>
 						</tr>
 						<tr>
-							<td>Fee</td>
+							<td>Fee and Other Charges</td>
 							<td><b><?php echo "₱".$fee; ?></b></td>
 						</tr>
 						<tr>
@@ -166,19 +227,23 @@
 					</table>
 				</section>
 				<section>
-					<h2>Bank Details</h2>
+					<h2>Billing Details</h2>
 					<table>
 						<tr>
-							<td>Account Name</td>
-							<td>Card</td>
+							<td>Name</td>
+							<td><?php echo $bill_name ?></td>
 						</tr>
 						<tr>
-							<td>Account Number</td>
-							<td>Card</td>
+							<td>Email Address</td>
+							<td><?php echo $bill_emailadd ?></td>
 						</tr>
 						<tr>
-							<td>Expiry Date</td>
-							<td>Card</td>
+							<td>Phone Number</td>
+							<td><?php echo $bill_phone ?></td>
+						</tr>
+						<tr>
+							<td>Address</td>
+							<td><?php echo $bill_address ?></td>
 						</tr>
 					</table>
 				</section>
