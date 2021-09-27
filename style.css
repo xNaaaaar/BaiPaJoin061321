@@ -41,6 +41,7 @@ blockquote, q {quotes: none;}
 blockquote:before, blockquote:after,
 q:before, q:after {content: '';content: none;}
 table {border-collapse: collapse;border-spacing: 0;}
+table tr th, table tr td{line-height:20px;}
 button, html input[type=button], input[type=reset], input[type=submit] { -webkit-appearance: button; cursor: pointer; }
 input:not([type='radio']):not([type='checkbox']), textarea, select{-webkit-appearance: none;}
 form, label {-webkit-text-size-adjust: 100%;}

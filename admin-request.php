@@ -28,6 +28,7 @@ html, body{height:100%;}
 .sidebar h2{text-align:center;}
 .sidebar h2 span{display:block;font-size:15px;}
 .sidebar ul{margin:35px 0 0 25px;height:auto;}
+.sidebar ul ul{margin:0 0 0 25px;}
 
 main{flex:4;float:none;height:100%;background:none;margin:0;padding:50px 50px 0;border-radius:0;text-align:center;}
 main h1{text-align:right;font-size:20px;}
@@ -43,6 +44,8 @@ main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 main .admins{height:auto;width:100%;}
 main .admins select{float:left;margin:0 0 20px;width:170px;height:40px;max-width:100%;padding:0 10px;}
 main .admins button{float:left;margin:0 10px 20px;width:170px;height:40px;max-width:100%;padding:0 10px;}
+main .admins table tr td:nth-child(10) a{color:#5cb85c;}
+main .admins table tr td:last-child a{color:red;}
 
 /* Responsive Design */
 @media only screen and (max-width: 1800px) {
@@ -99,69 +102,114 @@ main .admins button{float:left;margin:0 10px 20px;width:170px;height:40px;max-wi
         <!-- MAIN -->
         <main>
           <h1><i class="fas fa-user-circle"></i> Admin: <?php echo $current_admin['admin_name']; ?></h1>
-          <h2>Requests</h2>
+          <h2>Pending Requests</h2>
           <div class="contents">
             <div class="admins">
 							<form method="post">
-								<select name="">
+								<select name="cboOption" required>
 									<option value="">-- SELECT OPTION --</option>
-									<option value="">Joiner</option>
-									<option value="">Organizer</option>
+									<option value="joiner">Joiner</option>
+									<option value="organizer">Organizer</option>
 								</select>
-								<button type="button" name="button">Search</button>
+								<button type="submit" name="btnSearch">Search</button>
 							</form>
-              <table class="table-responsive table">
-                <thead class="table-dark">
-                  <tr>
-                    <th>ID#</th>
-    								<th>Book Id</th>
-    								<th>Request User</th>
-    								<th>Request Type</th>
-    								<th>Request Date Processed</th>
-    								<th>Request Amount</th>
-    								<th>Request Status</th>
-    								<th>Request Reason</th>
-    								<th></th>
-    								<th></th>
-                  </tr>
-                </thead>
+							<table class="table-responsive table">
+								<thead class="table-dark">
+									<tr>
+										<th>ID#</th>
+										<th>Book Id</th>
+										<th>Request User</th>
+										<th>Request Type</th>
+										<th>Request Date Processed</th>
+										<th>Request Date Approved</th>
+										<th>Request Amount</th>
+										<th>Request Status</th>
+										<th>Request Reason</th>
+										<th></th>
+										<th></th>
+									</tr>
+								</thead>
 								<tbody>
-                <?php
-									// ALL ORGANIZERS RESULTS
-                  $request = DB::query("SELECT * FROM request ORDER BY req_dateprocess DESC", array(), "READ");
+          <?php
+					## BUTTON SEARCH IS CLICKED
+					if(isset($_POST['btnSearch'])){
+						$cboOption = $_POST['cboOption'];
+						## FOR ORGANIZER && JOINER
+						$request = DB::query("SELECT * FROM request WHERE req_user=? ORDER BY req_dateprocess DESC", array($cboOption), "READ");
 
-                  if(count($request)>0){
-										foreach ($request as $result) {
-											echo "
-											<tr>
-		                    <td>".$result['req_id']."</td>
-		    								<td>".$result['book_id']."</td>
-		    								<td>".$result['req_user']."</td>
-		    								<td>".$result['req_type']."</td>
-		    								<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
-		    								<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
-		    								<td>".$result['req_status']."</td>
-		    								<td>".$result['req_reason']."</td>
-		    								<td>approved</td>
-		    								<td></td>
-		                  </tr>
-											";
-										}
+						if(count($request)>0){
+							foreach ($request as $result) {
+								echo "
+								<tr>
+									<td>".$result['req_id']."</td>
+									<td>".$result['book_id']."</td>
+									<td>".$result['req_user']."</td>
+									<td>".$result['req_type']."</td>
+									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>";
+								if($result['req_dateapproved'] == null)
+									echo "<td> --- </td>";
+								else {
+									echo "<td>".date("M. j, Y", strtotime($result['req_dateapproved']))."</td>";
+								}
+								echo "
+									<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
+									<td>".$result['req_status']."</td>
+									<td>".$result['req_reason']."</td>
+									<td><b><a href='' onclick='return confirm(\"Are you sure you want to approved this request?\");'>✓</a></b></td>
+									<td><b><a href='' onclick='return confirm(\"Are you sure you want to disapproved this request?\");'>✗</a></b></td>
+								</tr>
+								";
+							}
 
-									## IF NO EXISTING ORGANIZER
-									} else {
-										echo "	</tbody>";
-										echo "</table>";
-										echo "<p>No requests exists!</p>";
-									}
-                ?>
+						## IF NO EXISTING ORGANIZER OR JOINER
+						} else {
+							echo "	</tbody>";
+							echo "</table>";
+							echo "<p>No requests exists!</p>";
+						}
+
+					## ALL REQUEST RESULTS
+					} else {
+						$request = DB::query("SELECT * FROM request ORDER BY req_dateprocess DESC", array(), "READ");
+
+						if(count($request)>0){
+							foreach ($request as $result) {
+								echo "
+								<tr>
+									<td>".$result['req_id']."</td>
+									<td>".$result['book_id']."</td>
+									<td>".$result['req_user']."</td>
+									<td>".$result['req_type']."</td>
+									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>";
+								##
+								if($result['req_dateapproved'] == null)
+									echo "<td> --- </td>";
+								else
+									echo "<td>".date("M. j, Y", strtotime($result['req_dateapproved']))."</td>";
+								##
+								echo "
+									<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
+									<td>".$result['req_status']."</td>
+									<td>".$result['req_reason']."</td>
+									<td><b><a href='' onclick='return confirm(\"Are you sure you want to approved this request?\");'>✓</a></b></td>
+									<td><b><a href='' onclick='return confirm(\"Are you sure you want to disapproved this request?\");'>✗</a></b></td>
+								</tr>
+								";
+							}
+
+						## IF NO EXISTING ORGANIZER
+						} else {
+							echo "	</tbody>";
+							echo "</table>";
+							echo "<p>No requests exists!</p>";
+						}
+					}
+					?>
             </div>
           </div>
         </main>
       </div>
-      <?php
-      }
-      ?>
+		<?php } ?>
     </div>
   </div>
 </body>

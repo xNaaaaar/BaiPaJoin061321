@@ -41,7 +41,7 @@ main h1{text-align:right;font-size:20px;}
 main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin:15px 0;text-align:left;}
 main h2 span{font-size:30px;}
 main h2 span a:hover, main a:hover{color:#313131;text-decoration:none;}
-main h3{font:600 30px/100% Montserrat,sans-serif;;margin-bottom:10px;text-align:center;}
+main h3{font:600 30px/100% Montserrat,sans-serif;;margin-bottom:10px;text-align:left;}
 main input{display:inline-block;width:99%;height:50px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 20px;margin:5px auto;border:1px solid #cfcfcf;}
 
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
@@ -107,6 +107,11 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
           <h2>Organizers</h2>
           <div class="contents">
             <div class="admins">
+							<?php
+							$orga = DB::query("SELECT * FROM organizer WHERE orga_id=?", array($_GET['orga_id']), "READ");
+							$orga = $orga[0];
+							echo "<h3>".$orga['orga_fname']." ".$orga['orga_lname']."</h3>";
+							?>
 							<table class="table-responsive table">
                 <thead class="table-dark">
                   <tr>
