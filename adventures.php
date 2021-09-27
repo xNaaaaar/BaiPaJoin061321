@@ -222,8 +222,8 @@
 							$num_per_page = 5;
 							$start_from = ($page-1) * $num_per_page;
 
-							$card = DB::query("SELECT * FROM adventure", array(), "READ");
-							$card1 = DB::query("SELECT * FROM adventure LIMIT $start_from,$num_per_page", array(), "READ");
+							$card = DB::query("SELECT * FROM adventure WHERE adv_status !='full'", array(), "READ");
+							$card1 = DB::query("SELECT * FROM adventure WHERE adv_status !='full' LIMIT $start_from,$num_per_page", array(), "READ");
 							displayAll(99, $card1);
 							pagination($page, $card, $num_per_page);
 						}
@@ -240,11 +240,11 @@
 
 							$txtSearch = trim(ucwords($_POST['txtSearch']));
 
-							$card = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' ORDER BY adv_id DESC LIMIT $start_from,$num_per_page", array(), "READ");
+							$card = DB::query("SELECT * FROM adventure WHERE (adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%') AND adv_status !='full' ORDER BY adv_id DESC LIMIT $start_from,$num_per_page", array(), "READ");
 
 							
 
-							$card1 = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' ", array(), "READ");
+							$card1 = DB::query("SELECT * FROM adventure WHERE (adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%') AND adv_status !='full' ", array(), "READ");
 
 							displayAll(99, $card1);
 							pagination($page, $card, $num_per_page);
@@ -337,9 +337,9 @@
 								pagination($page, $card, $num_per_page);
 							}
 							else { //This works if return items from SQL is empty due to search not found
-								$card1 = DB::query("SELECT * FROM adventure LIMIT $start_from,$num_per_page", array(), "READ");
+								$card1 = DB::query("SELECT * FROM adventure WHERE adv_status !='full' LIMIT $start_from,$num_per_page", array(), "READ");
 								displayAll(99, $card1);
-								$card = DB::query("SELECT * FROM adventure", array(), "READ");
+								$card = DB::query("SELECT * FROM adventure WHERE adv_status !='full' ", array(), "READ");
 								pagination($page, $card, $num_per_page);
 							}
 						}
@@ -355,7 +355,7 @@
 
 					        if(!empty($_SESSION['places'])) {
 
-								$sqlquery = "SELECT * FROM adventure WHERE adv_address";
+								$sqlquery = "SELECT * FROM adventure WHERE (adv_address";
 
 								$arrlength = count($_SESSION['places']);
 
@@ -383,14 +383,14 @@
 
 										//$sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";
 										// Check commented code above
-										$sqlquery = $sqlquery . " ORDER BY adv_id";	 //Temporary to show true results
+										$sqlquery = $sqlquery . ") AND adv_status != 'full' ORDER BY adv_id";	 //Temporary to show true results
 								}
 							}
 
 							else if(!empty($_POST['activities'])) {
 
 								if(empty($_POST['places']))
-									$sqlquery = "SELECT * FROM adventure WHERE adv_kind";
+									$sqlquery = "SELECT * FROM (adventure WHERE adv_kind";
 									// 	New string query is created if no Place checkbox is selected
 
 								$arrlength = count($_POST['activities']);
@@ -404,7 +404,7 @@
 
 								//$sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";
 								// Check commented code above
-								$sqlquery = $sqlquery . " ORDER BY adv_id";	//Temporary to show true results
+								$sqlquery = $sqlquery . ") AND adv_status != 'full' ORDER BY adv_id";	//Temporary to show true results
 							}
 
 							if(!empty($sqlquery)) {
@@ -416,8 +416,13 @@
 								
 							}
 							else {
+
 								$card = DB::query("SELECT * FROM adventure", array(), "READ");
 								$card1 = DB::query("SELECT * FROM adventure LIMIT $start_from,$num_per_page", array(), "READ");
+								$card = DB::query("SELECT * FROM adventure WHERE adv_status != 'full'", array(), "READ");								
+								$card1 = DB::query("SELECT * FROM adventure WHERE adv_status != 'full' LIMIT $start_from,
+								$num_per_page", array(), "READ");
+								
 								displayAll(99, $card1);
 								pagination($page, $card, $num_per_page);
 
