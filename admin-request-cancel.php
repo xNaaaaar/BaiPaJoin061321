@@ -5,8 +5,27 @@
   // REDIRECT IF ADMIN NOT LOGGED IN
   if(!isset($_SESSION['admin'])) header("Location: login.php");
 
-	if(isset($_GET['success'])){
-		echo "<script>alert('Successfully verified!')</script>";
+	if(isset($_GET['j_cancel'])){
+		## UPDATE REQUEST DATE APPROVED && STATUS
+		DB::query("UPDATE request SET req_dateapproved=?, req_status=? WHERE req_id=?", array(date("Y-m-d"), "approved", $_GET['req_id']), "UPDATE");
+
+		## QUERY THE SPECIFIC REQ_ID
+		$req = DB::query("SELECT * FROM request WHERE req_id=?", array($_GET['req_id']), "READ");
+		$req = $req[0];
+
+		## GET THE ADVENTURE TO CALCULATE REFUNDED AMOUNT
+		$adv = DB::query("SELECT * FROM booking b INNER JOIN adventure a ON b.adv_id = a.adv_id WHERE book_id=?", array($req['book_id']), "READ");
+		$adv = $adv[0];
+
+		## TO BE REFUNDED AMOUNT
+		$adv_price = ($adv['adv_totalcostprice'] / $adv['adv_maxguests']) * $adv['book_guests'];
+		$cancel_fee = $adv_price * 0.3;
+		$final_price = $adv_price - $cancel_fee;
+
+		## ADD NEW REQUEST AS REFUND
+		DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateapproved, req_amount, req_status, book_id) VALUES(?,?,?,?,?,?,?)", array($req['req_user'], "refund", date("Y-m-d"), date("Y-m-d"), $final_price, "approved", $req['book_id']), "CREATE");
+
+		echo "<script>alert('Successfully approved cancelation!')</script>";
 	}
 
 ?>
@@ -44,8 +63,7 @@ main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 main .admins{height:auto;width:100%;}
 main .admins select{float:left;margin:0 0 20px;height:40px;max-width:100%;padding:0 10px;}
 main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;padding:0 30px;}
-main .admins table tr td:nth-child(10) a{color:#5cb85c;}
-main .admins table tr td:last-child a{color:red;}
+main .admins table tr td:nth-child(9){color:#5cb85c;}
 
 /* Responsive Design */
 @media only screen and (max-width: 1800px) {
@@ -96,13 +114,14 @@ main .admins table tr td:last-child a{color:red;}
         <!-- SIDEBAR -->
 				<?php
 					$currentSidebarPage = 'request';
+					$currentSubMenu = 'cancel';
 					include("includes/sidebar-admin.php");
 				?>
 
         <!-- MAIN -->
         <main>
           <h1><i class="fas fa-user-circle"></i> Admin: <?php echo $current_admin['admin_name']; ?></h1>
-          <h2>Pending Requests</h2>
+          <h2>Cancelation</h2>
           <div class="contents">
             <div class="admins">
 							<form method="post">
@@ -121,10 +140,10 @@ main .admins table tr td:last-child a{color:red;}
 										<th>Request User</th>
 										<th>Request Type</th>
 										<th>Request Date Processed</th>
+										<th>Request Date Approved</th>
 										<th>Request Amount</th>
-										<th>Request Status</th>
 										<th>Request Reason</th>
-										<th></th>
+										<th>Request Status</th>
 										<th></th>
 									</tr>
 								</thead>
@@ -134,7 +153,7 @@ main .admins table tr td:last-child a{color:red;}
 					if(isset($_POST['btnSearch'])){
 						$cboOption = $_POST['cboOption'];
 						## FOR ORGANIZER && JOINER
-						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_status=? ORDER BY req_dateprocess DESC", array($cboOption, "pending"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND req_status=? || req_status=? ORDER BY req_dateprocess DESC", array($cboOption, "cancel","approved", "disapproved"), "READ");
 
 						if(count($request)>0){
 							foreach ($request as $result) {
@@ -145,42 +164,11 @@ main .admins table tr td:last-child a{color:red;}
 									<td>".$result['req_user']."</td>
 									<td>".$result['req_type']."</td>
 									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
+									<td>".date("M. j, Y", strtotime($result['req_dateapproved']))."</td>
 									<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
-									<td>".$result['req_status']."</td>
 									<td>".$result['req_reason']."</td>
-									<td><b><a href='admin-request-cancel.php?j_cancel' onclick='return confirm(\"Are you sure you want to approved this request?\");'>✓</a></b></td>
-									<td><b><a href='' onclick='return confirm(\"Are you sure you want to disapproved this request?\");'>✗</a></b></td>
-								</tr>
-								";
-							}
-							echo "	</tbody>";
-							echo "</table>";
-
-						## IF NO EXISTING ORGANIZER OR JOINER
-						} else {
-							echo "	</tbody>";
-							echo "</table>";
-							echo "<p>No requests exists!</p>";
-						}
-
-					## ALL REQUEST RESULTS
-					} else {
-						$request = DB::query("SELECT * FROM request WHERE req_status=? ORDER BY req_dateprocess DESC", array("pending"), "READ");
-
-						if(count($request)>0){
-							foreach ($request as $result) {
-								echo "
-								<tr>
-									<td>".$result['req_id']."</td>
-									<td>".$result['book_id']."</td>
-									<td>".$result['req_user']."</td>
-									<td>".$result['req_type']."</td>
-									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
-									<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
-									<td>".$result['req_status']."</td>
-									<td>".$result['req_reason']."</td>
-									<td><b><a href='admin-request-cancel.php?req_id=".$result['req_id']."&j_cancel' onclick='return confirm(\"Are you sure you want to approved this cancelation request?\");'>✓</a></b></td>
-									<td><b><a href='' onclick='return confirm(\"Are you sure you want to disapproved this request?\");'>✗</a></b></td>
+									<td><em>".$result['req_status']."</em></td>
+									<td><a href=''>view refund</a></td>
 								</tr>
 								";
 							}
@@ -191,7 +179,38 @@ main .admins table tr td:last-child a{color:red;}
 						} else {
 							echo "	</tbody>";
 							echo "</table>";
-							echo "<p>No requests exists!</p>";
+							echo "<p>No cancelation approved exists!</p>";
+						}
+
+					## ALL CANCELLATION APPROVED RESULTS
+					} else {
+						$request = DB::query("SELECT * FROM request WHERE req_type=? AND req_status=? || req_status=? ORDER BY req_dateprocess DESC", array("cancel","approved", "disapproved"), "READ");
+
+						if(count($request)>0){
+							foreach ($request as $result) {
+								echo "
+								<tr>
+									<td>".$result['req_id']."</td>
+									<td>".$result['book_id']."</td>
+									<td>".$result['req_user']."</td>
+									<td>".$result['req_type']."</td>
+									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
+									<td>".date("M. j, Y", strtotime($result['req_dateapproved']))."</td>
+									<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
+									<td>".$result['req_reason']."</td>
+									<td><em>".$result['req_status']."</em></td>
+									<td><a href=''>view refund</a></td>
+								</tr>
+								";
+							}
+							echo "	</tbody>";
+							echo "</table>";
+
+						## IF NO EXISTING ORGANIZER
+						} else {
+							echo "	</tbody>";
+							echo "</table>";
+							echo "<p>No cancelation approved exists!</p>";
 						}
 					}
 					?>

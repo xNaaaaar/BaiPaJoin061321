@@ -5,16 +5,11 @@
   // REDIRECT IF ADMIN NOT LOGGED IN
   if(!isset($_SESSION['admin'])) header("Location: login.php");
 
-	if(isset($_GET['success'])){
-		echo "<script>alert('Successfully verified!')</script>";
-	}
-
 ?>
 <!-- Head -->
 <?php include("includes/head.php"); ?>
 <!-- End of Head -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-
 
 <style media="screen">
 html, body{height:100%;}
@@ -28,13 +23,12 @@ html, body{height:100%;}
 .sidebar h2{text-align:center;}
 .sidebar h2 span{display:block;font-size:15px;}
 .sidebar ul{margin:35px 0 0 25px;height:auto;}
-.sidebar ul ul{margin:0 0 0 25px;}
 
 main{flex:4;float:none;height:100%;background:none;margin:0;padding:50px 50px 0;border-radius:0;text-align:center;}
 main h1{text-align:right;font-size:20px;}
 main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin:15px 0;text-align:left;}
 main h2 span{font-size:30px;}
-main h2 span a:hover, main a:hover{color:#313131;text-decoration:none;}
+main h2 span a:hover{color:#313131;text-decoration:none;}
 main h3{font:600 30px/100% Montserrat,sans-serif;;margin-bottom:10px;text-align:center;}
 main input{display:inline-block;width:99%;height:50px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 20px;margin:5px auto;border:1px solid #cfcfcf;}
 main p:last-of-type{width:100%;color:red;font-size:20px;}
@@ -44,8 +38,6 @@ main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 main .admins{height:auto;width:100%;}
 main .admins select{float:left;margin:0 0 20px;height:40px;max-width:100%;padding:0 10px;}
 main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;padding:0 30px;}
-main .admins table tr td:nth-child(10) a{color:#5cb85c;}
-main .admins table tr td:last-child a{color:red;}
 
 /* Responsive Design */
 @media only screen and (max-width: 1800px) {
@@ -95,111 +87,86 @@ main .admins table tr td:last-child a{color:red;}
       <div class="main_con">
         <!-- SIDEBAR -->
 				<?php
-					$currentSidebarPage = 'request';
+					$currentSidebarPage = 'voucher';
 					include("includes/sidebar-admin.php");
 				?>
 
         <!-- MAIN -->
         <main>
           <h1><i class="fas fa-user-circle"></i> Admin: <?php echo $current_admin['admin_name']; ?></h1>
-          <h2>Pending Requests</h2>
+          <h2>Vouchers</h2>
           <div class="contents">
             <div class="admins">
 							<form method="post">
 								<select name="cboOption" required>
-									<option value="">-- SELECT USER --</option>
-									<option value="joiner">Joiner</option>
-									<option value="organizer">Organizer</option>
+									<option value="">-- SELECT ORGANIZER --</option>
+									<?php
+									$orga = DB::query("SELECT * FROM organizer", array(), "READ");
+									if(count($orga)>0){
+										foreach ($orga as $result) {
+											echo "
+											<option value='".$result['orga_id']."'>".$result['orga_fname']." ".$result['orga_lname']."</option>
+											";
+										}
+									}
+									?>
 								</select>
 								<button type="submit" name="btnSearch">Search</button>
 							</form>
-							<table class="table-responsive table">
-								<thead class="table-dark">
-									<tr>
-										<th>ID#</th>
-										<th>Book Id</th>
-										<th>Request User</th>
-										<th>Request Type</th>
-										<th>Request Date Processed</th>
-										<th>Request Amount</th>
-										<th>Request Status</th>
-										<th>Request Reason</th>
-										<th></th>
-										<th></th>
-									</tr>
-								</thead>
+              <table class="table-responsive table">
+                <thead class="table-dark">
+                  <tr>
+										<th>Organizer ID</th>
+										<th>Adventure Name</th>
+                    <th>Code</th>
+    								<th>Discount</th>
+    								<th>Voucher Name</th>
+    								<th>Start Date</th>
+    								<th>End Date</th>
+    								<th>Min. Spent</th>
+    								<th>Used</th>
+                  </tr>
+                </thead>
 								<tbody>
-          <?php
-					## BUTTON SEARCH IS CLICKED
-					if(isset($_POST['btnSearch'])){
-						$cboOption = $_POST['cboOption'];
-						## FOR ORGANIZER && JOINER
-						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_status=? ORDER BY req_dateprocess DESC", array($cboOption, "pending"), "READ");
+                <?php
+									// ALL VOUCHER RESULTS
+                  $voucher = DB::query("SELECT * FROM voucher", array(), "READ");
 
-						if(count($request)>0){
-							foreach ($request as $result) {
-								echo "
-								<tr>
-									<td>".$result['req_id']."</td>
-									<td>".$result['book_id']."</td>
-									<td>".$result['req_user']."</td>
-									<td>".$result['req_type']."</td>
-									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
-									<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
-									<td>".$result['req_status']."</td>
-									<td>".$result['req_reason']."</td>
-									<td><b><a href='admin-request-cancel.php?j_cancel' onclick='return confirm(\"Are you sure you want to approved this request?\");'>✓</a></b></td>
-									<td><b><a href='' onclick='return confirm(\"Are you sure you want to disapproved this request?\");'>✗</a></b></td>
-								</tr>
-								";
-							}
-							echo "	</tbody>";
-							echo "</table>";
+                  if(count($voucher)>0){
+                    foreach ($voucher as $result) {
+											$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($result['adv_id']), "READ");
+											$adv = $adv[0];
+											echo "
+											<tr>
+												<td>".$result['orga_id']."</td>
+													<td>".$adv['adv_name']."</td>
+												<td>".$result['vouch_code']."</td>
+												<td>".$result['vouch_discount']."%</td>
+												<td>".$result['vouch_name']."</td>
+												<td>".date("M. j, Y", strtotime($result['vouch_startdate']))."</td>
+												<td>".date("M. j, Y", strtotime($result['vouch_enddate']))."</td>
+												<td>".$result['vouch_minspent']."</td>
+												<td>".$result['vouch_user']."</td>
+											</tr>
+											";
+                    }
+										echo "	</tbody>";
+										echo "</table>";
 
-						## IF NO EXISTING ORGANIZER OR JOINER
-						} else {
-							echo "	</tbody>";
-							echo "</table>";
-							echo "<p>No requests exists!</p>";
-						}
-
-					## ALL REQUEST RESULTS
-					} else {
-						$request = DB::query("SELECT * FROM request WHERE req_status=? ORDER BY req_dateprocess DESC", array("pending"), "READ");
-
-						if(count($request)>0){
-							foreach ($request as $result) {
-								echo "
-								<tr>
-									<td>".$result['req_id']."</td>
-									<td>".$result['book_id']."</td>
-									<td>".$result['req_user']."</td>
-									<td>".$result['req_type']."</td>
-									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
-									<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
-									<td>".$result['req_status']."</td>
-									<td>".$result['req_reason']."</td>
-									<td><b><a href='admin-request-cancel.php?req_id=".$result['req_id']."&j_cancel' onclick='return confirm(\"Are you sure you want to approved this cancelation request?\");'>✓</a></b></td>
-									<td><b><a href='' onclick='return confirm(\"Are you sure you want to disapproved this request?\");'>✗</a></b></td>
-								</tr>
-								";
-							}
-							echo "	</tbody>";
-							echo "</table>";
-
-						## IF NO EXISTING ORGANIZER
-						} else {
-							echo "	</tbody>";
-							echo "</table>";
-							echo "<p>No requests exists!</p>";
-						}
-					}
-					?>
+									## IF NO EXISTING VOUCHER
+									} else {
+										echo "	</tbody>";
+										echo "</table>";
+										echo "<p>No voucher exists!</p>";
+									}
+                ?>
             </div>
           </div>
         </main>
       </div>
-		<?php } ?>
+      <?php
+      }
+      ?>
     </div>
   </div>
 </body>

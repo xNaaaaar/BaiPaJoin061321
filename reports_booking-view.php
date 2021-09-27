@@ -27,7 +27,7 @@
 		main section:before{content:"";width:100%;height:3px;background:#7fdcd3;position:absolute;top:-25px;left:0;}
 		main ol{text-align:left;}
 		main table{width:100%;margin:0 auto 0;text-align:left;}
-		main table tr td{width:50%;}
+		main table tr td{width:50%;line-height:25px;}
 
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
@@ -103,7 +103,7 @@
 
 				$pay_id = $payment_details['data']['id'];
 				$pay_desc = 'N/A';
-				$pay_type = $payment_details['data']['attributes']['source']['type']; 
+				$pay_type = $payment_details['data']['attributes']['source']['type'];
 				$pay_lastdigit = 'N/A';
 
 				## PER GUESTS COST
@@ -125,7 +125,7 @@
 
 			## THE ADV JOINER BOOKED
 			$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($booked['adv_id']), "READ");
-			$adv = $adv[0];			
+			$adv = $adv[0];
 
 			## JOINER DETAILS
 			$joiner = DB::query("SELECT * FROM joiner WHERE joiner_id=?", array($_SESSION['joiner']), "READ");
@@ -140,19 +140,19 @@
 					<h2>Booking Details</h2>
 					<table>
 						<tr>
-							<td>Booking ID : </td>
-							<td><b><?php echo $booked['book_id']; ?></b></td>
-						</tr>
-						<tr>
-							<td>Booking Date : </td>
-							<td><b><?php echo date("M. j, Y", strtotime($adv['adv_date'])); ?></b></td>
-						</tr>
-						<tr>
 							<td>Adventure Name</td>
 							<td><b><?php echo $adv['adv_name']; ?></b></td>
 						</tr>
 						<tr>
-							<td>Status : </td>
+							<td>Booking ID</td>
+							<td><b><?php echo $booked['book_id']; ?></b></td>
+						</tr>
+						<tr>
+							<td>Booking Date</td>
+							<td><b><?php echo date("M. j, Y", strtotime($adv['adv_date'])); ?></b></td>
+						</tr>
+						<tr>
+							<td>Status</td>
 							<td><b><?php echo strtoupper($booked['book_status']); ?></b></td>
 						</tr>
 					</table>
@@ -201,7 +201,7 @@
 						<tr><td><br></td></tr>
 						<tr>
 							<td>Paid Thru</td>
-							<td><b><?php echo $pay_type; ?></b></td>
+							<td><b><?php echo strtoupper($pay_type); ?></b></td>
 						</tr>
 						<tr>
 							<td>Last 4 Digits</td>

@@ -149,7 +149,7 @@
 									";
 
 									if($result['book_status'] == "paid"){
-										echo "<td><a href='request_cancel.php?book_id=".$result['book_id']."' onclick='return confirm(\"Are you sure you want to request cancelation for this adventure?\");'>cancel</a></td>";
+										echo "<td><a href='request_cancel.php?book_id=".$result['book_id']."' onclick='return confirm(\"Are you sure you want to request cancelation for this adventure? BaiPaJoin deducts 30% cancelation fee for the total price you paid (excludes the fee)\");'>cancel</a></td>";
 										echo "<td><a href='reports_booking-view.php?book_id=".$result['book_id']."' onclick='return confirm(\"View receipt?\");'>view</a></td>";
 									} else {
 										echo "<td><a href='payment-card.php?book_id=".$result['book_id']."&id=".$result['adv_id']."' onclick='return confirm(\"Ready to pay now?\");'>pay</a></td>";

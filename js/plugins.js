@@ -17,7 +17,7 @@ $(document).ready(function(){
 		var regex = /(?![^<]+>)((\+\d{1,2}[\s.-])?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4})/g;
 				$(this).html(
 						$(this).html()
-						.replace(/BaiPaJoin/gi, "<mark class='comp'>$&</mark>")
+						//.replace(/../gi, "<mark class='comp'>$&</mark>")
 						.replace(regex1, "<mark class='main_phone'>$&</mark>").replace(regex2, "<mark class='main_phone'>$&</mark>").replace(regex, "<mark class='main_phone'>$&</mark>"));
 		});
 
