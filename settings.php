@@ -118,7 +118,7 @@
 
 			<main>
 				<form method="post">
-					<h2>Profile <span><a href="edit_profile.php"><i class='fas fa-edit'></i></a></span></h2>
+					<h2>Profile <span><a href="edit_profile.php"><i class='fas fa-edit' data-toggle='tooltip' title='Update Info'></i></a></span></h2>
 					<!-- FOR ORGANIZER -->
 					<?php if(isset($_SESSION['organizer'])){ ?>
 					<h3>Note: Please complete profile details and add atleast 2 legal documents below, to verify your account.</h3>
@@ -132,13 +132,13 @@
 						<input type="email" value="<?php echo "{$_SESSION['email']}"; ?>" placeholder="Email Address" disabled>
 					</div>
 
-					<h2>Password <span><a href="edit_password.php"><i class='fas fa-edit'></i></a></span></h2>
+					<h2>Password <span><a href="edit_password.php"><i class='fas fa-edit' data-toggle='tooltip' title='Change Password'></i></a></span></h2>
 					<div class="form form2">
 						<input type="password" name="" value="" placeholder="**********" disabled>
 					</div>
 
 					<h2>Legal Documents <span class="legal" >
-						<a href="add_docu.php"><i class='fas fa-plus-circle'></i></a>
+						<a href="add_docu.php"><i class='fas fa-plus-circle' data-toggle='tooltip' title='Add Documents'></i></a>
 						<?php
 						$docu = DB::query("SELECT * FROM legal_document WHERE orga_id=?", array($_SESSION['organizer']), "READ");
 						## CHECK IF ORGANIZER STATUS IS NOT VERIFIED AND ADDED LEGAL IS GREATER THAN OR EQUAL TO TWO
@@ -171,7 +171,7 @@
 						<input type="email" value="<?php echo "{$_SESSION['email']}"; ?>" placeholder="Email Address" disabled>
 					</div>
 
-					<h2>Password <span><a href="edit_password.php"><i class='fas fa-edit'></i></a></span></h2>
+					<h2>Password <span><a href="edit_password.php"><i class='fas fa-edit' data-toggle='tooltip' title='Change Password'></i></a></span></h2>
 					<div class="form form2">
 						<input type="password" name="" value="" placeholder="**********" disabled>
 					</div>

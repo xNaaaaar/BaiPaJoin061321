@@ -373,12 +373,12 @@ function displayAll($num, $query = NULL){
 						<ul class='icons'>
 				";
 					if(!$_SESSION['verified'] == 1 || $_SESSION['verified'] == 2){
-						echo "<li><a href='edit_docu.php?image=".$result['docu_image']."'><i class='fas fa-edit'></i></a></li>";
+						echo "<li><a href='edit_docu.php?image=".$result['docu_image']."'><i class='fas fa-edit' data-toggle='tooltip' title='Update Document'></i></a></li>";
 					}
 
 					if(!$_SESSION['verified'] == 2){
 						echo "
-						<li><a href='delete.php?table=legal_document&image=".$result['docu_image']."' onclick='return confirm(\"Are you sure you want to delete this document?\");'><i class='far fa-trash-alt'></i></a></li>
+						<li><a href='delete.php?table=legal_document&image=".$result['docu_image']."' onclick='return confirm(\"Are you sure you want to delete this document?\");'><i class='far fa-trash-alt' data-toggle='tooltip' title='Delete Document'></i></a></li>
 						";
 					}
 				echo "
@@ -430,14 +430,14 @@ function displayAll($num, $query = NULL){
 				#
 				if($result['adv_currentGuest'] == 0){
 					echo "
-						<li><a href='edit_adv.php?id=".$result['adv_id']."'><i class='fas fa-edit'></i></a></li>
-						<li><a href='delete.php?table=adventure&id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to delete this adventure?\");'><i class='far fa-trash-alt'></i></a></li>
+						<li><a href='edit_adv.php?id=".$result['adv_id']."'><i class='fas fa-edit' data-toggle='tooltip' title='Update Adventure'></i></a></li>
+						<li><a href='delete.php?table=adventure&id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to delete this adventure?\");'><i class='far fa-trash-alt' data-toggle='tooltip' title='Remove Adventure'></i></a></li>
 					";
 				}
 				#
 				$no_cancel_starting_date = date("Y-m-d", strtotime("-10 days", strtotime($result['adv_date'])));
 				if(date("Y-m-d") < $no_cancel_starting_date && $result['adv_currentGuest'] > 0){
-					echo "<li><a href='adventures_posted.php' onclick='return confirm(\"Are you sure you want to cancel this adventure? Joiner who are booked can process refund!\");'><i class='fas fa-ban'></i></a></li>";
+					echo "<li><a href='adventures_posted.php' onclick='return confirm(\"Are you sure you want to cancel this adventure? Joiner who are booked can process refund!\");'><i class='fas fa-ban' data-toggle='tooltip' title='Cancel Adventure'></i></a></li>";
 				}
 				echo "
 					</ul>
@@ -482,8 +482,8 @@ function displayAll($num, $query = NULL){
 					<p>Valid Until: <q>".date('M. j, Y', strtotime($result['vouch_enddate']))."</q></p>
 
 					<ul class='icons'>
-						<li><a href='edit_voucher.php?id=".$result['vouch_code']."'><i class='fas fa-edit'></i></a></li>
-						<li><a href='delete.php?table=voucher&id=".$result['vouch_code']."' onclick='return confirm(\"Are you sure you want to delete this voucher?\");'><i class='far fa-trash-alt'></i></a></li>
+						<li><a href='edit_voucher.php?id=".$result['vouch_code']."'><i class='fas fa-edit' data-toggle='tooltip' title='Update Voucher'></i></a></li>
+						<li><a href='delete.php?table=voucher&id=".$result['vouch_code']."' onclick='return confirm(\"Are you sure you want to delete this voucher?\");'><i class='far fa-trash-alt' data-toggle='tooltip' title='Remove Voucher'></i></a></li>
 					</ul>
 				</div>
 				";
@@ -527,7 +527,7 @@ function displayAll($num, $query = NULL){
 					<p>Valid Until: <q>".date('M. j, Y', strtotime($result['vouch_enddate']))."</q></p>
 
 					<ul class='icons'>
-						<li><a onclick='copy_voucher_code(\"".$result['vouch_code']."\")'><i class='far fa-copy'></i></a></li>
+						<li><a onclick='copy_voucher_code(\"".$result['vouch_code']."\")'><i class='far fa-copy' data-toggle='tooltip' title='Copy Code'></i></a></li>
 					</ul>
 				</div>
 				";
@@ -577,9 +577,9 @@ function displayAll($num, $query = NULL){
 					$favAdv = DB::query("SELECT * FROM favorite WHERE joiner_id = ? AND adv_id = ?", array($_SESSION['joiner'], $result['adv_id']), "READ");
 
 					if(count($favAdv) > 0)
-						echo "<li><a id='saved' class='added' href='favorites.php?removeFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to remove this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+						echo "<li><a id='saved' class='added' href='favorites.php?removeFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to remove this adventure to your favorites?\");'><i class='fas fa-bookmark' data-toggle='tooltip' title='Remove from Favorite'></i></a></li>";
 					else
-						echo "<li><a href='favorites.php?addFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to add this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+						echo "<li><a href='favorites.php?addFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to add this adventure to your favorites?\");'><i class='fas fa-bookmark' data-toggle='tooltip' title='Add to Favorite'></i></a></li>";
 
 				} else
 					echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to add adventures to favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
@@ -637,12 +637,12 @@ function displayAll($num, $query = NULL){
 						$favAdv = DB::query("SELECT * FROM favorite WHERE joiner_id = ? AND adv_id = ?", array($_SESSION['joiner'], $result['adv_id']), "READ");
 
 						if(count($favAdv) > 0)
-							echo "<li><a id='saved' class='added' href='adventures.php?removeFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to remove this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+							echo "<li><a id='saved' class='added' href='adventures.php?removeFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to remove this adventure to your favorites?\");'><i class='fas fa-bookmark' data-toggle='tooltip' data-placement='top' title='Remove from Favorite'></i></a></li>";
 						else
-							echo "<li><a href='adventures.php?addFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to add this adventure to your favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+							echo "<li><a href='adventures.php?addFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to add this adventure to your favorites?\");'><i class='fas fa-bookmark' data-toggle='tooltip' data-placement='top' title='Add to Favorite'></i></a></li>";
 
 					} else {
-						echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to add adventures to favorites?\");'><i class='fas fa-bookmark'></i></a></li>";
+						echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to add adventures to favorites?\");'><i class='fas fa-bookmark' data-toggle='tooltip' data-placement='top' title='Add to Favorite'></i></a></li>";
 					}
 					##
 					echo "

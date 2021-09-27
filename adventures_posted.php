@@ -107,7 +107,7 @@
 					<?php
 					// CHECK IF ORGANIZER IS VERIFIED TO POST ADVENTURE
 					if($_SESSION['verified'] == 1)
-						echo "<a href='adventures_added.php'><i class='fas fa-plus-circle'></i></a>";
+						echo "<a href='adventures_added.php'><i class='fas fa-plus-circle' data-toggle='tooltip' title='Add Adventure'></i></a>";
 					else
 						echo "<a class='disable'><i class='fas fa-plus-circle'></i></a>";
 					?>
@@ -117,8 +117,8 @@
 
 				<!-- DIRECT LINK FOR UNDO|RESET BUTTON -->
 
-					<button type="submit" formaction="adventures_posted.php" name="btnSearch"><i class="fas fa-search"></i></button>
-					<button formaction="adventures_posted.php" ><i class="fas fa-undo-alt"></i></button>
+					<button type="submit" formaction="adventures_posted.php" name="btnSearch"><i class="fas fa-search" data-toggle='tooltip' title='Search'></i></button>
+					<button formaction="adventures_posted.php" ><i class="fas fa-undo-alt" data-toggle='tooltip' title='Reset View'></i></button>
 				</form>
 
 					<?php

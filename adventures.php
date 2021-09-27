@@ -71,7 +71,7 @@
 		.card p:last-of-type{color:#111;font-size:30px;font-weight:500;margin:0 0 0 2px;}
 
 		/* PAGINATION COLORS */
-		a.paging:visited {background-color: black;   color:black;}
+		a.paging:visited {background-color: black;}
 		a.paging:active {background-color: black; color:black}
 		a.paging:hover {background-color: wheat; font-weight:bold; color:#bf127a;}
 
@@ -207,8 +207,9 @@
 					<div class="form">
 						<input type="text" name="txtSearch" placeholder="Search any...">
 						<!-- DIRECT LINK FOR UNDO|RESET BUTTON -->
-						<button type="submit" formaction="adventures.php" name="btnSearch"><i class="fas fa-search"></i></button>
-						<button formaction="adventures.php" ><i class="fas fa-undo-alt"></i></button>
+						<button type="submit" formaction="adventures.php" name="btnSearch"><i class="fas fa-search" data-toggle='tooltip' data-placement='top' title='Search'></i></button>
+						<button formaction="adventures.php" ><i class="fas fa-undo-alt" data-toggle='tooltip' data-placement='top' 
+        				title='Reset View'></i></button>
 					</div>
 					<?php
 
@@ -233,6 +234,7 @@
 								$page = $_GET['page'];
 							else
 								$page = 1;
+
 							$num_per_page = 5;
 							$start_from = ($page-1) * $num_per_page;
 
@@ -240,11 +242,12 @@
 
 							$card = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' ORDER BY adv_id DESC LIMIT $start_from,$num_per_page", array(), "READ");
 
-							pagination($page, $card, $num_per_page);
+							
 
 							$card1 = DB::query("SELECT * FROM adventure WHERE adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%' ", array(), "READ");
 
 							displayAll(99, $card1);
+							pagination($page, $card, $num_per_page);
 						}
 
 						else if(isset($_POST['btnSave'])) {
@@ -253,6 +256,7 @@
 								$page = $_GET['page'];
 							else
 								$page = 1;
+
 							$num_per_page = 5;
 							$start_from = ($page-1) * $num_per_page;
 
@@ -406,14 +410,16 @@
 							if(!empty($sqlquery)) {
 								$card = DB::query($sqlquery, array(), "READ");
 								if(!empty($card))
-									displayAll(99, $card);
+									
+								displayAll(99, $card);
 								pagination($page, $card, $num_per_page);
+								
 							}
 							else {
 								$card = DB::query("SELECT * FROM adventure", array(), "READ");
-								pagination($page, $card, $num_per_page);
 								$card1 = DB::query("SELECT * FROM adventure LIMIT $start_from,$num_per_page", array(), "READ");
 								displayAll(99, $card1);
+								pagination($page, $card, $num_per_page);
 
 							}
 			                unset($_SESSION['places']);

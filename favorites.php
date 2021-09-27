@@ -136,8 +136,8 @@
 					<input type="text" name="txtSearch" placeholder="Search any...">
 
 					<!-- DIRECT LINK FOR UNDO|RESET BUTTON -->
-					<button type="submit" formaction="favorites.php" name="btnSearch"><i class="fas fa-search"></i></button>
-					<button formaction="favorites.php" ><i class="fas fa-undo-alt"></i></button>
+					<button type="submit" formaction="favorites.php" name="btnSearch"><i class="fas fa-search" data-toggle='tooltip' title='Search'></i></button>
+					<button formaction="favorites.php" ><i class="fas fa-undo-alt" data-toggle='tooltip' title='Reset View'></i></button>
 			  </form>
 
 

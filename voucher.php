@@ -107,7 +107,7 @@
 						// CHECK IF ORGANIZER IS VERIFIED TO ADD VOUCHER
 						if(isset($_SESSION['organizer'])){
 							if($_SESSION['verified'] == 1)
-								echo "<a href='add_voucher.php'><i class='fas fa-plus-circle'></i></a>";
+								echo "<a href='add_voucher.php'><i class='fas fa-plus-circle' data-toggle='tooltip' title='Add Voucher'></i></a>";
 							else
 								echo "<a class='disable'><i class='fas fa-plus-circle'></i></a>";
 						}
@@ -115,8 +115,8 @@
 				</span> </h2>
 				<form method="post">
 					<input type="text" name="txtSearch" placeholder="Search any...">
-					<button type="submit" name="btnSearch"><i class="fas fa-search"></i></button>
-					<button type="submit" name="btnRestart"><i class="fas fa-undo-alt"></i></button>
+					<button type="submit" name="btnSearch"><i class="fas fa-search" data-toggle='tooltip' title='Search'></i></button>
+					<button type="submit" name="btnRestart"><i class="fas fa-undo-alt" data-toggle='tooltip' title='Reset View'></i></button>
 				</form>
 					<!-- FOR ORGANIZER -->
 					<?php if(isset($_SESSION['organizer'])){ ?>
