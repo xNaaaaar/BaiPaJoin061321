@@ -22,10 +22,9 @@
 	main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 
 	main .contents{display:flex;justify-content:space-between;margin:30px 0 0;width:100%;flex-wrap:wrap;}
-	main section{width:31%;border:1px solid #cfcfcf;box-shadow:10px 10px 10px -5px #cfcfcf;min-height:200px;position:relative;padding:30px;margin:0 auto 30px;}
-	main section h3{font-size:25px;}
-	main section h3 span{display:block;}
-	main section p{margin:20px 0 0;font-size:60px;color:gray;line-height:60px;}
+	main section{width:31%;border:1px solid #cfcfcf;box-shadow:10px 10px 10px -5px #cfcfcf;min-height:200px;position:relative;padding:30px 30px 110px;margin:0 auto 30px;}
+	main section h3{font:600 25px/100% Montserrat,sans-serif;}
+	main section p{margin:20px 0 0;font-size:50px;color:gray;line-height:50px;position:absolute;bottom:30px;left:0;right:0;}
 
 	/*RESPONSIVE*/
 	@media only screen and (max-width:1000px) {
@@ -74,7 +73,7 @@
 
 					## CARD NUMBER 1
 					$adv_active_db = DB::query("SELECT count(adv_id) FROM adventure WHERE adv_date > '$current_date' and orga_id=?", array($_SESSION['organizer']), "READ");
-					$adv_active = $adv_active_db[0];	
+					$adv_active = $adv_active_db[0];
 
 					## CARD NUMBER 2
 					$adv_inactive_db = DB::query("SELECT count(adv_id) FROM adventure WHERE adv_date <= '$current_date' and orga_id=?", array($_SESSION['organizer']), "READ");
@@ -119,8 +118,8 @@
 					##CARD NUMBER 9
 					$vouch_applied_db = DB::query("SELECT sum(vouch_user) FROM voucher WHERE orga_id=?", array($_SESSION['organizer']), "READ");
 					$vouch_applied = $vouch_applied_db[0];
-				}			
-			
+				}
+
 			?>
 			<!-- End of Sub Navigation -->
 
@@ -128,109 +127,109 @@
 				<h2>Products</h2>
 				<div class="contents">
 					<section>
-						<h3>Number of Active<span>Adventures</span></h3>
+						<h3>Number of Active Adventures</h3>
 						<p>
-							<?php								
+							<?php
 								if(!empty($adv_active))
 									echo $adv_active[0];
 								else
-									echo 'No data available';
+									echo 'N/A';
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Number of Inactive<span>Adventures</span></h3>
+						<h3>Number of Inactive Adventures</h3>
 						<p>
 							<?php
 								if(!empty($adv_inactive))
 									echo $adv_inactive[0];
 								else
-									echo 'No data available';
+									echo 'N/A';
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Total Number of<span>Listed Adventures</span></h3>
+						<h3>Total Number of Listed Adventures</h3>
 						<p>
 							<?php
 								if(!empty($adv_inactive) && !empty($adv_active))
 									echo $total_num_adv;
 								else
-									echo 'No data available';								
+									echo 'N/A';
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Average # of Prospect Booking<span>per Adventure</span> </h3>
+						<h3>Average # of Prospect Booking per Adventure</h3>
 						<p>
 							<?php
 								if(!empty($num_prospect_bookings))
 									echo ($num_prospect_bookings/$total_num_adv);
 								else
-									echo 'No data available';
+									echo 'N/A';
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Average # of Pending Booking<span>per Adventure</span> </h3>
+						<h3>Average # of Pending Booking per Adventure </h3>
 						<p>
 							<?php
 								if(!empty($num_pending_bookings))
-									echo ($num_pending_bookings/$total_num_adv);
+									echo number_format(($num_pending_bookings/$total_num_adv),2,'.','');
 								else
-									echo 'No data available';
+									echo 'N/A';
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Average # of Confirmed Booking<span>per Adventure</span> </h3>
+						<h3>Average # of Confirmed Booking per Adventure </h3>
 						<p>
 							<?php
 								if(!empty($num_confirm_bookings))
 									echo ($num_confirm_bookings/$total_num_adv);
 								else
-									echo 'No data available';
+									echo 'N/A';
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Number of Active<span>Vouchers</span></h3>
+						<h3>Number of Active Vouchers</h3>
 						<p>
 							<?php
-								if(!empty($voucher_result)) 
+								if(!empty($voucher_result))
 									echo $vouch_active[0];
 								else
-									echo 'No data available';
+									echo 'N/A';
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Number of Inactive<span>Vouchers</span></h3>
+						<h3>Number of Inactive Vouchers</h3>
 						<p>
 							<?php
 								if(!empty($voucher_result))
 									echo $vouch_inactive[0];
 								else
-									echo 'No data available';
+									echo 'N/A';
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Total Number of Applied<span>Vouchers</span></h3>
+						<h3>Total Number of Applied Vouchers</h3>
 						<p>
 							<?php
 								if(!empty($voucher_result))
 									echo $vouch_applied[0];
 								else
-									echo 'No data available';
+									echo 'N/A';
 							?>
 						</p>
 					</section>

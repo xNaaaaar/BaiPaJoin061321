@@ -22,10 +22,9 @@
 	main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 
 	main .contents{display:flex;justify-content:space-between;margin:30px 0 0;width:100%;flex-wrap:wrap;}
-	main section{width:31%;border:1px solid #cfcfcf;box-shadow:10px 10px 10px -5px #cfcfcf;min-height:200px;position:relative;padding:30px;margin:0 auto 30px;}
-	main section h3{font-size:25px;}
-	main section h3 span{display:block;}
-	main section p{margin:20px 0 0;font-size:60px;color:gray;line-height:60px;}
+	main section{width:31%;border:1px solid #cfcfcf;box-shadow:10px 10px 10px -5px #cfcfcf;min-height:200px;position:relative;padding:30px 30px 110px;margin:0 auto 30px;}
+	main section h3{font:600 25px/100% Montserrat,sans-serif;}
+	main section p{margin:20px 0 0;font-size:50px;color:gray;line-height:50px;position:absolute;bottom:30px;left:0;right:0;}
 
 	/*RESPONSIVE*/
 	@media only screen and (max-width:1000px) {
@@ -95,8 +94,8 @@
 					$confirm_php = $confirm_php + (int)$confirm_val[0];
 
 					//file_put_contents('debug.log', date('h:i:sa').' => ' .$prospect_php. "\n" . "\n", FILE_APPEND);
-				}								
-				
+				}
+
 			?>
 			<!-- End of Sub Navigation -->
 
@@ -104,43 +103,43 @@
 				<h2>Sales</h2>
 				<div class="contents">
 					<section>
-						<h3>Number of <span>Prospect Bookings</span></h3>
+						<h3>Number of Prospect Bookings</h3>
 						<p>
-							<?php	
-								if($num_prospect_bookings != 0)										
+							<?php
+								if($num_prospect_bookings != 0)
 									echo $num_prospect_bookings;
 								else
-									echo 'No Data Available';
+									echo 'N/A';
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Number of <span>Pending Bookings</span></h3>
+						<h3>Number of Pending Bookings</h3>
 						<p>
-							<?php 
-								if($num_pending_bookings != 0)	
+							<?php
+								if($num_pending_bookings != 0)
 									echo $num_pending_bookings;
 								else
-									echo 'No Data Available';
+									echo 'N/A';
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Number of <span>Confirmed Bookings</span></h3>
+						<h3>Number of Confirmed Bookings</h3>
 						<p>
 							<?php
 								if($num_confirm_bookings != 0)
 									echo $num_confirm_bookings;
 								else
-									echo 'No Data Available';
+									echo 'N/A';
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Value (PHP) of <span>Prospect Bookings</span></h3>
+						<h3>Value (PHP) of Prospect Bookings</h3>
 						<p>
 							<?php
 								echo "₱".number_format($prospect_php, 2, ".", ",");
@@ -149,7 +148,7 @@
 					</section>
 					<!--  -->
 					<section>
-						<h3>Value (PHP) of <span>Pending Bookings</span></h3>
+						<h3>Value (PHP) of Pending Bookings</h3>
 						<p>
 							<?php
 								echo "₱".number_format($pending_php, 2, ".", ",");
@@ -158,7 +157,7 @@
 					</section>
 					<!--  -->
 					<section>
-						<h3>Value (PHP) of <span>Confirm Bookings</span></h3>
+						<h3>Value (PHP) of Confirm Bookings</h3>
 						<p>
 							<?php
 								echo "₱".number_format($confirm_php, 2, ".", ",");
@@ -167,37 +166,37 @@
 					</section>
 					<!--  -->
 					<section>
-						<h3>Prospect to Confirm Booking <span>Conversion Ratio</span></h3>
+						<h3>Prospect to Confirm Booking Conversion Ratio</h3>
 						<p>
 							<?php
-								if($num_prospect_bookings != 0)	
+								if($num_prospect_bookings != 0)
 									echo round((($num_confirm_bookings/($num_prospect_bookings+$num_confirm_bookings))*100)).'%';
 								else
-									echo 'No Data Available';
+									echo 'N/A';
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Prospect to Pending Booking <span>Conversion Ratio</span></h3>
+						<h3>Prospect to Pending Booking Conversion Ratio</h3>
 						<p>
 							<?php
-								if($num_pending_bookings != 0)	
+								if($num_pending_bookings != 0)
 									echo round((($num_pending_bookings/($num_prospect_bookings+$num_pending_bookings))*100)).'%';
 								else
-									echo 'No Data Available';
+									echo 'N/A';
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Pending to Confirm Booking <span>Conversion Ratio</span></h3>
+						<h3>Pending to Confirm Booking Conversion Ratio</h3>
 						<p>
 							<?php
-								if($num_confirm_bookings != 0)	
+								if($num_confirm_bookings != 0)
 									echo round((($num_confirm_bookings/($num_pending_bookings+$num_confirm_bookings))*100)).'%';
 								else
-									echo 'No Data Available';
+									echo 'N/A';
 							?>
 						</p>
 					</section>
