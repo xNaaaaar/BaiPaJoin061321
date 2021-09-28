@@ -3,14 +3,6 @@
 	require_once("extensions/db.php");
 	##
 	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
-
-	if(isset($_GET['cancel_success'])){
-		echo "<script>alert('Cancellation request successfully sent to admin!')</script>";
-	}
-
-	if(isset($_GET['update_success'])){
-		echo "<script>alert('Successfully updated cancelation reason!')</script>";
-	}
 ?>
 
 <!-- Head -->
@@ -26,6 +18,7 @@
 		.main_con{display:flex;justify-content:space-between;}
 		.sidebar ul ul{height:auto;}
 		.success{color:#5cb85c;}
+		.error{color:red;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:30px;text-align:left;}
@@ -65,68 +58,69 @@
 <div id="main_area">
 	<div class="wrapper">
 		<div class="breadcrumbs">
-			<a href="index.php">Home</a> &#187; <a href="settings.php">Settings</a> &#187; Request
+			<a href="index.php">Home</a> &#187; <a href="settings.php">Settings</a> &#187; <a href="request.php">Request</a> &#187; Cancelation
 		</div>
 		<div class="main_con">
 			<!-- Sub Navigation -->
 			<?php
 				$currentSidebarPage = 'request';
+				$currentSubMenu = "cancel";
 				include("includes/sidebar.php");
 			?>
 			<!-- End of Sub Navigation -->
 			<main>
 				<form method="post" >
-					<h2>Pending Requests</h2>
+					<h2>Cancelation</h2>
 
 					<?php ##
-					// DISPLAY REQUEST FOR ORGANIZER
+					// DISPLAY CANCELATION REQUEST FOR ORGANIZER
 					if(isset($_SESSION['organizer'])){
-						
 
-					// DISPLAY REQUEST FOR JOINER
+
+					// DISPLAY CANCELATION REQUEST FOR JOINER
 					} else {
 						echo "
 						<table>
 							<thead>
 								<tr>
 									<th>Book ID</th>
-									<th>Request Type</th>
-									<th>Request Date</th>
+									<th>Date Processed</th>
+									<th>Date Responded</th>
 									<th>Amount Paid</th>
-									<th>Request Reason</th>
-									<th>Request Status</th>
+									<th>Reason</th>
+									<th>Status</th>
 									<th></th>
 								</tr>
 							</thead>
 						";
 
-						$request = DB::query("SELECT * FROM request r INNER JOIN booking b ON r.book_id = b.book_id WHERE joiner_id=? AND req_status=?", array($_SESSION['joiner'], "pending"), "READ");
+						$request = DB::query("SELECT * FROM request r INNER JOIN booking b ON r.book_id = b.book_id WHERE joiner_id=? AND req_type=? AND (req_status=? OR req_status=?)", array($_SESSION['joiner'], "cancel", "approved", "disapproved"), "READ");
 
 						if(count($request)>0){
 							foreach ($request as $result) {
 								echo "
 								<tr>
 									<td>".$result['book_id']."</td>
-									<td>".$result['req_type']."</td>
 									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
+									<td>".date("M. j, Y", strtotime($result['req_dateresponded']))."</td>
 									<td>₱".number_format($result['req_amount'],2,".",",")."</td>
-									<td>".$result['req_reason']."</td>
-									<td><em class='success'>".$result['req_status']."</em></td>";
+									<td>".$result['req_reason']."</td>";
 
-								if($result['req_status'] == "pending"){
-									echo "<td><a href='request-edit.php?req_id=".$result['req_id']."' onclick='return confirm(\"Are you sure you want to edit reason?\");'>edit</a></td>";
-								} else {
-									echo "<td></td>";
-								}
+								if($result['req_status'] == "approved")
+									echo "<td><em class='success'>".$result['req_status']."</em></td>";
+								else
+									echo "<td><em class='error'>".$result['req_status']."</em></td>";
 
-								echo "</tr>";
+								echo "
+									<td></td>
+								</tr>";
 							}
 							echo "</table>";
 
 						// NO RECORDS FOUND
 						} else {
 							echo "</table>";
-							echo "<h3>No pending request found!</h3>";
+							echo "<h3>No cancelation request found!</h3>";
 						}
 					}
 					?>

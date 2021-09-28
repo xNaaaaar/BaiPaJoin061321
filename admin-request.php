@@ -151,8 +151,8 @@ main .admins table tr td:last-child a{color:red;}
 								<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
 								<td>".$result['req_reason']."</td>
 								<td><em>".$result['req_status']."</em></td>
-								<td><b><a href='admin-request-cancel.php?req_id=".$result['req_id']."&j_cancel' onclick='return confirm(\"Are you sure you want to approved this cancelation request?\");'>✓</a></b></td>
-								<td><b><a href='' onclick='return confirm(\"Are you sure you want to disapproved this request?\");'>✗</a></b></td>
+								<td><b><a href='admin-request-cancel.php?req_id=".$result['req_id']."&approved' onclick='return confirm(\"Are you sure you want to approved this cancelation request?\");'>✓</a></b></td>
+								<td><b><a href='admin-request-cancel.php?req_id=".$result['req_id']."&disapproved' onclick='return confirm(\"Are you sure you want to disapproved this request?\");'>✗</a></b></td>
 							</tr>
 							";
 						}

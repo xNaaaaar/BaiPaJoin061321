@@ -20,7 +20,7 @@
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:30px;text-align:left;}
-		main h3{font-weight:500;font-size:20px;color:red;margin:20px 0 0;}
+		main h3{font-weight:500;font-size:20px;color:red;margin:0 0 10px;text-align:left;}
 		main table{width:100%;text-align:center;font-size:16px;}
 		main table thead{background:#7fdcd3;color:#fff;}
 		main table thead tr:hover{background:#7fdcd3;}
@@ -69,6 +69,7 @@
 			<main>
 				<form method="post" >
 					<h2>Bookings</h2>
+					<h3>Note: You can only cancel a paid adventure once.</h3>
 					<!-- <h3>Note: Pay anytime by clicking the <i class='fas fa-hand-holding-usd'></i> icon. Request cancel by clicking <i class='fas fa-ban'></i> icon. View booking details by clicking <i class='far fa-eye'></i> icon.</h3> -->
 
 					<?php ##

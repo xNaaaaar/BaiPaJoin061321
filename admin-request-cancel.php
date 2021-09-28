@@ -5,7 +5,8 @@
   // REDIRECT IF ADMIN NOT LOGGED IN
   if(!isset($_SESSION['admin'])) header("Location: login.php");
 
-	if(isset($_GET['j_cancel']) && isset($_GET['req_id'])){
+	## IF REQUEST CANCELATION IS APPROVED
+	if(isset($_GET['approved']) && isset($_GET['req_id'])){
 		## UPDATE REQUEST DATE APPROVED && STATUS
 		DB::query("UPDATE request SET req_dateresponded=?, req_status=? WHERE req_id=?", array(date("Y-m-d"), "approved", $_GET['req_id']), "UPDATE");
 
@@ -17,6 +18,12 @@
 		$adv = DB::query("SELECT * FROM booking b INNER JOIN adventure a ON b.adv_id = a.adv_id WHERE book_id=?", array($req['book_id']), "READ");
 		$adv = $adv[0];
 
+		## UPDATE ADVENTURE CURRENT GUESTS
+		DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($adv['adv_currentGuest'] - $adv['book_guests'], $adv['adv_id']), "UPDATE");
+
+		## UPDATE BOOKING PAID TO REFUNDED
+		DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array("refunded", $req['book_id']), "UPDATE");
+
 		## TO BE REFUNDED AMOUNT
 		$adv_price = ($adv['adv_totalcostprice'] / $adv['adv_maxguests']) * $adv['book_guests'];
 		$cancel_fee = $adv_price * 0.3;
@@ -26,6 +33,12 @@
 		DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, book_id) VALUES(?,?,?,?,?,?,?)", array($req['req_user'], "refund", date("Y-m-d"), date("Y-m-d"), $final_price, "approved", $req['book_id']), "CREATE");
 
 		echo "<script>alert('Successfully approved cancelation!')</script>";
+	}
+
+	## IF REQUEST CANCELATION IS DISAPPROVED
+	if(isset($_GET['disapproved']) && isset($_GET['req_id'])){
+		## UPDATE REQUEST STATUS
+		DB::query("UPDATE request SET req_dateresponded=?, req_status=? WHERE req_id=?", array(date("Y-m-d"), "disapproved", $_GET['req_id']), "UPDATE");
 	}
 
 ?>
@@ -63,7 +76,6 @@ main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 main .admins{height:auto;width:100%;}
 main .admins select{float:left;margin:0 0 20px;height:40px;max-width:100%;padding:0 10px;}
 main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;padding:0 30px;}
-main .admins table tr td:nth-child(9){color:#5cb85c;}
 
 /* Responsive Design */
 @media only screen and (max-width: 1800px) {
@@ -153,11 +165,11 @@ main .admins table tr td:nth-child(9){color:#5cb85c;}
 					if(isset($_POST['btnSearch'])){
 						$cboOption = $_POST['cboOption'];
 						## FOR ORGANIZER && JOINER
-						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND req_status=? || req_status=? ORDER BY req_dateprocess DESC", array($cboOption, "cancel", "approved", "disapproved"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND (req_status=? || req_status=?) ORDER BY req_dateprocess DESC", array($cboOption, "cancel", "approved", "disapproved"), "READ");
 
 					## ALL CANCELLATION APPROVED RESULTS
 					} else {
-						$request = DB::query("SELECT * FROM request WHERE req_type=? AND req_status=? || req_status=? ORDER BY req_dateprocess DESC", array("cancel", "approved", "disapproved"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_type=? AND (req_status=? || req_status=?) ORDER BY req_dateprocess DESC", array("cancel", "approved", "disapproved"), "READ");
 					}
 
 					## DISPLAY
@@ -172,8 +184,14 @@ main .admins table tr td:nth-child(9){color:#5cb85c;}
 								<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
 								<td>".date("M. j, Y", strtotime($result['req_dateresponded']))."</td>
 								<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
-								<td>".$result['req_reason']."</td>
-								<td><em>".$result['req_status']."</em></td>
+								<td>".$result['req_reason']."</td>";
+
+							if($result['req_status'] == "approved")
+								echo "<td style='color:#5cb85c;'><em>approved</em></td>";
+							else
+								echo "<td style='color:red;'><em>disapproved</em></td>";
+
+							echo "
 								<td></td>
 							</tr>
 							";

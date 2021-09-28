@@ -166,9 +166,9 @@ main .admins table tr td:nth-child(8){color:#5cb85c;}
 
 							## CHECK IF RECEIVED BY USER
 							if($result['req_rcvd'] == 0)
-								echo "<td><em>sent<em></td>";
+								echo "<td><em>sent to user<em></td>";
 							else
-								echo "<td><em>received<em></td>";
+								echo "<td><em>received by user<em></td>";
 
 							echo "</tr>";
 						}

@@ -70,10 +70,10 @@
 			if($currentSidebarPage == 'request'){
 			?>
 			<ul>
-				<li class="<?php if($currentSubMenu == 'resched') echo 'current_sidebar'; ?>"><a href="#">Reschedule</a> </li>
-				<li class="<?php if($currentSubMenu == 'cancel') echo 'current_sidebar'; ?>"><a href="#">Cancelation</a></li>
-				<li class="<?php if($currentSubMenu == 'refund') echo 'current_sidebar'; ?>"><a href="#">Refund</a></li>
-				<li class="<?php if($currentSubMenu == 'payout') echo 'current_sidebar'; ?>"><a href="#">Payout</a></li>
+				<li class="<?php if($currentSubMenu == 'resched') echo 'current_sidebar'; ?>"><a href="request-resched.php">Reschedule</a> </li>
+				<li class="<?php if($currentSubMenu == 'cancel') echo 'current_sidebar'; ?>"><a href="request-cancel.php">Cancelation</a></li>
+				<li class="<?php if($currentSubMenu == 'refund') echo 'current_sidebar'; ?>"><a href="request-refund.php">Refund</a></li>
+				<li class="<?php if($currentSubMenu == 'payout') echo 'current_sidebar'; ?>"><a href="request-payout.php">Payout</a></li>
 			</ul>
 			<?php
 			}
