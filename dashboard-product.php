@@ -68,37 +68,58 @@
 				$vouch_active = $vouch_inactive = $vouch_applied = 0;
 				$current_date = date('Y-m-d');
 
-				$adv_active_db = DB::query("SELECT count(adv_id) FROM adventure WHERE adv_date > '$current_date' and orga_id=?", array($_SESSION['organizer']), "READ");
-				$adv_active = $adv_active_db[0];	
+				$adventure_result = DB::query("SELECT * FROM adventure WHERE orga_id=?", array($_SESSION['organizer']), "READ");
 
-				$adv_inactive_db = DB::query("SELECT count(adv_id) FROM adventure WHERE adv_date <= '$current_date' and orga_id=?", array($_SESSION['organizer']), "READ");
-				$adv_inactive = $adv_inactive_db[0];
+				if(!empty($adventure_result)) {
 
-				$total_num_adv = (int)$adv_active[0]+(int)$adv_inactive[0];
+					## CARD NUMBER 1
+					$adv_active_db = DB::query("SELECT count(adv_id) FROM adventure WHERE adv_date > '$current_date' and orga_id=?", array($_SESSION['organizer']), "READ");
+					$adv_active = $adv_active_db[0];	
+
+					## CARD NUMBER 2
+					$adv_inactive_db = DB::query("SELECT count(adv_id) FROM adventure WHERE adv_date <= '$current_date' and orga_id=?", array($_SESSION['organizer']), "READ");
+					$adv_inactive = $adv_inactive_db[0];
+
+					## CARD NUMBER 3
+					$total_num_adv = (int)$adv_active[0]+(int)$adv_inactive[0];
+				}
 
 				$adv_ids = DB::query("SELECT adv_id FROM adventure WHERE orga_id=?", array($_SESSION['organizer']), "READ");
+
 				foreach($adv_ids as $id) {
+
+					## CARD NUMBER 4
 					$prospect_db = DB::query("SELECT count(adv_id) FROM booking WHERE book_status='pending' and adv_id=?", array($id[0]), "READ");
 					$prospect = $prospect_db[0];
 					$num_prospect_bookings = $num_prospect_bookings + (int)$prospect[0];
 
+					## CARD NUMBER 5
 					$pending_db = DB::query("SELECT count(adv_id) FROM booking WHERE book_status='waiting for payment' and adv_id=?", array($id[0]), "READ");
 					$pending = $pending_db[0];
 					$num_pending_bookings = $num_pending_bookings + (int)$pending[0];
 
+					## CARD NUMBER 6
 					$paid_db = DB::query("SELECT count(adv_id) FROM booking WHERE book_status='paid' and adv_id=?", array($id[0]), "READ");
 					$paid = $paid_db[0];
 					$num_confirm_bookings = $num_confirm_bookings + (int)$paid[0];
 				}
 
-				$vouch_active_db = DB::query("SELECT count(adv_id) FROM voucher WHERE vouch_enddate >= '$current_date' and orga_id=?", array($_SESSION['organizer']), "READ");
-				$vouch_active = $vouch_active_db[0];
+				$voucher_result = DB::query("SELECT * FROM voucher WHERE orga_id=?", array($_SESSION['organizer']), "READ");
 
-				$vouch_inactive_db = DB::query("SELECT count(adv_id) FROM voucher WHERE vouch_enddate < '$current_date' and orga_id=?", array($_SESSION['organizer']), "READ");
-				$vouch_inactive = $vouch_inactive_db[0];
+				if(!empty($voucher_result)) {
 
-				$vouch_applied_db = DB::query("SELECT sum(vouch_user) FROM voucher WHERE orga_id=?", array($_SESSION['organizer']), "READ");
-				$vouch_applied = $vouch_applied_db[0];
+					##CARD NUMBER 7
+					$vouch_active_db = DB::query("SELECT count(adv_id) FROM voucher WHERE vouch_enddate >= '$current_date' and orga_id=?", array($_SESSION['organizer']), "READ");
+					$vouch_active = $vouch_active_db[0];
+
+					##CARD NUMBER 8
+					$vouch_inactive_db = DB::query("SELECT count(adv_id) FROM voucher WHERE vouch_enddate < '$current_date' and orga_id=?", array($_SESSION['organizer']), "READ");
+					$vouch_inactive = $vouch_inactive_db[0];
+
+					##CARD NUMBER 9
+					$vouch_applied_db = DB::query("SELECT sum(vouch_user) FROM voucher WHERE orga_id=?", array($_SESSION['organizer']), "READ");
+					$vouch_applied = $vouch_applied_db[0];
+				}			
 			
 			?>
 			<!-- End of Sub Navigation -->
@@ -110,7 +131,10 @@
 						<h3>Number of Active<span>Adventures</span></h3>
 						<p>
 							<?php								
-								echo $adv_active[0];
+								if(!empty($adv_active))
+									echo $adv_active[0];
+								else
+									echo 'No data available';
 							?>
 						</p>
 					</section>
@@ -119,7 +143,10 @@
 						<h3>Number of Inactive<span>Adventures</span></h3>
 						<p>
 							<?php
-								echo $adv_inactive[0];
+								if(!empty($adv_inactive))
+									echo $adv_inactive[0];
+								else
+									echo 'No data available';
 							?>
 						</p>
 					</section>
@@ -128,7 +155,10 @@
 						<h3>Total Number of<span>Listed Adventures</span></h3>
 						<p>
 							<?php
-								echo $total_num_adv;
+								if(!empty($adv_inactive) && !empty($adv_active))
+									echo $total_num_adv;
+								else
+									echo 'No data available';								
 							?>
 						</p>
 					</section>
@@ -137,7 +167,10 @@
 						<h3>Average # of Prospect Booking<span>per Adventure</span> </h3>
 						<p>
 							<?php
-								echo ($num_prospect_bookings/$total_num_adv);
+								if(!empty($num_prospect_bookings))
+									echo ($num_prospect_bookings/$total_num_adv);
+								else
+									echo 'No data available';
 							?>
 						</p>
 					</section>
@@ -146,7 +179,10 @@
 						<h3>Average # of Pending Booking<span>per Adventure</span> </h3>
 						<p>
 							<?php
-								echo ($num_pending_bookings/$total_num_adv);
+								if(!empty($num_pending_bookings))
+									echo ($num_pending_bookings/$total_num_adv);
+								else
+									echo 'No data available';
 							?>
 						</p>
 					</section>
@@ -155,7 +191,10 @@
 						<h3>Average # of Confirmed Booking<span>per Adventure</span> </h3>
 						<p>
 							<?php
-								echo ($num_confirm_bookings/$total_num_adv);
+								if(!empty($num_confirm_bookings))
+									echo ($num_confirm_bookings/$total_num_adv);
+								else
+									echo 'No data available';
 							?>
 						</p>
 					</section>
@@ -164,7 +203,10 @@
 						<h3>Number of Active<span>Vouchers</span></h3>
 						<p>
 							<?php
-								echo $vouch_active[0];
+								if(!empty($voucher_result)) 
+									echo $vouch_active[0];
+								else
+									echo 'No data available';
 							?>
 						</p>
 					</section>
@@ -173,7 +215,10 @@
 						<h3>Number of Inactive<span>Vouchers</span></h3>
 						<p>
 							<?php
-								echo $vouch_inactive[0];
+								if(!empty($voucher_result))
+									echo $vouch_inactive[0];
+								else
+									echo 'No data available';
 							?>
 						</p>
 					</section>
@@ -182,7 +227,10 @@
 						<h3>Total Number of Applied<span>Vouchers</span></h3>
 						<p>
 							<?php
-								echo $vouch_applied[0];
+								if(!empty($voucher_result))
+									echo $vouch_applied[0];
+								else
+									echo 'No data available';
 							?>
 						</p>
 					</section>

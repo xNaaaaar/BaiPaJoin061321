@@ -106,8 +106,11 @@
 					<section>
 						<h3>Number of <span>Prospect Bookings</span></h3>
 						<p>
-							<?php													
-								echo $num_prospect_bookings;
+							<?php	
+								if($num_prospect_bookings != 0)										
+									echo $num_prospect_bookings;
+								else
+									echo 'No Data Available';
 							?>
 						</p>
 					</section>
@@ -115,8 +118,11 @@
 					<section>
 						<h3>Number of <span>Pending Bookings</span></h3>
 						<p>
-							<?php
-								echo $num_pending_bookings;
+							<?php 
+								if($num_pending_bookings != 0)	
+									echo $num_pending_bookings;
+								else
+									echo 'No Data Available';
 							?>
 						</p>
 					</section>
@@ -125,7 +131,10 @@
 						<h3>Number of <span>Confirmed Bookings</span></h3>
 						<p>
 							<?php
-								echo $num_confirm_bookings;
+								if($num_confirm_bookings != 0)
+									echo $num_confirm_bookings;
+								else
+									echo 'No Data Available';
 							?>
 						</p>
 					</section>
@@ -161,7 +170,10 @@
 						<h3>Prospect to Confirm Booking <span>Conversion Ratio</span></h3>
 						<p>
 							<?php
-								echo round((($num_confirm_bookings/($num_prospect_bookings+$num_confirm_bookings))*100)).'%';
+								if($num_prospect_bookings != 0)	
+									echo round((($num_confirm_bookings/($num_prospect_bookings+$num_confirm_bookings))*100)).'%';
+								else
+									echo 'No Data Available';
 							?>
 						</p>
 					</section>
@@ -170,7 +182,10 @@
 						<h3>Prospect to Pending Booking <span>Conversion Ratio</span></h3>
 						<p>
 							<?php
-								echo round((($num_pending_bookings/($num_prospect_bookings+$num_pending_bookings))*100)).'%';
+								if($num_pending_bookings != 0)	
+									echo round((($num_pending_bookings/($num_prospect_bookings+$num_pending_bookings))*100)).'%';
+								else
+									echo 'No Data Available';
 							?>
 						</p>
 					</section>
@@ -179,7 +194,10 @@
 						<h3>Pending to Confirm Booking <span>Conversion Ratio</span></h3>
 						<p>
 							<?php
-								echo round((($num_confirm_bookings/($num_pending_bookings+$num_confirm_bookings))*100)).'%';
+								if($num_confirm_bookings != 0)	
+									echo round((($num_confirm_bookings/($num_pending_bookings+$num_confirm_bookings))*100)).'%';
+								else
+									echo 'No Data Available';
 							?>
 						</p>
 					</section>
