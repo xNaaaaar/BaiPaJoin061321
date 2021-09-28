@@ -62,6 +62,41 @@
 				$currentSidebarPage = 'dashboard';
 				$currentSubMenu = 'sales';
 				include("includes/sidebar.php");
+
+				$num_confirm_bookings = $num_pending_bookings = $num_prospect_bookings = 0;
+				$confirm_php = $pending_php = $prospect_php = 0;
+
+				$adv_ids = DB::query("SELECT adv_id FROM adventure WHERE orga_id=?", array($_SESSION['organizer']), "READ");
+
+				foreach($adv_ids as $id) {
+
+					$prospect_db = DB::query("SELECT count(adv_id) FROM booking WHERE book_status='pending' and adv_id=?", array($id[0]), "READ");
+					$prospect = $prospect_db[0];
+					$num_prospect_bookings = $num_prospect_bookings + (int)$prospect[0];
+
+					$pending_db = DB::query("SELECT count(adv_id) FROM booking WHERE book_status='waiting for payment' and adv_id=?", array($id[0]), "READ");
+					$pending = $pending_db[0];
+					$num_pending_bookings = $num_pending_bookings + (int)$pending[0];
+
+					$paid_db = DB::query("SELECT count(adv_id) FROM booking WHERE book_status='paid' and adv_id=?", array($id[0]), "READ");
+					$paid = $paid_db[0];
+					$num_confirm_bookings = $num_confirm_bookings + (int)$paid[0];
+
+					$prospect_val_db = DB::query("SELECT sum(book_totalcosts) FROM booking WHERE book_status='pending' and adv_id=?", array($id[0]), "READ");
+					$prospect_val = $prospect_val_db[0];
+					$prospect_php = $prospect_php + (int)$prospect_val[0];
+
+					$pending_val_db = DB::query("SELECT sum(book_totalcosts) FROM booking WHERE book_status='waiting for payment' and adv_id=?", array($id[0]), "READ");
+					$pending_val = $pending_val_db[0];
+					$pending_php = $pending_php + (int)$pending_val[0];
+
+					$confirm_val_db = DB::query("SELECT sum(book_totalcosts) FROM booking WHERE book_status='paid' and adv_id=?", array($id[0]), "READ");
+					$confirm_val = $confirm_val_db[0];
+					$confirm_php = $confirm_php + (int)$confirm_val[0];
+
+					//file_put_contents('debug.log', date('h:i:sa').' => ' .$prospect_php. "\n" . "\n", FILE_APPEND);
+				}								
+				
 			?>
 			<!-- End of Sub Navigation -->
 
@@ -69,77 +104,84 @@
 				<h2>Sales</h2>
 				<div class="contents">
 					<section>
-						<h3>Total <span>Joiners</span></h3>
+						<h3>Number of <span>Prospect Bookings</span></h3>
 						<p>
-							<?php
-							$joiner = DB::query("SELECT * FROM joiner", array(), "READ");
-							echo count($joiner);
+							<?php													
+								echo $num_prospect_bookings;
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Total <span>Organizers</span></h3>
+						<h3>Number of <span>Pending Bookings</span></h3>
 						<p>
 							<?php
-							$orga = DB::query("SELECT * FROM organizer", array(), "READ");
-							echo count($orga);
+								echo $num_pending_bookings;
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Total <span>Paid</span></h3>
+						<h3>Number of <span>Confirmed Bookings</span></h3>
 						<p>
 							<?php
-							$total = 0;
-							$payment = DB::query("SELECT * FROM payment", array(), "READ");
-
-							if(count($payment)>0){
-								foreach ($payment as $result) {
-									$total = $total + $result['payment_total'];
-								}
-							}
-
-							echo "₱".number_format($total, 2, ".", ",");
+								echo $num_confirm_bookings;
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Total <span>Bookings</span> </h3>
+						<h3>Value (PHP) of <span>Prospect Bookings</span></h3>
 						<p>
 							<?php
-							$book = DB::query("SELECT * FROM booking", array(), "READ");
-							echo count($book);
+								echo "₱".number_format($prospect_php, 2, ".", ",");
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Bookings <span>Paid</span>	</h3>
+						<h3>Value (PHP) of <span>Pending Bookings</span></h3>
 						<p>
 							<?php
-							$book_paid = DB::query("SELECT * FROM booking WHERE book_status=?", array("paid"), "READ");
-							echo count($book_paid);
+								echo "₱".number_format($pending_php, 2, ".", ",");
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-
+						<h3>Value (PHP) of <span>Confirm Bookings</span></h3>
+						<p>
+							<?php
+								echo "₱".number_format($confirm_php, 2, ".", ",");
+							?>
+						</p>
 					</section>
 					<!--  -->
 					<section>
-
+						<h3>Prospect to Confirm Booking <span>Conversion Ratio</span></h3>
+						<p>
+							<?php
+								echo round((($num_confirm_bookings/($num_prospect_bookings+$num_confirm_bookings))*100)).'%';
+							?>
+						</p>
 					</section>
 					<!--  -->
 					<section>
-
+						<h3>Prospect to Pending Booking <span>Conversion Ratio</span></h3>
+						<p>
+							<?php
+								echo round((($num_pending_bookings/($num_prospect_bookings+$num_pending_bookings))*100)).'%';
+							?>
+						</p>
 					</section>
 					<!--  -->
 					<section>
-
+						<h3>Pending to Confirm Booking <span>Conversion Ratio</span></h3>
+						<p>
+							<?php
+								echo round((($num_confirm_bookings/($num_pending_bookings+$num_confirm_bookings))*100)).'%';
+							?>
+						</p>
 					</section>
 				</div>
 			</main>

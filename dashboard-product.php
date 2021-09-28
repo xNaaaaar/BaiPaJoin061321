@@ -62,6 +62,44 @@
 				$currentSidebarPage = 'dashboard';
 				$currentSubMenu = 'prod';
 				include("includes/sidebar.php");
+
+				$adv_active = $adv_inactive = 0;
+				$num_confirm_bookings = $num_pending_bookings = $num_prospect_bookings = 0;
+				$vouch_active = $vouch_inactive = $vouch_applied = 0;
+				$current_date = date('Y-m-d');
+
+				$adv_active_db = DB::query("SELECT count(adv_id) FROM adventure WHERE adv_date > '$current_date' and orga_id=?", array($_SESSION['organizer']), "READ");
+				$adv_active = $adv_active_db[0];	
+
+				$adv_inactive_db = DB::query("SELECT count(adv_id) FROM adventure WHERE adv_date <= '$current_date' and orga_id=?", array($_SESSION['organizer']), "READ");
+				$adv_inactive = $adv_inactive_db[0];
+
+				$total_num_adv = (int)$adv_active[0]+(int)$adv_inactive[0];
+
+				$adv_ids = DB::query("SELECT adv_id FROM adventure WHERE orga_id=?", array($_SESSION['organizer']), "READ");
+				foreach($adv_ids as $id) {
+					$prospect_db = DB::query("SELECT count(adv_id) FROM booking WHERE book_status='pending' and adv_id=?", array($id[0]), "READ");
+					$prospect = $prospect_db[0];
+					$num_prospect_bookings = $num_prospect_bookings + (int)$prospect[0];
+
+					$pending_db = DB::query("SELECT count(adv_id) FROM booking WHERE book_status='waiting for payment' and adv_id=?", array($id[0]), "READ");
+					$pending = $pending_db[0];
+					$num_pending_bookings = $num_pending_bookings + (int)$pending[0];
+
+					$paid_db = DB::query("SELECT count(adv_id) FROM booking WHERE book_status='paid' and adv_id=?", array($id[0]), "READ");
+					$paid = $paid_db[0];
+					$num_confirm_bookings = $num_confirm_bookings + (int)$paid[0];
+				}
+
+				$vouch_active_db = DB::query("SELECT count(adv_id) FROM voucher WHERE vouch_enddate >= '$current_date' and orga_id=?", array($_SESSION['organizer']), "READ");
+				$vouch_active = $vouch_active_db[0];
+
+				$vouch_inactive_db = DB::query("SELECT count(adv_id) FROM voucher WHERE vouch_enddate < '$current_date' and orga_id=?", array($_SESSION['organizer']), "READ");
+				$vouch_inactive = $vouch_inactive_db[0];
+
+				$vouch_applied_db = DB::query("SELECT sum(vouch_user) FROM voucher WHERE orga_id=?", array($_SESSION['organizer']), "READ");
+				$vouch_applied = $vouch_applied_db[0];
+			
 			?>
 			<!-- End of Sub Navigation -->
 
@@ -69,77 +107,84 @@
 				<h2>Products</h2>
 				<div class="contents">
 					<section>
-						<h3>Total <span>Joiners</span></h3>
+						<h3>Number of Active<span>Adventures</span></h3>
 						<p>
-							<?php
-							$joiner = DB::query("SELECT * FROM joiner", array(), "READ");
-							echo count($joiner);
+							<?php								
+								echo $adv_active[0];
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Total <span>Organizers</span></h3>
+						<h3>Number of Inactive<span>Adventures</span></h3>
 						<p>
 							<?php
-							$orga = DB::query("SELECT * FROM organizer", array(), "READ");
-							echo count($orga);
+								echo $adv_inactive[0];
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Total <span>Paid</span></h3>
+						<h3>Total Number of<span>Listed Adventures</span></h3>
 						<p>
 							<?php
-							$total = 0;
-							$payment = DB::query("SELECT * FROM payment", array(), "READ");
-
-							if(count($payment)>0){
-								foreach ($payment as $result) {
-									$total = $total + $result['payment_total'];
-								}
-							}
-
-							echo "₱".number_format($total, 2, ".", ",");
+								echo $total_num_adv;
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Total <span>Bookings</span> </h3>
+						<h3>Average # of Prospect Booking<span>per Adventure</span> </h3>
 						<p>
 							<?php
-							$book = DB::query("SELECT * FROM booking", array(), "READ");
-							echo count($book);
+								echo ($num_prospect_bookings/$total_num_adv);
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-						<h3>Bookings <span>Paid</span>	</h3>
+						<h3>Average # of Pending Booking<span>per Adventure</span> </h3>
 						<p>
 							<?php
-							$book_paid = DB::query("SELECT * FROM booking WHERE book_status=?", array("paid"), "READ");
-							echo count($book_paid);
+								echo ($num_pending_bookings/$total_num_adv);
 							?>
 						</p>
 					</section>
 					<!--  -->
 					<section>
-
+						<h3>Average # of Confirmed Booking<span>per Adventure</span> </h3>
+						<p>
+							<?php
+								echo ($num_confirm_bookings/$total_num_adv);
+							?>
+						</p>
 					</section>
 					<!--  -->
 					<section>
-
+						<h3>Number of Active<span>Vouchers</span></h3>
+						<p>
+							<?php
+								echo $vouch_active[0];
+							?>
+						</p>
 					</section>
 					<!--  -->
 					<section>
-
+						<h3>Number of Inactive<span>Vouchers</span></h3>
+						<p>
+							<?php
+								echo $vouch_inactive[0];
+							?>
+						</p>
 					</section>
 					<!--  -->
 					<section>
-
+						<h3>Total Number of Applied<span>Vouchers</span></h3>
+						<p>
+							<?php
+								echo $vouch_applied[0];
+							?>
+						</p>
 					</section>
 				</div>
 			</main>
