@@ -70,8 +70,7 @@
 		<div class="main_con">
 			<!-- Sub Navigation -->
 			<?php
-				$currentSidebarPage = 'reports';
-				$currentSubMenu = 'request';
+				$currentSidebarPage = 'request';
 				include("includes/sidebar.php");
 			?>
 			<!-- End of Sub Navigation -->

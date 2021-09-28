@@ -5,10 +5,6 @@
   // REDIRECT IF ADMIN NOT LOGGED IN
   if(!isset($_SESSION['admin'])) header("Location: login.php");
 
-	if(isset($_GET['success'])){
-		echo "<script>alert('Successfully verified!')</script>";
-	}
-
 ?>
 <!-- Head -->
 <?php include("includes/head.php"); ?>
@@ -118,12 +114,12 @@ main .admins table tr td:last-child a{color:red;}
 									<tr>
 										<th>ID#</th>
 										<th>Book Id</th>
-										<th>Request User</th>
-										<th>Request Type</th>
-										<th>Request Date Processed</th>
-										<th>Request Amount</th>
-										<th>Request Status</th>
-										<th>Request Reason</th>
+										<th>User</th>
+										<th>Type</th>
+										<th>Date Processed</th>
+										<th>Amount</th>
+										<th>Status</th>
+										<th>Reason</th>
 										<th></th>
 										<th></th>
 									</tr>

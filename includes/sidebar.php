@@ -52,6 +52,13 @@
 			}
 		?>
 		<li class="<?php if($currentSidebarPage == 'voucher') echo 'current_sidebar'; ?>"><a href="voucher.php"><i class="fas fa-tags"></i> <q>Voucher</q></a></li>
+		<li class="<?php if($currentSidebarPage == 'request') echo 'current_sidebar'; ?>"><a href="reports_request.php"><i class="fas fa-file-alt"></i> <q>Request</q></a></li>
+			<ul>
+				<li>Reschedule</li>
+				<li>Cancelation</li>
+				<li>Refund</li>
+				<li>Payout</li>
+			</ul>
 		<li class="<?php if($currentSidebarPage == 'reports') echo 'current_sidebar'; ?>"><a href="reports_booking.php"><i class="fas fa-sticky-note"></i> <q>Reports</q></a></li>
 			<?php
 			if($currentSidebarPage == 'reports'){
@@ -63,7 +70,6 @@
 						echo "<li><a href=''>Rebooking</a></li>";
 					}
 					?>
-					<li class="<?php if($currentSubMenu == 'request') echo 'current_sidebar'; ?>"><a href="reports_request.php">Request</a></li>
 					<li><a href="reports_rating.php">Ratings</a></li>
 				</ul>
 			<?php

@@ -5,29 +5,6 @@
   // REDIRECT IF ADMIN NOT LOGGED IN
   if(!isset($_SESSION['admin'])) header("Location: login.php");
 
-	if(isset($_GET['j_cancel'])){
-		## UPDATE REQUEST DATE APPROVED && STATUS
-		DB::query("UPDATE request SET req_dateresponded=?, req_status=? WHERE req_id=?", array(date("Y-m-d"), "approved", $_GET['req_id']), "UPDATE");
-
-		## QUERY THE SPECIFIC REQ_ID
-		$req = DB::query("SELECT * FROM request WHERE req_id=?", array($_GET['req_id']), "READ");
-		$req = $req[0];
-
-		## GET THE ADVENTURE TO CALCULATE REFUNDED AMOUNT
-		$adv = DB::query("SELECT * FROM booking b INNER JOIN adventure a ON b.adv_id = a.adv_id WHERE book_id=?", array($req['book_id']), "READ");
-		$adv = $adv[0];
-
-		## TO BE REFUNDED AMOUNT
-		$adv_price = ($adv['adv_totalcostprice'] / $adv['adv_maxguests']) * $adv['book_guests'];
-		$cancel_fee = $adv_price * 0.3;
-		$final_price = $adv_price - $cancel_fee;
-
-		## ADD NEW REQUEST AS REFUND
-		DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, book_id) VALUES(?,?,?,?,?,?,?)", array($req['req_user'], "refund", date("Y-m-d"), date("Y-m-d"), $final_price, "approved", $req['book_id']), "CREATE");
-
-		echo "<script>alert('Successfully approved cancelation!')</script>";
-	}
-
 ?>
 <!-- Head -->
 <?php include("includes/head.php"); ?>
@@ -63,7 +40,7 @@ main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 main .admins{height:auto;width:100%;}
 main .admins select{float:left;margin:0 0 20px;height:40px;max-width:100%;padding:0 10px;}
 main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;padding:0 30px;}
-main .admins table tr td:nth-child(9){color:#5cb85c;}
+main .admins table tr td:nth-child(8){color:#5cb85c;}
 
 /* Responsive Design */
 @media only screen and (max-width: 1800px) {
@@ -114,14 +91,14 @@ main .admins table tr td:nth-child(9){color:#5cb85c;}
         <!-- SIDEBAR -->
 				<?php
 					$currentSidebarPage = 'request';
-					$currentSubMenu = 'cancel';
+					$currentSubMenu = 'refund';
 					include("includes/sidebar-admin.php");
 				?>
 
         <!-- MAIN -->
         <main>
           <h1><i class="fas fa-user-circle"></i> Admin: <?php echo $current_admin['admin_name']; ?></h1>
-          <h2>Cancelation</h2>
+          <h2>Refund</h2>
           <div class="contents">
             <div class="admins">
 							<form method="post">
@@ -142,7 +119,6 @@ main .admins table tr td:nth-child(9){color:#5cb85c;}
 										<th>Date Processed</th>
 										<th>Date Responded</th>
 										<th>Amount</th>
-										<th>Reason</th>
 										<th>Status</th>
 										<th></th>
 									</tr>
@@ -153,7 +129,7 @@ main .admins table tr td:nth-child(9){color:#5cb85c;}
 					if(isset($_POST['btnSearch'])){
 						$cboOption = $_POST['cboOption'];
 						## FOR ORGANIZER && JOINER
-						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND req_status=? || req_status=? ORDER BY req_dateprocess DESC", array($cboOption, "cancel", "approved", "disapproved"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND req_status=? || req_status=? ORDER BY req_dateprocess DESC", array($cboOption, "refund", "approved", "disapproved"), "READ");
 
 						if(count($request)>0){
 							foreach ($request as $result) {
@@ -166,9 +142,8 @@ main .admins table tr td:nth-child(9){color:#5cb85c;}
 									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
 									<td>".date("M. j, Y", strtotime($result['req_dateresponded']))."</td>
 									<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
-									<td>".$result['req_reason']."</td>
 									<td><em>".$result['req_status']."</em></td>
-									<td></td>
+									<td><a href=''>refund user</a></td>
 								</tr>
 								";
 							}
@@ -179,12 +154,12 @@ main .admins table tr td:nth-child(9){color:#5cb85c;}
 						} else {
 							echo "	</tbody>";
 							echo "</table>";
-							echo "<p>No cancelation exists!</p>";
+							echo "<p>No refund exists!</p>";
 						}
 
-					## ALL CANCELLATION APPROVED RESULTS
+					## ALL REFUND APPROVED RESULTS
 					} else {
-						$request = DB::query("SELECT * FROM request WHERE req_type=? AND req_status=? || req_status=? ORDER BY req_dateprocess DESC", array("cancel", "approved", "disapproved"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_type=? AND req_status=? || req_status=? ORDER BY req_dateprocess DESC", array("refund", "approved", "disapproved"), "READ");
 
 						if(count($request)>0){
 							foreach ($request as $result) {
@@ -197,9 +172,8 @@ main .admins table tr td:nth-child(9){color:#5cb85c;}
 									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
 									<td>".date("M. j, Y", strtotime($result['req_dateresponded']))."</td>
 									<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
-									<td>".$result['req_reason']."</td>
 									<td><em>".$result['req_status']."</em></td>
-									<td></td>
+									<td><a href='' onclick='return confirm(\"Are you sure payment is already sent to user?\");'>refund user</a></td>
 								</tr>
 								";
 							}
@@ -210,7 +184,7 @@ main .admins table tr td:nth-child(9){color:#5cb85c;}
 						} else {
 							echo "	</tbody>";
 							echo "</table>";
-							echo "<p>No cancelation exists!</p>";
+							echo "<p>No refund exists!</p>";
 						}
 					}
 					?>

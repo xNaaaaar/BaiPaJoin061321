@@ -91,14 +91,14 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
         <!-- SIDEBAR -->
 				<?php
 					$currentSidebarPage = 'dashboard';
-					$currentSubMenu = 'sales';
+					$currentSubMenu = 'prod';
 					include("includes/sidebar-admin.php");
 				?>
 
         <!-- MAIN -->
         <main>
           <h1><i class="fas fa-user-circle"></i> Admin: <?php echo $current_admin['admin_name']; ?></h1>
-          <h2>Sales</h2>
+          <h2>Products</h2>
           <div class="contents">
             <section>
 							<h3>Total <span>Joiners</span></h3>
