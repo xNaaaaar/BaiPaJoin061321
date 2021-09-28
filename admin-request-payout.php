@@ -5,6 +5,20 @@
   // REDIRECT IF ADMIN NOT LOGGED IN
   if(!isset($_SESSION['admin'])) header("Location: login.php");
 
+	if(isset($_GET['req_id']) && isset($_GET['refunded'])){
+		## UPDATE this.req_id
+		DB::query("UPDATE request SET req_rcvd=? WHERE req_id=?", array(1, $_GET['req_id']), "READ");
+
+		## DISPLAY this.req_id
+		$refund = DB::query("SELECT * FROM request WHERE req_id=?", array($_GET['req_id']), "READ");
+		$refund = $refund[0];
+
+		## CREATE REQUEST FOR REFUNDED REQUEST
+		$payout = DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, book_id) VALUES(?,?,?,?,?,?,?)", array($refund['req_user'], "payout", date("Y-m-d"), date("Y-m-d"), $refund['req_amount'], "refunded", $refund['book_id']), "CREATE");
+
+		echo "<script>alert('Successfully sent refund!')</script>";
+	}
+
 ?>
 <!-- Head -->
 <?php include("includes/head.php"); ?>
@@ -91,14 +105,14 @@ main .admins table tr td:nth-child(8){color:#5cb85c;}
         <!-- SIDEBAR -->
 				<?php
 					$currentSidebarPage = 'request';
-					$currentSubMenu = 'refund';
+					$currentSubMenu = 'payout';
 					include("includes/sidebar-admin.php");
 				?>
 
         <!-- MAIN -->
         <main>
           <h1><i class="fas fa-user-circle"></i> Admin: <?php echo $current_admin['admin_name']; ?></h1>
-          <h2>Refund</h2>
+          <h2>Payout</h2>
           <div class="contents">
             <div class="admins">
 							<form method="post">
@@ -129,11 +143,11 @@ main .admins table tr td:nth-child(8){color:#5cb85c;}
 					if(isset($_POST['btnSearch'])){
 						$cboOption = $_POST['cboOption'];
 						## FOR ORGANIZER && JOINER
-						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND req_status=? ORDER BY req_dateprocess DESC", array($cboOption, "refund", "approved"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND req_status=? ORDER BY req_dateprocess DESC", array($cboOption, "payout", "refunded"), "READ");
 
 					## ALL REFUND APPROVED RESULTS
 					} else {
-						$request = DB::query("SELECT * FROM request WHERE req_type=? AND req_status=? ORDER BY req_dateprocess DESC", array("refund", "approved"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_type=? AND req_status=? ORDER BY req_dateprocess DESC", array("payout", "refunded"), "READ");
 					}
 
 					## DISPLAY
@@ -150,14 +164,13 @@ main .admins table tr td:nth-child(8){color:#5cb85c;}
 								<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
 								<td><em>".$result['req_status']."</em></td>";
 
-							## CHECK IF THIS REFUND IS ALREADY REFUNDED
-							if($result['req_rcvd'] == 0) {
-								echo "<td><a href='admin-request-payout.php?req_id=".$result['req_id']."&refunded' onclick='return confirm(\"Are you sure payment is already sent to user?\");'>refund user</a></td>";
-							} else {
-								echo "<td><em>refunded</em></td>";
-							}
-							echo "</tr>";
+							## CHECK IF RECEIVED BY USER
+							if($result['req_rcvd'] == 0)
+								echo "<td><em>sent<em></td>";
+							else
+								echo "<td><em>received<em></td>";
 
+							echo "</tr>";
 						}
 						echo "	</tbody>";
 						echo "</table>";
@@ -166,7 +179,7 @@ main .admins table tr td:nth-child(8){color:#5cb85c;}
 					} else {
 						echo "	</tbody>";
 						echo "</table>";
-						echo "<p>No refund exists!</p>";
+						echo "<p>No payout exists!</p>";
 					}
 					?>
             </div>

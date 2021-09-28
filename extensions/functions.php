@@ -1894,9 +1894,9 @@ function display_admin(){
 				echo "<td><a href='admin.php' onclick='return confirm(\"Admin logged in cannot be deleted!\");'><i class='far fa-trash-alt'></i></a></td>";
 			} else {
 				echo "<td></td>";
-				echo "<td><a href='admin.php?delete=".$result['admin_id']."' onclick='return confirm(\"Are you sure you want to delete this admin?\");'><i class='far fa-trash-alt'></i></a></td>
-				</tr>";
+				echo "<td><a href='admin.php?delete=".$result['admin_id']."' onclick='return confirm(\"Are you sure you want to delete this admin?\");'><i class='far fa-trash-alt'></i></a></td>";
 			}
+			echo "</tr>";
 		}
 		echo "</table>";
 

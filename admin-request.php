@@ -24,7 +24,7 @@ html, body{height:100%;}
 .sidebar h2{text-align:center;}
 .sidebar h2 span{display:block;font-size:15px;}
 .sidebar ul{margin:35px 0 0 25px;height:auto;}
-.sidebar ul ul{margin:0 0 0 25px;}
+.sidebar ul ul{margin:0 0 0 10px;}
 
 main{flex:4;float:none;height:100%;background:none;margin:0;padding:50px 50px 0;border-radius:0;text-align:center;}
 main h1{text-align:right;font-size:20px;}
@@ -40,7 +40,8 @@ main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 main .admins{height:auto;width:100%;}
 main .admins select{float:left;margin:0 0 20px;height:40px;max-width:100%;padding:0 10px;}
 main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;padding:0 30px;}
-main .admins table tr td:nth-child(10) a{color:#5cb85c;}
+main .admins table tr td:nth-child(8){color:#33b5e5;}
+main .admins table tr td:nth-child(9) a{color:#5cb85c;}
 main .admins table tr td:last-child a{color:red;}
 
 /* Responsive Design */
@@ -118,8 +119,8 @@ main .admins table tr td:last-child a{color:red;}
 										<th>Type</th>
 										<th>Date Processed</th>
 										<th>Amount</th>
-										<th>Status</th>
 										<th>Reason</th>
+										<th>Status</th>
 										<th></th>
 										<th></th>
 									</tr>
@@ -132,63 +133,37 @@ main .admins table tr td:last-child a{color:red;}
 						## FOR ORGANIZER && JOINER
 						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_status=? ORDER BY req_dateprocess DESC", array($cboOption, "pending"), "READ");
 
-						if(count($request)>0){
-							foreach ($request as $result) {
-								echo "
-								<tr>
-									<td>".$result['req_id']."</td>
-									<td>".$result['book_id']."</td>
-									<td>".$result['req_user']."</td>
-									<td>".$result['req_type']."</td>
-									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
-									<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
-									<td>".$result['req_status']."</td>
-									<td>".$result['req_reason']."</td>
-									<td><b><a href='admin-request-cancel.php?j_cancel' onclick='return confirm(\"Are you sure you want to approved this request?\");'>✓</a></b></td>
-									<td><b><a href='' onclick='return confirm(\"Are you sure you want to disapproved this request?\");'>✗</a></b></td>
-								</tr>
-								";
-							}
-							echo "	</tbody>";
-							echo "</table>";
-
-						## IF NO EXISTING ORGANIZER OR JOINER
-						} else {
-							echo "	</tbody>";
-							echo "</table>";
-							echo "<p>No requests exists!</p>";
-						}
-
 					## ALL REQUEST RESULTS
 					} else {
 						$request = DB::query("SELECT * FROM request WHERE req_status=? ORDER BY req_dateprocess DESC", array("pending"), "READ");
+					}
 
-						if(count($request)>0){
-							foreach ($request as $result) {
-								echo "
-								<tr>
-									<td>".$result['req_id']."</td>
-									<td>".$result['book_id']."</td>
-									<td>".$result['req_user']."</td>
-									<td>".$result['req_type']."</td>
-									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
-									<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
-									<td>".$result['req_status']."</td>
-									<td>".$result['req_reason']."</td>
-									<td><b><a href='admin-request-cancel.php?req_id=".$result['req_id']."&j_cancel' onclick='return confirm(\"Are you sure you want to approved this cancelation request?\");'>✓</a></b></td>
-									<td><b><a href='' onclick='return confirm(\"Are you sure you want to disapproved this request?\");'>✗</a></b></td>
-								</tr>
-								";
-							}
-							echo "	</tbody>";
-							echo "</table>";
-
-						## IF NO EXISTING ORGANIZER
-						} else {
-							echo "	</tbody>";
-							echo "</table>";
-							echo "<p>No requests exists!</p>";
+					## DISPLAY
+					if(count($request)>0){
+						foreach ($request as $result) {
+							echo "
+							<tr>
+								<td>".$result['req_id']."</td>
+								<td>".$result['book_id']."</td>
+								<td>".$result['req_user']."</td>
+								<td>".$result['req_type']."</td>
+								<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
+								<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
+								<td>".$result['req_reason']."</td>
+								<td><em>".$result['req_status']."</em></td>
+								<td><b><a href='admin-request-cancel.php?req_id=".$result['req_id']."&j_cancel' onclick='return confirm(\"Are you sure you want to approved this cancelation request?\");'>✓</a></b></td>
+								<td><b><a href='' onclick='return confirm(\"Are you sure you want to disapproved this request?\");'>✗</a></b></td>
+							</tr>
+							";
 						}
+						echo "	</tbody>";
+						echo "</table>";
+
+					## IF NO EXISTING ORGANIZER
+					} else {
+						echo "	</tbody>";
+						echo "</table>";
+						echo "<p>No pending requests exists!</p>";
 					}
 					?>
             </div>

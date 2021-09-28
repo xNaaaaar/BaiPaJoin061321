@@ -23,7 +23,7 @@ html, body{height:100%;}
 .sidebar h2{text-align:center;}
 .sidebar h2 span{display:block;font-size:15px;}
 .sidebar ul{margin:35px 0 0 25px;height:auto;}
-.sidebar ul ul{margin:0 0 0 25px;}
+.sidebar ul ul{margin:0 0 0 10px;}
 
 main{flex:4;float:none;height:100%;background:none;margin:0;padding:50px 50px 0;border-radius:0;text-align:center;}
 main h1{text-align:right;font-size:20px;}

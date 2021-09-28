@@ -56,36 +56,35 @@
 			<!-- Sub Navigation -->
 			<?php
 				$currentSidebarPage = 'reports';
-				$currentSubMenu = 'reports';
+				$currentSubMenu = 'request';
 				include("includes/sidebar.php");
 			?>
 			<!-- End of Sub Navigation -->
 			<main>
+				<?php
+				if(isset($_GET['req_id'])){
+					$request = DB::query("SELECT * FROM request WHERE req_id=?", array($_GET['req_id']), "READ");
+					$request = $request[0];
+				?>
 				<form method="post">
-					<h2>Request Cancel Booking</h2>
+					<h2>Edit Reason</h2>
 
-					<textarea name="txtReason" placeholder="Input valid reason" maxlength="100" required></textarea>
-					<button class="edit" type="submit" name="btnRequest">Request</button>
-					<a class="edit" href="reports_booking.php">Back</a>
+					<textarea name="txtReason" placeholder="Input valid reason" maxlength="100" required><?php echo $request['req_reason']; ?></textarea>
+					<button class="edit" type="submit" name="btnSave">Save</button>
+					<a class="edit" href="request.php">Back</a>
 				</form>
-			</main>
-
-			<?php
-			if(isset($_POST['btnRequest'])){
-				$txtReason = ucfirst(trim($_POST['txtReason']));
-
-				$booked = DB::query("SELECT * FROM booking WHERE book_id=?", array($_GET['book_id']), "READ");
-				if(count($booked)>0){
-					$booked = $booked[0];
-					## FOR JOINER
-					if(isset($_SESSION['joiner'])){
-						DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_amount, req_status, req_reason, book_id) VALUES(?,?,?,?,?,?,?)", array("joiner", "cancel", date("Y-m-d"), $booked['book_totalcosts'], "pending", $txtReason, $_GET['book_id']), "CREATE");
-
-						header("Location: reports_request.php?cancel_success");
-					}
+				<?php
 				}
-			}
-			?>
+
+				if(isset($_POST['btnSave'])){
+					$txtReason = ucfirst(trim($_POST['txtReason']));
+
+					DB::query("UPDATE request SET req_reason=? WHERE req_id=?", array($txtReason, $_GET['req_id']), "UPDATE");
+
+					header("Location: request.php?update_success");
+				}
+				?>
+			</main>
 		</div>
 
 	<div class="clearfix"></div>

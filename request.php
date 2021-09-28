@@ -76,10 +76,10 @@
 			<!-- End of Sub Navigation -->
 			<main>
 				<form method="post" >
-					<h2>Requests</h2>
+					<h2>Pending Requests</h2>
 
 					<?php ##
-					// DISPLAY REQUEST REPORTS FOR ORGANIZER
+					// DISPLAY REQUEST FOR ORGANIZER
 					if(isset($_SESSION['organizer'])){
 						echo "
 						<table>
@@ -122,7 +122,7 @@
 							echo "<h3>No request found!</h3>";
 						}
 
-					// DISPLAY REQUEST REPORTS FOR JOINER
+					// DISPLAY REQUEST FOR JOINER
 					} else {
 						echo "
 						<table>
@@ -140,7 +140,7 @@
 							</thead>
 						";
 
-						$request = DB::query("SELECT * FROM request r INNER JOIN booking b ON r.book_id = b.book_id WHERE joiner_id=?", array($_SESSION['joiner']), "READ");
+						$request = DB::query("SELECT * FROM request r INNER JOIN booking b ON r.book_id = b.book_id WHERE joiner_id=? AND req_status=?", array($_SESSION['joiner'], "pending"), "READ");
 
 						if(count($request)>0){
 							foreach ($request as $result) {
@@ -154,7 +154,7 @@
 									<td><em class='success'>".$result['req_status']."</em></td>";
 
 								if($result['req_status'] == "pending"){
-									echo "<td><a href='reports_request-edit.php?req_id=".$result['req_id']."' onclick='return confirm(\"Are you sure you want to edit reason?\");'>edit</a></td>";
+									echo "<td><a href='request-edit.php?req_id=".$result['req_id']."' onclick='return confirm(\"Are you sure you want to edit reason?\");'>edit</a></td>";
 								} else {
 									echo "<td></td>";
 								}
@@ -165,10 +165,11 @@
 								";
 							}
 							echo "</table>";
+
 						// NO RECORDS FOUND
 						} else {
 							echo "</table>";
-							echo "<h3>No request found!</h3>";
+							echo "<h3>No pending request found!</h3>";
 						}
 					}
 					?>

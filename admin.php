@@ -66,6 +66,8 @@ main p:last-of-type{width:100%;color:red;font-size:20px;}
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 
 main .admins{height:auto;width:70%;}
+main .admins table tr td:nth-child(4) i{color:#5cb85c;}
+main .admins table tr td:last-child i{color:red;}
 
 main .forms{width:28%;}
 main .forms form{height:auto;padding:40px 25px 25px;box-shadow:10px 10px 10px -5px #cfcfcf;border:1px solid #cfcfcf;margin:0 0 20px;}

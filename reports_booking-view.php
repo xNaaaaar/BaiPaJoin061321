@@ -135,7 +135,7 @@
 				<figure>
 					<img src="images/receipt.jpg" alt="">
 				</figure>
-				<h1>Transaction Receipt</h1>
+				<h1>Itinerary Receipt</h1>
 				<section>
 					<h2>Booking Details</h2>
 					<table>
@@ -209,7 +209,7 @@
 						</tr>
 						<tr>
 							<td>Payment Time</td>
-							<td><b><?php echo $payment['payment_datetime']; ?></b></td>
+							<td><b><?php echo date("M. j, Y @H:i a", strtotime($payment['payment_datetime'])); ?></b></td>
 						</tr>
 						<tr><td><br></td></tr>
 						<tr>
@@ -231,19 +231,19 @@
 					<table>
 						<tr>
 							<td>Name</td>
-							<td><?php echo $bill_name ?></td>
+							<td><b><?php echo $bill_name ?></b></td>
 						</tr>
 						<tr>
 							<td>Email Address</td>
-							<td><?php echo $bill_emailadd ?></td>
+							<td><b><?php echo $bill_emailadd ?></b></td>
 						</tr>
 						<tr>
 							<td>Phone Number</td>
-							<td><?php echo $bill_phone ?></td>
+							<td><b><?php echo $bill_phone ?></b></td>
 						</tr>
 						<tr>
 							<td>Address</td>
-							<td><?php echo $bill_address ?></td>
+							<td><b><?php echo $bill_address ?></b></td>
 						</tr>
 					</table>
 				</section>

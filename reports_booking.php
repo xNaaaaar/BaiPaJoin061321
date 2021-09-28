@@ -126,7 +126,7 @@
 									<th>Book Date & Time</th>
 									<th>Book Price</th>
 									<th>Book Status</th>
-									<th></th>
+									<th>Receipt</th>
 									<th></th>
 								</tr>
 							</thead>
@@ -149,11 +149,14 @@
 									";
 
 									if($result['book_status'] == "paid"){
-										echo "<td><a href='request_cancel.php?book_id=".$result['book_id']."' onclick='return confirm(\"Are you sure you want to request cancelation for this adventure? BaiPaJoin deducts 30% cancelation fee for the total price you paid (excludes the fee)\");'>cancel</a></td>";
 										echo "<td><a href='reports_booking-view.php?book_id=".$result['book_id']."' onclick='return confirm(\"View receipt?\");'>view</a></td>";
+										## CANNOT CANCEL 10days BEFORE THE ADVENTURE DATE (ongoing)
+										## CURRENT DATE IS EQUAL ADVENTURE DATE (happening)
+										## CURRENT DATE IS GREATER THAN ADVENTURE DATE (done)
+										echo "<td><a href='reports_booking-cancel.php?book_id=".$result['book_id']."' onclick='return confirm(\"Are you sure you want to request cancelation for this adventure? BaiPaJoin deducts 30% cancelation fee for the total price you paid (excludes the fee)\");'>cancel</a></td>";
 									} else {
+										echo "<td> --- </td>";
 										echo "<td><a href='payment-card.php?book_id=".$result['book_id']."&id=".$result['adv_id']."' onclick='return confirm(\"Ready to pay now?\");'>pay</a></td>";
-										echo "<td></td>";
 									}
 									echo "</tr>";
 								}

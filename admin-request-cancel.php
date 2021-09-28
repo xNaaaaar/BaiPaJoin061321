@@ -5,7 +5,7 @@
   // REDIRECT IF ADMIN NOT LOGGED IN
   if(!isset($_SESSION['admin'])) header("Location: login.php");
 
-	if(isset($_GET['j_cancel'])){
+	if(isset($_GET['j_cancel']) && isset($_GET['req_id'])){
 		## UPDATE REQUEST DATE APPROVED && STATUS
 		DB::query("UPDATE request SET req_dateresponded=?, req_status=? WHERE req_id=?", array(date("Y-m-d"), "approved", $_GET['req_id']), "UPDATE");
 
@@ -47,7 +47,7 @@ html, body{height:100%;}
 .sidebar h2{text-align:center;}
 .sidebar h2 span{display:block;font-size:15px;}
 .sidebar ul{margin:35px 0 0 25px;height:auto;}
-.sidebar ul ul{margin:0 0 0 25px;}
+.sidebar ul ul{margin:0 0 0 10px;}
 
 main{flex:4;float:none;height:100%;background:none;margin:0;padding:50px 50px 0;border-radius:0;text-align:center;}
 main h1{text-align:right;font-size:20px;}
@@ -155,63 +155,37 @@ main .admins table tr td:nth-child(9){color:#5cb85c;}
 						## FOR ORGANIZER && JOINER
 						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND req_status=? || req_status=? ORDER BY req_dateprocess DESC", array($cboOption, "cancel", "approved", "disapproved"), "READ");
 
-						if(count($request)>0){
-							foreach ($request as $result) {
-								echo "
-								<tr>
-									<td>".$result['req_id']."</td>
-									<td>".$result['book_id']."</td>
-									<td>".$result['req_user']."</td>
-									<td>".$result['req_type']."</td>
-									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
-									<td>".date("M. j, Y", strtotime($result['req_dateresponded']))."</td>
-									<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
-									<td>".$result['req_reason']."</td>
-									<td><em>".$result['req_status']."</em></td>
-									<td></td>
-								</tr>
-								";
-							}
-							echo "	</tbody>";
-							echo "</table>";
-
-						## IF NO EXISTING ORGANIZER
-						} else {
-							echo "	</tbody>";
-							echo "</table>";
-							echo "<p>No cancelation exists!</p>";
-						}
-
 					## ALL CANCELLATION APPROVED RESULTS
 					} else {
 						$request = DB::query("SELECT * FROM request WHERE req_type=? AND req_status=? || req_status=? ORDER BY req_dateprocess DESC", array("cancel", "approved", "disapproved"), "READ");
+					}
 
-						if(count($request)>0){
-							foreach ($request as $result) {
-								echo "
-								<tr>
-									<td>".$result['req_id']."</td>
-									<td>".$result['book_id']."</td>
-									<td>".$result['req_user']."</td>
-									<td>".$result['req_type']."</td>
-									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
-									<td>".date("M. j, Y", strtotime($result['req_dateresponded']))."</td>
-									<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
-									<td>".$result['req_reason']."</td>
-									<td><em>".$result['req_status']."</em></td>
-									<td></td>
-								</tr>
-								";
-							}
-							echo "	</tbody>";
-							echo "</table>";
-
-						## IF NO EXISTING ORGANIZER
-						} else {
-							echo "	</tbody>";
-							echo "</table>";
-							echo "<p>No cancelation exists!</p>";
+					## DISPLAY
+					if(count($request)>0){
+						foreach ($request as $result) {
+							echo "
+							<tr>
+								<td>".$result['req_id']."</td>
+								<td>".$result['book_id']."</td>
+								<td>".$result['req_user']."</td>
+								<td>".$result['req_type']."</td>
+								<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
+								<td>".date("M. j, Y", strtotime($result['req_dateresponded']))."</td>
+								<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
+								<td>".$result['req_reason']."</td>
+								<td><em>".$result['req_status']."</em></td>
+								<td></td>
+							</tr>
+							";
 						}
+						echo "	</tbody>";
+						echo "</table>";
+
+					## IF NO EXISTING ORGANIZER
+					} else {
+						echo "	</tbody>";
+						echo "</table>";
+						echo "<p>No cancelation exists!</p>";
 					}
 					?>
             </div>

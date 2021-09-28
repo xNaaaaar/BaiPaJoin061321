@@ -65,15 +65,15 @@
 			}
 		?>
 		<li class="<?php if($currentSidebarPage == 'voucher') echo 'current_sidebar'; ?>"><a href="voucher.php"><i class="fas fa-tags"></i> <q>Voucher</q></a></li>
-		<li class="<?php if($currentSidebarPage == 'request') echo 'current_sidebar'; ?>"><a href="reports_request.php"><i class="fas fa-file-alt"></i> <q>Request</q></a></li>
+		<li class="<?php if($currentSidebarPage == 'request') echo 'current_sidebar'; ?>"><a href="request.php"><i class="fas fa-file-alt"></i> <q>Request</q></a></li>
 			<?php
 			if($currentSidebarPage == 'request'){
 			?>
 			<ul>
-				<li class="<?php if($currentSubMenu == 'resched') echo 'current_sidebar'; ?>">Reschedule</li>
-				<li class="<?php if($currentSubMenu == 'cancel') echo 'current_sidebar'; ?>">Cancelation</li>
-				<li class="<?php if($currentSubMenu == 'refund') echo 'current_sidebar'; ?>">Refund</li>
-				<li class="<?php if($currentSubMenu == 'payout') echo 'current_sidebar'; ?>">Payout</li>
+				<li class="<?php if($currentSubMenu == 'resched') echo 'current_sidebar'; ?>"><a href="#">Reschedule</a> </li>
+				<li class="<?php if($currentSubMenu == 'cancel') echo 'current_sidebar'; ?>"><a href="#">Cancelation</a></li>
+				<li class="<?php if($currentSubMenu == 'refund') echo 'current_sidebar'; ?>"><a href="#">Refund</a></li>
+				<li class="<?php if($currentSubMenu == 'payout') echo 'current_sidebar'; ?>"><a href="#">Payout</a></li>
 			</ul>
 			<?php
 			}
@@ -84,11 +84,6 @@
 			?>
 				<ul>
 					<li class="<?php if($currentSubMenu == 'reports') echo 'current_sidebar'; ?>"><a href="reports_booking.php">Bookings</a></li>
-					<?php
-					if($_SESSION['current_user'] == 'Joiner'){
-						echo "<li><a href=''>Rebooking</a></li>";
-					}
-					?>
 					<li class="<?php if($currentSubMenu == 'ratings') echo 'current_sidebar'; ?>"><a href="reports_rating.php">Ratings</a></li>
 				</ul>
 			<?php
