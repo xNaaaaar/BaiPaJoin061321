@@ -81,7 +81,7 @@
 			<main>
 				<form method="post">
 					<h2>Add Voucher</h2>
-
+					<h3>Note: When creating a voucher, it will ONLY apply to a specific adventure you selected and adventure date should be in between the start and date dates.</h3>
 					<div class="form form2">
 						<input type="text" name="txtName" value="" placeholder="Name" required>
 						<select name="cboAdv" required>
