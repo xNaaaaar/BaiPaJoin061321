@@ -1805,6 +1805,8 @@ function booking_paid_updates($method, $book_id, $intent_id, $total=null){
 	$adv_booked = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($booked['adv_id']), "READ");
 	$adv_booked = $adv_booked[0];
 	DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($adv_booked['adv_currentGuest'] + $booked['book_guests'], $adv_booked['adv_id']), "UPDATE");
+	$adv_booked = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($booked['adv_id']), "READ");
+	$adv_booked = $adv_booked[0];
 	if($adv_booked['adv_maxguests'] <= $adv_booked['adv_currentGuest'])
 		DB::query("UPDATE adventure SET adv_status=? WHERE adv_id=?", array("full", $adv_booked['adv_id']), "UPDATE");
 
