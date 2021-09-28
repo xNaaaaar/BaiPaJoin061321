@@ -36,6 +36,19 @@
 	?>
 	<!-- SUB NAVIGATION: SETTINGS -->
 	<ul>
+		<?php if($_SESSION['current_user'] == 'Organizer') { ?>
+		<li class="<?php if($currentSidebarPage == 'dashboard') echo 'current_sidebar'; ?>"><a href="dashboard.php"><i class="fas fa-chart-line"></i> <q>Dashboard</q></a></li>
+			<?php
+			if($currentSidebarPage == 'dashboard'){
+			?>
+			<ul>
+				<li class="<?php if($currentSubMenu == 'sales') echo 'current_sidebar'; ?>"><a href="dashboard.php">Sales</a></li>
+				<li class="<?php if($currentSubMenu == 'prod') echo 'current_sidebar'; ?>"><a href="dashboard-product.php">Products</a></li>
+			</ul>
+		<?php
+			}
+		}
+		?>
 		<li class="<?php if($currentSidebarPage == 'profile') echo 'current_sidebar'; ?>"><a href="settings.php"><i class="fas fa-user-circle"></i> <q>Profile</q></a></li>
 		<?php
 			if($_SESSION['current_user'] == 'Joiner') {
@@ -53,12 +66,18 @@
 		?>
 		<li class="<?php if($currentSidebarPage == 'voucher') echo 'current_sidebar'; ?>"><a href="voucher.php"><i class="fas fa-tags"></i> <q>Voucher</q></a></li>
 		<li class="<?php if($currentSidebarPage == 'request') echo 'current_sidebar'; ?>"><a href="reports_request.php"><i class="fas fa-file-alt"></i> <q>Request</q></a></li>
+			<?php
+			if($currentSidebarPage == 'request'){
+			?>
 			<ul>
-				<li>Reschedule</li>
-				<li>Cancelation</li>
-				<li>Refund</li>
-				<li>Payout</li>
+				<li class="<?php if($currentSubMenu == 'resched') echo 'current_sidebar'; ?>">Reschedule</li>
+				<li class="<?php if($currentSubMenu == 'cancel') echo 'current_sidebar'; ?>">Cancelation</li>
+				<li class="<?php if($currentSubMenu == 'refund') echo 'current_sidebar'; ?>">Refund</li>
+				<li class="<?php if($currentSubMenu == 'payout') echo 'current_sidebar'; ?>">Payout</li>
 			</ul>
+			<?php
+			}
+			?>
 		<li class="<?php if($currentSidebarPage == 'reports') echo 'current_sidebar'; ?>"><a href="reports_booking.php"><i class="fas fa-sticky-note"></i> <q>Reports</q></a></li>
 			<?php
 			if($currentSidebarPage == 'reports'){
@@ -70,7 +89,7 @@
 						echo "<li><a href=''>Rebooking</a></li>";
 					}
 					?>
-					<li><a href="reports_rating.php">Ratings</a></li>
+					<li class="<?php if($currentSubMenu == 'ratings') echo 'current_sidebar'; ?>"><a href="reports_rating.php">Ratings</a></li>
 				</ul>
 			<?php
 			}
