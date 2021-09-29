@@ -93,6 +93,99 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
 					$currentSidebarPage = 'dashboard';
 					$currentSubMenu = 'orga';
 					include("includes/sidebar-admin.php");
+
+					$best_seller = $popular = $favorite = 0;
+					$highest_rate = $lowest_rate = $top_rate = 0;
+					$high_count = $high_rating = $low_count = $low_rating = 0;
+					$current_date = date('Y-m-d');
+
+					## CARD NUMBER 1
+					$orga_pending_db = DB::query("SELECT count(orga_id) FROM organizer WHERE orga_status = 2", array(), "READ");
+					$orga_pending = $orga_pending_db[0];
+
+					## CARD NUMBER 2
+					$orga_verified_db = DB::query("SELECT count(orga_id) FROM organizer WHERE orga_status = 1", array(), "READ");
+					$orga_verified = $orga_verified_db[0];
+
+					## CARD NUMBER 3
+					$orga_unverified_db = DB::query("SELECT count(orga_id) FROM organizer WHERE orga_status = 0", array(), "READ");
+					$orga_unverified = $orga_unverified_db[0];
+
+					$adv_db = DB::query("SELECT adv_id FROM adventure WHERE adv_date > '$current_date'", array(), "READ");
+
+					## CARD NUMBER 4
+					foreach($adv_db as $adv) {
+						$count_db = DB::query("SELECT count(adv_id) FROM booking WHERE book_status='paid' AND adv_id =?", array($adv[0]), "READ");
+						$count = $count_db[0];						
+						if($count[0] > $high_count) {
+							$high_count = $count[0];
+							$best_seller_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
+							$best_seller = $best_seller_db[0];
+						}
+					}
+
+					## CARD NUMBER 5
+					$high_count = 0;
+					foreach($adv_db as $adv) {
+						$count_db = DB::query("SELECT count(adv_id) FROM favorite WHERE adv_id =?", array($adv[0]), "READ");
+						$count = $count_db[0];						
+						if($count[0] > $high_count) {
+							$high_count = $count[0];
+							$favorite_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
+							$favorite = $favorite_db[0];
+							//file_put_contents('debug.log', date('h:i:sa').' => '. $high_count.' : '. $favorite[0] . "\n" . "\n", FILE_APPEND);
+						}
+					}
+
+					## CARD NUMBER 6
+					$high_count = 0;
+					foreach($adv_db as $adv) {
+						$count_db = DB::query("SELECT count(adv_id) FROM booking WHERE adv_id =?", array($adv[0]), "READ");
+						$count = $count_db[0];						
+						if($count[0] > $high_count) {
+							$high_count = $count[0];
+							$popular_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
+							$popular = $popular_db[0];
+							//file_put_contents('debug.log', date('h:i:sa').' => '. $high_count.' : '. $best_seller[0] . "\n" . "\n", FILE_APPEND);
+						}
+					}
+
+					## CARD NUMBER 7 & 9
+					foreach($adv_db as $adv) {
+						$rating_db = DB::query("SELECT count(adv_id), sum(rating_stars) FROM rating WHERE adv_id =?", array($adv[0]), "READ");
+						$rating_data = $rating_db[0];
+						if(!empty($rating_data) && $rating_data[0] != 0) {							
+							$rating = $rating_data[1] / $rating_data[0];
+							if($rating > $high_rating) {
+								$high_rating = $rating;
+								$highest_rate_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
+								$highest_rate = $highest_rate_db[0];
+								if($low_rating == 0) {
+									$low_rating = $rating;
+									$low_rate_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
+									$lowest_rate = $low_rate_db[0];
+								}																
+							}
+							else if($rating < $low_rating) {
+								$low_rating = $rating;
+									$low_rate_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
+									$lowest_rate = $low_rate_db[0];
+							}
+						}						
+					}
+
+					## CARD NUMBER 8
+					$high_count = 0;
+					foreach($adv_db as $adv) {
+						$count_db = DB::query("SELECT count(adv_id) FROM rating WHERE adv_id =?", array($adv[0]), "READ");
+						$count = $count_db[0];						
+						if($count[0] > $high_count) {
+							$high_count = $count[0];
+							$top_rate_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
+							$top_rate = $top_rate_db[0];
+							//file_put_contents('debug.log', date('h:i:sa').' => '. $high_count.' : '. $best_seller[0] . "\n" . "\n", FILE_APPEND);
+						}
+					}
 				?>
 
         <!-- MAIN -->
@@ -100,80 +193,115 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
           <h1><i class="fas fa-user-circle"></i> Admin: <?php echo $current_admin['admin_name']; ?></h1>
           <h2>Organizer</h2>
           <div class="contents">
-            <section>
-							<h3>Total <span>Joiners</span></h3>
+						<section>
+							<h3>Number of Verified Organizers</h3>
 							<p>
 								<?php
-								$joiner = DB::query("SELECT * FROM joiner", array(), "READ");
-								echo count($joiner);
+									if(!empty($orga_verified_db))
+										echo $orga_verified[0];
+									else
+										echo 'N/A';
 								?>
 							</p>
-            </section>
+						</section>
 						<!--  -->
 						<section>
-							<h3>Total <span>Organizers</span></h3>
+							<h3>Number of Unverified Organizers</h3>
 							<p>
 								<?php
-								$orga = DB::query("SELECT * FROM organizer", array(), "READ");
-								echo count($orga);
+									if(!empty($orga_unverified_db))
+										echo $orga_unverified[0];
+									else
+										echo 'N/A';
 								?>
 							</p>
-            </section>
+						</section>
 						<!--  -->
 						<section>
-							<h3>Total <span>Paid</span></h3>
+							<h3>Number of Under Review Organizers</h3>
 							<p>
 								<?php
-								$total = 0;
-								$payment = DB::query("SELECT * FROM payment", array(), "READ");
-
-								if(count($payment)>0){
-									foreach ($payment as $result) {
-										$total = $total + $result['payment_total'];
+									if(!empty($orga_pending_db))
+										echo $orga_pending[0];
+									else
+										echo 'N/A';
+								?>
+							</p>
+						</section>
+						<!--  -->
+						<section>
+							<h3>Most Favorite Adventure</h3>
+							<p>
+								<?php
+									if($favorite != 0)
+										echo $favorite[0];
+									else
+										echo 'N/A';
+								?>
+							</p>
+						</section>
+						<!--  -->
+						<section>
+							<h3>Best Seller Adventure</h3>
+							<p>
+								<?php
+									if($best_seller != 0) {
+										echo $best_seller[0];
 									}
-								}
-
-								echo "₱".number_format($total, 2, ".", ",");
+									else
+										echo 'N/A';
 								?>
 							</p>
-            </section>
+						</section>
 						<!--  -->
 						<section>
-							<h3>Total <span>Bookings</span> </h3>
+							<h3>Most Popular Adventure</h3>
 							<p>
 								<?php
-								$book = DB::query("SELECT * FROM booking", array(), "READ");
-								echo count($book);
+									if($popular != 0)
+										echo $popular[0];
+									else
+										echo 'N/A';
 								?>
 							</p>
 						</section>
 						<!--  -->
 						<section>
-							<h3>Bookings <span>Paid</span>	</h3>
+							<h3>Highest Review</h3>
 							<p>
 								<?php
-								$book_paid = DB::query("SELECT * FROM booking WHERE book_status=?", array("paid"), "READ");
-								echo count($book_paid);
+									if($highest_rate != 0)
+										echo $highest_rate[0];
+									else
+										echo 'N/A';
 								?>
 							</p>
 						</section>
 						<!--  -->
 						<section>
-
+							<h3>Most Number of Reviews</h3>
+							<p>
+								<?php
+									if($top_rate != 0)
+										echo $top_rate[0];
+									else
+										echo 'N/A';
+								?>
+							</p>
 						</section>
 						<!--  -->
 						<section>
-
+							<h3>Lowest Review</h3>
+							<p>
+								<?php
+									if($lowest_rate != 0)
+										echo $lowest_rate[0];
+									else
+										echo 'N/A';
+								?>
+							</p>
 						</section>
-						<!--  -->
-						<section>
-
-						</section>
-						<!--  -->
-						<section>
-
-						</section>
-          </div>
+				</div>
         </main>
       </div>
       <?php

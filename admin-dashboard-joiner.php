@@ -93,6 +93,62 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
 					$currentSidebarPage = 'dashboard';
 					$currentSubMenu = 'joiner';
 					include("includes/sidebar-admin.php");
+
+					$highest_paid = $highest_count = $highest_guest = 0;
+					$num_guest = $guest_per_booking = $top_rating = 0;
+
+					## CARD NUMBER 1
+					$joiner = DB::query("SELECT * FROM joiner", array(), "READ");
+
+					$joiner_list = DB::query("SELECT joiner_id FROM joiner", array(), "READ");
+
+					## CARD NUMBER 2
+					foreach($joiner_list as $joiner_id) {
+						$joiner_db = DB::query("SELECT sum(book_totalcosts) FROM booking WHERE joiner_id =?", array($joiner_id[0]), "READ");
+						$joiner = $joiner_db[0];
+						if($joiner[0] > $highest_paid) {
+							$highest_paid = $joiner[0];
+							$biggest_spender_db = DB::query("SELECT joiner_fname, joiner_lname FROM joiner WHERE joiner_id =?", array($joiner_id[0]), "READ");
+							$biggest_spender = $biggest_spender_db[0];
+						}
+					}
+
+					## CARD NUMBER 3
+					foreach($joiner_list as $joiner_id) {
+						$booking_db = DB::query("SELECT count(joiner_id) FROM booking WHERE joiner_id =?", array($joiner_id[0]), "READ");
+						$booking = $booking_db[0];
+						if($booking[0] > $highest_count) {
+							$highest_count = $booking[0];
+							$most_booking_db = DB::query("SELECT joiner_fname, joiner_lname FROM joiner WHERE joiner_id =?", array($joiner_id[0]), "READ");
+							$biggest_booker = $most_booking_db[0];
+						}
+					}
+
+					## CARD NUMBER 4
+					foreach($joiner_list as $joiner_id) {
+						$booking_list = DB::query("SELECT book_id FROM booking WHERE book_status = 'paid' AND joiner_id =?", array($joiner_id[0]), "READ");
+						foreach($booking_list as $book_id) {
+							$guest_per_booking_db = DB::query("SELECT count(guest_name) FROM guest WHERE book_id =?", array($book_id[0]), "READ");
+							$guest_per_booking = $guest_per_booking_db[0];
+							$num_guest = $num_guest + $guest_per_booking[0];
+						}
+						if($num_guest > $highest_guest) {
+							$highest_guest = $num_guest;
+							$top_guest_db = DB::query("SELECT joiner_fname, joiner_lname FROM joiner WHERE joiner_id =?", array($joiner_id[0]), "READ");
+							$top_guest = $top_guest_db[0];
+						}
+					}
+
+					## CARD NUMBER 5
+					foreach($joiner_list as $joiner_id) {
+						$num_rating_db = DB::query("SELECT count(rating_id) FROM rating WHERE joiner_id =?", array($joiner_id[0]), "READ");
+						$num_rating = $num_rating_db[0];
+						if($num_rating[0] > $top_rating) {
+							$top_rating = $num_rating[0];
+							$feedback_joiner_db = DB::query("SELECT joiner_fname, joiner_lname FROM joiner WHERE joiner_id =?", array($joiner_id[0]), "READ");
+							$feedback_joiner = $feedback_joiner_db[0];
+						}
+					}
 				?>
 
         <!-- MAIN -->
@@ -104,56 +160,58 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
 							<h3>Total <span>Joiners</span></h3>
 							<p>
 								<?php
-								$joiner = DB::query("SELECT * FROM joiner", array(), "READ");
-								echo count($joiner);
+									if(!empty($joiner))
+										echo count($joiner);
+									else
+										echo 'N/A';
 								?>
 							</p>
             </section>
 						<!--  -->
 						<section>
-							<h3>Total <span>Organizers</span></h3>
+							<h3>Biggest Joiner<span>Spender</span></h3>
 							<p>
 								<?php
-								$orga = DB::query("SELECT * FROM organizer", array(), "READ");
-								echo count($orga);
+									if(!empty($biggest_spender))
+										echo $biggest_spender[0]." ".$biggest_spender[1];
+									else
+										echo 'N/A';
 								?>
 							</p>
             </section>
 						<!--  -->
 						<section>
-							<h3>Total <span>Paid</span></h3>
+							<h3>Most Number of<span>Bookings</span></h3>
 							<p>
 								<?php
-								$total = 0;
-								$payment = DB::query("SELECT * FROM payment", array(), "READ");
-
-								if(count($payment)>0){
-									foreach ($payment as $result) {
-										$total = $total + $result['payment_total'];
-									}
-								}
-
-								echo "₱".number_format($total, 2, ".", ",");
+									if(!empty($biggest_booker))
+										echo $biggest_booker[0]." ".$biggest_booker[1];
+									else
+										echo 'N/A';
 								?>
 							</p>
             </section>
 						<!--  -->
 						<section>
-							<h3>Total <span>Bookings</span> </h3>
+							<h3>Barkada Goals<span>Joiner</span> </h3>
 							<p>
 								<?php
-								$book = DB::query("SELECT * FROM booking", array(), "READ");
-								echo count($book);
+									if(!empty($top_guest))
+										echo $top_guest[0]." ".$top_guest[1];
+									else
+										echo 'N/A';
 								?>
 							</p>
 						</section>
 						<!--  -->
 						<section>
-							<h3>Bookings <span>Paid</span>	</h3>
+							<h3>Most Number of Feedback<span>Submitted</span>	</h3>
 							<p>
 								<?php
-								$book_paid = DB::query("SELECT * FROM booking WHERE book_status=?", array("paid"), "READ");
-								echo count($book_paid);
+									if(!empty($feedback_joiner))
+										echo $feedback_joiner[0]." ".$feedback_joiner[1];
+									else
+										echo 'N/A';
 								?>
 							</p>
 						</section>

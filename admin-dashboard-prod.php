@@ -110,6 +110,7 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
 					## CARD NUMBER 3
 					$total_num_adv = (int)$adv_active[0]+(int)$adv_inactive[0];
 
+					## CARD NUMBER 4
 					$prospect_db = DB::query("SELECT count(adv_id) FROM booking WHERE book_status='pending'", array(), "READ");
 					$prospect = $prospect_db[0];
 					$num_prospect_bookings = $num_prospect_bookings + (int)$prospect[0];
