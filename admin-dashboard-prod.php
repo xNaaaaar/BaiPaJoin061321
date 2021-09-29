@@ -208,7 +208,7 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
 							<p>
 								<?php
 									if(!empty($num_confirm_bookings))
-										echo ($num_confirm_bookings/$total_num_adv);
+										echo number_format(($num_confirm_bookings/$total_num_adv),2,'.',',');
 									else
 										echo 'N/A';
 								?>
