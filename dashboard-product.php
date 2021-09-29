@@ -167,7 +167,7 @@
 						<p>
 							<?php
 								if(!empty($num_prospect_bookings))
-									echo ($num_prospect_bookings/$total_num_adv);
+									echo number_format(($num_prospect_bookings/$total_num_adv),2,'.',',');
 								else
 									echo 'N/A';
 							?>
@@ -191,7 +191,7 @@
 						<p>
 							<?php
 								if(!empty($num_confirm_bookings))
-									echo ($num_confirm_bookings/$total_num_adv);
+									echo number_format(($num_confirm_bookings/$total_num_adv),2,'.',',');
 								else
 									echo 'N/A';
 							?>
