@@ -74,15 +74,14 @@
 			if(isset($_POST['btnRequest'])){
 				$txtReason = ucfirst(trim($_POST['txtReason']));
 
-				$booked = DB::query("SELECT * FROM booking WHERE book_id=?", array($_GET['book_id']), "READ");
+				$booked_db = DB::query("SELECT * FROM booking WHERE book_id=?", array($_GET['book_id']), "READ");
+				$booked = $booked_db[0];
 				if(count($booked)>0){
-					$booked = $booked[0];
-					## FOR JOINER
-					if(isset($_SESSION['joiner'])){
-						DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_amount, req_status, req_reason, book_id) VALUES(?,?,?,?,?,?,?)", array("joiner", "cancel", date("Y-m-d"), $booked['book_totalcosts'], "pending", $txtReason, $_GET['book_id']), "CREATE");
+					
+						file_put_contents('debug.log', date('h:i:sa').' => Im here!'."\n" . "\n", FILE_APPEND);
+						DB::query("INSERT INTO request (req_user, req_type, req_dateprocess, req_amount, req_status, req_reason, req_rcvd, book_id) VALUES(?,?,?,?,?,?,?,?)", array('joiner', 'cancel', date("Y-m-d"), $booked['book_totalcosts'], 'pending', $txtReason, 0, $_GET['book_id']), "CREATE");						
 
 						header("Location: request.php?cancel_success");
-					}
 				}
 			}
 			?>
