@@ -161,28 +161,31 @@
 					<h2>Guest Details</h2>
 					<ol>
 						<?php
-						$guests = DB::query("SELECT * FROM guest WHERE book_id=?", array($booked['book_id']), "READ");
-						## BOOKED FOR AS A GUEST
-						if(isset($_SESSION['bookOption']) && $_SESSION['bookOption'] == "guest"){
-						?>
-							<li><?php echo $joiner['joiner_fname']." ".$joiner['joiner_lname']; ?> (you)</li>
-							<?php
-							## IF MANY GUESTS EXISTS
-							$counter = 2;
-							if(count($guests)>0){
-								foreach ($guests as $result) {
-									echo "<li start='".$counter."'>".$result['guest_name']."</li>";
-									$counter++;
-								}
-							}
-						## BOOKED FOR SOMEONE
-						} else {
-							if(count($guests)>0){
+						
+							$num_guests_db = DB::query("SELECT book_guests FROM booking WHERE book_id=?", array($booked['book_id']), "READ");
+								$num_guests = $num_guests_db[0];
+
+							$guests = DB::query("SELECT * FROM guest WHERE book_id=?", array($booked['book_id']), "READ");
+
+							## BOOK FOR SOMEONE ELSE
+							if(count($guests) == $num_guests[0]) {
 								foreach ($guests as $result) {
 									echo "<li>".$result['guest_name']."</li>";
 								}
 							}
-						}
+
+							## BOOK AS A GUEST
+							else if(count($guests) < $num_guests[0]) {
+
+								$joiner_db = DB::query("SELECT joiner_fname, joiner_lname FROM joiner WHERE joiner_id =?", array($_SESSION['joiner']), "READ");
+								$joiner = $joiner_db[0];
+
+								echo "<li>".$joiner[0]." ".$joiner[1]."</li>";
+
+								foreach ($guests as $result) {
+									echo "<li>".$result['guest_name']."</li>";
+								}
+							}
 						?>
 
 					</ol>
