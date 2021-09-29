@@ -70,6 +70,7 @@
 		<div class="main_con">
 			<!-- Sub Navigation -->
 			<?php
+				$currentSubMenu = '';
 				$currentSidebarPage = 'request';
 				include("includes/sidebar.php");
 			?>

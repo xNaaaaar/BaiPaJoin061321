@@ -92,7 +92,8 @@ main .admins table tr td:last-child a{color:red;}
       <div class="main_con">
         <!-- SIDEBAR -->
 				<?php
-					$currentSidebarPage = 'request';
+				$currentSubMenu = '';
+				$currentSidebarPage = 'request';
 					include("includes/sidebar-admin.php");
 				?>
 
