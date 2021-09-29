@@ -82,7 +82,7 @@
 					<?php ##
 					// DISPLAY REQUEST FOR ORGANIZER
 					if(isset($_SESSION['organizer'])){
-						
+
 
 					// DISPLAY REQUEST FOR JOINER
 					} else {

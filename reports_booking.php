@@ -69,7 +69,6 @@
 			<main>
 				<form method="post" >
 					<h2>Bookings</h2>
-					<h3>Note: You can only cancel a paid adventure once.</h3>
 					<!-- <h3>Note: Pay anytime by clicking the <i class='fas fa-hand-holding-usd'></i> icon. Request cancel by clicking <i class='fas fa-ban'></i> icon. View booking details by clicking <i class='far fa-eye'></i> icon.</h3> -->
 
 					<?php ##
@@ -138,7 +137,7 @@
 						if(count($joiner_bookings)>0){
 							foreach ($joiner_bookings as $result) {
 								## CHECK IF BOOKING IS IN REQUEST
-								$req = DB::query("SELECT * FROM request WHERE book_id=?", array($result['book_id']), "READ");
+								$req = DB::query("SELECT * FROM request WHERE book_id=? AND req_status!=?", array($result['book_id'], "disapproved"), "READ");
 								if(count($req) == 0){
 									echo "
 									<tr>

@@ -161,7 +161,7 @@
 					<h2>Guest Details</h2>
 					<ol>
 						<?php
-						
+
 							$num_guests_db = DB::query("SELECT book_guests FROM booking WHERE book_id=?", array($booked['book_id']), "READ");
 								$num_guests = $num_guests_db[0];
 
@@ -180,7 +180,7 @@
 								$joiner_db = DB::query("SELECT joiner_fname, joiner_lname FROM joiner WHERE joiner_id =?", array($_SESSION['joiner']), "READ");
 								$joiner = $joiner_db[0];
 
-								echo "<li>".$joiner[0]." ".$joiner[1]."</li>";
+								echo "<li>".$joiner[0]." ".$joiner[1]." (you)</li>";
 
 								foreach ($guests as $result) {
 									echo "<li>".$result['guest_name']."</li>";

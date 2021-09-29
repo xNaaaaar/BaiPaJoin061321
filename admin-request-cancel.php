@@ -30,7 +30,7 @@
 		$final_price = $adv_price - $cancel_fee;
 
 		## ADD NEW REQUEST AS REFUND
-		DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, book_id) VALUES(?,?,?,?,?,?,?)", array($req['req_user'], "refund", date("Y-m-d"), date("Y-m-d"), $final_price, "approved", $req['book_id']), "CREATE");
+		DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, req_rcvd, book_id) VALUES(?,?,?,?,?,?,?,?)", array($req['req_user'], "refund", date("Y-m-d"), date("Y-m-d"), $final_price, "approved", 0, $req['book_id']), "CREATE");
 
 		echo "<script>alert('Successfully approved cancelation!')</script>";
 	}

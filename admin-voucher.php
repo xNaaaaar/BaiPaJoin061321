@@ -129,36 +129,44 @@ main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;pad
                 </thead>
 								<tbody>
                 <?php
-									// ALL VOUCHER RESULTS
-                  $voucher = DB::query("SELECT * FROM voucher", array(), "READ");
+								// WHEN BUTTON IS CLICKED
+								if(isset($_POST['btnSearch'])){
+									$cboOption = $_POST['cboOption'];
 
-                  if(count($voucher)>0){
-                    foreach ($voucher as $result) {
-											$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($result['adv_id']), "READ");
-											$adv = $adv[0];
-											echo "
-											<tr>
-												<td>".$result['orga_id']."</td>
-													<td>".$adv['adv_name']."</td>
-												<td>".$result['vouch_code']."</td>
-												<td>".$result['vouch_discount']."%</td>
-												<td>".$result['vouch_name']."</td>
-												<td>".date("M. j, Y", strtotime($result['vouch_startdate']))."</td>
-												<td>".date("M. j, Y", strtotime($result['vouch_enddate']))."</td>
-												<td>".$result['vouch_minspent']."</td>
-												<td>".$result['vouch_user']."</td>
-											</tr>
-											";
-                    }
-										echo "	</tbody>";
-										echo "</table>";
+									// SELECT VOUCHER OF SPECIFIC ORGANIZER
+									$voucher = DB::query("SELECT * FROM voucher WHERE orga_id=?", array($cboOption), "READ");
 
-									## IF NO EXISTING VOUCHER
-									} else {
-										echo "	</tbody>";
-										echo "</table>";
-										echo "<p>No voucher exists!</p>";
-									}
+								// ALL VOUCHER RESULTS
+								} else $voucher = DB::query("SELECT * FROM voucher", array(), "READ");
+
+								// DISPLAY VOUCHER
+                if(count($voucher)>0){
+                  foreach ($voucher as $result) {
+										$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($result['adv_id']), "READ");
+										$adv = $adv[0];
+										echo "
+										<tr>
+											<td>".$result['orga_id']."</td>
+												<td>".$adv['adv_name']."</td>
+											<td>".$result['vouch_code']."</td>
+											<td>".$result['vouch_discount']."%</td>
+											<td>".$result['vouch_name']."</td>
+											<td>".date("M. j, Y", strtotime($result['vouch_startdate']))."</td>
+											<td>".date("M. j, Y", strtotime($result['vouch_enddate']))."</td>
+											<td>".$result['vouch_minspent']."</td>
+											<td>".$result['vouch_user']."</td>
+										</tr>
+										";
+                  }
+									echo "	</tbody>";
+									echo "</table>";
+
+								## IF NO EXISTING VOUCHER
+								} else {
+									echo "	</tbody>";
+									echo "</table>";
+									echo "<p>No voucher added exists!</p>";
+								}
                 ?>
             </div>
           </div>

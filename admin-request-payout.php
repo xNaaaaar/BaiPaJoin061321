@@ -14,7 +14,7 @@
 		$refund = $refund[0];
 
 		## CREATE REQUEST FOR REFUNDED REQUEST
-		$payout = DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, book_id) VALUES(?,?,?,?,?,?,?)", array($refund['req_user'], "payout", date("Y-m-d"), date("Y-m-d"), $refund['req_amount'], "refunded", $refund['book_id']), "CREATE");
+		$payout = DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, req_rcvd, book_id) VALUES(?,?,?,?,?,?,?,?)", array($refund['req_user'], "payout", date("Y-m-d"), date("Y-m-d"), $refund['req_amount'], "refunded", 0, $refund['book_id']), "CREATE");
 
 		echo "<script>alert('Successfully sent refund!')</script>";
 	}
