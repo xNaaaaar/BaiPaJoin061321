@@ -731,20 +731,20 @@ function create_filter_sql($places, $activities, $min, $max) {
 
 			if(!empty($min) && !empty($max)) {
 				//BOTH MIN, MAX is present including ACTIVITIES and PLACES
-				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1)) AND adv_status != 'full' AND (adv_totalcostprice /adv_maxguests) < ($max+1) ORDER BY adv_id";
+				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1)) AND adv_status != 'full' AND (adv_totalcostprice /adv_maxguests) < ($max+1) ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 
 			}
 			else if(!empty($min) && empty($max)) {
 				//ONLY MIN is present including ACTIVITIES and PLACES but MAX is absent
-				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1)) AND adv_status != 'full' ORDER BY adv_id";
+				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1)) AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 			}
 			else if(empty($min) && !empty($max)) {
 				//ONLY MAX is present including ACTIVITIES and PLACES but MIN is absent
-				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($max+1)) AND adv_status != 'full' ORDER BY adv_id";
+				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($max+1)) AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 			}
 			else {
 				//BOTH ACTIVITIES and PLACES is present but BOTH MAX & MIN is absent
-				$sqlquery = $sqlquery . ") AND adv_status != 'full' ORDER BY adv_id";
+				$sqlquery = $sqlquery . ") AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 			}
 		}
 
@@ -754,19 +754,19 @@ function create_filter_sql($places, $activities, $min, $max) {
 
 			if(!empty($min) && !empty($max)) {
 				//BOTH MIN and MAX is present including PLACES but ACTIVITIES is absent
-				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1) AND (adv_totalcostprice /adv_maxguests) < ($max+1)) AND adv_status != 'full' ORDER BY adv_id";
+				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1) AND (adv_totalcostprice /adv_maxguests) < ($max+1)) AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 			}
 			else if(!empty($min) && empty($max)) {
 				//ONLY MIN is present including PLACES but ACTIVITIES and MAX is absent
-				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1)) AND adv_status != 'full' ORDER BY adv_id";
+				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1)) AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 			}
 			else if(empty($min) && !empty($max)) {
 				//ONLY MAX is present including PLACES but ACTIVITIES and MIN is absent
-				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) < ($max+1)) AND adv_status != 'full' ORDER BY adv_id";
+				$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) < ($max+1)) AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 			}
 			else{
 				//ONLY PLACES is present but ACTIVITIES, MIN and MAX is absent
-				$sqlquery = $sqlquery . ") AND adv_status != 'full' ORDER BY adv_id";
+				$sqlquery = $sqlquery . ") AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 			}
 		}
 	}
@@ -789,38 +789,38 @@ function create_filter_sql($places, $activities, $min, $max) {
 
 		if(!empty($min) && !empty($max)) {
 			//BOTH MIN, MAX is present including ACTIVITIES but PLACES is absent
-			$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1) AND (adv_totalcostprice /adv_maxguests) < ($max+1)) AND adv_status != 'full' ORDER BY adv_id";
+			$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1) AND (adv_totalcostprice /adv_maxguests) < ($max+1)) AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 		}
 		else if(!empty($min) && empty($max)) {
 			//ONLY MIN is present including ACTIVITIES but PLACES is absent
-			$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1)) AND adv_status != 'full' ORDER BY adv_id";
+			$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) > ($min+1)) AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 		}
 		else if(empty($min) && !empty($max)) {
 			//ONLY MAX is present including ACTIVITIES but PLACES is absent
-			$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) < ($max+1)) AND adv_status != 'full' ORDER BY adv_id";
+			$sqlquery = $sqlquery . " OR (adv_totalcostprice /adv_maxguests) < ($max+1)) AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 		}
 		else  {
 			//ONLY ACTIVITIES is present PLACES, MAX & MIN is absent
-			$sqlquery = $sqlquery . ") AND adv_status != 'full' ORDER BY adv_id";
+			$sqlquery = $sqlquery . ") AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 		}
 	}
 
 	else if(!empty($min) && !empty($max)) {
 			//BOTH MIN & MAX is present but PLACES and ACTIVITIES is absent
-			$sqlquery = "SELECT * from adventure WHERE ((adv_totalcostprice /adv_maxguests) > ($min+1) AND (adv_totalcostprice /adv_maxguests) < ($max+1)) AND adv_status != 'full' ORDER BY adv_id";
+			$sqlquery = "SELECT * from adventure WHERE ((adv_totalcostprice /adv_maxguests) > ($min+1) AND (adv_totalcostprice /adv_maxguests) < ($max+1)) AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 	}
 
 	else if(!empty($min) && empty($max)) {
 		//ONLY MIN is present but PLACES and ACTIVITIES is absent
-		$sqlquery = "SELECT * from adventure WHERE ((adv_totalcostprice /adv_maxguests) > ($min-1)) AND adv_status != 'full' ORDER BY adv_id";
+		$sqlquery = "SELECT * from adventure WHERE ((adv_totalcostprice /adv_maxguests) > ($min-1)) AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 	}
 
 	else if(empty($min) && !empty($max)) {
 		//ONLY MAX is present but PLACES and ACTIVITIES is absent
-		$sqlquery = "SELECT * from adventure WHERE ((adv_totalcostprice /adv_maxguests) < ($max+1)) AND adv_status != 'full' ORDER BY adv_id";
+		$sqlquery = "SELECT * from adventure WHERE ((adv_totalcostprice /adv_maxguests) < ($max+1)) AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 	}
 
-	//file_put_contents('debug.log', date('h:i:sa').' => ' .$sqlquery. "\n" . "\n", FILE_APPEND);
+	file_put_contents('debug.log', date('h:i:sa').' => ' .$sqlquery. "\n" . "\n", FILE_APPEND);
 
 	return $sqlquery;
 }
