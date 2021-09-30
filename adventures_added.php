@@ -82,56 +82,89 @@
 			<!-- End of Sub Navigation -->
 
 			<main>
+				<h2>Post an Adventure</h2>
+				<form method="post" class='reuse_data'>
+					<select name="cboAdv" required>
+						<option>-- REUSE ADVENTURE DATA --</option>
+					<?php
+					## SELECT ALL ORGANIZER'S ADVENTURE POSTED
+					$advs = DB::query("SELECT * FROM adventure WHERE orga_id=?", array($_SESSION['organizer']), "READ");
+					if(count($advs)>0){
+						foreach ($advs as $result) {
+							echo "<option value='".$result['adv_id']."'>".$result['adv_name']."</option>";
+						}
+					}
+					?>
+					</select>
+					<button type="submit" name="btnReuse">Reuse</button>
+					<?php
+					## REUSE EXISTING ADVENTURE DATA
+					if(isset($_POST['btnReuse'])){
+						$cboAdv = $_POST['cboAdv'];
+						if(!empty($cboAdv)){
+							$this_adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($cboAdv), "READ");
+							$this_adv = $this_adv[0];
+							##
+							$_SESSION['this_type'] = $this_adv['adv_type'];
+							$_SESSION['this_guest'] = $this_adv['adv_maxguests'];
+							$_SESSION['this_name'] = $this_adv['adv_name'];
+							$_SESSION['this_kind'] = $this_adv['adv_kind'];
+							$_SESSION['this_address'] = $this_adv['adv_address'];
+							$_SESSION['this_date'] = $this_adv['adv_date'];
+							$_SESSION['this_details'] = $this_adv['adv_details'];
+							$_SESSION['this_price'] = $this_adv['adv_totalcostprice'];
+						}
+					}
+					?>
+				</form>
 				<form method="post" enctype="multipart/form-data">
-					<h2>Post an Adventure</h2>
-
 					<div class="form form1">
 						<select name="cboType" onchange="displayMaxGuests(this);" required>
 							<option value="">Type of Adventure</option>
-							<option value="packaged">Packaged</option>
-							<option value="not packaged">Not Packaged</option>
+							<option value="packaged" <?php echo (isset($_SESSION['this_type']) && $_SESSION['this_type'] == "Packaged") ? "selected='selected'":""; ?>>Packaged</option>
+							<option value="not packaged" <?php echo (isset($_SESSION['this_type']) && $_SESSION['this_type'] == "Not Packaged") ? "selected='selected'":""; ?>>Not Packaged</option>
 						</select>
-						<input type="number" name="numMaxGuests" id="display" placeholder="No. Max Guests" value="1">
-						<input type="text" name="txtName" placeholder="Adventure Name" required>
+						<input type="number" name="numMaxGuests" id="display" placeholder="No. Max Guests" value="<?php echo (isset($_SESSION['this_guest'])) ? $_SESSION['this_guest']:1; ?>">
+						<input type="text" name="txtName" placeholder="Adventure Name" value="<?php echo (isset($_SESSION['this_name'])) ? $_SESSION['this_name']:""; ?>" required>
 						<select name="cboKind" required>
 							<option value="">Activities</option>
-							<option value="Swimming">Swimming</option>
-							<option value="Camping">Camping</option>
-							<option value="Island Hopping">Island Hopping</option>
-							<option value="Mountain Hiking">Mountain Hiking</option>
-							<option value="Snorkeling">Snorkeling</option>
-							<option value="Canyoneering">Canyoneering</option>
-							<option value="Biking">Biking</option>
-							<option value="Diving">Diving</option>
-							<option value="Jetski">Jetski</option>
-							<option value="Banana Boat">Banana Boat</option>
+							<option value="Swimming" <?php echo (isset($_SESSION['this_kind']) && $_SESSION['this_kind'] == "Swimming") ? "selected='selected'":""; ?>>Swimming</option>
+							<option value="Camping" <?php echo (isset($_SESSION['this_kind']) && $_SESSION['this_kind'] == "Camping") ? "selected='selected'":""; ?>>Camping</option>
+							<option value="Island Hopping" <?php echo (isset($_SESSION['this_kind']) && $_SESSION['this_kind'] == "Island Hopping") ? "selected='selected'":""; ?>>Island Hopping</option>
+							<option value="Mountain Hiking" <?php echo (isset($_SESSION['this_kind']) && $_SESSION['this_kind'] == "Mountain Hiking") ? "selected='selected'":""; ?>>Mountain Hiking</option>
+							<option value="Snorkeling" <?php echo (isset($_SESSION['this_kind']) && $_SESSION['this_kind'] == "Snorkeling") ? "selected='selected'":""; ?>>Snorkeling</option>
+							<option value="Canyoneering" <?php echo (isset($_SESSION['this_kind']) && $_SESSION['this_kind'] == "Canyoneering") ? "selected='selected'":""; ?>>Canyoneering</option>
+							<option value="Biking" <?php echo (isset($_SESSION['this_kind']) && $_SESSION['this_kind'] == "Biking") ? "selected='selected'":""; ?>>Biking</option>
+							<option value="Diving" <?php echo (isset($_SESSION['this_kind']) && $_SESSION['this_kind'] == "Diving") ? "selected='selected'":""; ?>>Diving</option>
+							<option value="Jetski" <?php echo (isset($_SESSION['this_kind']) && $_SESSION['this_kind'] == "Jetski") ? "selected='selected'":""; ?>>Jetski</option>
+							<option value="Banana Boat" <?php echo (isset($_SESSION['this_kind']) && $_SESSION['this_kind'] == "Banana Boat") ? "selected='selected'":""; ?>>Banana Boat</option>
 						</select>
 						<!-- <input type="text" name="txtAddress" placeholder="Address" required> -->
 						<select name="cboLoc" required>
 							<option value="">Location</option>
-							<option value="Bantayan Island">Bantayan Island</option>
-							<option value="Malapascua Island">Malapascua Island</option>
-							<option value="Camotes Island">Camotes Island</option>
-							<option value="Moalboal">Moalboal</option>
-							<option value="Badian">Badian</option>
-							<option value="Oslob">Oslob</option>
-							<option value="Alcoy">Alcoy</option>
-							<option value="Aloguinsan">Aloguinsan</option>
-							<option value="Santander">Santander</option>
-							<option value="Alegria">Alegria</option>
-							<option value="Dalaguete">Dalaguete</option>
+							<option value="Bantayan Island" <?php echo (isset($_SESSION['this_address']) && $_SESSION['this_address'] == "Bantayan Island") ? "selected='selected'":""; ?>>Bantayan Island</option>
+							<option value="Malapascua Island" <?php echo (isset($_SESSION['this_address']) && $_SESSION['this_address'] == "Malapascua Island") ? "selected='selected'":""; ?>>Malapascua Island</option>
+							<option value="Camotes Island" <?php echo (isset($_SESSION['this_address']) && $_SESSION['this_address'] == "Camotes Island") ? "selected='selected'":""; ?>>Camotes Island</option>
+							<option value="Moalboal" <?php echo (isset($_SESSION['this_address']) && $_SESSION['this_address'] == "Moalboal") ? "selected='selected'":""; ?>>Moalboal</option>
+							<option value="Badian" <?php echo (isset($_SESSION['this_address']) && $_SESSION['this_address'] == "Badian") ? "selected='selected'":""; ?>>Badian</option>
+							<option value="Oslob" <?php echo (isset($_SESSION['this_address']) && $_SESSION['this_address'] == "Oslob") ? "selected='selected'":""; ?>>Oslob</option>
+							<option value="Alcoy" <?php echo (isset($_SESSION['this_address']) && $_SESSION['this_address'] == "Alcoy") ? "selected='selected'":""; ?>>Alcoy</option>
+							<option value="Aloguinsan" <?php echo (isset($_SESSION['this_address']) && $_SESSION['this_address'] == "Aloguinsan") ? "selected='selected'":""; ?>>Aloguinsan</option>
+							<option value="Santander" <?php echo (isset($_SESSION['this_address']) && $_SESSION['this_address'] == "Santander") ? "selected='selected'":""; ?>>Santander</option>
+							<option value="Alegria" <?php echo (isset($_SESSION['this_address']) && $_SESSION['this_address'] == "Alegria") ? "selected='selected'":""; ?>>Alegria</option>
+							<option value="Dalaguete" <?php echo (isset($_SESSION['this_address']) && $_SESSION['this_address'] == "Dalaguete") ? "selected='selected'":""; ?>>Dalaguete</option>
 						</select>
-						<input type="date" name="dateDate" placeholder="Date" required>
+						<input type="date" name="dateDate" placeholder="Date" value="<?php echo (isset($_SESSION['this_date'])) ? $_SESSION['this_date']:""; ?>" required>
 						<div class="label">
 							<label for="f01">Add a maximum of 4 adventure images</label>
 						</div>
 						<input id="f01" type="file" name="fileAdvImgs[]" placeholder="Add Adventure Images" multiple required/>
-						<textarea name="txtDetails" placeholder="Details" required></textarea>
+						<textarea name="txtDetails" placeholder="Details" required><?php echo (isset($_SESSION['this_details'])) ? $_SESSION['this_details']:""; ?></textarea>
 						<div class="label">
 							<label for="f02">Add itinerary image</label>
 						</div>
 						<input id="f02" type="file" name="fileItineraryImg" placeholder="Add Itinerary Image" required/>
-						<input type="num" name="numPrice" placeholder="Total Price" required>
+						<input type="num" name="numPrice" placeholder="Total Price" value="<?php echo (isset($_SESSION['this_price'])) ? $_SESSION['this_price']:""; ?>" required>
 					</div>
 
 					<button class="edit" type="submit" name="btnPost">Post</button>

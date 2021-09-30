@@ -62,9 +62,9 @@
 			<!-- End of Sub Navigation -->
 			<main>
 				<form method="post">
-					<h2>Request Cancel Booking</h2>
+					<h2>Reason for Cancelling</h2>
 
-					<textarea name="txtReason" placeholder="Input valid reason" maxlength="100" required></textarea>
+					<textarea name="txtReason" placeholder="Type here.." maxlength="100" required></textarea>
 					<button class="edit" type="submit" name="btnRequest">Request</button>
 					<a class="edit" href="reports_booking.php">Back</a>
 				</form>

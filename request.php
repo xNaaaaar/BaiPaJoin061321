@@ -116,9 +116,8 @@
 
 								if($result['req_status'] == "pending"){
 									echo "<td><a href='request-edit.php?req_id=".$result['req_id']."' onclick='return confirm(\"Are you sure you want to edit reason?\");'>edit</a></td>";
-								} else {
+								} else
 									echo "<td></td>";
-								}
 
 								echo "</tr>";
 							}

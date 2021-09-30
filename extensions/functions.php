@@ -1907,6 +1907,18 @@ function display_admin(){
 	}
 }
 
+##### CODE START HERE @UPDATE ADVENTURE IF FULL OR NOT #####
+function adv_full_checker(){
+	$adv = DB::query("SELECT * FROM adventure WHERE adv_status=?", array("not full"), "READ");
+	if(count($adv)>0){
+		foreach ($adv as $result) {
+			if($result['adv_maxguests'] == $result['adv_currentGuest']){
+				DB::query("UPDATE adventure SET adv_status=? WHERE adv_id=?", array("full", $result['adv_id']), "UPDATE");
+			}
+		}
+	}
+}
+
 
 
 ##### END OF CODES #####
