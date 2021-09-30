@@ -12,7 +12,12 @@
 						echo "<a href='adventures_posted.php' class='wow fadeInLeft' data-wow-duration='1s' data-wow-delay='.6s'>Search Now &#187;</a>";
 					else
 						echo "<a href='islands.php' class='wow fadeInLeft' data-wow-duration='1s' data-wow-delay='.6s'>Search Now &#187;</a>";
-						echo "<a href='#' class='wow fadeInLeft' data-wow-duration='1.5s' data-wow-delay='1s'>Book Me &#187;</a>";
+						$adv_db = DB::query("SELECT adv_id FROM adventure WHERE adv_status != 'full'", array(), "READ");
+						$adv_list = array();
+						foreach($adv_db as $item)
+							array_push($adv_list, $item[0]);
+						$random_adv = array_rand($adv_list,1);						
+						echo "<a href='place.php?id=".$adv_list[$random_adv]."' class='wow fadeInLeft' data-wow-duration='1.5s' data-wow-delay='1s'>Surprise Me &#187;</a>";
 				?>
 
 			</div>
