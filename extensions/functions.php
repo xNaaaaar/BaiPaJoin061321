@@ -352,7 +352,7 @@ function uploadMultipleImages($name, $target){
 }
 
 ##### CODE START HERE @DISPLAY ALL CARDS #####
-function displayAll($num, $query = NULL){
+function displayAll($num, $query = NULL, $book_id = NULL){
 	$card = "";
 
 	// FOR LEGAL DOCUMENT DISPLAYING CARDS
@@ -425,7 +425,7 @@ function displayAll($num, $query = NULL){
 						<span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span>
 					</h2>
 					<p>".$result['adv_address']."</p>
-					<p>₱".number_format((float)$price, 2, '.', ',')." / guest</p>
+					<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
 					<ul class='icons'>";
 				#
 				if($result['adv_currentGuest'] == 0){
@@ -570,7 +570,7 @@ function displayAll($num, $query = NULL){
 					</figure>
 					<h2>".$result['adv_name']." - ".$result['adv_kind']." <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
 					<p>".$result['adv_address']."</p>
-					<p>₱ ".number_format((float)$price, 2, '.', ',')." / guest</p>
+					<p>₱ ".number_format((float)$price, 2, '.', ',')." / person</p>
 					<ul class='icons'>";
 
 			  if(isset($_SESSION['joiner'])){
@@ -595,8 +595,72 @@ function displayAll($num, $query = NULL){
 			echo "<h3>You haven't added adventures to your favorites!</h3>";
 		}
 	}
+	// DISPLAY ALL ADVENTURES AVAILABLE FOR RESCHEDULE
+	else if($num === 5){
+		// $card = DB::query("SELECT * FROM adventure", array(), "READ");
+		if($query != NULL) $card = $query;
+		$booked = DB::query("SELECT * FROM booking WHERE book_id=?", array($book_id), "READ");
+		$booked = $booked[0];
+
+		if(count($card)>0){
+			foreach($card as $result){
+				$remainingGuestsText = "";
+				$images = $result['adv_images'];
+				$image = explode(",", $images);
+
+				// RANDOM IMAGE DISPLAY
+				$totalImagesNum = count($image) - 1;
+				$displayImage = rand(1,$totalImagesNum);
+
+				// PRICE PER PERSON
+				$price = $result['adv_totalcostprice'] / $result['adv_maxguests'];
+
+				// REMAINING GUEST
+				$numRemainingGuests = $result['adv_maxguests'] - $result['adv_currentGuest'];
+
+				// REMAINING GUEST IN TEXT
+				if($result['adv_type'] == 'Packaged')
+					$remainingGuestsText = "- ".$numRemainingGuests." slots remaining";
+
+				// DISPLAY ALL ADVENTURE WITH FUTURE DATES
+				if($result["adv_date"] > date("Y-m-d")){
+					echo "
+					<div class='card'>
+						<span><em>on ".date("M j, Y", strtotime($result['adv_date']))."</em></span>
+						<figure>
+							<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt=''>
+						</figure>
+						<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
+						<p>".$result['adv_address']."</p>
+						<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
+						<ul class='icons'>";
+
+					if(isset($_SESSION['joiner'])){
+						$no_cancel_date = date("Y-m-d", strtotime("-10 days", strtotime($result['adv_date'])));
+						## CHECK IF CURRENT DAY IS NOT 10DAYS BVEFORE ADV
+						if(date("Y-m-d") > $no_cancel_date) {
+							echo "<li><a href='' onclick='return confirm(\"You cannot resched this adventure because it is happening in a few days!\");'><i class='far fa-clock' data-toggle='tooltip' data-placement='top' title='Reschedule to this adventure'></i></a></li>";
+
+						## ADV AVAILABLE TO RESCHED
+						} else {
+							echo "<li><a href='reports_resched.php?adv_id=".$result['adv_id']."&book_id=".$book_id."' onclick='return confirm(\"You can only resched this adventure once. Are you sure you want to reschedule?\");'><i class='far fa-clock' data-toggle='tooltip' data-placement='top' title='Reschedule to this adventure'></i></a></li>";
+						}
+
+					}
+					##
+					echo "
+						</ul>
+					</div>
+					";
+				}
+			}
+		}
+		else {
+			echo "<h3>No adventure exists!</h3>";
+		}
+
 	// ELSE TO IFS AND DISPLAY ALL ADVENTURES
-	else {
+	} else {
 		$card = DB::query("SELECT * FROM adventure", array(), "READ");
 		if($query != NULL) $card = $query;
 
@@ -630,7 +694,7 @@ function displayAll($num, $query = NULL){
 						</figure>
 						<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
 						<p>".$result['adv_address']."</p>
-						<p>₱".number_format((float)$price, 2, '.', ',')." / guest</p>
+						<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
 						<ul class='icons'>";
 
 					if(isset($_SESSION['joiner'])){

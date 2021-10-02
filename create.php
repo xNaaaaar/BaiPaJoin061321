@@ -33,6 +33,9 @@
 		<div class="protect-me">
 		<div class="clearfix">
 
+<!-- Loader -->
+<?php include("includes/loader.php"); ?>
+
 <!-- Main -->
 <div id="main_area" class="user_area create">
 	<!-- Images Slider -->
@@ -92,6 +95,11 @@
   <script src="js/responsiveslides.min.js"></script>
   <script src="js/plugins.js"></script>
   <!--?php wp_footer(); ?-->
+	<script>
+		$(window).on("load",()=>{
+			$(".loader-wrapper").fadeOut();
+		});
+	</script>
 </body>
 </html>
 <!-- End Footer -->

@@ -1,4 +1,7 @@
 <div id="nav_area">
+	<!-- Loader -->
+	<?php include("includes/loader.php"); ?>
+	
 	<div class="nav_toggle_button">
 	<div class="logo_wrap"></div>
 		<div class="toggle_holder">

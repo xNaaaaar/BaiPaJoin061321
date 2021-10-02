@@ -70,7 +70,6 @@
 			if($currentSidebarPage == 'request'){
 			?>
 			<ul>
-				<li class="<?php if($currentSubMenu == 'resched') echo 'current_sidebar'; ?>"><a href="request-resched.php">Reschedule</a> </li>
 				<li class="<?php if($currentSubMenu == 'cancel') echo 'current_sidebar'; ?>"><a href="request-cancel.php">Cancelation</a></li>
 				<li class="<?php if($currentSubMenu == 'refund') echo 'current_sidebar'; ?>"><a href="request-refund.php">Refund</a></li>
 				<li class="<?php if($currentSubMenu == 'payout') echo 'current_sidebar'; ?>"><a href="request-payout.php">Payout</a></li>
@@ -84,6 +83,7 @@
 			?>
 				<ul>
 					<li class="<?php if($currentSubMenu == 'reports') echo 'current_sidebar'; ?>"><a href="reports_booking.php">Bookings</a></li>
+					<li class="<?php if($currentSubMenu == 'resched') echo 'current_sidebar'; ?>"><a href="reports_resched.php">Reschedule</a></li>
 					<li class="<?php if($currentSubMenu == 'ratings') echo 'current_sidebar'; ?>"><a href="reports_rating.php">Ratings</a></li>
 				</ul>
 			<?php

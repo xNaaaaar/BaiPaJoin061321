@@ -117,6 +117,10 @@
 	<script type="text/javascript" defer>
 		"use strict"
 
+		$(window).on("load",()=>{
+			$(".loader-wrapper").fadeOut();
+		});
+		
 		function displayMaxGuests(that) {
 			if (that.value == "packaged")
 					document.getElementById("display").style.opacity = 1;

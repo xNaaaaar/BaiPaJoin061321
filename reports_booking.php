@@ -178,20 +178,19 @@
 											}
 										}
 
-										if(empty($_SESSION['resched']))
-											echo "<td><a href='' onclick='return confirm(\"Sorry! You cannot reschedule this adventure!\");'>resched</a></td>";
-										else {
-											echo "<td><a href='reports_booking.php?adv_choices=".implode(",",$_SESSION['resched'])."' onclick='return confirm(\"Are you sure you want to reschedule this adventure?\");'>resched</a></td>";
-											## DESTROY THIS SESSION AFTER SENDING
-											## EXPLODE FIRST THE CHOICES
-											## DISPLAY ALL ADVENTURES THAT CAN BE RESCHEDULE
-											## CHOOSE WHICH ADVENTURE THEN IF RESCHEDULE IS FINAL
-												## UPDATE BOOKING ADV_ID
-												## UPDATE ADVENTURE CURRENT GUEST
-												## UPDATE IF FULL OR NOT FULL (call adv_full_checker())
+										## CHECK IF RESCHEDULED ONCE
+										$resched_once = DB::query("SELECT * FROM request WHERE book_id=? AND req_status=?", array($result['book_id'], "rescheduled"), "READ");
+										if(count($resched_once)>0){
+											echo "<td><em style='color:#5cb85c;'>rescheduled</em></td>";
+										} else {
+											if(empty($_SESSION['resched']))
+												echo "<td><a href='' onclick='return confirm(\"Sorry! There is no available adventure for you to reschedule!\");'>resched</a></td>";
+											else {
+												echo "<td><a href='reports_booking-resched.php?book_id=".$result['book_id']."&available=".implode(",",$_SESSION['resched'])."' onclick='return confirm(\"You can only resched this adventure once. Are you sure you want to reschedule?\");'>resched</a></td>";
+												## DESTROY THIS SESSION AFTER SENDING
+												unset($_SESSION['resched']);
+											}
 										}
-
-
 									}
 
 									## CURRENT DATE IS GREATER THAN ADVENTURE DATE (done)
