@@ -7,7 +7,7 @@
 			</div>
 
 			<div class="contact_info1">
-				<p>We are using these temporary contents on the website.</p>
+				<p>You can visit our office here!</p>
 			</div>
 
 			<div class="contact_info2">

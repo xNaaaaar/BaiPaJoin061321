@@ -157,17 +157,17 @@
 					<div class="review_cards">
 						<div class="card">
 							<i class="fas fa-quote-left"></i>
-							<p>You are reading dummy text as placeholders for this layout. Dummy text for the reader to review. Words shown on this layout are placeholders. More information about the company will be posted soon. Contents are for display purposes only.</p>
+							<p>I was looking for a place to spend time with myself. I found this place in BaiPaJoin and thought the price was affordable. When I arrived, they already had the room ready and cleaned with all the toiletries. My accommodation was of great value and will definitely return to this place when I visit Camotes Island again!</p>
 							<h3>Melnar Ancit <span>rated 4 <i class="fas fa-star"></i></span></h3>
 						</div>
 						<div class="card">
 							<i class="fas fa-quote-left"></i>
-							<p>You are reading dummy text as placeholders for this layout. Dummy text for the reader to review. Words shown on this layout are placeholders. </p>
+							<p>I have stayed in many many hotels over the years, but never one quite like this at the price. Great staff, a really comfortable bed, unbelievable food and a very friendly owner. After reading so many incredible reviews about this hotel, I had to experience it for myself, and if was a good decision. There is quite a lot to see and do from having a base here, and the hotel will arrange day tours, or scooter hire if requested. I did two day tours and enjoyed them both very much. As for the food, it didn't reach on what I had expected, some food was bland, and some was good, it was really 50/50.</p>
 							<h3>Joy Blanco <span>rated 3 <i class="fas fa-star"></i></span></h3>
 						</div>
 						<div class="card">
 							<i class="fas fa-quote-left"></i>
-							<p>You are reading dummy text as placeholders for this layout. Dummy text for the reader to review. Words shown on this layout are placeholders. More information about the company will be posted soon. Contents are for display purposes only. This space is reserved for more details.</p>
+							<p>This resort is amongst the very few existing facilities on Camotes Island that has a degree of scale and the ability to satisfy the expectations of the travellers / holiday makers. The food on offer is good quality and very reasonably priced. The hotel offers fabulous swimming and is not too far from the Ferry Terminal. Surprisingly the breakfast menu does not include much in the way of fresh fruit. It’s easily either the best or at worst the second best place to stay.</p>
 							<h3>John Doe <span>rated 4 <i class="fas fa-star"></i></span></h3>
 						</div>
 					</div>

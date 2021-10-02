@@ -108,8 +108,10 @@
 
 			<main>
 				<h1 class="h1_title">BaiPaJoin: <span>An Online Joiner Platform for Tourists</span></h1>
-				<p>We are using these temporary contents on the website.  These dummy texts are for display purposes only to show the volume of content that will be placed on this particular page. We have reserved this space to display more information about the company.</p>
-				<p>In the near future, these text will be replaced with more details and different ways to contact the business.</p>
+				<p>Tired? Stressed? Looking for something new? Try booking here in BaiPaJoin, where you experience hassle-free adventures
+					with just a click away. Travelling with a budget? Don't worry, we offer affordable and flexible adventures for your friends
+					and family.</p>
+				<p>What are you waiting for? Pack and grab your things to meet new wonders!</p>
 			</main>
 		</div>
 

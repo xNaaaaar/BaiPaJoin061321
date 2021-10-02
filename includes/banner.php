@@ -6,7 +6,7 @@
 
 			<div class="bnr_info">
 				<h2 class="wow fadeInLeft" data-wow-duration="1s">Search an Adventures <span>in Cebu</span></h2>
-				<p class="wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">We are using these temporary contents on the website  These dummy texts are for display purposes only.</p>
+				<p class="wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">Rejoice and stop daydreaming! You'll be surprised to discover that you don't have to travel long distances to reap the benefits of breathtaking attractions and exciting outdoor adventures, because Cebu may just have it all.</p>
 				<?php
 					if(isset($_SESSION['organizer']))
 						echo "<a href='adventures_posted.php' class='wow fadeInLeft' data-wow-duration='1s' data-wow-delay='.6s'>Search Now &#187;</a>";
