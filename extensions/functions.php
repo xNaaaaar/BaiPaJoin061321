@@ -61,15 +61,18 @@ function createAccount(){
 				}
 			}
 
+			$img_address = array();
+		  	$img_name = array();
+
+		 	array_push($img_address,'images/welcome-bg.jpg',
+		 		'images/main-logo-green.png','images/welcome-img.jpg');
+
+		  	array_push($img_name,'background','logo','main');
+
 			$email_subject = 'WELCOME TO BAIPAJOIN';
-			if($cboType == "Joiner")
-				$email_message = 'Dear '.$txtFirstname.', Welcome to BaiPaJoin! We have come bearing great news: your account has been activated and you can now start booking your favorite adventures! Be sure, to apply or select a voucher when you book your 1st adventure to get a discount! We are excited for your BaiPaJoin adventure and experience. Have a look through our Terms and Condition to know what is in the store for you. For further information, and feel free to email us at teambaipajoincebu@gmail.com if you have any questions. Ahoy! Your adventure awaits! Welcome aboard!
-				Regards, BaiPaJoin Team';
-			elseif($cboType == "Organizer")
-				$email_message = 'Dear '.$txtFirstname.', Welcome to BaiPaJoin! We have come bearing great news: your account has been activated and you can now start posting your adventures! Be sure, to create a voucher when you upload your 1st adventure to get a increase your adventure bookings! Have a look through our Terms and Condition to know what is in the store for you. For further information, and feel free to email us at teambaipajoincebu@gmail.com if you have any questions. Ahoy! Your adventure awaits! Welcome aboard!
-				Regards, BaiPaJoin Team';
-			//$email_message_html = html_welcome_message();
-			send_email($emEmail, $email_subject, $email_message);
+			$email_message = html_welcome_message($txtFirstname, $cboType);
+
+			send_email($emEmail, $email_subject, $email_message, $img_address, $img_name);
 
 			//SUCCESSFUL MESSAGE
 			echo "<script>alert('Account created successfully!')</script>";
@@ -1739,7 +1742,6 @@ function retrieve_paymongo_ewallet_payment($payment_id) {
 	return json_decode($response, true);
 }
 
-
 ##### CODE START HERE @ITEXMO API #####
 function send_sms($mobile, $message) {
 
@@ -1774,44 +1776,86 @@ function send_sms($mobile, $message) {
 }
 
 ##### CODE START HERE @PHPMAILER API #####
-function send_email($to, $subject, $message) {
+function send_email($to, $subject, $message, $img_address = null, $img_name = null ) {
 
 	require 'PHPMailerAutoload.php';
 
-	$mail = new PHPMailer;
+	# EMAIL EMBEDDED WITH IMAGE
+	if(!empty($img_address) && !empty($img_name)) {
+		$mail = new PHPMailer;
 
-	//$mail->SMTPDebug = 4;                               	// Enable verbose debug output
-	$mail->isSMTP();                                      	// Set mailer to use SMTP
-	$mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
-	$mail->SMTPAuth = true;                               	// Enable SMTP authentication
-	$mail->Username = 'teambaipajoincebu@gmail.com';  // SMTP username
-	$mail->Password = 'capstone42';                          	// SMTP password
-	$mail->SMTPSecure = 'tls';                             	// Enable TLS encryption, `ssl` also accepted
-	$mail->Port = 587;                                    	// TCP port to connect to
-	$mail->setFrom('teambaipajoincebu@gmail.com', 'BAIPAJOIN');
-	$mail->addAddress($to);     							// Add a recipient
-	$mail->addReplyTo('teambaipajoincebu@gmail.com');
-	//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Add attachment + name (optional)
-	$mail->isHTML(true);                                  // Set email format to HTML
+		//$mail->SMTPDebug = 4;                               	// Enable verbose debug output
+		$mail->isSMTP();                                      	// Set mailer to use SMTP
+		$mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+		$mail->SMTPAuth = true;                               	// Enable SMTP authentication
+		$mail->Username = 'teambaipajoincebu@gmail.com';  // SMTP username
+		$mail->Password = 'capstone42';                          	// SMTP password
+		$mail->SMTPSecure = 'tls';                             	// Enable TLS encryption, `ssl` also accepted
+		$mail->Port = 587;                                    	// TCP port to connect to
+		$mail->setFrom('teambaipajoincebu@gmail.com', 'BAIPAJOIN');
+		$mail->addAddress($to);     							// Add a recipient
+		$mail->addReplyTo('teambaipajoincebu@gmail.com');
+		//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Add attachment + name (optional)
+		$mail->AddEmbeddedImage($img_address[0],$img_name[0]);
+		$mail->AddEmbeddedImage($img_address[1],$img_name[1]);
+		$mail->AddEmbeddedImage($img_address[2],$img_name[2]);
+		$mail->isHTML(true); 									// Set email format to HTML
+		$mail->Subject = $subject;
+		$mail->Body = $message;
 
-	$mail->Subject = $subject;
-	$mail->Body = $message;
+		if(!$mail->send()) {
+	    	if(!file_exists('logs\phpmailer')) {
+	        	mkdir('logs\phpmailer', 0777, true);
+	      }
+	      $log_file_data = 'logs\\phpmailer\\error_log_' . date('d-M-Y') . '.log';
+	      file_put_contents($log_file_data, date('h:i:sa').' => Error: '. $mail->ErrorInfo . "\n" . "\n", FILE_APPEND);
+	    }
+	    else {
+	    	if(!file_exists('logs\phpmailer')) {
+	        	mkdir('logs\phpmailer', 0777, true);
+	      }
+	      $log_file_data = 'logs\\phpmailer\\success_log_' . date('d-M-Y') . '.log';
+	      file_put_contents($log_file_data, date('h:i:sa').' =>  Sent to: ' . $to . "\n" . '               Subject: ' . $subject . "\n" . '               Message: ' . $message . "\n" . "\n", FILE_APPEND);
 
-	if(!$mail->send()) {
-    	if(!file_exists('logs\phpmailer')) {
-        	mkdir('logs\phpmailer', 0777, true);
-      }
-      $log_file_data = 'logs\\phpmailer\\error_log_' . date('d-M-Y') . '.log';
-      file_put_contents($log_file_data, date('h:i:sa').' => Error: '. $mail->ErrorInfo . "\n" . "\n", FILE_APPEND);
-    }
-    else {
-    	if(!file_exists('logs\phpmailer')) {
-        	mkdir('logs\phpmailer', 0777, true);
-      }
-      $log_file_data = 'logs\\phpmailer\\success_log_' . date('d-M-Y') . '.log';
-      file_put_contents($log_file_data, date('h:i:sa').' =>  Sent to: ' . $to . "\n" . '               Subject: ' . $subject . "\n" . '               Message: ' . $message . "\n" . "\n", FILE_APPEND);
+	    } //This code will a log.txt file to get the response of the PHPMailers		
+	}
 
-    } //This code will a log.txt file to get the response of the PHPMailers
+	# EMAIL WITHOUT IMAGE EMBEDDED
+ 	else {
+		$mail = new PHPMailer;
+
+		//$mail->SMTPDebug = 4;                               	// Enable verbose debug output
+		$mail->isSMTP();                                      	// Set mailer to use SMTP
+		$mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+		$mail->SMTPAuth = true;                               	// Enable SMTP authentication
+		$mail->Username = 'teambaipajoincebu@gmail.com';  // SMTP username
+		$mail->Password = 'capstone42';                          	// SMTP password
+		$mail->SMTPSecure = 'tls';                             	// Enable TLS encryption, `ssl` also accepted
+		$mail->Port = 587;                                    	// TCP port to connect to
+		$mail->setFrom('teambaipajoincebu@gmail.com', 'BAIPAJOIN');
+		$mail->addAddress($to);     							// Add a recipient
+		$mail->addReplyTo('teambaipajoincebu@gmail.com');
+		//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Add attachment + name (optional)
+		$mail->isHTML(true); 									// Set email format to HTML
+		$mail->Subject = $subject;
+		$mail->Body = $message;
+
+		if(!$mail->send()) {
+	    	if(!file_exists('logs\phpmailer')) {
+	        	mkdir('logs\phpmailer', 0777, true);
+	      }
+	      $log_file_data = 'logs\\phpmailer\\error_log_' . date('d-M-Y') . '.log';
+	      file_put_contents($log_file_data, date('h:i:sa').' => Error: '. $mail->ErrorInfo . "\n" . "\n", FILE_APPEND);
+	    }
+	    else {
+	    	if(!file_exists('logs\phpmailer')) {
+	        	mkdir('logs\phpmailer', 0777, true);
+	      }
+	      $log_file_data = 'logs\\phpmailer\\success_log_' . date('d-M-Y') . '.log';
+	      file_put_contents($log_file_data, date('h:i:sa').' =>  Sent to: ' . $to . "\n" . '               Subject: ' . $subject . "\n" . '               Message: ' . $message . "\n" . "\n", FILE_APPEND);
+
+	    } //This code will a log.txt file to get the response of the PHPMailers		
+	}		
 }
 
 ##### CODE START HERE @OPENWEATHERMAP API #####
@@ -1913,14 +1957,6 @@ function weather_bg($weather){
 	return $bg_color;
 }
 
-function html_welcome_message() {
-	$message = '
-		//Place your html email template here
-	';
-
-	return $message;
-}
-
 ##### CODE START HERE @DELETING ADMIN #####
 function delete_admin_account($admin_id){
 	// DELETE ADMIN ACCOUNT
@@ -1983,6 +2019,71 @@ function adv_full_checker(){
 	}
 }
 
+##### EMAIL TEMPLATE FOR NEW ACCOUNTS
+function html_welcome_message($name, $type) {
+	
+	if($type == 'Joiner') {
+		$message = "
+		    <!DOCTYPE html>
+		    <html>
+		      <head>
+		        <meta charset='utf-8'>
+		        <title>BaiPaJoin | Welcome</title>
+		      </head>
+		      <body style='background:url(\"cid:background\");font:normal 15px/20px Verdana,sans-serif;'>
+		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
+		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
+		            <figure class='main-logo'>
+		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
+		            </figure>
+		            <figure >
+		              <img src='cid:main' style='max-width:100%;width:300px;height:200px;margin:0 auto;'>
+		            </figure>
+		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Dear ".$name.",</h1>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Welcome to BaiPaJoin! We have come bearing great news: your account has been activated and now you can enjoy convenient and hassle-free adventures in a click. Be sure, to apply or select a voucher when you book your 1st adventure to get a discount! Have a look at our Terms and Conditions to know what is in the store for you. We are incredibly excited to have you here. Want to start your adventure? Click the button below to login.</p>
+		            <a href='localhost/BaiPaJoin42/login.php' style='display:block;width:140px;height:35px;background:#7fdcd3;margin:0 auto;border-radius:10px;line-height:35px;color:#fff;text-decoration:none;'>Login Here</a>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you have any questions, please send an email to <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com]</a> </p>
+		          	<p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Regards, </p>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Team BaiPaJoin</p>
+		          </div>
+		        </div>
+		      </body>
+		    </html>
+		";
+	}
+
+	else if($type == 'Organizer') {
+		$message = "
+		    <!DOCTYPE html>
+		    <html>
+		      <head>
+		        <meta charset='utf-8'>
+		        <title>BaiPaJoin | Welcome</title>
+		      </head>
+		      <body style='background:url(\"cid:background\");font:normal 15px/20px Verdana,sans-serif;'>
+		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
+		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
+		            <figure class='main-logo'>
+		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
+		            </figure>
+		            <figure >
+		              <img src='cid:main' style='max-width:100%;width:300px;height:200px;margin:0 auto;'>
+		            </figure>
+		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Dear ".$name.",</h1>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Welcome to BaiPaJoin! We have come bearing great news: your account has been activated and you can now start posting your adventures! Be sure, to create a voucher when you upload your 1st adventure to get a increase your adventure bookings! Have a look at our Terms and Conditions to know what is in the store for you. Your adventure awaits! Welcome aboard! We are incredibly excited to have you here. Want to start your adventure? Click the button below to login.</p>
+		            <a href='localhost/BaiPaJoin42/login.php' style='display:block;width:140px;height:35px;background:#7fdcd3;margin:0 auto;border-radius:10px;line-height:35px;color:#fff;text-decoration:none;'>Login Here</a>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you have any questions, please send an email to <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com]</a> </p>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Regards, </p>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Team BaiPaJoin</p>
+		          </div>
+		        </div>
+		      </body>
+		    </html>
+		";
+	}
+
+	return $message;
+}
 
 
 ##### END OF CODES #####
