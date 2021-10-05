@@ -79,6 +79,18 @@
 				##
 				DB::query("INSERT INTO request (req_user, req_type, req_dateprocess, req_amount, req_status, req_reason, req_rcvd, book_id) VALUES(?,?,?,?,?,?,?,?)", array('joiner', 'cancel', date("Y-m-d"), $booked['book_totalcosts'], 'pending', $txtReason, 0, $_GET['book_id']), "CREATE");
 
+				## EMAIL + SMS NOTIFICATION
+				$joiner_db = DB::query("SELECT * FROM joiner WHERE joiner_id = ?", array($_SESSION['joiner']), "READ");
+				$joiner_info = $joiner_db[0];
+
+				$sms_sendto = $joiner_info['joiner_phone'];
+				$sms_message = "Hi ".$joiner_info['joiner_fname']."! Your request for cancellation has been submitted on ".date('d-M-Y').".";
+
+				send_sms($sms_sendto,$sms_message);
+
+				//$email_message = html_cancellation_message($joiner_info['joiner_fname'], $current_adv['adv_date'], $resched_adv['adv_date']);
+				//send_email($joiner_info['joiner_email'], "BOOKING CANCELLATION", $email_message);
+
 				header("Location: request.php?cancel_success");
 			}
 			?>

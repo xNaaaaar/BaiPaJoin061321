@@ -32,6 +32,25 @@
 		## ADD NEW REQUEST AS REFUND
 		DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, req_rcvd, book_id) VALUES(?,?,?,?,?,?,?,?)", array($req['req_user'], "refund", date("Y-m-d"), date("Y-m-d"), $final_price, "approved", 0, $req['book_id']), "CREATE");
 
+		## EMAIL + SMS NOTIFICATION
+		$booking_joiner_id_db = DB::query("SELECT joiner_id FROM booking WHERE book_id = ?", array($req['book_id']), "READ");
+		$booking_joiner_id = $booking_joiner_id_db[0];
+
+		if($req['req_user'] == 'joiner') {
+			$joiner_db = DB::query("SELECT * FROM joiner WHERE joiner_id = ?", array($booking_joiner_id['joiner_id']), "READ");
+			$joiner_info = $joiner_db[0];
+
+			$sms_sendto = $joiner_info['joiner_phone'];
+			$sms_message = "Hi ".$joiner_info['joiner_fname']."! Your request to cancel & refund has been approved!";
+
+			send_sms($sms_sendto,$sms_message);
+		}
+
+		
+
+		//$email_message = html_cancellation_message($joiner_info['joiner_fname'], $current_adv['adv_date'], $resched_adv['adv_date']);
+		//send_email($joiner_info['joiner_email'], "BOOKING CANCELLATION", $email_message);
+
 		echo "<script>alert('Successfully approved cancelation!')</script>";
 	}
 
