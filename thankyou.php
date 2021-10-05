@@ -84,7 +84,7 @@
 							<p>Hooray! We appreciate your recent booking, please check email for your receipt. We hope you'll enjoy your adventure and meet new wonders. Stay safe and thank you for choosing BaiPaJoin.</p>
 							<ul>
 								<li><a href="index.php">Back to Home</a> l </li>
-								<li><a href="#">View Payment Reports</a></li>
+								<li><a href="reports_booking.php">View Reports</a></li>
 							</ul>
 						</section>
 					</div>
