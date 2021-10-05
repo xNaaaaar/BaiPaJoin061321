@@ -1255,19 +1255,6 @@ function removeFavorite($advId, $page = NULL){
 		header('Location: adventures.php?removed=1');
 }
 
-##### CODE START HERE @RATING ADVENTURE #####
-function rateAdventure(){
-	$star = $_POST['star'];
-	$txtFeedback = trim(ucwords($_POST['txtFeedback']));
-
-	if($txtFeedback == "")
-		$txtFeedback = "No comment";
-
-	DB::query("INSERT INTO rating(rating_stars, rating_message, joiner_id, adv_id) VALUES(?,?,?,?)", array($star, $txtFeedback, $_SESSION['joiner'], $_GET['id']), "CREATE");
-
-	header("Location: place.php?id={$_GET['id']}&rated=1");
-}
-
 ##### CODE START HERE @LIMITING TEXT CONTENTS #####
 function limit_text($text, $limit) {
     if (str_word_count($text, 0) > $limit) {
@@ -1817,7 +1804,7 @@ function send_email($to, $subject, $message, $img_address = null, $img_name = nu
 	      $log_file_data = 'logs\\phpmailer\\success_log_' . date('d-M-Y') . '.log';
 	      file_put_contents($log_file_data, date('h:i:sa').' =>  Sent to: ' . $to . "\n" . '               Subject: ' . $subject . "\n" . '               Message: ' . $message . "\n" . "\n", FILE_APPEND);
 
-	    } //This code will a log.txt file to get the response of the PHPMailers		
+	    } //This code will a log.txt file to get the response of the PHPMailers
 	}
 
 	# EMAIL WITHOUT IMAGE EMBEDDED
@@ -1854,8 +1841,8 @@ function send_email($to, $subject, $message, $img_address = null, $img_name = nu
 	      $log_file_data = 'logs\\phpmailer\\success_log_' . date('d-M-Y') . '.log';
 	      file_put_contents($log_file_data, date('h:i:sa').' =>  Sent to: ' . $to . "\n" . '               Subject: ' . $subject . "\n" . '               Message: ' . $message . "\n" . "\n", FILE_APPEND);
 
-	    } //This code will a log.txt file to get the response of the PHPMailers		
-	}		
+	    } //This code will a log.txt file to get the response of the PHPMailers
+	}
 }
 
 ##### CODE START HERE @OPENWEATHERMAP API #####
@@ -2031,7 +2018,7 @@ function adv_full_checker(){
 
 ##### EMAIL TEMPLATE FOR NEW ACCOUNTS
 function html_welcome_message($name, $type) {
-	
+
 	if($type == 'Joiner') {
 		$message = "
 		    <!DOCTYPE html>

@@ -3,10 +3,6 @@
 	require_once("extensions/db.php");
 	ob_start();
 
-	if(isset($_POST['btnRate'])){
-		rateAdventure();
-	}
-
 	// IF RATED SUCCESSFULLY AN ADVENTURE
 	if(isset($_GET['rated']) && $_GET['rated'] == 1){
 		echo "<script>alert('This adventure is successfully rated!')</script>";
@@ -172,39 +168,6 @@
 						</div>
 					</div>
 				</div>
-				<!--  -->
-				<?php
-				if(isset($_SESSION['joiner'])){
-					## CHECK IF ADVENTURE DONE
-					$adv_done = DB::query("SELECT * FROM adventure WHERE adv_id=? AND adv_status=?", array($_GET['id'], "done"), "READ");
-					if(count($adv_done)>0){
-						## CHECK IF JOINER ALREADY RATE
-						$rateCheck = DB::query("SELECT * FROM rating WHERE joiner_id=? AND adv_id=?", array($_SESSION['joiner'], $_GET['id']), "READ");
-
-						if(count($rateCheck) == 0){
-				?>
-				<div class="place_ratings">
-					<h2>Ratings</h2>
-					<form method="post">
-						<div class="rating">
-							<input type="radio" id="star5" name="star" value="5" required><label for="star5"></label>
-							<input type="radio" id="star4" name="star" value="4" required><label for="star4"></label>
-							<input type="radio" id="star3" name="star" value="3" required><label for="star3"></label>
-							<input type="radio" id="star2" name="star" value="2" required><label for="star2"></label>
-							<input type="radio" id="star1" name="star" value="1" required><label for="star1"></label>
-						</div>
-						<div class="feedback">
-							<textarea name="txtFeedback" placeholder="Feedback (Optional)"></textarea>
-							<button class="edit" type="submit" name="btnRate">Rate</button>
-							<a class="edit" href="adventures.php">Back</a>
-						</div>
-					</form>
-				</div>
-			<?php
-						}
-					}
-				}
-			?>
 			</main>
 		</div>
 

@@ -96,7 +96,7 @@
 <div id="main_area">
 	<div class="wrapper">
 		<div class="breadcrumbs">
-			<a href="index.php">Home</a> &#187; <a href="settings.php">Settings</a> &#187; <a href="reports_booking.php">Reports </a> &#187; Booking
+			<a href="index.php">Home</a> &#187; <a href="settings.php">Settings</a> &#187; <a href="reports_booking.php">Reports </a> &#187; Reschedule
 		</div>
 		<div class="main_con">
 			<!-- Sub Navigation -->
