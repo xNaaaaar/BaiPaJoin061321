@@ -24,6 +24,9 @@
 	main .contents{display:flex;justify-content:space-between;margin:30px 0 0;width:100%;flex-wrap:wrap;}
 	main section{width:31%;border:1px solid #cfcfcf;box-shadow:10px 10px 10px -5px #cfcfcf;min-height:200px;position:relative;padding:30px 30px 110px;margin:0 auto 30px;}
 	main section h3{font:600 25px/100% Montserrat,sans-serif;}
+
+	main #graph{width:98%;border:1px solid #cfcfcf;box-shadow:10px 10px 10px -5px #cfcfcf;min-height:200px;position:relative;padding:30px 30px 110px;margin:0 auto 30px;}
+	
 	main section p{margin:20px 0 0;font-size:50px;color:gray;line-height:50px;position:absolute;bottom:30px;left:0;right:0;}
 
 	/*RESPONSIVE*/
@@ -99,87 +102,189 @@
 			?>
 			<!-- End of Sub Navigation -->
 
-			<main>
+				<main >
 				<h2>Sales</h2>
 				<div class="contents">
-					<section>
-						<h3>Number of Prospect Bookings</h3>
-						<p>
+					<section >
+						<h3>Prospect Bookings</h3>
+						<p >
+					    <i class='fas fa-cart-plus' style='color:#5da5da;'></i><br>
 							<?php
 								if($num_prospect_bookings != 0)
-									echo $num_prospect_bookings;
+									echo $num_prospect_bookings. '(₱'.number_format($prospect_php).')';
 								else
 									echo 'N/A';
 							?>
 						</p>
 					</section>
 					<!--  -->
-					<section>
-						<h3>Number of Pending Bookings</h3>
-						<p>
+					<section >
+						<h3>Pending Bookings</h3>
+						<p >
+						<i class='fas fa-cart-arrow-down' style='color:#faa43a;'></i><br>	
 							<?php
 								if($num_pending_bookings != 0)
-									echo $num_pending_bookings;
+									echo $num_pending_bookings. "(₱".number_format($pending_php).")";
 								else
 									echo 'N/A';
 							?>
 						</p>
 					</section>
 					<!--  -->
-					<section>
-						<h3>Number of Confirmed Bookings</h3>
-						<p>
+					<section >
+						<h3>Confirmed Bookings</h3>
+						<br><p >
+						<i class='fas fa-briefcase' style='color:#60bd68;'></i><br>		
 							<?php
 								if($num_confirm_bookings != 0)
-									echo $num_confirm_bookings;
+									echo $num_confirm_bookings. "(₱".number_format($confirm_php).")";
 								else
 									echo 'N/A';
 							?>
 						</p>
 					</section>
-					<!--  -->
-					<section>
+					<!--  
+					<section style='background-color:#b2912f; border-radius:10px;'>
 						<h3>Value (PHP) of Prospect Bookings</h3>
-						<p>
+						<p style='color: white'>
 							<?php
 								echo "₱".number_format($prospect_php, 2, ".", ",");
 							?>
+
 						</p>
-					</section>
-					<!--  -->
-					<section>
+					</section >
+					
+					<section style='background-color:#b276b2; border-radius:10px;'>
 						<h3>Value (PHP) of Pending Bookings</h3>
-						<p>
+						<p style='color: white'>
 							<?php
 								echo "₱".number_format($pending_php, 2, ".", ",");
 							?>
 						</p>
 					</section>
-					<!--  -->
-					<section>
+					
+					<section style='background-color:#decf3f; border-radius:10px;'>
 						<h3>Value (PHP) of Confirm Bookings</h3>
-						<p>
+						<p style='color: white'>
 							<?php
 								echo "₱".number_format($confirm_php, 2, ".", ",");
 							?>
 						</p>
 					</section>
-					<!--  -->
-					<section>
+					-->
+
+				<!-- SALE GRAPH -->
+					
+					<section id='graph'>
+					<h3>Sale Graph</h3>
+					 <i class='fas fa-chart-line' style='color:#faa43a'> Pending Bookings</i> |     
+					 <i class='fas fa-chart-line' style='color:#60bd68'> Confirmed Bookings</i> | 
+					 <i class='fas fa-chart-line' style='color:#5da5da'> Prospect Bookings</i>	
+					 <?php
+
+						$payChart= ''; 
+
+						$payDB = DB::query("SELECT * FROM booking ", array($_SESSION['organizer']), "READ");
+
+						foreach($payDB as $row ){
+							
+
+							if($row['book_status'] =='paid'){
+
+							$payChart .=
+								" {
+
+								book_datetime:'".$row["book_datetime"]."', 
+
+								book_totalcosts:".$row["book_totalcosts"].", 
+
+								book_guests:".$row["book_guests"]."},";
+
+					
+							 
+							} 
+
+     						 if($row['book_status'] =='waiting for payment'){ 
+
+							$payChart .=
+								"{ 
+
+								book_datetime:'".$row["book_datetime"]."', 
+
+								book_totalcosts2:".$row["book_totalcosts"].", 
+
+								book_guests:".$row["book_guests"]."}, ";
+
+							}
+
+							if($row['book_status'] =='pending'){ 
+
+							$payChart .=
+								"{ 
+
+								book_datetime:'".$row["book_datetime"]."', 
+
+								book_totalcosts3:".$row["book_totalcosts"].", 
+
+								book_guests:".$row["book_guests"]."}, ";
+
+							}
+
+						}
+						
+						$payChart = substr($payChart, 0, -2);
+
+					?>
+
+							<script>
+
+								Morris.Bar({
+
+									element :'chartContainer',
+									data:[<?php echo $payChart; ?>],
+									barColors:['#60bd68','black','#faa43a','#5da5da'],
+									//lineColors:['#60bd68','black','#faa43a','#5da5da'],
+									xkey:'book_datetime',
+									ykeys:['book_totalcosts','book_guests','book_totalcosts2','book_totalcosts3'],
+									labels:['Booking Cost','Guest', 'Pending Cost','Prospect Booking'],
+									hideHover:'auto',
+									ymax: 'auto',
+									ymin: 'auto',
+									
+									//stacked: true
+								}
+
+								);
+
+							</script>
+
+					  <div id="chartContainer" style="height: 370px; width: 100%; "></div>	
+					  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+					  <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+			          <script src="morris.js/morris.min.js"></script>
+
+
+					</section>	
+
+					<!-- <section style='background-color:#f15854; border-radius:10px;'>
+					<section>	
 						<h3>Prospect to Confirm Booking Conversion Ratio</h3>
-						<p>
+						<br><p >
+						<i class='fas fa-percentage' style='color:#f15854;'></i><br>	
 							<?php
-								if($num_prospect_bookings != 0)
+								/*if($num_prospect_bookings != 0)
 									echo round((($num_confirm_bookings/($num_prospect_bookings+$num_confirm_bookings))*100)).'%';
 								else
 									echo 'N/A';
 							?>
 						</p>
 					</section>
-					<!--  -->
-					<section>
+					 
+					
+					<section>	
 						<h3>Prospect to Pending Booking Conversion Ratio</h3>
-						<p>
+						<br><p >
+						<i class='fas fa-percentage' style='color:#decf3f;'></i><br>
 							<?php
 								if($num_pending_bookings != 0)
 									echo round((($num_pending_bookings/($num_prospect_bookings+$num_pending_bookings))*100)).'%';
@@ -188,18 +293,20 @@
 							?>
 						</p>
 					</section>
-					<!--  -->
-					<section>
+					  
+				
+					<section>	
 						<h3>Pending to Confirm Booking Conversion Ratio</h3>
-						<p>
+						<br><p >
+						<i class='fas fa-percentage' style='color:#b276b2;'></i><br>
 							<?php
 								if($num_confirm_bookings != 0)
 									echo round((($num_confirm_bookings/($num_pending_bookings+$num_confirm_bookings))*100)).'%';
 								else
-									echo 'N/A';
+									echo 'N/A';*/
 							?>
-						</p>
-					</section>
+						</p> 
+					</section> -->
 				</div>
 			</main>
 		</div>
