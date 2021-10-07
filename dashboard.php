@@ -266,9 +266,10 @@
 
 							</script>
 
+					<i class='fas fa-chart-line' style='color:#5da5da'><b style="color:black"> Prospect Bookings</b></i> |			
 					<i class='fas fa-chart-line' style='color:#faa43a'><b style="color:black"> Pending Bookings</b></i> |     
-					 <i class='fas fa-chart-line' style='color:#60bd68'><b style="color:black"> Confirmed Bookings</b></i> | 
-					 <i class='fas fa-chart-line' style='color:#5da5da'><b style="color:black"> Prospect Bookings</b></i>			
+					 <i class='fas fa-chart-line' style='color:#60bd68'><b style="color:black"> Confirmed Bookings</b></i>
+					 		
 
 					  <div id="chartContainer" ></div>	
 					    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
