@@ -25,9 +25,11 @@
 	main section{width:31%;border:1px solid #cfcfcf;box-shadow:10px 10px 10px -5px #cfcfcf;min-height:200px;position:relative;padding:30px 30px 110px;margin:0 auto 30px;}
 	main section h3{font:600 25px/100% Montserrat,sans-serif;}
 
-	main #graph{width:98%;border:1px solid #cfcfcf;box-shadow:10px 10px 10px -5px #cfcfcf;min-height:200px;position:relative;padding:30px 30px 110px;margin:0 auto 30px;}
+	main #graph{width:97.8%; height: 450px ; border:1px solid #cfcfcf;box-shadow:10px 10px 10px -5px #cfcfcf;min-height:200px;position:relative;padding:30px 30px 110px;margin:0 auto 30px;}
+
+	main section #chartContainer{height:370px; width: 100%; min-height:200px;position:relative;padding:30px 30px 110px;margin:0 auto 30px;}
 	
-	main section p{margin:20px 0 0;font-size:50px;color:gray;line-height:50px;position:absolute;bottom:30px;left:0;right:0;}
+	main section p{margin:20px 0 0; font:600 30px/100% Montserrat,sans-serif; color:gray;line-height:50px;position:absolute; bottom:30px;left:0;right:0;}
 
 	/*RESPONSIVE*/
 	@media only screen and (max-width:1000px) {
@@ -109,12 +111,14 @@
 						<h3>Prospect Bookings</h3>
 						<p >
 					    <i class='fas fa-cart-plus' style='color:#5da5da;'></i><br>
+
 							<?php
 								if($num_prospect_bookings != 0)
 									echo $num_prospect_bookings. '(₱'.number_format($prospect_php).')';
 								else
 									echo 'N/A';
 							?>
+		
 						</p>
 					</section>
 					<!--  -->
@@ -122,25 +126,30 @@
 						<h3>Pending Bookings</h3>
 						<p >
 						<i class='fas fa-cart-arrow-down' style='color:#faa43a;'></i><br>	
-							<?php
+
+				        	<?php
 								if($num_pending_bookings != 0)
 									echo $num_pending_bookings. "(₱".number_format($pending_php).")";
 								else
 									echo 'N/A';
 							?>
+				
 						</p>
 					</section>
 					<!--  -->
 					<section >
 						<h3>Confirmed Bookings</h3>
-						<br><p >
+						<br>
+						<p >
 						<i class='fas fa-briefcase' style='color:#60bd68;'></i><br>		
+
 							<?php
 								if($num_confirm_bookings != 0)
 									echo $num_confirm_bookings. "(₱".number_format($confirm_php).")";
 								else
 									echo 'N/A';
-							?>
+							?>	
+
 						</p>
 					</section>
 					<!--  
@@ -176,15 +185,15 @@
 				<!-- SALE GRAPH -->
 					
 					<section id='graph'>
-					<h3>Sale Graph</h3>
-					 <i class='fas fa-chart-line' style='color:#faa43a'> Pending Bookings</i> |     
-					 <i class='fas fa-chart-line' style='color:#60bd68'> Confirmed Bookings</i> | 
-					 <i class='fas fa-chart-line' style='color:#5da5da'> Prospect Bookings</i>	
+					<h3>Daily Sale Graph</h3><br>
+
 					 <?php
 
 						$payChart= ''; 
 
 						$payDB = DB::query("SELECT * FROM booking ", array($_SESSION['organizer']), "READ");
+                      
+                   if(count($payDB) > 0) {
 
 						foreach($payDB as $row ){
 							
@@ -231,8 +240,7 @@
 							}
 
 						}
-						
-						$payChart = substr($payChart, 0, -2);
+					}	
 
 					?>
 
@@ -243,7 +251,7 @@
 									element :'chartContainer',
 									data:[<?php echo $payChart; ?>],
 									barColors:['#60bd68','black','#faa43a','#5da5da'],
-									//lineColors:['#60bd68','black','#faa43a','#5da5da'],
+									lineColors:['#60bd68','black','#faa43a','#5da5da'],
 									xkey:'book_datetime',
 									ykeys:['book_totalcosts','book_guests','book_totalcosts2','book_totalcosts3'],
 									labels:['Booking Cost','Guest', 'Pending Cost','Prospect Booking'],
@@ -258,12 +266,14 @@
 
 							</script>
 
-					  <div id="chartContainer" style="height: 370px; width: 100%; "></div>	
-					  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-					  <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-			          <script src="morris.js/morris.min.js"></script>
+					<i class='fas fa-chart-line' style='color:#faa43a'><b style="color:black"> Pending Bookings</b></i> |     
+					 <i class='fas fa-chart-line' style='color:#60bd68'><b style="color:black"> Confirmed Bookings</b></i> | 
+					 <i class='fas fa-chart-line' style='color:#5da5da'><b style="color:black"> Prospect Bookings</b></i>			
 
-
+					  <div id="chartContainer" ></div>	
+					    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+						<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+						<script src="morris.js/morris.min.js"></script>
 					</section>	
 
 					<!-- <section style='background-color:#f15854; border-radius:10px;'>
