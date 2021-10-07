@@ -44,6 +44,7 @@
 			<ul>
 				<li class="<?php if($currentSubMenu == 'sales') echo 'current_sidebar'; ?>"><a href="dashboard.php">Sales</a></li>
 				<li class="<?php if($currentSubMenu == 'prod') echo 'current_sidebar'; ?>"><a href="dashboard-product.php">Products</a></li>
+				<li class="<?php if($currentSubMenu == 'payout') echo 'current_sidebar'; ?>"><a href="dashboard_payout.php">Payouts</a></li>
 			</ul>
 		<?php
 			}
