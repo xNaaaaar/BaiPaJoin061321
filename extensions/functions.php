@@ -418,14 +418,20 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 				if($result['adv_type'] == 'Packaged')
 					$remainingGuestsText = "- ".$numRemainingGuests." guests remaining";
 
+				$no_cancel_starting_date = date("Y-m-d", strtotime("-5 days", strtotime($result['adv_date'])));
+
 				echo "
 				<div class='card'>
 					<figure>
 						<img src='images/organizers/".$_SESSION['organizer']."/$image[$displayImage]' alt='image'>
 					</figure>
 					<em> on ".date("F j, Y", strtotime($result['adv_date']))."</em>
-					<h2>".$result['adv_name']." - ".$result['adv_kind']."
-						<span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span>
+					<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].")
+						<span>5 <i class='fas fa-star'></i> (25 reviews) ";##".."
+							if($numRemainingGuests == 0) echo "- full";
+							else echo $remainingGuestsText;
+					echo "
+						</span>
 					</h2>
 					<p>".$result['adv_address']."</p>
 					<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
@@ -436,11 +442,14 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						<li><a href='edit_adv.php?id=".$result['adv_id']."'><i class='fas fa-edit' data-toggle='tooltip' title='Update Adventure'></i></a></li>
 						<li><a href='delete.php?table=adventure&id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to delete this adventure?\");'><i class='far fa-trash-alt' data-toggle='tooltip' title='Remove Adventure'></i></a></li>
 					";
-				}
 				#
-				$no_cancel_starting_date = date("Y-m-d", strtotime("-10 days", strtotime($result['adv_date'])));
-				if(date("Y-m-d") < $no_cancel_starting_date && $result['adv_currentGuest'] > 0){
-					echo "<li><a href='adventures_posted.php' onclick='return confirm(\"Are you sure you want to cancel this adventure? Joiner who are booked can process refund!\");'><i class='fas fa-ban' data-toggle='tooltip' title='Cancel Adventure'></i></a></li>";
+				} elseif(date("Y-m-d") < $no_cancel_starting_date && $result['adv_currentGuest'] > 0){
+					echo "
+						<li><a href='adventures_posted.php' onclick='return confirm(\"Are you sure you want to cancel this adventure? Joiner who are booked can will be refunded!\");'><i class='fas fa-ban' data-toggle='tooltip' title='Cancel Adventure'></i></a></li>
+					";
+				#
+				} else {
+
 				}
 				echo "
 					</ul>

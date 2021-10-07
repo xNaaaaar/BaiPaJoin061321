@@ -9,6 +9,10 @@
 		echo "<script>alert('Successfully verified!')</script>";
 	}
 
+	if(isset($_GET['return'])){
+		echo "<script>alert('Successfully return organizer's verification request!')</script>";
+	}
+
 ?>
 <!-- Head -->
 <?php include("includes/head.php"); ?>

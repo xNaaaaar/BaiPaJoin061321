@@ -3,8 +3,7 @@
 	require_once("extensions/db.php");
 
 	// REDIRECT IF NOT LOGGED IN
-    if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
-
+  if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
 
 	// IF PROFILE IS UPDATED SUCCESSFULLY
 	if(isset($_GET['updated']) && $_GET['updated'] == 1){
@@ -120,8 +119,11 @@
 				<form method="post">
 					<h2>Profile <span><a href="edit_profile.php"><i class='fas fa-edit' data-toggle='tooltip' title='Update Info'></i></a></span></h2>
 					<!-- FOR ORGANIZER -->
-					<?php if(isset($_SESSION['organizer'])){ ?>
-					<h3>Note: Please complete profile details and add atleast 2 legal documents below, to verify your account.</h3>
+					<?php if(isset($_SESSION['organizer'])){
+						if($_SESSION['verified'] == 0)
+							echo "<h3>Note: Please complete profile details and add atleast 2 legal documents below, to verify your account.</h3>";
+					?>
+
 					<div class="form form1">
 						<input type="text" value="<?php echo "{$_SESSION['company']}"; ?>" placeholder="Company Name" disabled>
 						<input type="text" value="<?php echo "{$_SESSION['fname']}"; ?>" placeholder="Firstname" disabled>
@@ -140,7 +142,7 @@
 					<h2>Legal Documents <span class="legal" >
 						<a href="add_docu.php"><i class='fas fa-plus-circle' data-toggle='tooltip' title='Add Documents'></i></a>
 						<?php
-						$docu = DB::query("SELECT * FROM legal_document WHERE orga_id=?", array($_SESSION['organizer']), "READ");
+						$docu = DB::query("SELECT * FROM legal_document l INNER JOIN organizer o ON l.orga_id=o.orga_id WHERE o.orga_id=? AND orga_company!=? AND orga_address!=? AND orga_phone!=?", array($_SESSION['organizer'], "", "", ""), "READ");
 						## CHECK IF ORGANIZER STATUS IS NOT VERIFIED AND ADDED LEGAL IS GREATER THAN OR EQUAL TO TWO
 						if($_SESSION['verified'] == 0 && count($docu) >= 2){
 						?>
@@ -150,8 +152,9 @@
 						?>
 					</span></h2>
 					<?php
+					## DISPLAY INFO
 					if($_SESSION['verified'] == 0 && count($docu) >= 2){
-						echo "<h3>Click <i class='fas fa-paper-plane'></i> to send verification to admin!</h3>";
+						echo "<h3>Click <i class='fas fa-paper-plane'></i> to send verification to admin! </h3>";
 					}
 					?>
 

@@ -5,15 +5,20 @@
   // REDIRECT IF ADMIN NOT LOGGED IN
   if(!isset($_SESSION['admin'])) header("Location: login.php");
 
+	## BUTTON VERIFY IS CLICKED
 	if(isset($_POST['btnVerify'])){
 		## UPDATE ORGANIZER STATUS
 		DB::query("UPDATE organizer SET orga_status=? WHERE orga_id=?", array(1, $_GET['orga_id']), "UPDATE");
-		$organizer = DB::query("SELECT * FROM organizer WHERE orga_id=?", array($_GET['orga_id']), "REAd");
+		##
+		header("Location: admin-organizer.php?success");
+	}
 
-		if(count($organizer)>0){
-			$organizer = $organizer[0];
-			header("Location: admin-organizer.php?success");
-		}
+	## BUTTON RETURN IS CLICKED
+	if(isset($_POST['btnReturn'])){
+		## UPDATE ORGANIZER STATUS
+		DB::query("UPDATE organizer SET orga_status=? WHERE orga_id=?", array(0, $_GET['orga_id']), "UPDATE");
+		##
+		header("Location: admin-organizer.php?return");
 	}
 
 ?>
@@ -42,7 +47,6 @@ main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin:15px 0;tex
 main h2 span{font-size:30px;}
 main h2 span a:hover, main a:hover{color:#313131;text-decoration:none;}
 main h3{font:600 30px/100% Montserrat,sans-serif;;margin-bottom:10px;text-align:left;}
-main input{display:inline-block;width:99%;height:50px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 20px;margin:5px auto;border:1px solid #cfcfcf;}
 
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 
@@ -144,6 +148,7 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
 							</table>
 							<form method="post">
 								<button class="edit" type="submit" name="btnVerify" onclick="return confirm('Are you sure you want to verify this organizer?');">Verify</button>
+								<button class="edit" type="submit" name="btnReturn" onclick="return confirm('Are you sure you want to return this documents to organizer?');">Return</button>
 								<a class="edit" href="admin-organizer.php">Back</a>
 							</form>
             </div>
