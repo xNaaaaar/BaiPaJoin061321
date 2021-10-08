@@ -128,7 +128,7 @@
 					<section>
 						<h3>Total Revenue</h3>
 						<p >
-						<i class='fas fa-wallet' style='color:#faa43a;'></i><br>
+						<i class='fas fa-wallet' style='color:#60bd68;'></i><br>
 							<?php 
 								echo "₱".number_format($confirm_php, 2, ".", ",");
 							?>
@@ -136,9 +136,9 @@
 					</section>
 
 					<section>
-						<h3>Refunded Bookings</h3>
+						<h3>Cancelled Bookings</h3>
 						<p>
-						<i class="fas fa-money-check" style='color:#60bd68;'></i><br>	
+						<i class="fas fa-money-check" style='color:#faa43a;'></i><br>	
 							<?php
 								echo "₱-".number_format($refunded_php, 2, ".", ",");
 							?>
@@ -161,7 +161,7 @@
 				<!-- SALE GRAPH -->
 					
 					<section id='graph'>
-					<h3>Daily Payouts Graph</h3><br>
+					<h3>Daily Payouts Chart</h3><br>
 
 					 <?php
 
@@ -218,11 +218,11 @@
 
 									element :'chartContainer',
 									data:[<?php echo $payChart; ?>],
-									barColors:['#faa43a','#60bd68','#5da5da'],
-									lineColors:['#faa43a','#60bd68','#5da5da'],
+									barColors:['#60bd68','#faa43a','#5da5da'],
+									lineColors:['#60bd68','#faa43a','#5da5da'],
 									xkey:'book_datetime',
 									ykeys:['book_totalcosts','book_totalcosts2','book_totalcosts3'],
-									labels:['Total Revenue','Cancelled Bookings','Total Payouts'],
+									labels:['Revenue','Cancelled Bookings','Total Payouts'],
 									hideHover:'auto',
 									//ymax: 'auto',
 									//ymin: 'auto',
@@ -234,8 +234,8 @@
 
 							</script>
 
-					<i class='fas fa-chart-line' style='color:#faa43a'><b style="color:black"> Total Revenue </b></i> |     
-					 <i class='fas fa-chart-line' style='color:#60bd68'><b style="color:black"> Cancelled Bookings</b></i> | 
+					<i class='fas fa-chart-line' style='color:#60bd68'><b style="color:black"> Revenue </b></i> |     
+					 <i class='fas fa-chart-line' style='color:#faa43a'><b style="color:black"> Cancelled Bookings</b></i> | 
 					 <i class='fas fa-chart-line' style='color:#5da5da'><b style="color:black"> Total Payouts</b></i>			
 
 					  <div id="chartContainer" ></div>	

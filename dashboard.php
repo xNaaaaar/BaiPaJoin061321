@@ -187,7 +187,7 @@
 				<!-- SALE GRAPH -->
 					
 					<section id='graph'>
-					<h3>Daily Sales Graph</h3><br>
+					<h3>Daily Sales Chart</h3><br>
 
 					 <?php
 
