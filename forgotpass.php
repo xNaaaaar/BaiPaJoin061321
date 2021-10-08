@@ -67,19 +67,31 @@
 		if(empty($joiner) && empty($organizer))
 			echo "<script>alert('EMAIL NOT FOUND! Please make sure email address is CORRECT!')</script>";
 		else if(!empty($joiner)) {
-			$email_subject = 'PASSWORD RESET';
-    		$email_message = 'Dear '.$joiner['joiner_fname'].', We have received a request to reset the password of your BaiPaJoin Account. Here\'s a temporary password: '.$randomString.' , you can use to access your account. You\'re advised to change the immediately. Thank you! THIS IS A TEST. DO NOT REPLY!';
+			$img_address = array();
+			$img_name = array();
+			array_push($img_address,'images/reset-pass-bg.jpg','images/main-logo-green.png','images/reset-pass-img.jpg');
+			array_push($img_name,'background','logo','main');
 
-			send_email($email_add, $email_subject, $email_message);
+			$email_subject = 'PASSWORD RESET';
+    		$email_message = html_resetpassword_message($joiner['joiner_fname'], $randomString);
+
+			send_email($email_add, $email_subject, $email_message, $img_address, $img_name);
+
 			DB::query("UPDATE joiner SET joiner_password=? WHERE joiner_id=?", array($hash_pass, $joiner['joiner_id']), "UPDATE");
 
 			header("Location: login.php?success");
 		}
 		else if(!empty($organizer)) {
+			$img_address = array();
+			$img_name = array();
+			array_push($img_address,'images/reset-pass-bg.jpg','images/main-logo-green.png','images/reset-pass-img.jpg');
+			array_push($img_name,'background','logo','main');
+
 			$email_subject = 'PASSWORD RESET';
-    		$email_message = 'Dear '.$organizer['orga_fname'].', We have received a request to reset the password of your BaiPaJoin Account. Here\'s a temporary password: '.$randomString.' , you can use to access your account. You\'re advised to change the immediately. Thank you! THIS IS A TEST. DO NOT REPLY!';
+			$email_message = html_resetpassword_message($organizer['orga_fname'], $randomString);
 
 			send_email($email_add, $email_subject, $email_message);
+
 			DB::query("UPDATE organizer SET orga_password=? WHERE orga_id=?", array($hash_pass, $organizer['orga_id']), "UPDATE");
 
 			header("Location: login.php?success");

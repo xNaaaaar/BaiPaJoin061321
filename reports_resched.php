@@ -38,8 +38,14 @@
 
 		send_sms($sms_sendto,$sms_message);
 
-		//$email_message = html_reschedule_message($joiner_info['joiner_fname'], $current_adv['adv_date'], $resched_adv['adv_date']);
-		//send_email($joiner_info['joiner_email'], "BOOKING RESCHEDULE", $email_message);
+		$img_address = array();
+	  	$img_name = array();
+
+	  	array_push($img_address,'images/resched-bg.jpg','images/main-logo-green.png','images/resched-img.jpg');
+	  	array_push($img_name,'background','logo','main');
+		$email_message = html_reschedule_message($joiner_info['joiner_fname'], $current_adv['adv_date'], $resched_adv['adv_date']);
+
+		send_email($joiner_info['joiner_email'], "BOOKING RESCHEDULE", $email_message, $img_address, $img_name);
 	}
 
 ?>
