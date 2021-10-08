@@ -112,77 +112,71 @@
 					<section >
 						<h3>Prospect Bookings</h3>
 						<p >
-					    <i class='fas fa-cart-plus' style='color:#5da5da;'></i><br>
+					    <i class='fas fa-cart-plus' style='color:#5da5da;'></i>
 
 							<?php
 								if($num_prospect_bookings != 0)
 									echo $num_prospect_bookings. '(₱'.number_format($prospect_php).')';
 								else
+									echo 'N/A ';
+
+								echo '<hr>';
+
+                                echo "<h4>Prospect → Confirm Ratio<h4>";
+								if($num_prospect_bookings != 0)
+									echo round((($num_confirm_bookings/($num_prospect_bookings+$num_confirm_bookings))*100)).'%';
+								else
 									echo 'N/A';
 							?>
-		
+						
 						</p>
 					</section>
 					<!--  -->
 					<section >
 						<h3>Pending Bookings</h3>
 						<p >
-						<i class='fas fa-cart-arrow-down' style='color:#faa43a;'></i><br>	
+						<i class='fas fa-cart-arrow-down' style='color:#faa43a;'></i>	
 
 				        	<?php
-								if($num_pending_bookings != 0)
+							
+									if($num_pending_bookings != 0)
 									echo $num_pending_bookings. "(₱".number_format($pending_php).")";
 								else
 									echo 'N/A';
+
+								echo '<hr>';
+                                echo "<h4>Prospect → Pending Ratio<h4>";
+									if($num_pending_bookings != 0)
+									echo round((($num_pending_bookings/($num_prospect_bookings+$num_pending_bookings))*100)).'%';
+								else
+									echo 'N/A';
+						
 							?>
-				
 						</p>
 					</section>
 					<!--  -->
 					<section >
-						<h3>Confirmed Bookings</h3>
-						<br>
+						<h3>Confirm Bookings</h3>
 						<p >
-						<i class='fas fa-briefcase' style='color:#60bd68;'></i><br>		
+						<i class='fas fa-briefcase' style='color:#60bd68;'></i>	
 
 							<?php
 								if($num_confirm_bookings != 0)
 									echo $num_confirm_bookings. "(₱".number_format($confirm_php).")";
 								else
 									echo 'N/A';
+
+								echo '<hr>';
+                                echo "<h4>Pending → Confirm Ratio<h4>";
+								if($num_confirm_bookings != 0)
+									echo round((($num_confirm_bookings/($num_pending_bookings+$num_confirm_bookings))*100)).'%';
+								else
+									echo 'N/A';
 							?>	
 
 						</p>
 					</section>
-					<!--  
-					<section style='background-color:#b2912f; border-radius:10px;'>
-						<h3>Value (PHP) of Prospect Bookings</h3>
-						<p style='color: white'>
-							<?php
-								echo "₱".number_format($prospect_php, 2, ".", ",");
-							?>
-
-						</p>
-					</section >
 					
-					<section style='background-color:#b276b2; border-radius:10px;'>
-						<h3>Value (PHP) of Pending Bookings</h3>
-						<p style='color: white'>
-							<?php
-								echo "₱".number_format($pending_php, 2, ".", ",");
-							?>
-						</p>
-					</section>
-					
-					<section style='background-color:#decf3f; border-radius:10px;'>
-						<h3>Value (PHP) of Confirm Bookings</h3>
-						<p style='color: white'>
-							<?php
-								echo "₱".number_format($confirm_php, 2, ".", ",");
-							?>
-						</p>
-					</section>
-					-->
 
 				<!-- SALE GRAPH -->
 					
@@ -277,47 +271,6 @@
 						<script src="morris.js/morris.min.js"></script>
 					</section>	
 
-					<!-- <section style='background-color:#f15854; border-radius:10px;'>
-					<section>	
-						<h3>Prospect to Confirm Booking Conversion Ratio</h3>
-						<br><p >
-						<i class='fas fa-percentage' style='color:#f15854;'></i><br>	
-							<?php
-								/*if($num_prospect_bookings != 0)
-									echo round((($num_confirm_bookings/($num_prospect_bookings+$num_confirm_bookings))*100)).'%';
-								else
-									echo 'N/A';
-							?>
-						</p>
-					</section>
-					 
-					
-					<section>	
-						<h3>Prospect to Pending Booking Conversion Ratio</h3>
-						<br><p >
-						<i class='fas fa-percentage' style='color:#decf3f;'></i><br>
-							<?php
-								if($num_pending_bookings != 0)
-									echo round((($num_pending_bookings/($num_prospect_bookings+$num_pending_bookings))*100)).'%';
-								else
-									echo 'N/A';
-							?>
-						</p>
-					</section>
-					  
-				
-					<section>	
-						<h3>Pending to Confirm Booking Conversion Ratio</h3>
-						<br><p >
-						<i class='fas fa-percentage' style='color:#b276b2;'></i><br>
-							<?php
-								if($num_confirm_bookings != 0)
-									echo round((($num_confirm_bookings/($num_pending_bookings+$num_confirm_bookings))*100)).'%';
-								else
-									echo 'N/A';*/
-							?>
-						</p> 
-					</section> -->
 				</div>
 			</main>
 		</div>
