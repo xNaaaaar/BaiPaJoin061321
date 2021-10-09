@@ -420,10 +420,6 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 
 				$no_cancel_starting_date = date("Y-m-d", strtotime("-5 days", strtotime($result['adv_date'])));
 
-				## SKIP DISPLAY IF ADVENTURE IS PENDING FOR CANCELATION
-				$pending_adv = DB::query("SELECT * FROM request WHERE adv_id=? AND req_status=?", array($result['adv_id'], "pending"), "READ");
-				if(count($pending_adv)>0) continue;
-
 				echo "
 				<div class='card'>
 					<figure>
@@ -449,7 +445,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 				#
 				} elseif(date("Y-m-d") < $no_cancel_starting_date && $result['adv_currentGuest'] > 0){
 					echo "
-						<li><a href='reports_booking-cancel.php?adv_id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to cancel this adventure? Joiner who are booked can either request refund or reschedule!\");'><i class='fas fa-ban' data-toggle='tooltip' title='Cancel Adventure'></i></a></li>
+						<li><a href='adventures_posted.php' onclick='return confirm(\"Are you sure you want to cancel this adventure? Joiner who are booked can will be refunded!\");'><i class='fas fa-ban' data-toggle='tooltip' title='Cancel Adventure'></i></a></li>
 					";
 				#
 				} else {
@@ -584,7 +580,6 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					<figure>
 						<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt='image'>
 					</figure>
-					<em> on ".date("F j, Y", strtotime($result['adv_date']))."</em>
 					<h2>".$result['adv_name']." - ".$result['adv_kind']." <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
 					<p>".$result['adv_address']."</p>
 					<p>₱ ".number_format((float)$price, 2, '.', ',')." / person</p>
@@ -647,7 +642,6 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						<figure>
 							<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt=''>
 						</figure>
-						<em> on ".date("F j, Y", strtotime($result['adv_date']))."</em>
 						<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
 						<p>".$result['adv_address']."</p>
 						<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
@@ -710,7 +704,6 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						<figure>
 							<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt=''>
 						</figure>
-						<em> on ".date("F j, Y", strtotime($result['adv_date']))."</em>
 						<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
 						<p>".$result['adv_address']."</p>
 						<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
@@ -2024,7 +2017,6 @@ function adv_full_checker(){
 	$adv = DB::query("SELECT * FROM adventure", array(), "READ");
 	if(count($adv)>0){
 		foreach ($adv as $result) {
-			if($result['adv_status'] == 'canceled') continue;
 			if($result['adv_maxguests'] == $result['adv_currentGuest'])
 				DB::query("UPDATE adventure SET adv_status=? WHERE adv_id=?", array("full", $result['adv_id']), "UPDATE");
 			else if($result['adv_maxguests'] != $result['adv_currentGuest'])
@@ -2093,126 +2085,6 @@ function html_welcome_message($name, $type) {
 		        </div>
 		      </body>
 		    </html>
-		";
-	}
-
-	return $message;
-}
-
-##### EMAIL TEMPLATE FOR NEW ACCOUNTS
-function html_resetpassword_message($name, $temppass) {
-
-		$message = "
-		    <!DOCTYPE html>
-		    <html>
-		      <head>
-		        <meta charset='utf-8'>
-		        <title>BaiPaJoin | Reset Password</title>
-		      </head>
-		      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 100%;background-size:250px 250px;font:normal 15px/20px Verdana,sans-serif;'>
-		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
-		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
-		            <figure class='main-logo'>
-		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
-		            </figure>
-		            <figure >
-		              <img src='cid:main' style='max-width:100%;width:300px;height:240px;margin:0 auto;'>
-		            </figure>
-		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Temporary Password</h1>
-		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! Don't worry! We've got you covered. Here's your temporary password <b>".$temppass."</b>. Please make sure to change your password as soon as you've login to protect your self from hacking. </p>
-		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you have any questions or didn't make this change, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com].  </a> </p>
-		          </div>
-		        </div>
-		      </body>
-		    </html>
-		";
-
-	return $message;
-}
-
-function html_reschedule_message($name, $current, $resched) {
-
-		$message = "
-		    <!DOCTYPE html>
-		    <html>
-		      <head>
-		        <meta charset='utf-8'>
-		        <title>BaiPaJoin | Reschedule</title>
-		      </head>
-		      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 360%;font:normal 15px/20px Verdana,sans-serif;'>
-		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
-		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
-		            <figure class='main-logo'>
-		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
-		            </figure>
-		            <figure >
-		              <img src='cid:main' style='max-width:100%;width:300px;height:200px;margin:0 auto;'>
-		            </figure>
-		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Hooray! Adventure Rescheduled!</h1>
-		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! Your adventure has been successfully rescheduled from <b>".$current."</b> to <b>".$resched."</b>. We're happy to serve you again! Enjoy your BaiPaJoin Adventure!</p>
-		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you did not make this changes, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com]. Thank you!</a> </p>
-		          </div>
-		        </div>
-		      </body>
-		    </html>
-		";
-
-	return $message;
-}
-
-function html_cancellation_message($name, $type) {
-
-	if($type == 'Joiner') {
-		$message = "
-		    <!DOCTYPE html>
-		    <html>
-		      <head>
-		        <meta charset='utf-8'>
-		        <title>BaiPaJoin | Cancelation</title>
-		      </head>
-		      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 110%;background-size:350px 300px;font:normal 15px/20px Verdana,sans-serif;'>
-		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
-		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
-		            <figure class='main-logo'>
-		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
-		            </figure>
-		            <figure >
-		              <img src='cid:main' style='max-width:100%;width:300px;height:270px;margin:0 auto;'>
-		            </figure>
-		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Oooh No! Adventure Cancelled!</h1>
-		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! I'm sorry to hear that you have cancel your adventure. We've recieved your request and it's being reviewed. In the meanwhile, please check your EMAIL and SMS for the updates. Stay safe and thank you for using BaiPaJoin!</p>
-		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you have any questions or did not make this changes, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com].  </a> </p>
-		          </div>
-		        </div>
-		      </body>
-    		</html>
-		";
-	}
-
-	if($type == 'Organizer') {
-		$message = "
-		    <!DOCTYPE html>
-		    <html>
-		      <head>
-		        <meta charset='utf-8'>
-		        <title>BaiPaJoin | Cancelation</title>
-		      </head>
-		      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 110%;background-size:350px 300px;font:normal 15px/20px Verdana,sans-serif;'>
-		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
-		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
-		            <figure class='main-logo'>
-		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
-		            </figure>
-		            <figure >
-		              <img src='cid:main' style='max-width:100%;width:300px;height:270px;margin:0 auto;'>
-		            </figure>
-		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Oooh No! Adventure Cancelled!</h1>
-		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! We understand that you have to cancel the posted adventure. There are things that is truely out of your control. We've recieved your request and it's being reviewed. In the meanwhile, please check your EMAIL and SMS for the updates. Stay safe and thank you for using BaiPaJoin!</p>
-		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you have any questions or did not make this changes, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com].  </a> </p>
-		          </div>
-		        </div>
-		      </body>
-    		</html>
 		";
 	}
 
