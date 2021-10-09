@@ -77,7 +77,45 @@
 					<?php ##
 					// DISPLAY PAYOUT REQUEST FOR ORGANIZER
 					if(isset($_SESSION['organizer'])){
+						echo "
+						<table>
+							<thead>
+								<tr>
+									<th>Adv ID</th>
+									<th>Date Processed</th>
+									<th>Date Responded</th>
+									<th>Amount to Received</th>
+									<th></th>
+								</tr>
+							</thead>
+						";
 
+						$request = DB::query("SELECT * FROM request r INNER JOIN adventure a ON r.adv_id = a.adv_id WHERE orga_id=? AND req_type=?", array($_SESSION['organizer'], "payout"), "READ");
+
+						if(count($request)>0){
+							foreach ($request as $result) {
+								echo "
+								<input type='hidden' name='hidReqID' value='".$result['req_id']."'>
+								<tr>
+									<td>".$result['adv_id']."</td>
+									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
+									<td>".date("M. j, Y", strtotime($result['req_dateresponded']))."</td>
+									<td>₱".number_format($result['req_amount'],2,".",",")."</td>";
+
+								if($result['req_rcvd'] == 0)
+									echo "<td><button type='submit' name='btnRcvd' onclick='return confirm(\"Are you sure you received the refund money?\");'>Received</button></td>";
+								else
+									echo "<td class='success'><em>received</em></td>";
+
+								echo "</tr>";
+							}
+							echo "</table>";
+
+						// NO RECORDS FOUND
+						} else {
+							echo "</table>";
+							echo "<h3>No payout request found!</h3>";
+						}
 
 					// DISPLAY PAYOUT REQUEST FOR JOINER
 					} else {

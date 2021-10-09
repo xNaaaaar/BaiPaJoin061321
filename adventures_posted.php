@@ -56,11 +56,6 @@
 		.card p{font-size:23px;color:#989898;width:100% !important;margin:0 0 10px 2px;}
 		.card p:last-of-type{color:#111;font-size:30px;font-weight:500;margin:0 0 0 2px;}
 
-		/*RESPONSIVE*/
-		@media only screen and (max-width:1000px) {
-			main{padding:50px 0 0 25px;}
-		}
-
 		/* PAGINATION COLORS */
 		a.paging:visited {background-color: none;   color:none;}
 		a.paging:active {background-color: #FFCC00; text-decoration: none;  color:#FFFFFF}
@@ -68,6 +63,11 @@
 
 		a.pagingCurrent:visited {color:#bf127a;}
 		a.pagingCurrent:hover {background: wheat; font-weight:bold; color: none;}
+
+		/*RESPONSIVE*/
+		@media only screen and (max-width:1000px) {
+			main{padding:50px 0 0 25px;}
+		}
 
 	</style>
 

@@ -3,6 +3,28 @@
 	require_once("extensions/db.php");
 	##
 	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
+
+	## WHEN JOINER WANT A REFUND TO THE CANCELED ADVENTURE OF ORGANIZER
+	if(isset($_GET['book_id'])){
+		## SPECIFIC ADVENTURE THAT IS CANCELED
+		$adv = DB::query("SELECT * FROM booking b INNER JOIN adventure a ON b.adv_id = a.adv_id WHERE book_id=?", array($_GET['book_id']), "READ");
+		$adv = $adv[0];
+
+		## UPDATE ADVENTURE CURRENT GUESTS
+		DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($adv['adv_currentGuest'] - $adv['book_guests'], $adv['adv_id']), "UPDATE");
+
+		## UPDATE BOOKING PAID TO REFUNDED
+		DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array("refunded", $_GET['book_id']), "UPDATE");
+
+		## REFUND 100% PRICE PAID BY JOINER MINUS THE FEE
+		$final_price = $adv['adv_totalcostprice'] / $adv['adv_maxguests'];
+		$final_price = number_format($final_price, 2, ".", ",");
+
+		## ADD NEW REQUEST AS REFUND
+		DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, req_rcvd, book_id) VALUES(?,?,?,?,?,?,?,?)", array("joiner", "refund", date("Y-m-d"), date("Y-m-d"), $final_price, "approved", 0, $_GET['book_id']), "CREATE");
+
+		echo "<script>alert('Refund successfully approved. Please check your email to provide details to where you want to send your money.')</script>";
+	}
 ?>
 
 <!-- Head -->
@@ -126,6 +148,7 @@
 								<th>Book Date & Time</th>
 								<th>Book Price</th>
 								<th>Book Status</th>
+								<th>Adventure Status</th>
 								<th></th>
 								<th></th>
 								<th></th>
@@ -133,7 +156,7 @@
 						</thead>
 					";
 
-					$joiner_bookings = DB::query("SELECT * FROM booking WHERE joiner_id=? ORDER BY book_datetime DESC", array($_SESSION['joiner']), "READ");
+					$joiner_bookings = DB::query("SELECT * FROM booking WHERE joiner_id=?", array($_SESSION['joiner']), "READ");
 
 					if(count($joiner_bookings)>0){
 						foreach ($joiner_bookings as $result) {
@@ -159,6 +182,7 @@
 									<td>".date("M. j, Y g:i a", strtotime($result['book_datetime']))."</td>
 									<td>₱".number_format($result['book_totalcosts'], 2, ".", ",")."</td>
 									<td>".$result['book_status']."</td>
+									<td>".$adv['adv_status']."</td>
 								";
 
 								if($result['book_status'] == "paid"){
@@ -193,6 +217,11 @@
 										}
 									}
 
+									## CHECK IF THIS SPECIFIC ADVENTURE IS CANCELED BY ORGANIZER
+									$canceled = false;
+									$approved_canceled = DB::query("SELECT * FROM request WHERE adv_id=? AND req_status=?", array($result['adv_id'], "approved"), "READ");
+									if(count($approved_canceled)>0) $canceled = true;
+
 									## CURRENT DATE IS GREATER THAN ADVENTURE DATE (done)
 									if($adv['adv_date'] < date("Y-m-d")) {
 										echo "<td><em>done</em></td>";
@@ -205,6 +234,10 @@
 									} elseif(date("Y-m-d") > $no_cancel_date){
 										echo "<td><em>".round($days / (60 * 60 * 24))." days to go</em></td>";
 
+									## CHECK IF THIS ADVENTURE IS CANCELED BY ORGANIZER
+									} elseif($canceled){
+										echo "<td><a href='reports_booking.php?book_id=".$result['book_id']."' onclick='return confirm(\"Are you sure you want a refund to this canceled adventure?\");'>refund</a></td>";
+
 									## CANCELABLE DATE
 									} else {
 										echo "<td><a href='reports_booking-cancel.php?book_id=".$result['book_id']."' onclick='return confirm(\"Are you sure you want to request cancelation for this adventure? BaiPaJoin deducts 30% cancelation fee for the total price you paid (excludes the fee)\");'>cancel</a></td>";
@@ -214,6 +247,8 @@
 									echo "<td></td>";
 									echo "<td></td>";
 									echo "<td><a href='payment-card.php?book_id=".$result['book_id']."&id=".$result['adv_id']."' onclick='return confirm(\"Ready to pay now?\");'>pay</a></td>";
+
+									## JOINER CANNOT PAY IF 5 DAYS BEFORE ADVENTURE
 								}
 								echo "</tr>";
 							}

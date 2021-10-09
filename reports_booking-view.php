@@ -19,7 +19,9 @@
 		.main_con{display:flex;justify-content:space-between;}
 		.sidebar ul ul{height:auto;}
 
-		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
+		.fa-ban{font-size:400px;color:red;position:absolute;top:100px;left:0;right:0;z-index:5;}
+
+		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;position:relative;}
 		main h1{font:600 45px/100% Montserrat,sans-serif;color:#313131;text-align:center;margin:-70px 0 0;}
 		main h2{font:600 30px/100% Montserrat,sans-serif;margin:15px 0;text-align:left;}
 		main figure{width:60%;margin:-40px auto 0;}
@@ -132,6 +134,14 @@
 			$joiner = $joiner[0];
 			?>
 			<main>
+				<?php
+				if($adv["adv_status"] == "canceled"){
+					echo "
+					<i class='fas fa-ban'></i>
+					";
+				}
+				?>
+
 				<figure>
 					<img src="images/receipt.jpg" alt="">
 				</figure>

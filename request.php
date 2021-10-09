@@ -82,7 +82,54 @@
 					<?php ##
 					// DISPLAY REQUEST FOR ORGANIZER
 					if(isset($_SESSION['organizer'])){
+						echo "
+						<table>
+							<thead>
+								<tr>
+									<th>Adv ID</th>
+									<th>Request Type</th>
+									<th>Request Date</th>
+									<th>Total Amount</th>
+									<th>Request Reason</th>
+									<th>Request Status</th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+						";
 
+						$request = DB::query("SELECT * FROM request r INNER JOIN adventure a ON r.adv_id = a.adv_id WHERE orga_id=? AND req_status=?", array($_SESSION['organizer'], "pending"), "READ");
+
+						if(count($request)>0){
+							foreach ($request as $result) {
+								echo "
+								<tr>
+									<td>".$result['adv_id']."</td>
+									<td>".$result['req_type']."</td>
+									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
+									<td>₱".number_format($result['req_amount'],2,".",",")."</td>
+									<td>".$result['req_reason']."</td>
+									<td><em class='success'>".$result['req_status']."</em></td>";
+
+								if($result['req_status'] == "pending"){
+									echo "<td><a href='request-edit.php?req_id=".$result['req_id']."' onclick='return confirm(\"Are you sure you want to edit reason?\");'>edit</a></td>";
+									echo "<td></td>";
+
+								## NO PENDING
+								} else {
+									echo "<td></td>";
+									echo "<td></td>";
+								}
+
+								echo "</tr>";
+							}
+							echo "</table>";
+
+						// NO RECORDS FOUND
+						} else {
+							echo "</table>";
+							echo "<h3>No pending request found!</h3>";
+						}
 
 					// DISPLAY REQUEST FOR JOINER
 					} else {
@@ -97,11 +144,12 @@
 									<th>Request Reason</th>
 									<th>Request Status</th>
 									<th></th>
+									<th></th>
 								</tr>
 							</thead>
 						";
 
-						$request = DB::query("SELECT * FROM request r INNER JOIN booking b ON r.book_id = b.book_id WHERE joiner_id=? AND req_status=?", array($_SESSION['joiner'], "pending"), "READ");
+						$request = DB::query("SELECT * FROM request r INNER JOIN booking b ON r.book_id = b.book_id WHERE joiner_id=? AND (req_status=? || req_type=?)", array($_SESSION['joiner'], "pending", "canceled"), "READ");
 
 						if(count($request)>0){
 							foreach ($request as $result) {
@@ -116,8 +164,19 @@
 
 								if($result['req_status'] == "pending"){
 									echo "<td><a href='request-edit.php?req_id=".$result['req_id']."' onclick='return confirm(\"Are you sure you want to edit reason?\");'>edit</a></td>";
-								} else
 									echo "<td></td>";
+
+								## CANCELED BY ORGANIZER
+								} elseif($result['req_type'] == "canceled") {
+									echo "<td>refund</td>";
+									echo "<td>reschedule</td>";
+
+								## NO PENDING
+								} else {
+									echo "<td></td>";
+									echo "<td></td>";
+								}
+
 
 								echo "</tr>";
 							}

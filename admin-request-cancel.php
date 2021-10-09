@@ -5,7 +5,7 @@
   // REDIRECT IF ADMIN NOT LOGGED IN
   if(!isset($_SESSION['admin'])) header("Location: login.php");
 
-	## IF REQUEST CANCELATION IS APPROVED
+	## IF REQUEST CANCELATION IS APPROVED (FOR JOINER)
 	if(isset($_GET['approved']) && isset($_GET['req_id'])){
 		## UPDATE REQUEST DATE APPROVED && STATUS
 		DB::query("UPDATE request SET req_dateresponded=?, req_status=? WHERE req_id=?", array(date("Y-m-d"), "approved", $_GET['req_id']), "UPDATE");
@@ -46,26 +46,49 @@
 			send_sms($sms_sendto,$sms_message);
 		}
 
-		
-
 		//$email_message = html_cancellation_message($joiner_info['joiner_fname'], $current_adv['adv_date'], $resched_adv['adv_date']);
 		//send_email($joiner_info['joiner_email'], "BOOKING CANCELLATION", $email_message);
 
 		echo "<script>alert('Successfully approved cancelation!')</script>";
 	}
 
-	## IF REQUEST CANCELATION IS DISAPPROVED
+	## IF REQUEST CANCELATION IS APPROVED (FOR ORGANIZER)
+	if(isset($_GET['approved_o']) && isset($_GET['req_id'])){
+		## QUERY THE SPECIFIC REQ_ID
+		$req = DB::query("SELECT * FROM request WHERE req_id=?", array($_GET['req_id']), "READ");
+		$req = $req[0];
+
+		## ADV STATUS WILL BE CANCELED
+		DB::query("UPDATE adventure SET adv_status=? WHERE adv_id=?", array("canceled", $req['adv_id']), "UPDATE");
+
+		## CHECK IF THIS TO CANCEL ADVENTURE BY ORGANIZER HAVE SOMEONE WHO RESCHEDULE
+		## GET THE ADVENTURE TO BE CANCEL IN BOOKING
+		## CHECK IF THE BOOKING ID IS IN REQUEST WITH REQ_STATUS = RESCHEDULE
+		$adv_canceled = DB::query("SELECT * FROM booking b INNER JOIN request r ON b.book_id=r.book_id WHERE req_status=? AND b.adv_id=?", array("rescheduled", $req['adv_id']), "READ");
+
+		## DELETE ALL RESCHEDULED IN REQUEST TO THIS CANCELED ADVENTURE
+		if(count($adv_canceled)>0){
+			foreach ($adv_canceled as $result) {
+				DB::query("DELETE FROM request WHERE req_id=?", array($result['req_id']), "DELETE");
+			}
+		}
+
+		## UPDATE REQUEST PENDING TO APPROVED STATUS, DATE PROCESSED
+		DB::query("UPDATE request SET req_dateresponded=?, req_status=? WHERE req_id=?", array(date("Y-m-d"), "approved", $_GET['req_id']), "UPDATE");
+
+
+	}
+
+	## IF REQUEST CANCELATION IS DISAPPROVED (FOR JOINER && ORGANIZER)
 	if(isset($_GET['disapproved']) && isset($_GET['req_id'])){
 		## UPDATE REQUEST STATUS
 		DB::query("UPDATE request SET req_dateresponded=?, req_status=? WHERE req_id=?", array(date("Y-m-d"), "disapproved", $_GET['req_id']), "UPDATE");
 	}
-
 ?>
 <!-- Head -->
 <?php include("includes/head.php"); ?>
 <!-- End of Head -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-
 
 <style media="screen">
 html, body{height:100%;}
@@ -184,11 +207,11 @@ main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;pad
 					if(isset($_POST['btnSearch'])){
 						$cboOption = $_POST['cboOption'];
 						## FOR ORGANIZER && JOINER
-						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND (req_status=? || req_status=?) ORDER BY req_dateprocess DESC", array($cboOption, "cancel", "approved", "disapproved"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND (req_status=? || req_status=?)", array($cboOption, "cancel", "approved", "disapproved"), "READ");
 
 					## ALL CANCELLATION APPROVED RESULTS
 					} else {
-						$request = DB::query("SELECT * FROM request WHERE req_type=? AND (req_status=? || req_status=?) ORDER BY req_dateprocess DESC", array("cancel", "approved", "disapproved"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_type=? AND (req_status=? || req_status=?)", array("cancel", "approved", "disapproved"), "READ");
 					}
 
 					## DISPLAY

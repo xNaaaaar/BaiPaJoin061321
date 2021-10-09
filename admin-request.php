@@ -132,18 +132,17 @@ main .admins table tr td:last-child a{color:red;}
 					if(isset($_POST['btnSearch'])){
 						$cboOption = $_POST['cboOption'];
 						## FOR ORGANIZER && JOINER
-						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_status=? ORDER BY req_dateprocess DESC", array($cboOption, "pending"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_status=?", array($cboOption, "pending"), "READ");
 
 					## ALL REQUEST RESULTS
 					} else {
-						$request = DB::query("SELECT * FROM request WHERE req_status=? ORDER BY req_dateprocess DESC", array("pending"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_status=?", array("pending"), "READ");
 					}
 
 					## DISPLAY
 					if(count($request)>0){
 						foreach ($request as $result) {
-							echo "
-							<tr>
+							echo "<tr>
 								<td>".$result['req_id']."</td>
 								<td>".$result['book_id']."</td>
 								<td>".$result['req_user']."</td>
@@ -151,11 +150,21 @@ main .admins table tr td:last-child a{color:red;}
 								<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
 								<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
 								<td>".$result['req_reason']."</td>
-								<td><em>".$result['req_status']."</em></td>
-								<td><b><a href='admin-request-cancel.php?req_id=".$result['req_id']."&approved' onclick='return confirm(\"Are you sure you want to approved this cancelation request?\");'>✓</a></b></td>
-								<td><b><a href='admin-request-cancel.php?req_id=".$result['req_id']."&disapproved' onclick='return confirm(\"Are you sure you want to disapproved this request?\");'>✗</a></b></td>
-							</tr>
-							";
+								<td><em>".$result['req_status']."</em></td>";
+
+								if($result['req_user'] == 'joiner'){
+									echo "
+									<td><b><a href='admin-request-cancel.php?req_id=".$result['req_id']."&approved' onclick='return confirm(\"Are you sure you want to approved this cancelation request?\");'>✓</a></b></td>";
+
+								## FOR ORGANIZER
+								} else {
+									echo "
+									<td><b><a href='admin-request-cancel.php?req_id=".$result['req_id']."&approved_o' onclick='return confirm(\"Are you sure you want to approved this cancelation request?\");'>✓</a></b></td>";
+								}
+
+							echo "
+							<td><b><a href='admin-request-cancel.php?req_id=".$result['req_id']."&disapproved' onclick='return confirm(\"Are you sure you want to disapproved this request?\");'>✗</a></b></td>
+							</tr>";
 						}
 						echo "	</tbody>";
 						echo "</table>";

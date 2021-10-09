@@ -65,12 +65,20 @@
 					<h2>Reason for Cancelling</h2>
 
 					<textarea name="txtReason" placeholder="Type here.." maxlength="100" required></textarea>
-					<button class="edit" type="submit" name="btnRequest">Request</button>
-					<a class="edit" href="reports_booking.php">Back</a>
+					<?php
+					if(isset($_SESSION['joiner'])) {
+						echo "<button class='edit' type='submit' name='btnRequest-Joiner'>Request</button>";
+						echo "<a class='edit' href='reports_booking.php'>Back</a>";
+					} else {
+						echo "<button class='edit' type='submit' name='btnRequest-Organizer'>Request</button>";
+						echo "<a class='edit' href='adventures_posted.php'>Back</a>";
+					}
+					?>
 				</form>
 			</main>
 
 			<?php
+<<<<<<< Updated upstream
 				if(isset($_POST['btnRequest'])){
 					$txtReason = ucfirst(trim($_POST['txtReason']));
 					##
@@ -78,6 +86,16 @@
 					$booked = $booked_db[0];
 					##
 					DB::query("INSERT INTO request (req_user, req_type, req_dateprocess, req_amount, req_status, req_reason, req_rcvd, book_id) VALUES(?,?,?,?,?,?,?,?)", array('joiner', 'cancel', date("Y-m-d"), $booked['book_totalcosts'], 'pending', $txtReason, 0, $_GET['book_id']), "CREATE");
+=======
+			## REQUEST CANCEL FOR JOINER
+			if(isset($_POST['btnRequest-Joiner'])){
+				$txtReason = ucfirst(trim($_POST['txtReason']));
+				##
+				$booked_db = DB::query("SELECT * FROM booking WHERE book_id=?", array($_GET['book_id']), "READ");
+				$booked = $booked_db[0];
+				##
+				DB::query("INSERT INTO request (req_user, req_type, req_dateprocess, req_amount, req_status, req_reason, req_rcvd, book_id, adv_id) VALUES(?,?,?,?,?,?,?,?,?)", array('joiner', 'cancel', date("Y-m-d"), $booked['book_totalcosts'], 'pending', $txtReason, 0, $_GET['book_id'], NULL), "CREATE");
+>>>>>>> Stashed changes
 
 					## EMAIL + SMS NOTIFICATION
 					$joiner_db = DB::query("SELECT * FROM joiner WHERE joiner_id = ?", array($_SESSION['joiner']), "READ");
@@ -90,6 +108,7 @@
 
 					$email_message = html_cancellation_message($joiner_info['joiner_fname'], 'Joiner');
 
+<<<<<<< Updated upstream
 					$img_address = array();
 					$img_name = array();
 
@@ -100,6 +119,22 @@
 
 					header("Location: request.php?cancel_success");
 				}
+=======
+				header("Location: request.php?cancel_success");
+			}
+
+			## REQUEST CANCEL FOR ORGANIZER
+			if(isset($_POST['btnRequest-Organizer'])){
+				$txtReason = ucfirst(trim($_POST['txtReason']));
+				##
+				$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($_GET['adv_id']), "READ");
+				$adv = $adv[0];
+				##
+				DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_amount, req_status, req_reason, req_rcvd, book_id, adv_id) VALUES(?,?,?,?,?,?,?,?,?)", array('organizer', 'cancel', date("Y-m-d"), $adv['adv_totalcostprice'], "pending", $txtReason, 0, NULL, $_GET['adv_id']), "CREATE");
+				##
+				header("Location: request.php?cancel_success");
+			}
+>>>>>>> Stashed changes
 			?>
 		</div>
 

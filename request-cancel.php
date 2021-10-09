@@ -75,7 +75,49 @@
 					<?php ##
 					// DISPLAY CANCELATION REQUEST FOR ORGANIZER
 					if(isset($_SESSION['organizer'])){
+						echo "
+						<table>
+							<thead>
+								<tr>
+									<th>Adv ID</th>
+									<th>Date Processed</th>
+									<th>Date Responded</th>
+									<th>Total Amount</th>
+									<th>Reason</th>
+									<th>Status</th>
+									<th></th>
+								</tr>
+							</thead>
+						";
 
+						$request = DB::query("SELECT * FROM request r INNER JOIN adventure a ON r.adv_id = a.adv_id WHERE orga_id=? AND req_type=? AND (req_status=? OR req_status=?)", array($_SESSION['organizer'], "cancel", "approved", "disapproved"), "READ");
+
+						if(count($request)>0){
+							foreach ($request as $result) {
+								echo "
+								<tr>
+									<td>".$result['adv_id']."</td>
+									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
+									<td>".date("M. j, Y", strtotime($result['req_dateresponded']))."</td>
+									<td>₱".number_format($result['req_amount'],2,".",",")."</td>
+									<td>".$result['req_reason']."</td>";
+
+								if($result['req_status'] == "approved")
+									echo "<td><em class='success'>".$result['req_status']."</em></td>";
+								else
+									echo "<td><em class='error'>".$result['req_status']."</em></td>";
+
+								echo "
+									<td></td>
+								</tr>";
+							}
+							echo "</table>";
+
+						// NO RECORDS FOUND
+						} else {
+							echo "</table>";
+							echo "<h3>No cancelation request found!</h3>";
+						}
 
 					// DISPLAY CANCELATION REQUEST FOR JOINER
 					} else {

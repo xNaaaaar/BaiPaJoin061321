@@ -420,6 +420,10 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 
 				$no_cancel_starting_date = date("Y-m-d", strtotime("-5 days", strtotime($result['adv_date'])));
 
+				## SKIP DISPLAY IF ADVENTURE IS PENDING FOR CANCELATION
+				$pending_adv = DB::query("SELECT * FROM request WHERE adv_id=? AND req_status=?", array($result['adv_id'], "pending"), "READ");
+				if(count($pending_adv)>0) continue;
+
 				echo "
 				<div class='card'>
 					<figure>
@@ -445,7 +449,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 				#
 				} elseif(date("Y-m-d") < $no_cancel_starting_date && $result['adv_currentGuest'] > 0){
 					echo "
-						<li><a href='adventures_posted.php' onclick='return confirm(\"Are you sure you want to cancel this adventure? Joiner who are booked can will be refunded!\");'><i class='fas fa-ban' data-toggle='tooltip' title='Cancel Adventure'></i></a></li>
+						<li><a href='reports_booking-cancel.php?adv_id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to cancel this adventure? Joiner who are booked can either request refund or reschedule!\");'><i class='fas fa-ban' data-toggle='tooltip' title='Cancel Adventure'></i></a></li>
 					";
 				#
 				} else {
@@ -580,6 +584,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					<figure>
 						<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt='image'>
 					</figure>
+					<em> on ".date("F j, Y", strtotime($result['adv_date']))."</em>
 					<h2>".$result['adv_name']." - ".$result['adv_kind']." <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
 					<p>".$result['adv_address']."</p>
 					<p>₱ ".number_format((float)$price, 2, '.', ',')." / person</p>
@@ -642,6 +647,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						<figure>
 							<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt=''>
 						</figure>
+						<em> on ".date("F j, Y", strtotime($result['adv_date']))."</em>
 						<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
 						<p>".$result['adv_address']."</p>
 						<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
@@ -704,6 +710,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						<figure>
 							<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt=''>
 						</figure>
+						<em> on ".date("F j, Y", strtotime($result['adv_date']))."</em>
 						<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
 						<p>".$result['adv_address']."</p>
 						<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
@@ -2017,6 +2024,7 @@ function adv_full_checker(){
 	$adv = DB::query("SELECT * FROM adventure", array(), "READ");
 	if(count($adv)>0){
 		foreach ($adv as $result) {
+			if($result['adv_status'] == 'canceled') continue;
 			if($result['adv_maxguests'] == $result['adv_currentGuest'])
 				DB::query("UPDATE adventure SET adv_status=? WHERE adv_id=?", array("full", $result['adv_id']), "UPDATE");
 			else if($result['adv_maxguests'] != $result['adv_currentGuest'])

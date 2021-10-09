@@ -160,11 +160,11 @@ main .admins table tr td:nth-child(8){color:#5cb85c;}
 					if(isset($_POST['btnSearch'])){
 						$cboOption = $_POST['cboOption'];
 						## FOR ORGANIZER && JOINER
-						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND req_status=? ORDER BY req_dateprocess DESC", array($cboOption, "payout", "refunded"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND req_status=?", array($cboOption, "payout", "refunded"), "READ");
 
 					## ALL REFUND APPROVED RESULTS
 					} else {
-						$request = DB::query("SELECT * FROM request WHERE req_type=? AND req_status=? ORDER BY req_dateprocess DESC", array("payout", "refunded"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_type=? AND req_status=?", array("payout", "refunded"), "READ");
 					}
 
 					## DISPLAY
