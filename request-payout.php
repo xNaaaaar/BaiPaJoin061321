@@ -4,6 +4,15 @@
 	ob_start();
 	##
 	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
+	##
+	if(isset($_GET['adv_id'])){
+		## GET THE SPECIFIC ADV TO GET THE AMOUNT TO PAY
+		$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($_GET['adv_id']), "READ");
+		$adv = $adv[0];
+		$to_pay = ($adv['adv_totalcostprice'] / $adv['adv_maxguests']) * $adv['adv_currentGuest'];
+		##
+		DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, req_rcvd, adv_id) VALUES(?,?,?,?,?,?,?,?)", array("organizer", "payout", date("Y-m-d"), date("Y-m-d"), $to_pay, "approved", 0, $_GET['adv_id']), "CREATE");
+	}
 ?>
 
 <!-- Head -->
@@ -85,6 +94,7 @@
 									<th>Date Processed</th>
 									<th>Date Responded</th>
 									<th>Amount to Received</th>
+									<th>Proof of Payment</th>
 									<th></th>
 								</tr>
 							</thead>
@@ -102,7 +112,15 @@
 									<td>".date("M. j, Y", strtotime($result['req_dateresponded']))."</td>
 									<td>₱".number_format($result['req_amount'],2,".",",")."</td>";
 
-								if($result['req_rcvd'] == 0)
+								if($result['req_img'] == null) {
+									echo "<td>no upload yet</td>";
+
+								##
+								} else {
+									echo "<td><a href='images/admin/2021001/".$result['req_img']."' download='proof-of-payment'>Download this image</a></td>";
+								}
+
+								if($result['req_rcvd'] == 2)
 									echo "<td><button type='submit' name='btnRcvd' onclick='return confirm(\"Are you sure you received the refund money?\");'>Received</button></td>";
 								else
 									echo "<td class='success'><em>received</em></td>";

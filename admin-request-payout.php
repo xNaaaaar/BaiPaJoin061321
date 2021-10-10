@@ -5,6 +5,11 @@
   // REDIRECT IF ADMIN NOT LOGGED IN
   if(!isset($_SESSION['admin'])) header("Location: login.php");
 
+	## UPLOADING PROOF OF PAYMENT SUCCESS MESSAGE
+	if(isset($_GET['success'])) echo "<script>alert('Proof of payment successfully uploaded!')</script>";
+
+
+	## FOR JOINER
 	if(isset($_GET['req_id']) && isset($_GET['refunded'])){
 		## UPDATE this.req_id
 		DB::query("UPDATE request SET req_rcvd=? WHERE req_id=?", array(1, $_GET['req_id']), "READ");
@@ -35,7 +40,6 @@
 
 		echo "<script>alert('Successfully sent refund!')</script>";
 	}
-
 ?>
 <!-- Head -->
 <?php include("includes/head.php"); ?>
@@ -63,7 +67,6 @@ main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin:15px 0;tex
 main h2 span{font-size:30px;}
 main h2 span a:hover, main a:hover{color:#313131;text-decoration:none;}
 main h3{font:600 30px/100% Montserrat,sans-serif;;margin-bottom:10px;text-align:center;}
-main input{display:inline-block;width:99%;height:50px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 20px;margin:5px auto;border:1px solid #cfcfcf;}
 main p:last-of-type{width:100%;color:red;font-size:20px;}
 
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
@@ -71,7 +74,6 @@ main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 main .admins{height:auto;width:100%;}
 main .admins select{float:left;margin:0 0 20px;height:40px;max-width:100%;padding:0 10px;}
 main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;padding:0 30px;}
-main .admins table tr td:nth-child(8){color:#5cb85c;}
 
 /* Responsive Design */
 @media only screen and (max-width: 1800px) {
@@ -151,7 +153,7 @@ main .admins table tr td:nth-child(8){color:#5cb85c;}
 										<th>Date Responded</th>
 										<th>Amount</th>
 										<th>Status</th>
-										<th></th>
+										<th>Proof of Payment</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -160,11 +162,11 @@ main .admins table tr td:nth-child(8){color:#5cb85c;}
 					if(isset($_POST['btnSearch'])){
 						$cboOption = $_POST['cboOption'];
 						## FOR ORGANIZER && JOINER
-						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND req_status=?", array($cboOption, "payout", "refunded"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND (req_status=? || req_status=?)", array($cboOption, "payout", "refunded", "approved"), "READ");
 
 					## ALL REFUND APPROVED RESULTS
 					} else {
-						$request = DB::query("SELECT * FROM request WHERE req_type=? AND req_status=?", array("payout", "refunded"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_type=? AND (req_status=? || req_status=?)", array("payout", "refunded", "approved"), "READ");
 					}
 
 					## DISPLAY
@@ -178,16 +180,25 @@ main .admins table tr td:nth-child(8){color:#5cb85c;}
 								<td>".$result['req_type']."</td>
 								<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
 								<td>".date("M. j, Y", strtotime($result['req_dateresponded']))."</td>
-								<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
-								<td><em>".$result['req_status']."</em></td>";
+								<td>₱".number_format($result['req_amount'],2,'.',',')."</td>";
 
 							## CHECK IF RECEIVED BY USER
 							if($result['req_rcvd'] == 0)
-								echo "<td><em>sent to user<em></td>";
+								echo "<td style='color:#33b5e5;'><em>pending<em></td>";
+							elseif($result['req_rcvd'] == 2)
+								echo "<td style='color:#5cb85c;'><em>sent<em></td>";
 							else
-								echo "<td><em>received by user<em></td>";
+								echo "<td style='color:#5cb85c;'><em>received<em></td>";
+
+							## CHECK IF STATUS IS NOT PAID
+							if($result['req_status'] == "approved"){
+								echo "<td><a href='admin-request-payout-proof.php?req_id=".$result['req_id']."' onclick='return confirm(\"Are you sure you want to upload proof of payment?\");'>upload</a></td>";
+							} else {
+								echo "<td></td>";
+							}
 
 							echo "</tr>";
+
 						}
 						echo "	</tbody>";
 						echo "</table>";

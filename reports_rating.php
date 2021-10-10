@@ -141,7 +141,7 @@
 					// NO RECORDS FOUND
 					} else {
 						echo "</table>";
-						echo "<h3>No bookings found!</h3>";
+						echo "<h3>No ratings found!</h3>";
 					}
 
 				// DISPLAY RATING REPORTS FOR JOINER
@@ -159,7 +159,7 @@
 						</thead>
 					";
 
-					$to_rate = DB::query("SELECT * FROM adventure a INNER JOIN booking b ON a.adv_id=b.adv_id WHERE joiner_id=? AND book_status=? AND adv_date<? ORDER BY book_datetime DESC", array($_SESSION['joiner'], "paid", date("Y-m-d")), "READ");
+					$to_rate = DB::query("SELECT * FROM adventure a INNER JOIN booking b ON a.adv_id=b.adv_id WHERE joiner_id=? AND book_status=? AND adv_status=?", array($_SESSION['joiner'], "paid", "done"), "READ");
 
 					if(count($to_rate)>0){
 						foreach ($to_rate as $result) {

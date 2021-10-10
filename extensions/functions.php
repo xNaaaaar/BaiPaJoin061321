@@ -95,6 +95,14 @@ function create_admin_account(){
 	else {
 		DB::query("INSERT INTO admin(admin_name, admin_email, admin_pass) VALUES(?,?,?)", array($txtName, $emEmail, $pwPass), "CREATE");
 
+		//GET THE ORGANIZER ID
+		$admin = DB::query("SELECT * FROM admin WHERE admin_email = ?", array($emEmail), "READ");
+		$admin = $admin[0];
+		// CREATE FOLDER TO ADMIN
+		$payment_proof = 'images/admin/'.$admin['admin_id'];
+		//CREATE A FOLDER FOR THEIR ADVENTURES IMAGES
+		if(!file_exists($payment_proof)) mkdir($payment_proof,0777,true);
+
 		header("Location: admin.php?added");
 	}
 }
@@ -421,7 +429,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 				$no_cancel_starting_date = date("Y-m-d", strtotime("-5 days", strtotime($result['adv_date'])));
 
 				## SKIP DISPLAY IF ADVENTURE IS PENDING FOR CANCELATION
-				$pending_adv = DB::query("SELECT * FROM request WHERE adv_id=? AND req_status=?", array($result['adv_id'], "pending"), "READ");
+				$pending_adv = DB::query("SELECT * FROM request WHERE adv_id=? AND (req_status=? || req_status=?)", array($result['adv_id'], "pending", "approved"), "READ");
 				if(count($pending_adv)>0) continue;
 
 				echo "
@@ -432,7 +440,8 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					<em> on ".date("F j, Y", strtotime($result['adv_date']))."</em>
 					<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].")
 						<span>5 <i class='fas fa-star'></i> (25 reviews) ";##".."
-							if($numRemainingGuests == 0) echo "- full";
+							if($result['adv_status'] == "done") echo "- done";
+							elseif($numRemainingGuests == 0) echo "- full";
 							else echo $remainingGuestsText;
 					echo "
 						</span>
@@ -447,13 +456,13 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						<li><a href='delete.php?table=adventure&id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to delete this adventure?\");'><i class='far fa-trash-alt' data-toggle='tooltip' title='Remove Adventure'></i></a></li>
 					";
 				#
-				} elseif(date("Y-m-d") < $no_cancel_starting_date && $result['adv_currentGuest'] > 0){
+				} elseif((date("Y-m-d") < $no_cancel_starting_date) && ($result['adv_currentGuest'] > 0)){
 					echo "
 						<li><a href='adventures_posted.php' onclick='return confirm(\"Are you sure you want to cancel this adventure? Joiner who are booked can will be refunded!\");'><i class='fas fa-ban' data-toggle='tooltip' title='Cancel Adventure'></i></a></li>
 					";
 				#
 				} else {
-
+					echo "<li><a href='request-payout.php?adv_id=".$result['adv_id']."' onclick='return confirm(\"Confirm request payout?\");'><i class='fas fa-hand-holding-usd' data-toggle='tooltip' title='Request Payout'></i></a></li>";
 				}
 				echo "
 					</ul>
