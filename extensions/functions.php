@@ -420,6 +420,10 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 
 				$no_cancel_starting_date = date("Y-m-d", strtotime("-5 days", strtotime($result['adv_date'])));
 
+				## SKIP DISPLAY IF ADVENTURE IS PENDING FOR CANCELATION
+				$pending_adv = DB::query("SELECT * FROM request WHERE adv_id=? AND req_status=?", array($result['adv_id'], "pending"), "READ");
+				if(count($pending_adv)>0) continue;
+
 				echo "
 				<div class='card'>
 					<figure>
@@ -2094,6 +2098,7 @@ function html_welcome_message($name, $type) {
 
 	return $message;
 }
+
 
 
 ##### END OF CODES #####
