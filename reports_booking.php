@@ -145,9 +145,7 @@
 						foreach ($orga_bookings as $result) {
 							## CHECK IF THIS BOOKING IS REFUNDED IN REQUEST
 							$request = DB::query("SELECT * FROM request WHERE book_id=? AND req_status=?", array($result['book_id'], "refunded"), "READ");
-							if(count($request)>0){
-								continue;
-							}
+							if(count($request)>0) continue;
 							##
 							echo "
 							<tr>
