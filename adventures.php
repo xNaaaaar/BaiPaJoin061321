@@ -223,8 +223,8 @@
 							$num_per_page = 5;
 							$start_from = ($page-1) * $num_per_page;
 
-							$card = DB::query("SELECT * FROM adventure WHERE adv_status !='full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date", array(), "READ");
-							$card1 = DB::query("SELECT * FROM adventure WHERE adv_status !='full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date LIMIT $start_from,$num_per_page", array(), "READ");
+							$card = DB::query("SELECT * FROM adventure WHERE adv_status !='full' AND adv_status !='canceled' AND adv_status !='done' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date", array(), "READ");
+							$card1 = DB::query("SELECT * FROM adventure WHERE adv_status !='full' AND adv_status !='canceled' AND adv_status !='done' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date LIMIT $start_from,$num_per_page", array(), "READ");
 							displayAll(99, $card1);
 							pagination($page, $card, $num_per_page);
 						}
@@ -242,11 +242,11 @@
 
 							$txtSearch = trim(ucwords($_POST['txtSearch']));
 
-							$card = DB::query("SELECT * FROM adventure WHERE (adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%') AND adv_status !='full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date DESC LIMIT $start_from,$num_per_page", array(), "READ");
+							$card = DB::query("SELECT * FROM adventure WHERE (adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%') AND adv_status !='full' AND adv_status !='canceled' AND adv_status !='done' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date DESC LIMIT $start_from,$num_per_page", array(), "READ");
 
 
 
-							$card1 = DB::query("SELECT * FROM adventure WHERE (adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%') AND adv_status !='full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date ", array(), "READ");
+							$card1 = DB::query("SELECT * FROM adventure WHERE (adv_kind LIKE '%{$txtSearch}%' || adv_name LIKE '%{$txtSearch}%' || adv_type LIKE '%{$txtSearch}%' || adv_address LIKE '%{$txtSearch}%' || adv_totalcostprice LIKE '%{$txtSearch}%' || adv_date LIKE '%{$txtSearch}%' || adv_details LIKE '%{$txtSearch}%' || adv_postedDate LIKE '%{$txtSearch}%' || adv_maxguests LIKE '%{$txtSearch}%') AND adv_status !='full' AND adv_status !='canceled' AND adv_status !='done' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date ", array(), "READ");
 
 							displayAll(99, $card1);
 							pagination($page, $card, $num_per_page);
@@ -340,9 +340,9 @@
 								pagination($page, $card, $num_per_page);
 							}
 							else { //This works if return items from SQL is empty due to search not found
-								$card1 = DB::query("SELECT * FROM adventure WHERE adv_status !='full' LIMIT $start_from,$num_per_page", array(), "READ");
+								$card1 = DB::query("SELECT * FROM adventure WHERE adv_status !='full' AND adv_status !='canceled' AND adv_status !='done' LIMIT $start_from,$num_per_page", array(), "READ");
 								displayAll(99, $card1);
-								$card = DB::query("SELECT * FROM adventure WHERE adv_status !='full' ", array(), "READ");
+								$card = DB::query("SELECT * FROM adventure WHERE adv_status !='full' AND adv_status !='canceled' AND adv_status !='done' ", array(), "READ");
 								pagination($page, $card, $num_per_page);
 							}
 						}
@@ -387,7 +387,7 @@
 
 										//$sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";
 										// Check commented code above
-										$sqlquery = $sqlquery . ") AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";	 //Temporary to show true results
+										$sqlquery = $sqlquery . ") AND adv_status != 'full' AND adv_status !='canceled' AND adv_status !='done' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";	 //Temporary to show true results
 								}
 							}
 
@@ -408,7 +408,7 @@
 
 								//$sqlquery = $sqlquery . " ORDER BY adv_id DESC LIMIT $start_from,$num_per_page";
 								// Check commented code above
-								$sqlquery = $sqlquery . ") AND adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
+								$sqlquery = $sqlquery . ") AND adv_status != 'full' AND adv_status !='canceled' AND adv_status !='done' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date";
 							}
 
 							# FILTER FROM INDEX PHP
@@ -426,8 +426,8 @@
 
 								/*$card = DB::query("SELECT * FROM adventure", array(), "READ");
 								$card1 = DB::query("SELECT * FROM adventure LIMIT $start_from,$num_per_page", array(), "READ");*/
-								$card = DB::query("SELECT * FROM adventure WHERE adv_status != 'full'", array(), "READ");
-								$card1 = DB::query("SELECT * FROM adventure WHERE adv_status != 'full' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date LIMIT $start_from,
+								$card = DB::query("SELECT * FROM adventure WHERE adv_status != 'full' AND adv_status !='canceled' AND adv_status !='done'", array(), "READ");
+								$card1 = DB::query("SELECT * FROM adventure WHERE adv_status != 'full' AND adv_status !='canceled' AND adv_status !='done' ORDER BY adv_type DESC, (adv_currentGuest / adv_maxguests) DESC, adv_date LIMIT $start_from,
 								$num_per_page", array(), "READ");
 
 								displayAll(99, $card1);
