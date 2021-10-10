@@ -24,7 +24,10 @@
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:30px;text-align:left;}
-		main h3{font-weight:500;font-size:20px;color:red;margin:20px 0 0;text-align:center;}
+		main h3{font-weight:500;font-size:20px;color:red;margin:20px 0;text-align:center;}
+		main form{margin:0 0 20px;text-align:left;}
+		main form select{max-width:100%;width:240px;height:40px;padding:0 15px;}
+		main form button{max-width:100%;width:100px;height:40px;padding:0 15px;}
 		main table{width:100%;text-align:center;font-size:16px;}
 		main table thead{background:#7fdcd3;color:#fff;}
 		main table thead tr:hover{background:#7fdcd3;}
@@ -77,7 +80,69 @@
 				<?php ##
 				// DISPLAY RATING REPORTS FOR ORGANIZER
 				if(isset($_SESSION['organizer'])){
+					echo "
+					<form method='post'>
+						<select name='cboOption' required>
+							<option value=''>-- SELECT DONE ADVENTURE --</option>";
+					$adv = DB::query('SELECT * FROM adventure WHERE orga_id=? AND adv_status=?', array($_SESSION['organizer'], "done"), 'READ');
+					if(count($adv)>0){
+						foreach ($adv as $result) {
+							echo "<option value='".$result['adv_id']."'>".$result['adv_name']." - ".$result['adv_kind']."</option>";
+						}
+					}
+					echo "
+						</select>
+						<button type='submit' name='btnSearch'>Search</button>
+					</form>
+					";
+					echo "
+					<table>
+						<thead>
+							<tr>
+								<th>Book ID</th>
+								<th>Adv Name</th>
+								<th>Adv Kind</th>
+								<th>Adv Type</th>
+								<th>Ratings</th>
+								<th>Comments</th>
+								<th>Joiner Name</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+					";
 
+					if(isset($_POST['btnSearch'])){
+						$cboOption = $_POST['cboOption'];
+
+						$done_adv = DB::query('SELECT * FROM adventure a JOIN booking b ON a.adv_id=b.adv_id JOIN rating r ON b.book_id=r.book_id JOIN joiner j ON r.joiner_id=j.joiner_id WHERE a.orga_id=? AND a.adv_status=? AND a.adv_id=?', array($_SESSION['organizer'], "done", $cboOption), 'READ');
+					} else {
+						$done_adv = DB::query('SELECT * FROM adventure a JOIN booking b ON a.adv_id=b.adv_id JOIN rating r ON b.book_id=r.book_id JOIN joiner j ON r.joiner_id=j.joiner_id WHERE a.orga_id=? AND a.adv_status=?', array($_SESSION['organizer'], "done"), 'READ');
+					}
+
+					if(count($done_adv)>0){
+						foreach ($done_adv as $result) {
+							echo "
+							<tr>
+								<td>".$result['book_id']."</td>
+								<td>".$result['adv_name']."</td>
+								<td>".$result['adv_kind']."</td>
+								<td>".$result['adv_type']."</td>
+								<td>".$result['rating_stars']." <i class='fas fa-star'></i></td>
+								<td>".$result['rating_message']."</td>
+								<td>".$result['joiner_fname']." ".$result['joiner_lname']."</td>
+								<td></td>
+								<td></td>
+							</tr>
+							";
+						}
+						echo "</table>";
+
+					// NO RECORDS FOUND
+					} else {
+						echo "</table>";
+						echo "<h3>No bookings found!</h3>";
+					}
 
 				// DISPLAY RATING REPORTS FOR JOINER
 				} else {

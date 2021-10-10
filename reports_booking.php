@@ -108,7 +108,7 @@
 								foreach ($adv as $result) {
 									## NOT DISPLAY ADV CANCELED OR DONE
 									if($result['adv_status'] == "canceled" || $result['adv_status'] == "done") continue;
-									echo "<option value='".$result['adv_id']."'>".$result['adv_name']." ".$result['adv_kind']." max guests: ".$result['adv_maxguests']."</option>";
+									echo "<option value='".$result['adv_id']."'>".$result['adv_name']." - ".$result['adv_kind']." (MAX GUESTS: ".$result['adv_maxguests'].")</option>";
 								}
 							}
 					echo "
