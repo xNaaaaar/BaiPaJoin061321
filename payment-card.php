@@ -155,7 +155,7 @@
 						<li>Total guest/s:
 							<?php
 							echo $booked['book_guests'];
-							$info = (isset($_SESSION['bookOption']) && $_SESSION['bookOption'] == "someone") ? "(Excludes you)" : "(Includes you)";
+							$info = (isset($_SESSION['bookOption']) && $_SESSION['bookOption'] == "someone") ? "(excluding you)" : "(including you)";
 							echo " <span>".$info."</span>";
 							?>
 						</li>

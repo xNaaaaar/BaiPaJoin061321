@@ -41,8 +41,11 @@
 		.sidebar ul ul{height:auto;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:30px;text-align:left;}
-		main h3{font-weight:500;font-size:20px;color:red;margin:0 0 10px;text-align:left;}
+		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+		main h3{font-weight:500;font-size:20px;color:red;margin:20px 0;text-align:center;}
+		main form{margin:0 0 20px;text-align:left;}
+		main form select{max-width:100%;width:200px;height:40px;padding:0 15px;}
+		main form button{max-width:100%;width:100px;height:40px;padding:0 15px;}
 		main table{width:100%;text-align:center;font-size:16px;}
 		main table thead{background:#7fdcd3;color:#fff;}
 		main table thead tr:hover{background:#7fdcd3;}
@@ -97,6 +100,23 @@
 				// DISPLAY BOOKING REPORTS FOR ORGANIZER
 				if(isset($_SESSION['organizer'])){
 					echo "
+					<form method='post'>
+						<select name='cboOption' required>
+							<option value=''>-- SELECT ADVENTURE --</option>";
+							$adv = DB::query('SELECT * FROM adventure WHERE orga_id=?', array($_SESSION['organizer']), 'READ');
+							if(count($adv)>0){
+								foreach ($adv as $result) {
+									## NOT DISPLAY ADV CANCELED OR DONE
+									if($result['adv_status'] == "canceled" || $result['adv_status'] == "done") continue;
+									echo "<option value='".$result['adv_id']."'>".$result['adv_name']." ".$result['adv_kind']." max guests: ".$result['adv_maxguests']."</option>";
+								}
+							}
+					echo "
+						</select>
+						<button type='submit' name='btnSearch'>Search</button>
+					</form>
+					";
+					echo "
 					<table>
 						<thead>
 							<tr>
@@ -112,10 +132,23 @@
 						</thead>
 					";
 
-					$orga_bookings = DB::query("SELECT * FROM booking b INNER JOIN adventure a ON a.adv_id = b.adv_id WHERE orga_id=?", array($_SESSION['organizer']), "READ");
+					if(isset($_POST['btnSearch'])){
+						$cboOption = $_POST['cboOption'];
+
+						$orga_bookings = DB::query("SELECT * FROM booking b INNER JOIN adventure a ON b.adv_id = a.adv_id WHERE orga_id=? AND a.adv_id=?", array($_SESSION['organizer'], $cboOption), "READ");
+					} else {
+						$orga_bookings = DB::query("SELECT * FROM booking b INNER JOIN adventure a ON a.adv_id = b.adv_id WHERE orga_id=? AND (adv_status = ? || adv_status = ?)", array($_SESSION['organizer'], "full", "not full"), "READ");
+					}
 
 					if(count($orga_bookings)>0){
+						if(isset($_POST['btnSearch'])) $remaining_guest = 0;
 						foreach ($orga_bookings as $result) {
+							## CHECK IF THIS BOOKING IS REFUNDED IN REQUEST
+							$request = DB::query("SELECT * FROM request WHERE book_id=? AND req_status=?", array($result['book_id'], "refunded"), "READ");
+							if(count($request)>0){
+								continue;
+							}
+							##
 							echo "
 							<tr>
 								<td>".$result['adv_id']."</td>
@@ -128,8 +161,11 @@
 								<td></td>
 							</tr>
 							";
+
+							$remaining_guest = $result['adv_maxguests'] - $result['adv_currentGuest'];
 						}
 						echo "</table>";
+						if(isset($_POST['btnSearch'])) echo "<h3>Remaining guest: ".$remaining_guest."</h3>";
 
 					// NO RECORDS FOUND
 					} else {

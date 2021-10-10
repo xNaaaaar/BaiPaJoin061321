@@ -52,6 +52,7 @@
 		.book_info{text-align:left;height:auto;min-height:0;margin:0;width:100%;}
 		.book_info figure img{width:100%;height:200px;border-radius:10px;}
 		.book_info h2{text-align:left;margin:20px 0 10px;}
+		.book_info h2 span{color:#86cbec;}
 		.book_info .title_info1{list-style:none;margin-bottom:30px;font:600 18px/100% Montserrat,sans-serif;color:gray;}
 	  .book_info .title_info1 li{display:inline-block;}
 	  .book_info .title_info1 li address{display:inline-block;}

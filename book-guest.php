@@ -186,7 +186,7 @@
 								<li>Guest:
 									<?php
 									echo $pendingBooking['book_guests'];
-									$info = ($_SESSION['bookOption'] == "someone") ? "(Excludes you)" : "(Includes you)";
+									$info = ($_SESSION['bookOption'] == "someone") ? "(excluding you)" : "(including you)";
 									echo " <span>".$info."</span>";
 									?>
 								</li>
