@@ -63,7 +63,7 @@
 			<main>
 				<div class="place_ratings">
 					<h2>Rate</h2>
-					<form method="post">
+					<form method="post" enctype="multipart/form-data">
 						<div class="rating">
 							<input type="radio" id="star5" name="star" value="5" required><label for="star5"></label>
 							<input type="radio" id="star4" name="star" value="4" required><label for="star4"></label>
@@ -72,6 +72,8 @@
 							<input type="radio" id="star1" name="star" value="1" required><label for="star1"></label>
 						</div>
 						<div class="feedback">
+							<label>Upload pictures of adventure</label>
+							<input type="file" name="fileAdvImg" required>
 							<textarea name="txtFeedback" placeholder="Feedback (Required)" required maxlength="100"></textarea>
 							<button class="edit" type="submit" name="btnRate">Rate</button>
 							<a class="edit" href="reports_rating.php">Back</a>
@@ -82,11 +84,21 @@
 				<?php
 				if(isset($_POST['btnRate'])){
 					$star = $_POST['star'];
+					$imageName = uploadImage('fileAdvImg', "images/joiners/".$_SESSION['joiner']."/");
 					$txtFeedback = trim(ucwords($_POST['txtFeedback']));
 
-					DB::query("INSERT INTO rating(rating_stars, rating_message, joiner_id, book_id) VALUES(?,?,?,?)", array($star, $txtFeedback, $_SESSION['joiner'], $_GET['book_id']), "CREATE");
+					// ERROR TRAPPINGS
+					if($imageName === 1){
+						echo "<script>alert('An error occurred in uploading your image!')</script>";
 
-					header("Location: reports_rating.php?success");
+					} else if($imageName === 2){
+						echo "<script>alert('File type is not allowed!')</script>";
+
+					} else {
+						DB::query("INSERT INTO rating(rating_img, rating_stars, rating_message, joiner_id, book_id) VALUES(?,?,?,?,?)", array($imageName, $star, $txtFeedback, $_SESSION['joiner'], $_GET['book_id']), "CREATE");
+
+						header("Location: reports_rating.php?success");
+					}
 				}
 				?>
 

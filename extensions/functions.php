@@ -42,6 +42,17 @@ function createAccount(){
 			if($cboType == "Joiner") {
 				//ADD NEW JOINER ACCOUNT
 				DB::query("INSERT INTO joiner(joiner_fname, joiner_lname, joiner_mi, joiner_email, joiner_password) VALUES(?,?,?,?,?)", array($txtFirstname, $txtLastname, $txtMi, $emEmail, $pwPassword), "CREATE");
+
+				//GET THE JOINER ID
+				$userid = DB::query("SELECT * FROM joiner WHERE joiner_email = ?", array($emEmail), "READ");
+
+				//CHECK EXISTING EMAIL
+				if(count($userid)>0){
+					$userid = $userid[0];
+					$ratePathImages = 'images/joiners/'.$userid['joiner_id'];
+					//CREATE A FOLDER FOR THEIR RATINGS IMAGES
+					if(!file_exists($ratePathImages)) mkdir($ratePathImages,0777,true);
+				}
 			} else {
 				//ADD NEW ORGANIZER ACCOUNT
 				DB::query("INSERT INTO organizer(orga_fname, orga_lname, orga_mi, orga_email, orga_password, orga_status) VALUES(?,?,?,?,?,?)", array($txtFirstname, $txtLastname, $txtMi, $emEmail, $pwPassword, 0), "CREATE");
@@ -947,6 +958,9 @@ function deleteSQLDataTable($table, $id){
 
 			$path2 = "images/organizers/".$_SESSION['organizer']."/".$adv['adv_itineraryImg'];
 			if(!unlink($path2)) echo "<script>alert('An error occurred in deleting image!')</script>";
+
+			$path3 = "images/organizers/".$_SESSION['organizer']."/".$adv['adv_dosdont_image'];
+			if(!unlink($path3)) echo "<script>alert('An error occurred in deleting image!')</script>";
 		}
 		// DELETE SPECIFIC ID
 		DB::query("DELETE FROM {$table} WHERE adv_id=?", array($id), 'DELETE');
@@ -996,6 +1010,7 @@ function postAdventure(){
 		echo "<script>alert('Price cannot be zero or negative!')</script>";
 	}
 	else {
+		$fileDosDontsImg = uploadImage('fileDosDontsImg', "images/organizers/".$_SESSION['organizer']."/");
 		$fileItineraryImg = uploadImage('fileItineraryImg', "images/organizers/".$_SESSION['organizer']."/");
 		$fileAdvImgs = uploadMultipleImages('fileAdvImgs', "images/organizers/".$_SESSION['organizer']."/");
 
@@ -1003,10 +1018,10 @@ function postAdventure(){
 		else if($fileAdvImgs === 0){
 			echo "<script>alert('Must upload a maximum of four images!')</script>";
 		}
-		else if($fileAdvImgs === 1 || $fileItineraryImg === 1){
+		else if($fileAdvImgs === 1 || $fileItineraryImg === 1 || $fileDosDontsImg === 1){
 			echo "<script>alert('An error occurred in uploading your image!')</script>";
 		}
-		else if($fileAdvImgs === 2 || $fileItineraryImg === 2){
+		else if($fileAdvImgs === 2 || $fileItineraryImg === 2 || $fileDosDontsImg === 2){
 			echo "<script>alert('File type is not allowed!')</script>";
 		}
 		else {
@@ -1015,7 +1030,7 @@ function postAdventure(){
 			elseif($cboLoc == "Camotes Island") $town = "Camotes";
 			else $town = $cboLoc;
 
-			DB::query('INSERT INTO adventure(adv_images, adv_name, adv_kind, adv_type, adv_address, adv_town, adv_totalcostprice, adv_date, adv_details, adv_postedDate, adv_maxguests, adv_currentGuest, adv_itineraryImg, adv_status, orga_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', array($fileAdvImgs, $txtName, $cboKind, $cboType, $cboLoc, $town, $numPrice, $dateDate, $txtDetails, date('Y-m-d'), $numMaxGuests, 0, $fileItineraryImg, 'not full', $_SESSION['organizer']), "CREATE");
+			DB::query('INSERT INTO adventure(adv_images, adv_name, adv_kind, adv_type, adv_address, adv_town, adv_totalcostprice, adv_date, adv_details, adv_postedDate, adv_maxguests, adv_currentGuest, adv_itineraryImg, adv_dosdont_image, adv_status, orga_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', array($fileAdvImgs, $txtName, $cboKind, $cboType, $cboLoc, $town, $numPrice, $dateDate, $txtDetails, date('Y-m-d'), $numMaxGuests, 0, $fileItineraryImg, $fileDosDontsImg, "not full", $_SESSION['organizer']), "CREATE");
 
 			header('Location: adventures_posted.php?added=1');
 		}
@@ -1066,18 +1081,22 @@ function updateAdventure(){
 			$path2 = "images/organizers/".$_SESSION['organizer']."/".$adv['adv_itineraryImg'];
 			if(!unlink($path2)) echo "<script>alert('An error occurred in deleting image!')</script>";
 
+			$path3 = "images/organizers/".$_SESSION['organizer']."/".$adv['adv_dosdont_image'];
+			if(!unlink($path3)) echo "<script>alert('An error occurred in deleting image!')</script>";
+
 			//
-			$fileItineraryImg = uploadImage('fileItineraryImg', "images/organizers/".$_SESSION['organizer']."/");
 			$fileAdvImgs = uploadMultipleImages('fileAdvImgs', "images/organizers/".$_SESSION['organizer']."/");
+			$fileItineraryImg = uploadImage('fileItineraryImg', "images/organizers/".$_SESSION['organizer']."/");
+			$fileDosDontsImg = uploadImage('fileDosDontsImg', "images/organizers/".$_SESSION['organizer']."/");
 
 			if($numMaxGuests == "") $numMaxGuests = 0;
 			else if($fileAdvImgs === 0){
 				echo "<script>alert('Must upload a maximum of four images!')</script>";
 			}
-			else if($fileAdvImgs === 1 || $fileItineraryImg === 1){
+			else if($fileAdvImgs === 1 || $fileItineraryImg === 1 || $fileDosDontsImg === 1){
 				echo "<script>alert('An error occurred in uploading your image!')</script>";
 			}
-			else if($fileAdvImgs === 2 || $fileItineraryImg === 2){
+			else if($fileAdvImgs === 2 || $fileItineraryImg === 2 || $fileDosDontsImg === 2){
 				echo "<script>alert('File type is not allowed!')</script>";
 			}
 			else {
@@ -1087,7 +1106,7 @@ function updateAdventure(){
 				else $town = $cboLoc;
 
 				// UPDATE
-				DB::query('UPDATE adventure SET adv_images = ?, adv_name = ?, adv_kind = ?, adv_type = ?, adv_address = ?, adv_town = ?, adv_totalcostprice = ?, adv_date = ?, adv_details = ?, adv_postedDate = ?, adv_maxguests = ?, adv_itineraryImg = ? WHERE adv_id = ?', array($fileAdvImgs, $txtName, $cboKind, $cboType, $cboLoc, $town, $numPrice, $dateDate, $txtDetails, date('Y-m-d'), $numMaxGuests, $fileItineraryImg, $_GET['id']), "UPDATE");
+				DB::query('UPDATE adventure SET adv_images = ?, adv_name = ?, adv_kind = ?, adv_type = ?, adv_address = ?, adv_town = ?, adv_totalcostprice = ?, adv_date = ?, adv_details = ?, adv_postedDate = ?, adv_maxguests = ?, adv_itineraryImg = ?, adv_dosdont_image = ? WHERE adv_id = ?', array($fileAdvImgs, $txtName, $cboKind, $cboType, $cboLoc, $town, $numPrice, $dateDate, $txtDetails, date('Y-m-d'), $numMaxGuests, $fileItineraryImg, $fileDosDontsImg, $_GET['id']), "UPDATE");
 
 				header('Location: adventures_posted.php?updated=1');
 			}

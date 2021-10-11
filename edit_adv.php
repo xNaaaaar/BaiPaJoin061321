@@ -139,6 +139,10 @@
 							<label for="f02">Add itinerary image</label>
 						</div>
 						<input id="f02" type="file" name="fileItineraryImg" placeholder="Add Itinerary Image" required/>
+						<div class="label">
+							<label for="f03">Add Do's & Dont's Image</label>
+						</div>
+						<input id="f03" type="file" name="fileDosDontsImg" required/>
 						<input type="num" name="numPrice" placeholder="Total Price" value="<?php echo $adv['adv_totalcostprice']; ?>" required>
 					</div>
 

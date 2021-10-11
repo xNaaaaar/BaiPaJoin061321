@@ -258,7 +258,7 @@
 
 									## CURRENT DATE IS GREATER THAN ADVENTURE DATE (done)
 									if($adv['adv_date'] < date("Y-m-d")) {
-										echo "<td><em>done</em></td>";
+										echo "<td></td>";
 
 									## CURRENT DATE IS EQUAL ADVENTURE DATE (happening)
 									} elseif($adv['adv_date'] == date("Y-m-d")) {

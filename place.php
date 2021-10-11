@@ -26,6 +26,8 @@
 		main{width:100%;flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0;border-radius:0;text-align:center;}
 		main h1 span{display:block;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+
+		.error{font-size:20px;color:red;margin:50px auto;}
 	</style>
 
 	<!--?php wp_head(); ?-->
@@ -81,7 +83,7 @@
 						// DISPLAYING IMAGES
 						for($i = 1; $i < count($advImages); $i++){
 							echo "
-							<div class='carousel-cell'>
+							<div class='carousel-cell images'>
 								<img src='images/organizers/".$place['orga_id']."/".$advImages[$i]."'>
 							</div>
 							";
@@ -150,22 +152,37 @@
 				<!--  -->
 				<div class="place_reviews">
 					<h2>Reviews</h2>
-					<div class="review_cards">
-						<div class="card">
-							<i class="fas fa-quote-left"></i>
-							<p>I was looking for a place to spend time with myself. I found this place in BaiPaJoin and thought the price was affordable. When I arrived, they already had the room ready and cleaned with all the toiletries. My accommodation was of great value and will definitely return to this place when I visit Camotes Island again!</p>
-							<h3>Melnar Ancit <span>rated 4 <i class="fas fa-star"></i></span></h3>
-						</div>
-						<div class="card">
-							<i class="fas fa-quote-left"></i>
-							<p>I have stayed in many many hotels over the years, but never one quite like this at the price. Great staff, a really comfortable bed, unbelievable food and a very friendly owner. After reading so many incredible reviews about this hotel, I had to experience it for myself, and if was a good decision. There is quite a lot to see and do from having a base here, and the hotel will arrange day tours, or scooter hire if requested. I did two day tours and enjoyed them both very much. As for the food, it didn't reach on what I had expected, some food was bland, and some was good, it was really 50/50.</p>
-							<h3>Joy Blanco <span>rated 3 <i class="fas fa-star"></i></span></h3>
-						</div>
-						<div class="card">
-							<i class="fas fa-quote-left"></i>
-							<p>This resort is amongst the very few existing facilities on Camotes Island that has a degree of scale and the ability to satisfy the expectations of the travellers / holiday makers. The food on offer is good quality and very reasonably priced. The hotel offers fabulous swimming and is not too far from the Ferry Terminal. Surprisingly the breakfast menu does not include much in the way of fresh fruit. It’s easily either the best or at worst the second best place to stay.</p>
-							<h3>John Doe <span>rated 4 <i class="fas fa-star"></i></span></h3>
-						</div>
+					<div class="carousel" data-flickity>
+						<?php
+						$message = "There are no reviews to this adventure!";
+						## THIS ADVENTURE
+						if(isset($_GET['id'])){
+							$this_adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($_GET['id']), "READ");
+							$this_adv = $this_adv[0];
+							## ADVENTURE THAT HAS BEEN RATED WITH SPECIFIC ORGANIZER
+							$adv = DB::query("SELECT * FROM rating r JOIN booking b ON r.book_id=b.book_id JOIN adventure a ON b.adv_id=a.adv_id WHERE orga_id=?", array($this_adv['orga_id']), "READ");
+							##
+							if(count($adv)>0){
+								foreach ($adv as $result) {
+									if($result['adv_name'] == $this_adv['adv_name'] && $result['adv_kind'] == $this_adv['adv_kind'] && $result['adv_type'] == $this_adv['adv_type'] && $result['adv_address'] == $this_adv['adv_address']){
+										echo "
+										<div class='card carousel-cell'>
+											<figure>
+												<img src='images/joiners/".$result['joiner_id']."/".$result['rating_img']."'>
+											</figure>
+											<h3>Anonymous <span>rated ".$result['rating_stars']." <i class='fas fa-star'></i></span></h3>
+											<i class='fas fa-quote-left'></i>
+											<p>".$result['rating_message']."</p>
+										</div>
+										";
+										$message = "";
+									}
+								}
+							}
+						}
+						## IF THERE ARE NO RATINGS
+						echo ($message == "")? "" : "<h3 class='error'>".$message."</h3>";
+						?>
 					</div>
 				</div>
 			</main>

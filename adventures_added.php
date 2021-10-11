@@ -35,14 +35,15 @@
 		main .form input[type=file]{padding-top:13px;color:#b1b1b1;margin-top:0;}
 		main .form .label{font-size:15px;display:inline-block;text-align:left;width:99%;margin:5px 0 0;}
 
+		.reuse_data select{display:inline-block;height:50px;border:1px solid #cfcfcf;outline:none;border-radius:10px;padding:0 30px;font:normal 15px/50px Montserrat,sans-serif;}
+		.reuse_data button{display:inline-block;height:50px;border:1px solid #cfcfcf;outline:none;border-radius:10px;padding:0 30px;font:normal 15px/50px Montserrat,sans-serif;}
+		.reuse_data button:hover{color:#fff;background:#d1375d;border:1px solid #d1375d;}
+
 		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 30px 30px 200px;line-height:35px;text-align:left;margin:15px 0;border:1px solid #cfcfcf;}
 		.card figure{width:140px;height:140px;position:absolute;top:30px;left:30px;border:1px solid #1a1a1a;}
 		.card figure img{width:100%;}
 		.card h2{font:600 35px/100% Montserrat,sans-serif;color:#313131;margin-bottom:15px;}
 		.card p{font-size:23px;color:#989898;width:100% !important;}
-
-		main .edit{display:inline-block;width:209px;height:60px;background:#bf127a;border-radius:50px;color:#fff;margin:15px 5px;text-align:center;font:normal 20px/59px Montserrat,sans-serif;border:none;}
-		main .edit:hover{background:#8c0047;text-decoration:none;color:#fff;}
 
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
@@ -85,7 +86,7 @@
 				<h2>Post an Adventure</h2>
 				<form method="post" class='reuse_data'>
 					<select name="cboAdv" required>
-						<option>-- REUSE ADVENTURE DATA --</option>
+						<option value="">-- REUSE ADVENTURE DATA --</option>
 					<?php
 					## SELECT ALL ORGANIZER'S ADVENTURE POSTED
 					$advs = DB::query("SELECT * FROM adventure WHERE orga_id=?", array($_SESSION['organizer']), "READ");
@@ -97,26 +98,26 @@
 					?>
 					</select>
 					<button type="submit" name="btnReuse">Reuse</button>
-					<?php
-					## REUSE EXISTING ADVENTURE DATA
-					if(isset($_POST['btnReuse'])){
-						$cboAdv = $_POST['cboAdv'];
-						if(!empty($cboAdv)){
-							$this_adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($cboAdv), "READ");
-							$this_adv = $this_adv[0];
-							##
-							$_SESSION['this_type'] = $this_adv['adv_type'];
-							$_SESSION['this_guest'] = $this_adv['adv_maxguests'];
-							$_SESSION['this_name'] = $this_adv['adv_name'];
-							$_SESSION['this_kind'] = $this_adv['adv_kind'];
-							$_SESSION['this_address'] = $this_adv['adv_address'];
-							$_SESSION['this_date'] = $this_adv['adv_date'];
-							$_SESSION['this_details'] = $this_adv['adv_details'];
-							$_SESSION['this_price'] = $this_adv['adv_totalcostprice'];
-						}
-					}
-					?>
 				</form>
+				<?php
+				## REUSE EXISTING ADVENTURE DATA
+				if(isset($_POST['btnReuse'])){
+					$cboAdv = $_POST['cboAdv'];
+					if(!empty($cboAdv)){
+						$this_adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($cboAdv), "READ");
+						$this_adv = $this_adv[0];
+						##
+						$_SESSION['this_type'] = $this_adv['adv_type'];
+						$_SESSION['this_guest'] = $this_adv['adv_maxguests'];
+						$_SESSION['this_name'] = $this_adv['adv_name'];
+						$_SESSION['this_kind'] = $this_adv['adv_kind'];
+						$_SESSION['this_address'] = $this_adv['adv_address'];
+						$_SESSION['this_date'] = $this_adv['adv_date'];
+						$_SESSION['this_details'] = $this_adv['adv_details'];
+						$_SESSION['this_price'] = $this_adv['adv_totalcostprice'];
+					}
+				}
+				?>
 				<form method="post" enctype="multipart/form-data">
 					<div class="form form1">
 						<select name="cboType" onchange="displayMaxGuests(this);" required>
@@ -161,9 +162,13 @@
 						<input id="f01" type="file" name="fileAdvImgs[]" placeholder="Add Adventure Images" multiple required/>
 						<textarea name="txtDetails" placeholder="Details" required><?php echo (isset($_SESSION['this_details'])) ? $_SESSION['this_details']:""; ?></textarea>
 						<div class="label">
-							<label for="f02">Add itinerary image</label>
+							<label for="f02">Add Itinerary Image</label>
 						</div>
-						<input id="f02" type="file" name="fileItineraryImg" placeholder="Add Itinerary Image" required/>
+						<input id="f02" type="file" name="fileItineraryImg" required/>
+						<div class="label">
+							<label for="f03">Add Do's & Dont's Image</label>
+						</div>
+						<input id="f03" type="file" name="fileDosDontsImg" required/>
 						<input type="num" name="numPrice" placeholder="Total Price" value="<?php echo (isset($_SESSION['this_price'])) ? $_SESSION['this_price']:""; ?>" required>
 					</div>
 

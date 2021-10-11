@@ -105,8 +105,6 @@
 								<th>Adv Type</th>
 								<th>Ratings</th>
 								<th>Comments</th>
-								<th>Joiner Name</th>
-								<th></th>
 								<th></th>
 							</tr>
 						</thead>
@@ -130,8 +128,6 @@
 								<td>".$result['adv_type']."</td>
 								<td>".$result['rating_stars']." <i class='fas fa-star'></i></td>
 								<td>".$result['rating_message']."</td>
-								<td>".$result['joiner_fname']." ".$result['joiner_lname']."</td>
-								<td></td>
 								<td></td>
 							</tr>
 							";
