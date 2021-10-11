@@ -69,7 +69,7 @@
 		else if(!empty($joiner)) {
 			$img_address = array();
 			$img_name = array();
-			array_push($img_address,'images/reset-pass-bg.jpg','images/main-logo-green.png','images/reset-pass-img.jpg');
+			array_push($img_address,'images/reset-pass-bg.png','images/main-logo-green.png','images/reset-pass-img.png');
 			array_push($img_name,'background','logo','main');
 
 			$email_subject = 'PASSWORD RESET';
@@ -84,7 +84,7 @@
 		else if(!empty($organizer)) {
 			$img_address = array();
 			$img_name = array();
-			array_push($img_address,'images/reset-pass-bg.jpg','images/main-logo-green.png','images/reset-pass-img.jpg');
+			array_push($img_address,'images/reset-pass-bg.png','images/main-logo-green.png','images/reset-pass-img.png');
 			array_push($img_name,'background','logo','main');
 
 			$email_subject = 'PASSWORD RESET';

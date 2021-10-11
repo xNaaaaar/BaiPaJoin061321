@@ -44,10 +44,17 @@
 			$sms_message = "Hi ".$joiner_info['joiner_fname']."! Your request to cancel & refund has been approved!";
 
 			send_sms($sms_sendto,$sms_message);
-		}
 
-		//$email_message = html_cancellation_message($joiner_info['joiner_fname'], $current_adv['adv_date'], $resched_adv['adv_date']);
-		//send_email($joiner_info['joiner_email'], "BOOKING CANCELLATION", $email_message);
+			$email_message = html_cancellation_message($joiner_info['joiner_fname'], 'Joiner');
+
+			$img_address = array();
+			$img_name = array();
+
+			array_push($img_address,'images/cancel-bg.png','images/main-logo-green.png','images/cancel-img.png');
+			array_push($img_name,'background','logo','main');
+
+			send_email($joiner_info['joiner_email'], "BOOKING CANCELATION APPROVED", $email_message, $img_address, $img_name);
+		}	
 
 		echo "<script>alert('Successfully approved cancelation!')</script>";
 	}

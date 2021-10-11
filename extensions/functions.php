@@ -1462,8 +1462,6 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 	    }
 	}'; //This is to setup the query for paymongo add payment method
 
-	file_put_contents('debug.log', date('h:i:sa').' => '.$method_body_params . "\n" . "\n", FILE_APPEND);
-
 	curl_setopt_array($curl, array(
 	  CURLOPT_URL => 'https://api.paymongo.com/v1/payment_methods',
 	  CURLOPT_RETURNTRANSFER => true,
@@ -1554,23 +1552,24 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 		if($key == 'data') {
 			if($attach['data']['attributes']['status'] == 'succeeded') {
 
-				$name = $attach['data']['attributes']['payments'][0]['attributes']['billing']['name'];
 				$mobile = $attach['data']['attributes']['payments'][0]['attributes']['billing']['phone'];
 				$email = $attach['data']['attributes']['payments'][0]['attributes']['billing']['email'];
-
 				$amount = ($attach['data']['attributes']['amount'] / 100);
 				$currency = $attach['data']['attributes']['currency'];
-				$card_brand = $attach['data']['attributes']['payments'][0]['attributes']['source']['brand'];
 				$card_last_num = $attach['data']['attributes']['payments'][0]['attributes']['source']['last4'];
-				$id = $attach['data']['id'];
 
 				$sms_message = "Hooray! Thank you! Your payment for " . $amount . " " . $currency . " thru card number ending in " . $card_last_num . " was SUCCESSFUL!";
 
-				$email_subject = 'BOOKING CONFIRMATION';
-    			$email_message = ' Dear '.$name.', Hooray! Your payment for '.$amount.' '.$currency.' thru '.$card_brand.' ending in '. $card_last_num. ' was successful. Your transaction id is '.$id.' . Enjoy your BaiPaJoin Adventure! Thank you! THIS IS A TEST. DO NOT REPLY!';
-
 				send_sms($mobile, $sms_message);
-				send_email($email, $email_subject, $email_message);
+
+				$img_address = array();
+			  	$img_name = array();
+			  	array_push($img_address,'images/receipt-bg.png','images/main-logo-green.png','images/receipt-img.png');
+			  	array_push($img_name,'background','logo','main');
+
+    			$email_message = html_transreceipt_message($attach, 'card');    			
+
+				send_email($email, 'BOOKING TRANSACTION RECEIPT', $email_message, $img_address, $img_name);
 			}
 			$intent_id_status = [$intent['data']['id'], $attach['data']['attributes']['status']];
 			return $intent_id_status;
@@ -1964,6 +1963,22 @@ function booking_paid_updates($method, $book_id, $intent_id, $total=null){
 	} elseif($method == "grabpay") {
 
 	}
+
+	# THIS FOR BOOKING ITINERARY EMAIL
+	$guests = DB::query("SELECT guest_name FROM guest WHERE book_id=?", array($booked['book_id']), "READ");
+	
+	$joiner = DB::query("SELECT * FROM joiner WHERE joiner_id=?", array($booked['joiner_id']), "READ");
+	$joiner = $joiner[0];
+
+	$img_address = array();
+  	$img_name = array();
+  	array_push($img_address,'images/header-bg.png','images/main-logo-green.png','images/receipt-img.png');
+  	array_push($img_name,'background','logo','main');
+
+	$email = $joiner['joiner_email'];
+	$email_message = html_bookitinerary_message($booked, $adv_booked, $guests, $joiner);
+
+	send_email($email, 'BOOKING CONFIRMATION ITINERARY', $email_message, $img_address, $img_name);
 }
 
 ##### CODE START HERE @WEATHER BACKGROUND #####
@@ -2187,6 +2202,45 @@ function html_reschedule_message($name, $current, $resched) {
 	return $message;
 }
 
+function html_request_message($name, $req_type, $type) {
+
+	if($type == 'joiner') {
+		# CANCELATION REQUEST
+		if($req_type==1) {
+			$message = "
+		    <!DOCTYPE html>
+		    <html>
+		      <head>
+		        <meta charset='utf-8'>
+		        <title>BaiPaJoin | Request</title>
+		      </head>
+		      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 360%;font:normal 15px/20px Verdana,sans-serif;'>
+		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
+		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
+		            <figure class='main-logo'>
+		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
+		            </figure>
+		            <figure >
+		              <img src='cid:main' style='max-width:100%;width:300px;height:200px;margin:0 auto;'>
+		            </figure>
+		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Request Acknowledge</h1>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! We've recieved your request to <b>CANCEL</b> an adventure booking. Rest assured that we will do our best to review and provide a feedback as soon as possible. Due to the large volume of requests on review, it may take us between 12-48 hours to get back to you. In the meanwhile, please check your email or sms from time to time as we will provide an update thru these channels.</p>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you did not make this changes, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com]. Thank you!</a> </p>
+		          </div>
+		        </div>
+		      </body>
+		    </html>
+			";
+		}
+		else if($req_type==2) {
+		}
+		else if($req_type==3) {
+		}
+	}
+
+	return $message;
+}
+
 function html_cancellation_message($name, $type) {
 
 	if($type == 'Joiner') {
@@ -2207,7 +2261,42 @@ function html_cancellation_message($name, $type) {
 		              <img src='cid:main' style='max-width:100%;width:300px;height:270px;margin:0 auto;'>
 		            </figure>
 		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Oooh No! Adventure Cancelled!</h1>
-		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! I'm sorry to hear that you have cancel your adventure. We've recieved your request and it's being reviewed. In the meanwhile, please check your EMAIL and SMS for the updates. Stay safe and thank you for using BaiPaJoin!</p>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! I'm sorry to hear that you have cancel your adventure. We've recieved your request and it's already <b>APPROVED</b>. Please provide us with your bank details by responding to this email. In order for us to transfer the refund amount as soon as possible, please refer to the sample below. Stay safe and thank you for using BaiPaJoin!</p>
+	            	<table style='width:500px;max-width:100%;margin:0 auto; line-height:25px; text-align:left;'>
+		              <h2>SAMPLE BANK DETAILS</h2> 
+		              <tr>
+		                <td>Bank Name :</td>
+		                <td>BDO UniBank Ltd.</td>
+		              </tr>
+		              <tr>
+		                <td>Bank Code :</td>
+		                <td>BDO Colon 1</td>
+		              </tr>
+		              <tr>
+		                <td>Bank Address :</td>
+		                <td>Sanciangko St, Cebu City</td>
+		              </tr>
+		              <br>
+		              <tr>
+		                <td>Account Name :</td>
+		                <td>Juan Dela Cruz</td>
+		              </tr>
+		               <tr>
+		                <td>Account Number : </td>
+		                <td>123-456-7890</td>
+		              </tr>
+		              <tr>
+		                <td>Account Type :</td>
+		                <td>(Savings/Checking)</td>
+		              </tr>
+		              <tr>
+		                <td>Routing Number : </td>
+		                <td>123-456-7890-123-456789</td>
+		              </tr>
+		            </table>
+		            <br>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Once we receive your banking details we will process the refund within 24-48 hours upon receipt of the email. Once, we send it you will recieve a notification thru SMS and EMail about the it. Also, you may view the refund transaction receipt in payout section of the request tab. Thank you!</p>
+		            <br><br>
 		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you have any questions or did not make this changes, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com].  </a> </p>
 		          </div>
 		        </div>
@@ -2234,7 +2323,42 @@ function html_cancellation_message($name, $type) {
 		              <img src='cid:main' style='max-width:100%;width:300px;height:270px;margin:0 auto;'>
 		            </figure>
 		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Oooh No! Adventure Cancelled!</h1>
-		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! We understand that you have to cancel the posted adventure. There are things that is truely out of your control. We've recieved your request and it's being reviewed. In the meanwhile, please check your EMAIL and SMS for the updates. Stay safe and thank you for using BaiPaJoin!</p>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! I'm sorry to hear that you have cancel the adventure. We've recieved your request and it's already <b>APPROVED</b>. Please provide us with your bank details by responding to this email. In order for us to transfer the refund amount as soon as possible, please refer to the sample below. Stay safe and thank you for using BaiPaJoin!</p>
+	            	<table style='width:500px;max-width:100%;margin:0 auto; line-height:25px; text-align:left;'>
+		              <h2>SAMPLE BANK DETAILS</h2> 
+		              <tr>
+		                <td>Bank Name :</td>
+		                <td>BDO UniBank Ltd.</td>
+		              </tr>
+		              <tr>
+		                <td>Bank Code :</td>
+		                <td>BDO Colon 1</td>
+		              </tr>
+		              <tr>
+		                <td>Bank Address :</td>
+		                <td>Sanciangko St, Cebu City</td>
+		              </tr>
+		              <br>
+		              <tr>
+		                <td>Account Name :</td>
+		                <td>Juan Dela Cruz</td>
+		              </tr>
+		               <tr>
+		                <td>Account Number : </td>
+		                <td>123-456-7890</td>
+		              </tr>
+		              <tr>
+		                <td>Account Type :</td>
+		                <td>(Savings/Checking)</td>
+		              </tr>
+		              <tr>
+		                <td>Routing Number : </td>
+		                <td>123-456-7890-123-456789</td>
+		              </tr>
+		            </table>
+		            <br>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Once we receive your banking details we will process the refund within 24-48 hours upon receipt of the email. Once, we send it you will recieve a notification thru SMS and EMail about the it. Also, you may view the refund transaction receipt in payout section of the request tab. Thank you!</p>
+		            <br><br>
 		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you have any questions or did not make this changes, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com].  </a> </p>
 		          </div>
 		        </div>
@@ -2244,6 +2368,294 @@ function html_cancellation_message($name, $type) {
 	}
 
 	return $message;
+}
+
+function html_payout_message($name, $type, $amount) {
+
+	if($type == 'Joiner') {
+		$message = "
+		    <!DOCTYPE html>
+		    <html>
+		      <head>
+		        <meta charset='utf-8'>
+		        <title>BaiPaJoin | Payout</title>
+		      </head>
+		      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 110%;background-size:350px 300px;font:normal 15px/20px Verdana,sans-serif;'>
+		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
+		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
+		            <figure class='main-logo'>
+		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
+		            </figure>
+		            <figure >
+		              <img src='cid:main' style='max-width:100%;width:300px;height:270px;margin:0 auto;'>
+		            </figure>
+		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Yaaaaay! Payout Successful!</h1>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! We've <b>SUCCESSFULLY</b> sent out your refund amounting to ".$amount." PHP. A copy of the transaction reciept has been uploaded in the BaiPaJoin site. You may view the receipt in the payout section of the requests tab. Stay safe and thank you for using BaiPaJoin!</p>
+		            <br>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you have any questions or any disputes, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com].  </a> </p>
+		          </div>
+		        </div>
+		      </body>
+    		</html>
+		";
+	}
+
+	if($type == 'Organizer') {
+		$message = "
+		    <!DOCTYPE html>
+		    <html>
+		      <head>
+		        <meta charset='utf-8'>
+		        <title>BaiPaJoin | Cancelation</title>
+		      </head>
+		      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 110%;background-size:350px 300px;font:normal 15px/20px Verdana,sans-serif;'>
+		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
+		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
+		            <figure class='main-logo'>
+		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
+		            </figure>
+		            <figure >
+		              <img src='cid:main' style='max-width:100%;width:300px;height:270px;margin:0 auto;'>
+		            </figure>
+		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Yaaaaay! Payout Successful!</h1>
+		             <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! We've <b>SUCCESSFULLY</b> sent out your refund amounting to ".$amount." PHP. A copy of the transaction reciept has been uploaded in the BaiPaJoin site. You may view the receipt in the payout section of the requests tab. Stay safe and thank you for using BaiPaJoin!</p>
+		            <br>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you have any questions or any disputes, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com].  </a> </p>
+		          </div>
+		        </div>
+		      </body>
+    		</html>
+		";
+	}
+
+	return $message;
+}
+
+function html_transreceipt_message($attach, $type) {
+
+	$name = $attach['data']['attributes']['payments'][0]['attributes']['billing']['name'];
+	$address = $attach['data']['attributes']['payments'][0]['attributes']['billing']['address']['line1'];
+	$mobile = $attach['data']['attributes']['payments'][0]['attributes']['billing']['phone'];
+	$email = $attach['data']['attributes']['payments'][0]['attributes']['billing']['email'];
+	$id = $attach['data']['id'];
+	$description = $attach['data']['attributes']['description'];
+	$amount = ($attach['data']['attributes']['amount'] / 100);
+	$fee = ($attach['data']['attributes']['payments'][0]['attributes']['fee'] / 100);
+	$foreign_fee = ($attach['data']['attributes']['payments'][0]['attributes']['foreign_fee'] / 100);
+	$net_amount = ($attach['data']['attributes']['payments'][0]['attributes']['net_amount'] / 100);
+	$currency = $attach['data']['attributes']['currency'];
+	$pay_type = $attach['data']['attributes']['payments'][0]['attributes']['source']['type'];
+	$card_brand = $attach['data']['attributes']['payments'][0]['attributes']['source']['brand'];
+	$card_last_num = $attach['data']['attributes']['payments'][0]['attributes']['source']['last4'];
+	$available_at = $attach['data']['attributes']['payments'][0]['attributes']['available_at'];
+	$paid_at = $attach['data']['attributes']['payments'][0]['attributes']['updated_at'];
+
+	if($type == 'card') {
+		$message = "
+			<html>
+		      <head>
+		        <meta charset='utf-8'>
+		        <title>BaiPaJoin | TRANSACTION RECEIPT</title>
+		      </head>
+		      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 100%;background-size:350px 350px;font:normal 15px/20px Verdana,sans-serif;'>
+		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
+		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
+		            <figure class='main-logo'>
+		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
+		            </figure>
+		            <figure >
+		              <img src='cid:main' style='max-width:100%;width:350px;height:225px;margin:0 auto;'>
+		            </figure>
+		            <h1 style='margin:-40px 0 60px;color:#000;font-size:30px;'>Payment Successful</h1>
+		            <table style='width:500px;max-width:100%;margin:0 auto; line-height:25px; text-align:left;'>
+		              <h2>Transaction Receipt</h2> 
+		              <tr>
+		                <td>Name :</td>
+		                <td>".$name."</td>
+		              </tr>
+		              <tr>
+		                <td>Address :</td>
+		                <td>".$address."</td>
+		              </tr>
+		              <tr>
+		                <td>Phone Number :</td>
+		                <td>".$mobile."</td>
+		              </tr>
+		              <tr>
+		                <td>Email :</td>
+		                <td>".$email."</td>
+		              </tr>
+		               <tr>
+		                <td>Payment ID : </td>
+		                <td>".$id."</td>
+		              </tr>
+		              <tr>
+		                <td>Description :</td>
+		                <td>".$description."</td>
+		              </tr>
+		              <tr>
+		                <td>Total Amount : </td>
+		                <td>".$amount."</td>
+		              </tr>
+		              <tr>
+		                <td>Fee :</td>
+		                <td>".$fee."</td>
+		              </tr>
+		              <tr>
+		                <td>Foreign Fee :</td>
+		                <td>".$foreign_fee."</td>
+		              </tr>
+		              <tr>
+		                <td>Net Amount : </td>
+		                <td>".$net_amount."</td>
+		              </tr>
+		              <tr>
+		                <td>Currency : </td>
+		                <td>".$currency."</td>
+		              </tr>
+		              <tr>
+		                <td>Payment Type :</td>
+		                <td>".$pay_type."</td>
+		              </tr>
+		              <tr>
+		                <td>Brand :</td>
+		                <td>".$card_brand."</td>
+		              </tr>
+		              <tr>
+		                <td>Card Last  4 Digits :</td>
+		                <td>".$card_last_num."</td>
+		              </tr>
+		              <tr>
+		                <td>Created at:</td>
+		                <td>".date('m/d/Y H:i:s', $available_at)."</td>
+		              </tr>
+		              <tr>
+		                <td>Paid at:</td>
+		                <td>".date('m/d/Y H:i:s', $paid_at)."</td>
+		              </tr>
+		            </table>
+		            <p style='margin:50px 0 0;'>Powered by: Paymongo <span style='display:block;'></span> </p>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:0 auto;'>If you have any questions or dispute, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com]</a> </p>
+		          </div>
+		        </div>
+		      </body>
+		    </html>
+	    ";
+	}
+
+	return $message;
+}
+
+function html_bookitinerary_message($book, $adventure, $guests , $joiner) {
+
+	$guest_data = $guests[0];
+
+	$message = "
+		<html>
+	      <head>
+	        <meta charset='utf-8'>
+	        <title>BaiPaJoin | BOOKING ITINERARY</title>
+	      </head>
+	      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 100%;background-size:550px 700px;font:normal 15px/20px Verdana,sans-serif;'>
+	        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
+	          <div class='contents' style='text-align:center;color:#1a1a1a;'>
+	            <figure class='main-logo'>
+	              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
+	            </figure>
+	            <figure >
+	              <img src='cid:main' style='max-width:100%;width:350px;height:225px;margin:0 auto;'>
+	            </figure>
+	            <h1 style='margin:-40px 0 60px;color:#000;font-size:30px;'>Booking Itinerary</h1>
+	            <table style='width:500px;max-width:100%;margin:0 auto; line-height:25px; text-align:left;'>
+	              <h2>Adventure Details</h2>
+	              <tr>
+	                <td>Adventure Name :</td>
+	                <td>".$adventure['adv_name']."</td>
+	              </tr>
+	              <tr>
+	                <td>Adventure Activity : </td>
+	                <td>".$adventure['adv_kind']."</td>
+	              </tr>
+	              <tr>
+	                <td>Adventure Type :</td>
+	                <td>".$adventure['adv_type']."</td>
+	              </tr>
+	              <tr>
+	                <td>Adventure Town :</td>
+	                <td>".$adventure['adv_town']."</td>
+	              </tr>
+	              <tr>
+	                <td>Adventure Date :</td>
+	                <td>".$adventure['adv_date']."</td>
+	              </tr>
+	            </table>
+	            <br>
+	            <table style='width:500px;max-width:100%;margin:0 auto; line-height:25px; text-align:left;'>
+	              <h2>Guest Details</h2>
+	";
+
+	if($book['book_guests'] != count($guests)) {
+		$message .= "
+				<tr>
+   					<td>Guest 1 Full Name:</td>
+    				<td>".$joiner['joiner_fname']." ".$joiner['joiner_lname']."</td>
+  				</tr>
+		";
+
+		for ($i=0; $i < count($guests) ; $i++) {
+			$j = $i+1; 
+			$message .= "
+				<tr>
+	                <td>Guest ".($j+1)." Full Name: </td>
+	                <td>".$guest_data[0]."</td>
+	            </tr>
+			";
+		}
+	}
+	else {
+		for ($i=0; $i < count($guests) ; $i++) {
+			$j = $i; 
+			$message .= "
+				<tr>
+	                <td>Guest ".($j+1)." Full Name: </td>
+	                <td>".$guest_data[0]."</td>
+	            </tr>
+			";
+		}
+	}	        
+	              
+	$message .= "
+	            </table>
+	            <br>
+	            <table style='width:500px;max-width:100%;margin:0 auto; line-height:25px; text-align:left;'>
+	              <h2 >Booking Details</h2> 
+	              <tr>
+	                <td>Booking ID :</td>
+	                <td>".$book['book_id']."</td>
+	              </tr>
+	              <tr>
+	                <td>Booking Date & Time :</td>
+	                <td>".$book['book_datetime']."</td>
+	              </tr>
+	              <tr>
+	                <td>Booking Cost :</td>
+	                <td>".$book['book_totalcosts']." PHP</td>
+	              </tr>
+	               <tr>
+	                <td>Booking Status : </td>
+	                <td>PAID</td>
+	              </tr>
+	            </table>
+	            <br><br>
+	            <p style='line-height:20px;width:1000px;max-width:100%;margin:0 auto;'>If you have any questions or dispute, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com]</a> </p>
+	          </div>
+	        </div>
+	      </body>
+	    </html>
+	";
+
+	return $message;
+
 }
 
 ##### END OF CODES #####

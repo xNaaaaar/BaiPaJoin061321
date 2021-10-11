@@ -33,10 +33,17 @@
 			$sms_message = "Hi ".$joiner_info['joiner_fname']."! The amount ".$refund['req_amount']." has been successfully refunded on ".date('d-M-Y').".";
 
 			send_sms($sms_sendto,$sms_message);
-		}
 
-		//$email_message = html_cancellation_message($joiner_info['joiner_fname'], $current_adv['adv_date'], $resched_adv['adv_date']);
-		//send_email($joiner_info['joiner_email'], "BOOKING CANCELLATION", $email_message);
+			$email_message = html_payout_message($joiner_info['joiner_fname'], 'Joiner', $refund['req_amount']);
+
+			$img_address = array();
+			$img_name = array();
+
+			array_push($img_address,'images/payout-bg.png','images/main-logo-green.png','images/payout-img.png');
+			array_push($img_name,'background','logo','main');
+
+			send_email($joiner_info['joiner_email'], "REFUND PAYOUT SUCCESSFUL", $email_message, $img_address, $img_name);
+		}
 
 		echo "<script>alert('Successfully sent refund!')</script>";
 	}
