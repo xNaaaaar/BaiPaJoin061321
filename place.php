@@ -126,15 +126,35 @@
 						</form>
 
 						<?php
+
+							$adv_checker = DB::query('SELECT * FROM adventure WHERE adv_id=?', array($_GET['id']), "READ");
+							$adv_checker = $adv_checker[0];
+
+							// IF CHECK JOINER HAS OTHER BOOKING SET ON THE SAME DATE
+							$adv_ids = DB::query('SELECT adv_id FROM booking WHERE joiner_id=? AND book_status=?', array($_SESSION['joiner'],'paid'), "READ");
+							$adv_ids = $adv_ids[0];
+
+							$sameday_booking = false;
+
+							if(count($adv_ids)>0) {
+								foreach ($adv_ids as $adv_id) {
+									$adv = DB::query('SELECT adv_date FROM adventure WHERE adv_id=?', array($adv_id), "READ");
+									$adv = $adv[0];
+
+									if($adv['adv_date'] == $adv_checker['adv_date']) {
+										$sameday_booking = true;
+										break;
+									}
+								}
+							}
+
 							// WHEN BUTTON IS CLICKED
 							if(isset($_POST['btnBook'])){
-								// CHECK ADVENTURE IF FULL
-								$adv_checker = DB::query('SELECT * FROM adventure WHERE adv_id=?', array($_GET['id']), "READ");
-								if(count($adv_checker)>0){
-									$adv_checker = $adv_checker[0];
-									//
+
+								if(count($adv_checker)>0){									
+									// CHECK ADVENTURE IF FULL	
 									if($adv_checker['adv_status'] == 'not full')
-										header("Location: book.php?id=".$_GET['id']."");
+										header("Location: book.php?id=".$_GET['id']."&same_day=".$sameday_booking."");
 									else
 										header("Location: place.php?id=".$_GET['id']."&full");
 								}

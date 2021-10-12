@@ -2509,7 +2509,7 @@ function html_payout_message($name, $type, $amount) {
 		    <html>
 		      <head>
 		        <meta charset='utf-8'>
-		        <title>BaiPaJoin | Cancelation</title>
+		        <title>BaiPaJoin | Payout</title>
 		      </head>
 		      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 110%;background-size:350px 300px;font:normal 15px/20px Verdana,sans-serif;'>
 		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>

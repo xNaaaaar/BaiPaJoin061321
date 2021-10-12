@@ -3,6 +3,10 @@
 	require_once("extensions/db.php");
 
 	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
+
+	if($_GET['same_day'] == true) {
+		echo "<script>alert('Oh uh! We noticed that you have PREVIOUSLY book for an adventure having the same ADVENTURE DATE as the adventure you CURRENTLY selected. Are you sure, you want to continue?')</script>";
+	}
 ?>
 
 <!-- Head -->
