@@ -19,6 +19,31 @@
 		} else {
 			DB::query('UPDATE request SET req_img=?, req_status=?,req_rcvd=? WHERE req_id=?', array($imageName, "approved", 2, $_GET['req_id']), "CREATE");
 
+			## EMAIL + SMS NOTIFICATION
+			$refund = DB::query("SELECT * FROM request WHERE req_id = ?", array($_GET['req_id']), "READ");
+			$refund = $refund[0];
+
+			$orga_id = DB::query("SELECT orga_id FROM adventure WHERE adv_id = ?", array($refund['adv_id']), "READ");
+			$orga_id = $orga_id[0];
+
+			$organizer_db = DB::query("SELECT * FROM organizer WHERE orga_id = ?", array($orga_id['orga_id']), "READ");
+			$organizer_info = $organizer_db[0];
+
+			$sms_sendto = $organizer_info['orga_phone'];
+			$sms_message = "Hi ".$organizer_info['orga_fname']."! The amount ".$refund['req_amount']." has been successfully refunded on ".date('d-M-Y').".";
+
+			send_sms($sms_sendto,$sms_message);
+
+			$email_message = html_payout_message($organizer_info['orga_fname'], 'Organizer', $refund['req_amount']);
+
+			$img_address = array();
+			$img_name = array();
+
+			array_push($img_address,'images/payout-bg.png','images/main-logo-green.png','images/payout-img.png');
+			array_push($img_name,'background','logo','main');
+
+			send_email($organizer_info['orga_email'], "REFUND PAYOUT SUCCESSFUL", $email_message, $img_address, $img_name);
+
 			header("Location: admin-request-payout.php?success");
 		}
 	}

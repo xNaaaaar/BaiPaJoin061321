@@ -83,15 +83,79 @@
 		## UPDATE REQUEST PENDING TO APPROVED STATUS, DATE PROCESSED
 		DB::query("UPDATE request SET req_dateresponded=?, req_status=? WHERE req_id=?", array(date("Y-m-d"), "approved", $_GET['req_id']), "UPDATE");
 
+		$orga_id_db = DB::query("SELECT orga_id FROM adventure WHERE adv_id = ?", array($req['adv_id']), "READ");
+		$orga_db1 = $orga_id_db[0];
 
+		if($req['req_user'] == 'organizer') {
+			$orga_db = DB::query("SELECT * FROM organizer WHERE orga_id = ?", array($orga_db1[0]), "READ");
+			$orga_info = $orga_db[0];
+
+			$sms_sendto = $orga_info['orga_phone'];
+			$sms_message = "Hi ".$orga_info['orga_fname']."! Your request to cancel an adventure has been approved!";
+
+			send_sms($sms_sendto,$sms_message);
+
+			$email_message = html_cancellation_message($orga_info['orga_fname'], 'Organizer');
+
+			$img_address = array();
+			$img_name = array();
+
+			array_push($img_address,'images/cancel-bg.png','images/main-logo-green.png','images/cancel-img.png');
+			array_push($img_name,'background','logo','main');
+
+			send_email($orga_info['orga_email'], "BOOKING CANCELATION APPROVED", $email_message, $img_address, $img_name);
+
+			echo "<script>alert('Successfully approved cancelation!')</script>";
+		}	
 	}
 
 	## IF REQUEST CANCELATION IS DISAPPROVED (FOR JOINER && ORGANIZER)
-	if(isset($_GET['disapproved']) && isset($_GET['req_id'])){
+	if(isset($_GET['disapproved']) && isset($_GET['req_id'])) {
 		## UPDATE REQUEST STATUS
 		DB::query("UPDATE request SET req_dateresponded=?, req_status=? WHERE req_id=?", array(date("Y-m-d"), "disapproved", $_GET['req_id']), "UPDATE");
+
+		$req = DB::query("SELECT * FROM request WHERE req_id=?", array($_GET['req_id']), "READ");
+		$req = $req[0];
+
+		if($req['req_user'] == 'joiner') {
+			$booking_joiner_id_db = DB::query("SELECT joiner_id FROM booking WHERE book_id = ?", array($req['book_id']), "READ");
+			$booking_joiner_id = $booking_joiner_id_db[0];
+
+			$joiner_db = DB::query("SELECT * FROM joiner WHERE joiner_id = ?", array($booking_joiner_id['joiner_id']), "READ");
+			$joiner_info = $joiner_db[0];
+
+			$email_message = html_cancellation_message($joiner_info['joiner_fname'], 'denied');
+
+			$img_address = array();
+			$img_name = array();
+
+			array_push($img_address,'images/cancel-bg.png','images/main-logo-green.png','images/cancel-img.png');
+			array_push($img_name,'background','logo','main');
+
+			send_email($joiner_info['joiner_email'], "BOOKING CANCELATION DENIED", $email_message, $img_address, $img_name);
+		}	
+
+		else if($req['req_user'] == 'organizer') {
+			$orga_id_db = DB::query("SELECT orga_id FROM adventure WHERE adv_id = ?", array($req['adv_id']), "READ");
+			$orga_db1 = $orga_id_db[0];
+
+			$orga_db = DB::query("SELECT * FROM organizer WHERE orga_id = ?", array($orga_db1[0]), "READ");
+			$orga_info = $orga_db[0];
+
+			$email_message = html_cancellation_message($orga_info['orga_fname'], 'denied');
+
+			$img_address = array();
+			$img_name = array();
+
+			array_push($img_address,'images/cancel-bg.png','images/main-logo-green.png','images/cancel-img.png');
+			array_push($img_name,'background','logo','main');
+
+			send_email($orga_info['orga_email'], "BOOKING CANCELATION DENIED", $email_message, $img_address, $img_name);
+		}
 	}
+
 ?>
+
 <!-- Head -->
 <?php include("includes/head.php"); ?>
 <!-- End of Head -->

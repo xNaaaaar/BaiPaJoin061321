@@ -77,17 +77,17 @@
 				</form>
 			</main>
 
-		<?php
-		## REQUEST CANCEL FOR JOINER
-		if(isset($_POST['btnRequest-Joiner'])){
-			$txtReason = ucfirst(trim($_POST['txtReason']));
-			##
-			$booked_db = DB::query("SELECT * FROM booking WHERE book_id=?", array($_GET['book_id']), "READ");
-			$booked = $booked_db[0];
-			##
-			DB::query("INSERT INTO request (req_user, req_type, req_dateprocess, req_amount, req_status, req_reason, req_rcvd, book_id, adv_id) VALUES(?,?,?,?,?,?,?,?,?)", array('joiner', 'cancel', date("Y-m-d"), $booked['book_totalcosts'], 'pending', $txtReason, 0, $_GET['book_id'], NULL), "CREATE");
+			<?php
+			## REQUEST CANCEL FOR JOINER
+			if(isset($_POST['btnRequest-Joiner'])){
+				$txtReason = ucfirst(trim($_POST['txtReason']));
+				##
+				$booked_db = DB::query("SELECT * FROM booking WHERE book_id=?", array($_GET['book_id']), "READ");
+				$booked = $booked_db[0];
+				##
+				DB::query("INSERT INTO request (req_user, req_type, req_dateprocess, req_amount, req_status, req_reason, req_rcvd, book_id, adv_id) VALUES(?,?,?,?,?,?,?,?,?)", array('joiner', 'cancel', date("Y-m-d"), $booked['book_totalcosts'], 'pending', $txtReason, 0, $_GET['book_id'], NULL), "CREATE");
 
-				## EMAIL NOTIFICATION
+				## EMAIL JOINER NOTIFICATION
 				$joiner_db = DB::query("SELECT * FROM joiner WHERE joiner_id = ?", array($_SESSION['joiner']), "READ");
 				$joiner_info = $joiner_db[0];
 
@@ -112,7 +112,21 @@
 				$adv = $adv[0];
 				##
 				DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_amount, req_status, req_reason, req_rcvd, book_id, adv_id) VALUES(?,?,?,?,?,?,?,?,?)", array('organizer', 'cancel', date("Y-m-d"), $adv['adv_totalcostprice'], "pending", $txtReason, 0, NULL, $_GET['adv_id']), "CREATE");
-				##
+
+				## EMAIL ORGANIZER NOTIFICATION
+				$organizer_db = DB::query("SELECT * FROM organizer WHERE orga_id = ?", array($_SESSION['organizer']), "READ");
+				$organizer_info = $organizer_db[0];
+
+				$email_message = html_request_message($organizer_info['orga_fname'], 1, 'organizer');
+
+				$img_address = array();
+				$img_name = array();
+
+				array_push($img_address,'images/request-bg.png','images/main-logo-green.png','images/request-img.png');
+				array_push($img_name,'background','logo','main');
+
+				send_email($organizer_info['orga_email'], "REQUEST ACKNOWLEDGED", $email_message, $img_address, $img_name);
+
 				header("Location: request.php?cancel_success");
 			}
 			?>

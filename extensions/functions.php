@@ -471,9 +471,23 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					echo "
 						<li><a href='reports_booking-cancel.php?adv_id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to cancel this adventure? Joiner who are booked can either request refund or reschedule!\");'><i class='fas fa-ban' data-toggle='tooltip' title='Cancel Adventure'></i></a></li>
 					";
-				#
+				# IF ORGANIZER WILL CLICK PAYOUT
 				} else {
 					echo "<li><a href='request-payout.php?adv_id=".$result['adv_id']."' onclick='return confirm(\"Confirm request payout?\");'><i class='fas fa-hand-holding-usd' data-toggle='tooltip' title='Request Payout'></i></a></li>";
+
+						## EMAIL ORGANIZER NOTIFICATION
+						$organizer_db = DB::query("SELECT * FROM organizer WHERE orga_id = ?", array($_SESSION['organizer']), "READ");
+						$organizer_info = $organizer_db[0];
+
+						$email_message = html_request_message($organizer_info['orga_fname'], 2, 'organizer');
+
+						$img_address = array();
+						$img_name = array();
+
+						array_push($img_address,'images/request-bg.png','images/main-logo-green.png','images/request-img.png');
+						array_push($img_name,'background','logo','main');
+
+						send_email($organizer_info['orga_email'], "PAYOUT REQUEST ACKNOWLEDGED", $email_message, $img_address, $img_name);
 				}
 				echo "
 					</ul>
@@ -2240,6 +2254,99 @@ function html_request_message($name, $req_type, $type) {
 		}
 	}
 
+	else if($type == 'organizer') {
+		# CANCELATION REQUEST
+		if($req_type==1) {
+			$message = "
+		    <!DOCTYPE html>
+		    <html>
+		      <head>
+		        <meta charset='utf-8'>
+		        <title>BaiPaJoin | Request</title>
+		      </head>
+		      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 360%;font:normal 15px/20px Verdana,sans-serif;'>
+		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
+		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
+		            <figure class='main-logo'>
+		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
+		            </figure>
+		            <figure >
+		              <img src='cid:main' style='max-width:100%;width:300px;height:200px;margin:0 auto;'>
+		            </figure>
+		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Request Acknowledge</h1>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! We've recieved your request to <b>CANCEL</b> an adventure. Rest assured that we will do our best to review and provide a feedback as soon as possible. Due to the large volume of requests on review, it may take us between 12-48 hours to get back to you. In the meanwhile, please check your email or sms from time to time as we will provide an update thru these channels.</p>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you did not make this changes, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com]. Thank you!</a> </p>
+		          </div>
+		        </div>
+		      </body>
+		    </html>
+			";
+		}
+		else if($req_type==2) {
+			$message = "
+		    <!DOCTYPE html>
+		    <html>
+		      <head>
+		        <meta charset='utf-8'>
+		        <title>BaiPaJoin | Request</title>
+		      </head>
+		      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 360%;font:normal 15px/20px Verdana,sans-serif;'>
+		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
+		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
+		            <figure class='main-logo'>
+		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
+		            </figure>
+		            <figure >
+		              <img src='cid:main' style='max-width:100%;width:300px;height:200px;margin:0 auto;'>
+		            </figure>
+		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Request Acknowledge</h1>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! We've recieved your request for adventure <b>WITHDRAWAL OR PAYOUT</b>. . Please provide us with your bank details by responding to this email. In order for us to transfer the payout amount as soon as possible, please refer to the sample below. In the meanwhile, please check your email or sms from time to time as we will provide an update thru these channels.</p>
+		            <table style='width:500px;max-width:100%;margin:0 auto; line-height:25px; text-align:left;'>
+		              <h2>SAMPLE BANK DETAILS</h2> 
+		              <tr>
+		                <td>Bank Name :</td>
+		                <td>BDO UniBank Ltd.</td>
+		              </tr>
+		              <tr>
+		                <td>Bank Code :</td>
+		                <td>BDO Colon 1</td>
+		              </tr>
+		              <tr>
+		                <td>Bank Address :</td>
+		                <td>Sanciangko St, Cebu City</td>
+		              </tr>
+		              <br>
+		              <tr>
+		                <td>Account Name :</td>
+		                <td>Juan Dela Cruz</td>
+		              </tr>
+		               <tr>
+		                <td>Account Number : </td>
+		                <td>123-456-7890</td>
+		              </tr>
+		              <tr>
+		                <td>Account Type :</td>
+		                <td>(Savings/Checking)</td>
+		              </tr>
+		              <tr>
+		                <td>Routing Number : </td>
+		                <td>123-456-7890-123-456789</td>
+		              </tr>
+		            </table>
+		            <br>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Once we receive your banking details we will process the refund within 24-48 hours upon receipt of the email. Once, we send it you will recieve a notification thru SMS and EMail about the it. Also, you may view the refund transaction receipt in payout section of the request tab. Thank you!</p>
+		            <br><br>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you did not make this changes, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com]. Thank you!</a> </p>
+		          </div>
+		        </div>
+		      </body>
+		    </html>
+			";
+		}
+		else if($req_type==3) {
+		}
+	}
+
 	return $message;
 }
 
@@ -2325,43 +2432,37 @@ function html_cancellation_message($name, $type) {
 		              <img src='cid:main' style='max-width:100%;width:300px;height:270px;margin:0 auto;'>
 		            </figure>
 		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Oooh No! Adventure Cancelled!</h1>
-		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! I'm sorry to hear that you have cancel the adventure. We've recieved your request and it's already <b>APPROVED</b>. Please provide us with your bank details by responding to this email. In order for us to transfer the refund amount as soon as possible, please refer to the sample below. Stay safe and thank you for using BaiPaJoin!</p>
-	            	<table style='width:500px;max-width:100%;margin:0 auto; line-height:25px; text-align:left;'>
-		              <h2>SAMPLE BANK DETAILS</h2> 
-		              <tr>
-		                <td>Bank Name :</td>
-		                <td>BDO UniBank Ltd.</td>
-		              </tr>
-		              <tr>
-		                <td>Bank Code :</td>
-		                <td>BDO Colon 1</td>
-		              </tr>
-		              <tr>
-		                <td>Bank Address :</td>
-		                <td>Sanciangko St, Cebu City</td>
-		              </tr>
-		              <br>
-		              <tr>
-		                <td>Account Name :</td>
-		                <td>Juan Dela Cruz</td>
-		              </tr>
-		               <tr>
-		                <td>Account Number : </td>
-		                <td>123-456-7890</td>
-		              </tr>
-		              <tr>
-		                <td>Account Type :</td>
-		                <td>(Savings/Checking)</td>
-		              </tr>
-		              <tr>
-		                <td>Routing Number : </td>
-		                <td>123-456-7890-123-456789</td>
-		              </tr>
-		            </table>
-		            <br>
-		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Once we receive your banking details we will process the refund within 24-48 hours upon receipt of the email. Once, we send it you will recieve a notification thru SMS and EMail about the it. Also, you may view the refund transaction receipt in payout section of the request tab. Thank you!</p>
-		            <br><br>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! I'm sorry to hear that you have cancel the adventure. We've recieved your request and it's already <b>APPROVED</b>. Stay safe and thank you for using BaiPaJoin!</p>
+	            	<br>
 		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you have any questions or did not make this changes, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com].  </a> </p>
+		          </div>
+		        </div>
+		      </body>
+    		</html>
+		";
+	}
+
+	if($type == 'denied') {
+		$message = "
+		    <!DOCTYPE html>
+		    <html>
+		      <head>
+		        <meta charset='utf-8'>
+		        <title>BaiPaJoin | Cancelation</title>
+		      </head>
+		      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 110%;background-size:350px 300px;font:normal 15px/20px Verdana,sans-serif;'>
+		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
+		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
+		            <figure class='main-logo'>
+		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
+		            </figure>
+		            <figure >
+		              <img src='cid:main' style='max-width:100%;width:300px;height:270px;margin:0 auto;'>
+		            </figure>
+		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Oooh No! Adventure Cancelled!</h1>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! I'm sorry to hear that you have cancel the adventure. We've recieved your request and upon further review, the request is <b>DISAPPROVED</b>. Due to the fact that you have not met the criteria and standard set on the Terms and Conditions of this site. Stay safe and thank you for using BaiPaJoin!</p>
+	            	<br>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you have any questions or would like to appeal the request, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com].  </a> </p>
 		          </div>
 		        </div>
 		      </body>
