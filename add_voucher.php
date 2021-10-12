@@ -87,19 +87,20 @@
 						<select name="cboAdv" required>
 							<option>-- SELECT ADVENTURE --</option>
 							<?php
+							$currentDate = date('Y-m-d');
 							// DISPLAY ALL ADVENTURES CREATED BY CURRENT ORGANIZER
-							$adv = DB::query("SELECT * FROM adventure WHERE orga_id=?", array($_SESSION['organizer']), "READ");
+							$adv = DB::query("SELECT * FROM adventure WHERE orga_id=? AND adv_date>? AND adv_status!='canceled' AND adv_status !='done' ORDER BY adv_date", array($_SESSION['organizer'], $currentDate), "READ");
 
 							if(count($adv)>0){
 								foreach ($adv as $result) {
-									echo "<option value='".$result['adv_id']."'>".$result['adv_name']."</option>";
+									echo "<option value='".$result['adv_id']."'>".$result['adv_name']." / ".$result['adv_date']." / ".$result['adv_kind']."</option>";
 								}
 							}
 							?>
 						</select>
 						<input type="text" name="dateStartDate" placeholder="Start Date" onfocus="(this.type='date')" required>
 						<input type="text" name="dateEndDate" placeholder="End Date" onfocus="(this.type='date')" required>
-						<input type="number" name="numDiscount" placeholder="Discount" required>
+						<input type="number" name="numDiscount" placeholder="Discount" max="100" required>
 						<input type="number" name="numMinSpent" placeholder="Minimum Spent" required>
 					</div>
 
