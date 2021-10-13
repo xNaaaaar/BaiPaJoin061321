@@ -69,7 +69,14 @@
 				<div class="place_title">
 					<h1><?php echo $place['adv_name']; ?> <span>(<?php echo $place['adv_kind']." - ".$place['adv_type']; ?>)</span> </h1>
 					<ul class="title_info1">
-						<li>5 <i class="fas fa-star"></i> <q>(25 reviews)</q></li>
+						<li>
+							<?php
+							## RATINGS
+							$rate = adv_ratings($_GET['id'], true);
+							if($rate == 0) echo $rate;
+							else echo number_format($rate,1,".",""); 
+							?>
+							<i class="fas fa-star"></i> <q>(<?php echo adv_ratings($_GET['id'], true, "count ratings"); ?> reviews)</q></li>
 						<li><i class="fas fa-map-marker-alt"></i> <address><?php echo $place['adv_address']; ?></address></li>
 					</ul>
 					<!-- <ul class="title_info2">
@@ -151,8 +158,8 @@
 							// WHEN BUTTON IS CLICKED
 							if(isset($_POST['btnBook'])){
 
-								if(count($adv_checker)>0){									
-									// CHECK ADVENTURE IF FULL	
+								if(count($adv_checker)>0){
+									// CHECK ADVENTURE IF FULL
 									if($adv_checker['adv_status'] == 'not full')
 										header("Location: book.php?id=".$_GET['id']."&same_day=".$sameday_booking."");
 									else

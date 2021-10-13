@@ -450,10 +450,20 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					</figure>
 					<em> on ".date("F j, Y", strtotime($result['adv_date']))."</em>
 					<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].")
-						<span>5 <i class='fas fa-star'></i> (25 reviews) ";##".."
-							if($result['adv_status'] == "done") echo "- done";
-							elseif($numRemainingGuests == 0) echo "- full";
-							else echo $remainingGuestsText;
+						<span>";
+						## RATINGS
+						$rate = adv_ratings($result['adv_id'], true);
+						if($rate == 0) echo $rate;
+						else echo number_format($rate,1,".","");
+						echo " <i class='fas fa-star'></i>";
+
+						## RATINGS COUNT
+						echo "(".adv_ratings($result['adv_id'], true, "count ratings")." reviews) ";
+
+						## ADV STATUS
+						if($result['adv_status'] == "done") echo "- done";
+						elseif($numRemainingGuests == 0) echo "- full";
+						else echo $remainingGuestsText;
 					echo "
 						</span>
 					</h2>
@@ -619,7 +629,23 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt='image'>
 					</figure>
 					<em> on ".date("F j, Y", strtotime($result['adv_date']))."</em>
-					<h2>".$result['adv_name']." - ".$result['adv_kind']." <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
+					<h2>".$result['adv_name']." - ".$result['adv_kind']." <span>";
+						## RATINGS
+						$rate = adv_ratings($result['adv_id'], true);
+						if($rate == 0) echo $rate;
+						else echo number_format($rate,1,".","");
+						echo " <i class='fas fa-star'></i>";
+
+						## RATINGS COUNT
+						echo "(".adv_ratings($result['adv_id'], true, "count ratings")." reviews) ";
+
+						## ADV STATUS
+						if($result['adv_status'] == "done") echo "- done";
+						elseif($numRemainingGuests == 0) echo "- full";
+						else echo $remainingGuestsText;
+					echo "
+						</span>
+					</h2>
 					<p>".$result['adv_address']."</p>
 					<p>₱ ".number_format((float)$price, 2, '.', ',')." / person</p>
 					<ul class='icons'>";
@@ -682,7 +708,23 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 							<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt=''>
 						</figure>
 						<em> on ".date("F j, Y", strtotime($result['adv_date']))."</em>
-						<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
+						<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>";
+							## RATINGS
+							$rate = adv_ratings($result['adv_id'], true);
+							if($rate == 0) echo $rate;
+							else echo number_format($rate,1,".","");
+							echo " <i class='fas fa-star'></i>";
+
+							## RATINGS COUNT
+							echo "(".adv_ratings($result['adv_id'], true, "count ratings")." reviews) ";
+
+							## ADV STATUS
+							if($result['adv_status'] == "done") echo "- done";
+							elseif($numRemainingGuests == 0) echo "- full";
+							else echo $remainingGuestsText;
+						echo "
+							</span>
+						</h2>
 						<p>".$result['adv_address']."</p>
 						<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
 						<ul class='icons'>";
@@ -745,7 +787,23 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 							<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt=''>
 						</figure>
 						<em> on ".date("F j, Y", strtotime($result['adv_date']))."</em>
-						<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>5 <i class='fas fa-star'></i> (25 reviews) ".$remainingGuestsText."</span> </h2>
+						<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>";
+							## RATINGS
+							$rate = adv_ratings($result['adv_id'], true);
+							if($rate == 0) echo $rate;
+							else echo number_format($rate,1,".","");
+							echo " <i class='fas fa-star'></i>";
+
+							## RATINGS COUNT
+							echo "(".adv_ratings($result['adv_id'], true, "count ratings")." reviews) ";
+
+							## ADV STATUS
+							if($result['adv_status'] == "done") echo "- done";
+							elseif($numRemainingGuests == 0) echo "- full";
+							else echo $remainingGuestsText;
+						echo "
+							</span>
+						</h2>
 						<p>".$result['adv_address']."</p>
 						<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
 						<ul class='icons'>";
@@ -1582,10 +1640,10 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 			  	array_push($img_address,'images/receipt-bg.png','images/main-logo-green.png','images/receipt-img.png');
 			  	array_push($img_name,'background','logo','main');
 
-    			$email_message = html_transreceipt_message($attach, 'card');    			
+    			$email_message = html_transreceipt_message($attach, 'card');
 
 				send_email($email, 'BOOKING TRANSACTION RECEIPT', $email_message, $img_address, $img_name);
-				
+
 			}
 			$intent_id_status = [$intent['data']['id'], $attach['data']['attributes']['status']];
 			return $intent_id_status;
@@ -1982,7 +2040,7 @@ function booking_paid_updates($method, $book_id, $intent_id, $total=null){
 
 	# THIS FOR BOOKING ITINERARY EMAIL
 	$guests = DB::query("SELECT guest_name FROM guest WHERE book_id=?", array($booked['book_id']), "READ");
-	
+
 	$joiner = DB::query("SELECT * FROM joiner WHERE joiner_id=?", array($booked['joiner_id']), "READ");
 	$joiner = $joiner[0];
 
@@ -2302,7 +2360,7 @@ function html_request_message($name, $req_type, $type) {
 		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Request Acknowledge</h1>
 		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! We've recieved your request for adventure <b>WITHDRAWAL OR PAYOUT</b>. . Please provide us with your bank details by responding to this email. In order for us to transfer the payout amount as soon as possible, please refer to the sample below. In the meanwhile, please check your email or sms from time to time as we will provide an update thru these channels.</p>
 		            <table style='width:500px;max-width:100%;margin:0 auto; line-height:25px; text-align:left;'>
-		              <h2>SAMPLE BANK DETAILS</h2> 
+		              <h2>SAMPLE BANK DETAILS</h2>
 		              <tr>
 		                <td>Bank Name :</td>
 		                <td>BDO UniBank Ltd.</td>
@@ -2372,7 +2430,7 @@ function html_cancellation_message($name, $type) {
 		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Oooh No! Adventure Cancelled!</h1>
 		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! I'm sorry to hear that you have cancel your adventure. We've recieved your request and it's already <b>APPROVED</b>. Please provide us with your bank details by responding to this email. In order for us to transfer the refund amount as soon as possible, please refer to the sample below. Stay safe and thank you for using BaiPaJoin!</p>
 	            	<table style='width:500px;max-width:100%;margin:0 auto; line-height:25px; text-align:left;'>
-		              <h2>SAMPLE BANK DETAILS</h2> 
+		              <h2>SAMPLE BANK DETAILS</h2>
 		              <tr>
 		                <td>Bank Name :</td>
 		                <td>BDO UniBank Ltd.</td>
@@ -2571,7 +2629,7 @@ function html_transreceipt_message($attach, $type) {
 		            </figure>
 		            <h1 style='margin:-40px 0 60px;color:#000;font-size:30px;'>Payment Successful</h1>
 		            <table style='width:500px;max-width:100%;margin:0 auto; line-height:25px; text-align:left;'>
-		              <h2>Transaction Receipt</h2> 
+		              <h2>Transaction Receipt</h2>
 		              <tr>
 		                <td>Name :</td>
 		                <td>".$name."</td>
@@ -2706,7 +2764,7 @@ function html_bookitinerary_message($book, $adventure, $guests , $joiner) {
 		";
 
 		for ($i=0; $i < count($guests) ; $i++) {
-			$j = $i+1; 
+			$j = $i+1;
 			$message .= "
 				<tr>
 	                <td>Guest ".($j+1)." Full Name: </td>
@@ -2717,7 +2775,7 @@ function html_bookitinerary_message($book, $adventure, $guests , $joiner) {
 	}
 	else {
 		for ($i=0; $i < count($guests) ; $i++) {
-			$j = $i; 
+			$j = $i;
 			$message .= "
 				<tr>
 	                <td>Guest ".($j+1)." Full Name: </td>
@@ -2725,13 +2783,13 @@ function html_bookitinerary_message($book, $adventure, $guests , $joiner) {
 	            </tr>
 			";
 		}
-	}	        
-	              
+	}
+
 	$message .= "
 	            </table>
 	            <br>
 	            <table style='width:500px;max-width:100%;margin:0 auto; line-height:25px; text-align:left;'>
-	              <h2 >Booking Details</h2> 
+	              <h2 >Booking Details</h2>
 	              <tr>
 	                <td>Booking ID :</td>
 	                <td>".$book['book_id']."</td>
@@ -2759,6 +2817,36 @@ function html_bookitinerary_message($book, $adventure, $guests , $joiner) {
 
 	return $message;
 
+}
+
+function adv_ratings($adv_id, $specific_advs = false, $counts = null){
+	$total_stars = 0; $counter = 0;
+	$this_adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($adv_id), "READ");
+	$this_adv = $this_adv[0];
+	## ADVENTURE THAT HAS BEEN RATED WITH SPECIFIC ORGANIZER
+	$adv = DB::query("SELECT * FROM rating r JOIN booking b ON r.book_id=b.book_id JOIN adventure a ON b.adv_id=a.adv_id WHERE orga_id=?", array($this_adv['orga_id']), "READ");
+	##
+	if(count($adv)>0){
+		foreach ($adv as $result) {
+			## IF $specific_advs IS TRUE && DISPLAY SPECIFIC RATINGS
+			if($specific_advs) {
+				if($result['adv_name'] == $this_adv['adv_name'] && $result['adv_kind'] == $this_adv['adv_kind'] && $result['adv_type'] == $this_adv['adv_type'] && $result['adv_address'] == $this_adv['adv_address']){
+					$total_stars += $result['rating_stars'];
+					$counter++;
+				}
+
+			## FALSE && DISPLAY ALL RATINGS
+			} else {
+				$total_stars += $result['rating_stars'];
+				$counter++;
+			}
+		}
+	}
+
+	if($counts == null){
+		if($total_stars == 0) return $total_stars;
+		else return $total_stars = $total_stars / $counter;
+	} else return $counter;
 }
 
 ##### END OF CODES #####
