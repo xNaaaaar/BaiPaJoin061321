@@ -143,7 +143,7 @@
 
 							$sameday_booking = false;
 
-							if(count($adv_ids)>0) {
+							if(!empty($adv_ids)) {
 								foreach ($adv_ids as $adv_id) {
 									$adv = DB::query('SELECT adv_date FROM adventure WHERE adv_id=?', array($adv_id), "READ");
 									$adv = $adv[0];
