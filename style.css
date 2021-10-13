@@ -298,7 +298,7 @@ header{}
   .main_info{width:65%;padding-right:50px;}
   .main_info p{width:100% !important;text-align:left;font:400 20px/35px Montserrat,sans-serif;}
 
-  .book_info{width:486px;min-height:250px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;}
+  .book_info div{max-width:100%;width:486px;min-height:250px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;}
   .book_info h2{margin:0 0 30px;text-align:center;font-size:35px;}
   .book_info h2 span{font:600 25px/100% Montserrat,sans-serif;color:gray;display:block;margin-top:5px;}
   .book_info a{display:block;width:80%;}

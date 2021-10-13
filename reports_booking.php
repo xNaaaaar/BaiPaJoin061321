@@ -241,9 +241,16 @@
 										if(count($resched_once)>0){
 											echo "<td><em style='color:#5cb85c;'>rescheduled</em></td>";
 										} else {
-											if(empty($_SESSION['resched']))
+											## IF ADV IS DONE
+											if($adv['adv_status'] == "done"){
+												echo "<td></td>";
+
+											##
+											} elseif(empty($_SESSION['resched'])) {
 												echo "<td><a href='' onclick='return confirm(\"Sorry! There is no available adventure for you to reschedule!\");'>resched</a></td>";
-											else {
+
+											##
+											} else {
 												echo "<td><a href='reports_booking-resched.php?book_id=".$result['book_id']."&available=".implode(",",$_SESSION['resched'])."' onclick='return confirm(\"You can only resched this adventure once. Are you sure you want to reschedule?\");'>resched</a></td>";
 												## DESTROY THIS SESSION AFTER SENDING
 												unset($_SESSION['resched']);

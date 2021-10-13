@@ -169,11 +169,11 @@ main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;pad
 					if(isset($_POST['btnSearch'])){
 						$cboOption = $_POST['cboOption'];
 						## FOR ORGANIZER && JOINER
-						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND (req_status=? || req_status=?)", array($cboOption, "payout", "refunded", "approved"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_user=? AND req_type=? AND (req_status=? || req_status=? || req_status=?)", array($cboOption, "payout", "paid", "approved", "refunded"), "READ");
 
 					## ALL REFUND APPROVED RESULTS
 					} else {
-						$request = DB::query("SELECT * FROM request WHERE req_type=? AND (req_status=? || req_status=?)", array("payout", "refunded", "approved"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_type=? AND (req_status=? || req_status=? || req_status=?)", array("payout", "paid", "approved", "refunded"), "READ");
 					}
 
 					## DISPLAY
@@ -190,11 +190,11 @@ main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;pad
 								<td>₱".number_format($result['req_amount'],2,'.',',')."</td>";
 
 							## CHECK IF RECEIVED BY USER
-							if($result['req_rcvd'] == 0)
+							if($result['req_rcvd'] == 0) ## 0 MEANS PENDING REQUEST / RECEIPT PROOF NOT UPLOADED
 								echo "<td style='color:#33b5e5;'><em>pending<em></td>";
-							elseif($result['req_rcvd'] == 2)
+							elseif($result['req_rcvd'] == 2) ## 2 MEANS SENT MONEY TO ORGA INFO
 								echo "<td style='color:#5cb85c;'><em>sent<em></td>";
-							else
+							else ## 1 MEANS MONEY RECEIVED BY ORGA AND RECEIVED BUTTON IS CLICKED
 								echo "<td style='color:#5cb85c;'><em>received<em></td>";
 
 							## CHECK IF STATUS IS NOT PAID

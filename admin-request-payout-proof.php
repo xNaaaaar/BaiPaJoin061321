@@ -17,7 +17,7 @@
 			echo "<script>alert('File type is not allowed!')</script>";
 
 		} else {
-			DB::query('UPDATE request SET req_img=?, req_status=?,req_rcvd=? WHERE req_id=?', array($imageName, "approved", 2, $_GET['req_id']), "CREATE");
+			DB::query('UPDATE request SET req_img=?, req_status=?, req_rcvd=? WHERE req_id=?', array($imageName, "paid", 2, $_GET['req_id']), "CREATE");
 
 			## EMAIL + SMS NOTIFICATION
 			$refund = DB::query("SELECT * FROM request WHERE req_id = ?", array($_GET['req_id']), "READ");
@@ -152,19 +152,19 @@ main .edit{float:left;display:inline-block;width:150px;height:45px;font:normal 1
 								<h3><?php echo $details['orga_fname']; ?>'s Adventure Details</h3>
 								<table>
 									<tr>
-										<td>ID</td>
+										<td>Adventure ID</td>
 										<td>: <b><?php echo $details['adv_id']; ?></b></td>
 									</tr>
 									<tr>
-										<td>Name</td>
+										<td>Adventure Name</td>
 										<td>: <b><?php echo $details['adv_name']; ?></b></td>
 									</tr>
 									<tr>
-										<td>Activity</td>
+										<td>Adventure Activity</td>
 										<td>: <b><?php echo $details['adv_kind']; ?></b></td>
 									</tr>
 									<tr>
-										<td>Type</td>
+										<td>Adventure Type</td>
 										<td>: <b><?php echo $details['adv_type']; ?></b></td>
 									</tr>
 									<tr>

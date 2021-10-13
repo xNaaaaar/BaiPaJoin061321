@@ -10,6 +10,8 @@
 		$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($_GET['adv_id']), "READ");
 		$adv = $adv[0];
 		$to_pay = ($adv['adv_totalcostprice'] / $adv['adv_maxguests']) * $adv['adv_currentGuest'];
+		$fee = $to_pay * .10; // 10% FEE FOR ORGANIZER PAYOUT
+		$to_pay -= $fee;
 		##
 		DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, req_rcvd, adv_id) VALUES(?,?,?,?,?,?,?,?)", array("organizer", "payout", date("Y-m-d"), date("Y-m-d"), $to_pay, "approved", 0, $_GET['adv_id']), "CREATE");
 	}
@@ -100,7 +102,7 @@
 							</thead>
 						";
 
-						$request = DB::query("SELECT * FROM request r INNER JOIN adventure a ON r.adv_id = a.adv_id WHERE orga_id=? AND req_type=?", array($_SESSION['organizer'], "payout"), "READ");
+						$request = DB::query("SELECT * FROM request r INNER JOIN adventure a ON r.adv_id = a.adv_id WHERE orga_id=? AND req_type=? ORDER BY req_dateprocess", array($_SESSION['organizer'], "payout"), "READ");
 
 						if(count($request)>0){
 							foreach ($request as $result) {
@@ -113,17 +115,18 @@
 									<td>₱".number_format($result['req_amount'],2,".",",")."</td>";
 
 								if($result['req_img'] == null) {
-									echo "<td>no upload yet</td>";
-
+									echo "<td>receipt not uploaded yet</td>";
+									echo "<td></td>";
 								##
 								} else {
-									echo "<td><a href='images/admin/2021001/".$result['req_img']."' download='proof-of-payment'>Download this image</a></td>";
+									echo "<td><a href='images/admin/2021001/".$result['req_img']."' download='proof-of-payment'>Download receipt</a></td>";
+									if($result['req_rcvd'] == 2)
+										echo "<td><button type='submit' name='btnRcvd' onclick='return confirm(\"Are you sure you received the payout money for this adventure?\");'>Received</button></td>";
+									else
+										echo "<td class='success'><em>received</em></td>";
 								}
 
-								if($result['req_rcvd'] == 2)
-									echo "<td><button type='submit' name='btnRcvd' onclick='return confirm(\"Are you sure you received the refund money?\");'>Received</button></td>";
-								else
-									echo "<td class='success'><em>received</em></td>";
+
 
 								echo "</tr>";
 							}

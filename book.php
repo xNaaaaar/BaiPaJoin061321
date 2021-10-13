@@ -4,7 +4,7 @@
 
 	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
 
-	if($_GET['same_day'] == true) {
+	if(isset($_GET['same_day']) && $_GET['same_day'] == 1) {
 		echo "<script>alert('Oh uh! We noticed that you have PREVIOUSLY book for an adventure having the same ADVENTURE DATE as the adventure you CURRENTLY selected. Are you sure, you want to continue?')</script>";
 	}
 ?>
@@ -140,25 +140,34 @@
 						</div>
 						<!-- BOOKED INFORMATION -->
 						<div class="book_info">
-							<figure>
-								<?php
-									# DISPLAY RANDOM IMAGE
-									echo "<img src='images/organizers/".$adv['orga_id']."/$image[$displayImage]' alt=''>";
-								?>
-							</figure>
-							<section>
-								<h2><?php echo $adv['adv_name']; ?> <span><?php echo $adv['adv_kind']; ?></span> </h2>
-								<ul class="title_info1">
-									<li>5 <i class="fas fa-star"></i> <q>(25 reviews)</q></li>
-									<li><i class="fas fa-map-marker-alt"></i> <address><?php echo $adv['adv_address']; ?></address></li>
-								</ul>
-								<p>₱<?php echo $_SESSION['price']; ?> / person</p>
-							</section>
-							<section>
-								<h2>Overview</h2>
-								<!-- ADVENTURE DESCRIPTION LIMITED TO 30 WORDS -->
-								<p><?php echo limit_text($adv['adv_details'], 30) ?></p>
-							</section>
+							<div>
+								<figure>
+									<?php
+										# DISPLAY RANDOM IMAGE
+										echo "<img src='images/organizers/".$adv['orga_id']."/$image[$displayImage]' alt=''>";
+									?>
+								</figure>
+								<section>
+									<h2><?php echo $adv['adv_name']; ?> <span><?php echo $adv['adv_kind']; ?></span> </h2>
+									<ul class="title_info1">
+										<li>
+											<?php
+											## RATINGS
+											$rate = adv_ratings($_GET['id'], true);
+											if($rate == 0) echo $rate;
+											else echo number_format($rate,1,".","");
+											?>
+											<i class="fas fa-star"></i> <q>(<?php echo adv_ratings($_GET['id'], true, "count ratings"); ?> reviews)</q></li>
+										<li><i class="fas fa-map-marker-alt"></i> <address><?php echo $adv['adv_address']; ?></address></li>
+									</ul>
+									<p>₱<?php echo $_SESSION['price']; ?> / person</p>
+								</section>
+								<section>
+									<h2>Overview</h2>
+									<!-- ADVENTURE DESCRIPTION LIMITED TO 30 WORDS -->
+									<p><?php echo limit_text($adv['adv_details'], 30) ?></p>
+								</section>
+							</div>
 						</div>
 					</div>
 

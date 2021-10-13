@@ -440,7 +440,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 				$no_cancel_starting_date = date("Y-m-d", strtotime("-5 days", strtotime($result['adv_date'])));
 
 				## SKIP DISPLAY IF ADVENTURE IS PENDING FOR CANCELATION
-				$pending_adv = DB::query("SELECT * FROM request WHERE adv_id=? AND (req_status=? || req_status=?)", array($result['adv_id'], "pending", "approved"), "READ");
+				$pending_adv = DB::query("SELECT * FROM request WHERE adv_id=? AND (req_status=? || req_status=? || req_status=?)", array($result['adv_id'], "pending", "approved", "paid"), "READ");
 				if(count($pending_adv)>0) continue;
 
 				echo "

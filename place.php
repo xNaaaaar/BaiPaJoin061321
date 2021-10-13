@@ -74,7 +74,7 @@
 							## RATINGS
 							$rate = adv_ratings($_GET['id'], true);
 							if($rate == 0) echo $rate;
-							else echo number_format($rate,1,".",""); 
+							else echo number_format($rate,1,".","");
 							?>
 							<i class="fas fa-star"></i> <q>(<?php echo adv_ratings($_GET['id'], true, "count ratings"); ?> reviews)</q></li>
 						<li><i class="fas fa-map-marker-alt"></i> <address><?php echo $place['adv_address']; ?></address></li>
@@ -102,73 +102,74 @@
 					<div class="main_info">
 						<h2>Overview</h2>
 						<p><?php echo $place['adv_details']; ?></p>
+						<p>You can also download <a href="<?php echo "images/organizers/".$place['orga_id']."/".$place['adv_itineraryImg']; ?>" download="Adventure-Itinerary">this</a> adventure itinerary and <a href="<?php echo "images/organizers/".$place['orga_id']."/".$place['adv_dosdont_image']; ?>" download="Dos-And-Donts">do's and dont's</a>.</p>
 					</div>
 					<div class="book_info">
-						<h2>On <?php echo date('M. j, Y', strtotime($place['adv_date'])); ?> <span><?php echo "₱ ".number_format((float)$price, 2, '.', ',')." / person"; ?></span> </h2>
+						<div>
+							<h2>On <?php echo date('M. j, Y', strtotime($place['adv_date'])); ?> <span><?php echo "₱ ".number_format((float)$price, 2, '.', ',')." / person"; ?></span> </h2>
 
-						<form method="post">
-							<?php
-							## IF JOINER LOGIN
-							if(isset($_SESSION['joiner'])) {
-								$isempty = false;
-								$details_empty = DB::query("SELECT * FROM joiner WHERE joiner_id=?", array($_SESSION['joiner']), "READ");
-								if(count($details_empty)>0){
-									foreach ($details_empty as $result) {
-										$isempty = ($result[4] == "" || $result[5] == "") ? true : false;
+							<form method="post">
+								<?php
+								## IF JOINER LOGIN
+								if(isset($_SESSION['joiner'])) {
+									$isempty = false;
+									$details_empty = DB::query("SELECT * FROM joiner WHERE joiner_id=?", array($_SESSION['joiner']), "READ");
+									if(count($details_empty)>0){
+										foreach ($details_empty as $result) {
+											$isempty = ($result[4] == "" || $result[5] == "") ? true : false;
+										}
 									}
-								}
 
-								if($isempty)
-									echo "<a class='edit' href='settings.php' onclick='return confirm(\"You need to fill out all profile details!\");'>Book</a>";
-								else
-									echo "<button class='edit' type='submit' name='btnBook'>Book</button>";
-
-							## FOR GUESTS
-							} else {
-							?>
-								<a class="edit" href="login.php" onclick='return confirm("Login to book adventure!");'>Book</a>
-							<?php
-							}
-							?>
-						</form>
-
-						<?php
-
-							$adv_checker = DB::query('SELECT * FROM adventure WHERE adv_id=?', array($_GET['id']), "READ");
-							$adv_checker = $adv_checker[0];
-
-							// IF CHECK JOINER HAS OTHER BOOKING SET ON THE SAME DATE
-							$adv_ids = DB::query('SELECT adv_id FROM booking WHERE joiner_id=? AND book_status=?', array($_SESSION['joiner'],'paid'), "READ");
-							$adv_ids = $adv_ids[0];
-
-							$sameday_booking = false;
-
-							if(!empty($adv_ids)) {
-								foreach ($adv_ids as $adv_id) {
-									$adv = DB::query('SELECT adv_date FROM adventure WHERE adv_id=?', array($adv_id), "READ");
-									$adv = $adv[0];
-
-									if($adv['adv_date'] == $adv_checker['adv_date']) {
-										$sameday_booking = true;
-										break;
-									}
-								}
-							}
-
-							// WHEN BUTTON IS CLICKED
-							if(isset($_POST['btnBook'])){
-
-								if(count($adv_checker)>0){
-									// CHECK ADVENTURE IF FULL
-									if($adv_checker['adv_status'] == 'not full')
-										header("Location: book.php?id=".$_GET['id']."&same_day=".$sameday_booking."");
+									if($isempty)
+										echo "<a class='edit' href='settings.php' onclick='return confirm(\"You need to fill out all profile details!\");'>Book</a>";
 									else
-										header("Location: place.php?id=".$_GET['id']."&full");
-								}
-							}
-						?>
+										echo "<button class='edit' type='submit' name='btnBook'>Book</button>";
 
-						<a class="edit" href="#">Lend</a>
+								## FOR GUESTS
+								} else {
+								?>
+									<a class="edit" href="login.php" onclick='return confirm("Login to book adventure!");'>Book</a>
+								<?php
+								}
+								?>
+							</form>
+
+							<?php
+								$adv_checker = DB::query('SELECT * FROM adventure WHERE adv_id=?', array($_GET['id']), "READ");
+								$adv_checker = $adv_checker[0];
+
+								// IF CHECK JOINER HAS OTHER BOOKING SET ON THE SAME DATE
+								$adv_ids = DB::query('SELECT adv_id FROM booking WHERE joiner_id=? AND book_status=?', array($_SESSION['joiner'], 'paid'), "READ");
+								$adv_ids = $adv_ids[0];
+
+								$sameday_booking = 0;
+
+								if(!empty($adv_ids)) {
+									foreach ($adv_ids as $adv_id) {
+										$adv = DB::query('SELECT adv_date FROM adventure WHERE adv_id=?', array($adv_id), "READ");
+										$adv = $adv[0];
+
+										if($adv['adv_date'] == $adv_checker['adv_date']) {
+											$sameday_booking = 1;
+											break;
+										}
+									}
+								}
+
+								// WHEN BUTTON IS CLICKED
+								if(isset($_POST['btnBook'])){
+									if(count($adv_checker)>0){
+										// CHECK ADVENTURE IF FULL
+										if($adv_checker['adv_status'] == 'not full')
+											header("Location: book.php?id=".$_GET['id']."&same_day=".$sameday_booking."");
+										else
+											header("Location: place.php?id=".$_GET['id']."&full");
+									}
+								}
+							?>
+
+							<a class="edit" href="#">Lend</a>
+						</div>
 					</div>
 				</div>
 				<?php
