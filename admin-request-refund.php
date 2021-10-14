@@ -5,6 +5,9 @@
   // REDIRECT IF ADMIN NOT LOGGED IN
   if(!isset($_SESSION['admin'])) header("Location: login.php");
 
+	## UPLOADING PROOF OF PAYMENT SUCCESS MESSAGE
+	if(isset($_GET['success'])) echo "<script>alert('Proof of payment successfully uploaded!')</script>";
+
 ?>
 <!-- Head -->
 <?php include("includes/head.php"); ?>
@@ -98,7 +101,7 @@ main .admins table tr td:nth-child(8){color:#5cb85c;}
         <!-- MAIN -->
         <main>
           <h1><i class="fas fa-user-circle"></i> Admin: <?php echo $current_admin['admin_name']; ?></h1>
-          <h2>Refund</h2>
+          <h2>Refund (for joiner)</h2>
           <div class="contents">
             <div class="admins">
 							<form method="post">
@@ -120,7 +123,7 @@ main .admins table tr td:nth-child(8){color:#5cb85c;}
 										<th>Date Responded</th>
 										<th>Amount</th>
 										<th>Status</th>
-										<th></th>
+										<th>Proof of Payment</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -133,7 +136,7 @@ main .admins table tr td:nth-child(8){color:#5cb85c;}
 
 					## ALL REFUND APPROVED RESULTS
 					} else {
-						$request = DB::query("SELECT * FROM request WHERE req_type=? AND req_status=?", array("refund", "approved"), "READ");
+						$request = DB::query("SELECT * FROM request WHERE req_type=? AND (req_status=? || req_status=?)", array("refund", "approved", "refunded"), "READ");
 					}
 
 					## DISPLAY
@@ -147,14 +150,27 @@ main .admins table tr td:nth-child(8){color:#5cb85c;}
 								<td>".$result['req_type']."</td>
 								<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
 								<td>".date("M. j, Y", strtotime($result['req_dateresponded']))."</td>
-								<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
-								<td><em>".$result['req_status']."</em></td>";
+								<td>₱".number_format($result['req_amount'],2,'.',',')."</td>";
+
+							## CHECK IF RECEIVED BY USER
+							if($result['req_rcvd'] == 0) ## 0 MEANS PENDING REQUEST / REFUND PROOF NOT UPLOADED
+								echo "<td style='color:#33b5e5;'><em>pending<em></td>";
+							elseif($result['req_rcvd'] == 2) ## 2 MEANS SENT MONEY TO ORGA INFO
+								echo "<td style='color:#5cb85c;'><em>sent<em></td>";
+							else ## 1 MEANS MONEY RECEIVED BY JOINER AND RECEIVED BUTTON IS CLICKED
+								echo "<td style='color:#5cb85c;'><em>received<em></td>";
 
 							## CHECK IF THIS REFUND IS ALREADY REFUNDED
-							if($result['req_rcvd'] == 0) {
-								echo "<td><a href='admin-request-payout.php?req_id=".$result['req_id']."&refunded' onclick='return confirm(\"Are you sure payment is already sent to user?\");'>refund user</a></td>";
+							// if($result['req_rcvd'] == 0) {
+							// 	echo "<td><a href='admin-request-payout.php?req_id=".$result['req_id']."&refunded' onclick='return confirm(\"Are you sure payment is already sent to user?\");'>refund user</a></td>";
+							// } else {
+							// 	echo "<td><em>refunded</em></td>";
+							// }
+							## CHECK IF THIS REFUND IS ALREADY REFUNDED
+							if($result['req_status'] == "approved"){
+								echo "<td><a href='admin-request-refund-proof.php?req_id=".$result['req_id']."' onclick='return confirm(\"Are you sure you want to upload proof of payment?\");'>upload</a></td>";
 							} else {
-								echo "<td><em>refunded</em></td>";
+								echo "<td><a href='images/admin/".$_SESSION['admin']."/".$result['req_img']."' download='proof-of-payment-".$result['req_id']."'>Download Proof</a></td>";
 							}
 							echo "</tr>";
 

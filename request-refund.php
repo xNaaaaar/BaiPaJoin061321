@@ -1,6 +1,7 @@
 <?php
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
+	ob_start();
 	##
 	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
 ?>
@@ -30,6 +31,7 @@
 		main table tr{border-bottom:1px solid gray;}
 		main table tr:hover{background:#fafafa;}
 		main table td{padding:15px 10px;line-height:20px;}
+		main table td button{padding:5px 10px;}
 
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
@@ -86,32 +88,38 @@
 									<th>Book ID</th>
 									<th>Date Processed</th>
 									<th>Date Responded</th>
-									<th>Amount to Refund</th>
-									<th>Status</th>
+									<th>Amount to Received</th>
+									<th>Proof of Payment</th>
 									<th></th>
 								</tr>
 							</thead>
 						";
 
-						$request = DB::query("SELECT * FROM request r INNER JOIN booking b ON r.book_id = b.book_id WHERE joiner_id=? AND req_type=? AND (req_status=? OR req_status=?)", array($_SESSION['joiner'], "refund", "approved", "disapproved"), "READ");
+						$request = DB::query("SELECT * FROM request r JOIN booking b ON r.book_id = b.book_id WHERE joiner_id=? AND req_type=? ORDER BY req_dateprocess", array($_SESSION['joiner'], "refund"), "READ");
 
 						if(count($request)>0){
 							foreach ($request as $result) {
 								echo "
+								<input type='hidden' name='hidReqID' value='".$result['req_id']."'>
 								<tr>
 									<td>".$result['book_id']."</td>
 									<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>
 									<td>".date("M. j, Y", strtotime($result['req_dateresponded']))."</td>
 									<td>₱".number_format($result['req_amount'],2,".",",")."</td>";
 
-								if($result['req_status'] == "approved")
-									echo "<td><em class='success'>".$result['req_status']."</em></td>";
-								else
-									echo "<td><em class='error'>".$result['req_status']."</em></td>";
+								if($result['req_img'] == null) {
+									echo "<td>receipt not uploaded yet</td>";
+									echo "<td></td>";
+								##
+								} else {
+									echo "<td><a href='images/admin/2021001/".$result['req_img']."' download='proof-of-payment'>Download receipt</a></td>";
+									if($result['req_rcvd'] == 2)
+										echo "<td><button type='submit' name='btnRcvd' onclick='return confirm(\"Are you sure you received the refunded money for this adventure?\");'>Received</button></td>";
+									else
+										echo "<td class='success'><em>received</em></td>";
+								}
 
-								echo "
-									<td></td>
-								</tr>";
+								echo "</tr>";
 							}
 							echo "</table>";
 
@@ -120,6 +128,15 @@
 							echo "</table>";
 							echo "<h3>No refund request found!</h3>";
 						}
+					}
+
+					## WHEN BUTTON RECEIVED IS CLICKED
+					if(isset($_POST['btnRcvd'])){
+						$hidReqID = $_POST['hidReqID'];
+
+						DB::query("UPDATE request SET req_rcvd=? WHERE req_id=?", array(1, $hidReqID), "UPDATE");
+
+						header("Location: request-refund.php");
 					}
 					?>
 				</form>
@@ -132,5 +149,5 @@
 <!-- End Main -->
 
 <!--Footer -->
-<?php include("includes/footer.php"); ?>
+<?php include("includes/footer.php"); ob_end_flush();?>
 <!-- End Footer -->

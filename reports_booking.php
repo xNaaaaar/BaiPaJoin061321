@@ -232,7 +232,7 @@
 											## CHECK IF THERE ARE THE SAME adv_name, adv_kind, adv_address, adv_totalcostprice/person
 											## && CHECK IF THERE ARE ENOUGH GUESTS
 											if($this_adv['adv_name'] == $adv['adv_name'] && $this_adv['adv_kind'] == $adv['adv_kind'] && $this_adv['adv_address'] == $this_adv['adv_address'] && $this_adv_price == $adv_price && $this_guest >= $result['book_guests']){
-												$_SESSION['resched'] = $this_adv['adv_id'];
+												$_SESSION['resched'][] = $this_adv['adv_id'];
 											}
 										}
 
@@ -290,6 +290,9 @@
 									## JOINER CANNOT PAY IF 5 DAYS BEFORE ADVENTURE
 								}
 								echo "</tr>";
+							} else {
+								echo "</table>";
+								echo "<h3>No bookings found!</h3>";
 							}
 						}
 						echo "</table>";

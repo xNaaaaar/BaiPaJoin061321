@@ -121,13 +121,10 @@
 								} else {
 									echo "<td><a href='images/admin/2021001/".$result['req_img']."' download='proof-of-payment'>Download receipt</a></td>";
 									if($result['req_rcvd'] == 2)
-										echo "<td><button type='submit' name='btnRcvd' onclick='return confirm(\"Are you sure you received the payout money for this adventure?\");'>Received</button></td>";
+										echo "<td><button type='submit' name='btnRcvd' onclick='return confirm(\"Are you sure you received the paid money for this adventure?\");'>Received</button></td>";
 									else
 										echo "<td class='success'><em>received</em></td>";
 								}
-
-
-
 								echo "</tr>";
 							}
 							echo "</table>";

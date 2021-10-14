@@ -441,7 +441,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 
 				// REMAINING GUEST IN TEXT
 				if($result['adv_type'] == 'Packaged')
-					$remainingGuestsText = " - ".$result['adv_currentGuest']."/".$numRemainingGuests." slots occupied";
+					$remainingGuestsText = " - ".$result['adv_currentGuest']."/".$result['adv_maxguests']." slots occupied";
 
 				$no_cancel_starting_date = date("Y-m-d", strtotime("-5 days", strtotime($result['adv_date'])));
 
@@ -626,7 +626,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 
 				// REMAINING GUEST IN TEXT
 				if($result['adv_type'] == 'Packaged')
-					$remainingGuestsText = " - ".$result['adv_currentGuest']."/".$numRemainingGuests." slots occupied";
+					$remainingGuestsText = " - ".$result['adv_currentGuest']."/".$result['adv_maxguests']." slots occupied";
 
 				echo "
 				<a class='card-link' href='place.php?id=".$result['adv_id']."'>
@@ -703,13 +703,12 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 
 				// REMAINING GUEST IN TEXT
 				if($result['adv_type'] == 'Packaged')
-					$remainingGuestsText = " - ".$result['adv_currentGuest']."/".$numRemainingGuests." slots occupied";
+					$remainingGuestsText = " - ".$result['adv_currentGuest']."/".$result['adv_maxguests']." slots occupied";
 
 				// DISPLAY ALL ADVENTURE WITH FUTURE DATES
 				if($result["adv_date"] > date("Y-m-d")){
 					echo "
 					<div class='card'>
-						<span><em>on ".date("M j, Y", strtotime($result['adv_date']))."</em></span>
 						<figure>
 							<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt=''>
 						</figure>
@@ -732,26 +731,21 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 							</span>
 						</h2>
 						<p>".$result['adv_address']."</p>
-						<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
-						<ul class='icons'>";
+						<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>";
 
 					if(isset($_SESSION['joiner'])){
 						$no_cancel_date = date("Y-m-d", strtotime("-10 days", strtotime($result['adv_date'])));
 						## CHECK IF CURRENT DAY IS NOT 10DAYS BVEFORE ADV
 						if(date("Y-m-d") > $no_cancel_date) {
-							echo "<li><a href='' onclick='return confirm(\"You cannot resched this adventure because it is happening in a few days!\");'><i class='far fa-clock' data-toggle='tooltip' data-placement='top' title='Reschedule to this adventure'></i></a></li>";
+							echo "<a class='edit' href='' onclick='return confirm(\"You cannot resched this adventure because it is happening in a few days!\");'>Reschedule to this adventure</a>";
 
 						## ADV AVAILABLE TO RESCHED
 						} else {
-							echo "<li><a href='reports_resched.php?adv_id=".$result['adv_id']."&book_id=".$book_id."' onclick='return confirm(\"You can only resched this adventure once. Are you sure you want to reschedule?\");'><i class='far fa-clock' data-toggle='tooltip' data-placement='top' title='Reschedule to this adventure'></i></a></li>";
+							echo "<a class='edit' href='reports_resched.php?adv_id=".$result['adv_id']."&book_id=".$book_id."' onclick='return confirm(\"You can only resched this adventure once. Are you sure you want to reschedule?\");'>Reschedule to this adventure</a>";
 						}
-
 					}
 					##
-					echo "
-						</ul>
-					</div>
-					";
+					echo "</div>";
 				}
 			}
 		}
@@ -782,7 +776,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 
 				// REMAINING GUEST IN TEXT
 				if($result['adv_type'] == 'Packaged')
-					$remainingGuestsText = " - ".$result['adv_currentGuest']."/".$numRemainingGuests." slots occupied";
+					$remainingGuestsText = " - ".$result['adv_currentGuest']."/".$result['adv_maxguests']." slots occupied";
 
 				// DISPLAY ALL ADVENTURE WITH FUTURE DATES
 				if($result["adv_date"] > date("Y-m-d")){

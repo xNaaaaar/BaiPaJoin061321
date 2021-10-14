@@ -155,10 +155,12 @@
 						</thead>
 					";
 
-					$to_rate = DB::query("SELECT * FROM adventure a INNER JOIN booking b ON a.adv_id=b.adv_id WHERE joiner_id=? AND book_status=? AND adv_status=?", array($_SESSION['joiner'], "paid", "done"), "READ");
+					$to_rate = DB::query("SELECT * FROM adventure a JOIN booking b ON a.adv_id=b.adv_id WHERE joiner_id=? AND book_status=? AND adv_status=?", array($_SESSION['joiner'], "paid", "done"), "READ");
 
 					if(count($to_rate)>0){
 						foreach ($to_rate as $result) {
+							$booked_request = DB::query("SELECT * FROM request WHERE book_id=? AND req_status=?", array($result['book_id'], "refunded"), "READ");
+							if(count($booked_request)>0) continue;
 							echo "
 							<tr>
 								<td>".$result['book_id']."</td>

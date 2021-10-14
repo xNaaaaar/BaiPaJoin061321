@@ -8,45 +8,45 @@
 	## UPLOADING PROOF OF PAYMENT SUCCESS MESSAGE
 	if(isset($_GET['success'])) echo "<script>alert('Proof of payment successfully uploaded!')</script>";
 
-
 	## FOR JOINER
-	if(isset($_GET['req_id']) && isset($_GET['refunded'])){
-		## UPDATE this.req_id
-		DB::query("UPDATE request SET req_rcvd=? WHERE req_id=?", array(1, $_GET['req_id']), "READ");
+	// if(isset($_GET['req_id']) && isset($_GET['refunded'])){
+	// 	## UPDATE this.req_id
+	// 	DB::query("UPDATE request SET req_rcvd=? WHERE req_id=?", array(1, $_GET['req_id']), "READ");
+	//
+	// 	## DISPLAY this.req_id
+	// 	$refund = DB::query("SELECT * FROM request WHERE req_id=?", array($_GET['req_id']), "READ");
+	// 	$refund = $refund[0];
+	//
+	// 	## CREATE REQUEST FOR REFUNDED REQUEST
+	// 	$payout = DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, req_rcvd, book_id) VALUES(?,?,?,?,?,?,?,?)", array($refund['req_user'], "payout", date("Y-m-d"), date("Y-m-d"), $refund['req_amount'], "refunded", 0, $refund['book_id']), "CREATE");
+	//
+	// 	## EMAIL + SMS NOTIFICATION
+	// 	if($refund['req_user'] == 'joiner') {
+	// 		$request_joiner_id_db = DB::query("SELECT joiner_id FROM booking WHERE book_id = ?", array($refund['book_id']), "READ");
+	// 		$request_joiner_id = $request_joiner_id_db[0];
+	//
+	// 		$joiner_db = DB::query("SELECT * FROM joiner WHERE joiner_id = ?", array($request_joiner_id['joiner_id']), "READ");
+	// 		$joiner_info = $joiner_db[0];
+	//
+	// 		$sms_sendto = $joiner_info['joiner_phone'];
+	// 		$sms_message = "Hi ".$joiner_info['joiner_fname']."! The amount ".$refund['req_amount']." has been successfully refunded on ".date('d-M-Y').".";
+	//
+	// 		send_sms($sms_sendto,$sms_message);
+	//
+	// 		$email_message = html_payout_message($joiner_info['joiner_fname'], 'Joiner', $refund['req_amount']);
+	//
+	// 		$img_address = array();
+	// 		$img_name = array();
+	//
+	// 		array_push($img_address,'images/payout-bg.png','images/main-logo-green.png','images/payout-img.png');
+	// 		array_push($img_name,'background','logo','main');
+	//
+	// 		send_email($joiner_info['joiner_email'], "REFUND PAYOUT SUCCESSFUL", $email_message, $img_address, $img_name);
+	// 	}
+	//
+	// 	echo "<script>alert('Successfully sent refund!')</script>";
+	// }
 
-		## DISPLAY this.req_id
-		$refund = DB::query("SELECT * FROM request WHERE req_id=?", array($_GET['req_id']), "READ");
-		$refund = $refund[0];
-
-		## CREATE REQUEST FOR REFUNDED REQUEST
-		$payout = DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, req_rcvd, book_id) VALUES(?,?,?,?,?,?,?,?)", array($refund['req_user'], "payout", date("Y-m-d"), date("Y-m-d"), $refund['req_amount'], "refunded", 0, $refund['book_id']), "CREATE");
-
-		## EMAIL + SMS NOTIFICATION
-		if($refund['req_user'] == 'joiner') {
-			$request_joiner_id_db = DB::query("SELECT joiner_id FROM booking WHERE book_id = ?", array($refund['book_id']), "READ");
-			$request_joiner_id = $request_joiner_id_db[0];
-
-			$joiner_db = DB::query("SELECT * FROM joiner WHERE joiner_id = ?", array($request_joiner_id['joiner_id']), "READ");
-			$joiner_info = $joiner_db[0];
-
-			$sms_sendto = $joiner_info['joiner_phone'];
-			$sms_message = "Hi ".$joiner_info['joiner_fname']."! The amount ".$refund['req_amount']." has been successfully refunded on ".date('d-M-Y').".";
-
-			send_sms($sms_sendto,$sms_message);
-
-			$email_message = html_payout_message($joiner_info['joiner_fname'], 'Joiner', $refund['req_amount']);
-
-			$img_address = array();
-			$img_name = array();
-
-			array_push($img_address,'images/payout-bg.png','images/main-logo-green.png','images/payout-img.png');
-			array_push($img_name,'background','logo','main');
-
-			send_email($joiner_info['joiner_email'], "REFUND PAYOUT SUCCESSFUL", $email_message, $img_address, $img_name);
-		}
-
-		echo "<script>alert('Successfully sent refund!')</script>";
-	}
 ?>
 <!-- Head -->
 <?php include("includes/head.php"); ?>
@@ -138,7 +138,7 @@ main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;pad
         <!-- MAIN -->
         <main>
           <h1><i class="fas fa-user-circle"></i> Admin: <?php echo $current_admin['admin_name']; ?></h1>
-          <h2>Payout</h2>
+          <h2>Payout (for organizer)</h2>
           <div class="contents">
             <div class="admins">
 							<form method="post">
@@ -153,7 +153,7 @@ main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;pad
 								<thead class="table-dark">
 									<tr>
 										<th>ID#</th>
-										<th>Book Id</th>
+										<th>Adv Id</th>
 										<th>User</th>
 										<th>Type</th>
 										<th>Date Processed</th>
@@ -182,7 +182,7 @@ main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;pad
 							echo "
 							<tr>
 								<td>".$result['req_id']."</td>
-								<td>".$result['book_id']."</td>
+								<td>".$result['adv_id']."</td>
 								<td>".$result['req_user']."</td>
 								<td>".$result['req_type']."</td>
 								<td>".date("M. j, Y", strtotime($result['req_dateprocess']))."</td>

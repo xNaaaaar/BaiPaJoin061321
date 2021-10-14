@@ -15,3 +15,5 @@
 			}
 		}
 	}
+
+	adv_full_checker();

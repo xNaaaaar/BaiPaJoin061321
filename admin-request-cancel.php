@@ -22,7 +22,7 @@
 		DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($adv['adv_currentGuest'] - $adv['book_guests'], $adv['adv_id']), "UPDATE");
 
 		## UPDATE BOOKING PAID TO REFUNDED
-		DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array("refunded", $req['book_id']), "UPDATE");
+		## DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array("refunded", $req['book_id']), "UPDATE");
 
 		## TO BE REFUNDED AMOUNT
 		$adv_price = ($adv['adv_totalcostprice'] / $adv['adv_maxguests']) * $adv['book_guests'];
@@ -54,7 +54,7 @@
 			array_push($img_name,'background','logo','main');
 
 			send_email($joiner_info['joiner_email'], "BOOKING CANCELATION APPROVED", $email_message, $img_address, $img_name);
-		}	
+		}
 
 		echo "<script>alert('Successfully approved cancelation!')</script>";
 	}
@@ -106,7 +106,7 @@
 			send_email($orga_info['orga_email'], "BOOKING CANCELATION APPROVED", $email_message, $img_address, $img_name);
 
 			echo "<script>alert('Successfully approved cancelation!')</script>";
-		}	
+		}
 	}
 
 	## IF REQUEST CANCELATION IS DISAPPROVED (FOR JOINER && ORGANIZER)
@@ -133,7 +133,7 @@
 			array_push($img_name,'background','logo','main');
 
 			send_email($joiner_info['joiner_email'], "BOOKING CANCELATION DENIED", $email_message, $img_address, $img_name);
-		}	
+		}
 
 		else if($req['req_user'] == 'organizer') {
 			$orga_id_db = DB::query("SELECT orga_id FROM adventure WHERE adv_id = ?", array($req['adv_id']), "READ");
