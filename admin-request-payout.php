@@ -201,7 +201,7 @@ main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;pad
 							if($result['req_status'] == "approved"){
 								echo "<td><a href='admin-request-payout-proof.php?req_id=".$result['req_id']."' onclick='return confirm(\"Are you sure you want to upload proof of payment?\");'>upload</a></td>";
 							} else {
-								echo "<td></td>";
+								echo "<td><a href='images/admin/".$_SESSION['admin']."/".$result['req_img']."' download='proof-of-payment-".$result['req_id']."'>Download Proof</a></td>";
 							}
 
 							echo "</tr>";

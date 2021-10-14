@@ -299,6 +299,7 @@ function joinerSaveProfileChanges(){
 
 ##### CODE START HERE @ADD USER LEGAL DOCUMENTS (ORGANIZER) #####
 function addLegalDocuments(){
+	$radioView = $_POST['radioView'];
 	$cboType = $_POST['cboType'];
 	$txtDescription = trim($_POST['txtDescription']);
 	$imageName = uploadImage('fileDocuImage', "legal_docu/".$_SESSION['organizer']."/");
@@ -314,7 +315,7 @@ function addLegalDocuments(){
 		echo "<script>alert('File type is not allowed!')</script>";
 	}
 	else {
-		DB::query('INSERT INTO legal_document (orga_id, docu_type, docu_description, docu_image, docu_dateadded) VALUES (?,?,?,?,?)', array($_SESSION['organizer'], $cboType, $txtDescription, $imageName, date('Y-m-d')), "CREATE");
+		DB::query('INSERT INTO legal_document (orga_id, docu_type, docu_description, docu_image, docu_dateadded, docu_viewable) VALUES (?,?,?,?,?,?)', array($_SESSION['organizer'], $cboType, $txtDescription, $imageName, date('Y-m-d'), $radioView), "CREATE");
 
 		header("Location: settings.php?edited=1");
 	}
@@ -385,14 +386,19 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 			foreach($card as $result){
 				echo "
 				<div class='card'>
-						<figure>
-							<img src='legal_docu/".$_SESSION['organizer']."/".$result['docu_image']."' alt='".$result['docu_type']."'>
-						</figure>
-						<div>
-							<h2>".$result['docu_type']." <span>Added on: ".date('M. j, Y', strtotime($result['docu_dateadded']))."</span></h2>
-							<p>".$result['docu_description']."</p>
-						</div>
-						<ul class='icons'>
+					<figure>
+						<img src='legal_docu/".$_SESSION['organizer']."/".$result['docu_image']."' alt='".$result['docu_type']."'>
+					</figure>
+					<div>
+						";
+						if($result['docu_viewable'] == 1)
+							echo "<em>Viewable by Joiners: Public</em>";
+						else echo "<em>Viewable by Joiners: Private</em>";
+						echo "
+						<h2>".$result['docu_type']." <span>Added on: ".date('M. j, Y', strtotime($result['docu_dateadded']))."</span></h2>
+						<p>".$result['docu_description']."</p>
+					</div>
+					<ul class='icons'>
 				";
 					if(!$_SESSION['verified'] == 1 || $_SESSION['verified'] == 2){
 						echo "<li><a href='edit_docu.php?image=".$result['docu_image']."'><i class='fas fa-edit' data-toggle='tooltip' title='Update Document'></i></a></li>";
@@ -435,7 +441,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 
 				// REMAINING GUEST IN TEXT
 				if($result['adv_type'] == 'Packaged')
-					$remainingGuestsText = "- ".$numRemainingGuests." guests remaining";
+					$remainingGuestsText = " - ".$result['adv_currentGuest']."/".$numRemainingGuests." slots occupied";
 
 				$no_cancel_starting_date = date("Y-m-d", strtotime("-5 days", strtotime($result['adv_date'])));
 
@@ -455,14 +461,14 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						$rate = adv_ratings($result['adv_id'], true);
 						if($rate == 0) echo $rate;
 						else echo number_format($rate,1,".","");
-						echo " <i class='fas fa-star'></i>";
+						echo " <i class='fas fa-star'></i> ";
 
 						## RATINGS COUNT
-						echo "(".adv_ratings($result['adv_id'], true, "count ratings")." reviews) ";
+						echo "(".adv_ratings($result['adv_id'], true, "count ratings")." reviews)";
 
 						## ADV STATUS
-						if($result['adv_status'] == "done") echo "- done";
-						elseif($numRemainingGuests == 0) echo "- full";
+						if($result['adv_status'] == "done") echo " - done";
+						elseif($numRemainingGuests == 0) echo " - full";
 						else echo $remainingGuestsText;
 					echo "
 						</span>
@@ -620,7 +626,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 
 				// REMAINING GUEST IN TEXT
 				if($result['adv_type'] == 'Packaged')
-					$remainingGuestsText = "- ".$numRemainingGuests." guests remaining";
+					$remainingGuestsText = " - ".$result['adv_currentGuest']."/".$numRemainingGuests." slots occupied";
 
 				echo "
 				<a class='card-link' href='place.php?id=".$result['adv_id']."'>
@@ -634,14 +640,14 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						$rate = adv_ratings($result['adv_id'], true);
 						if($rate == 0) echo $rate;
 						else echo number_format($rate,1,".","");
-						echo " <i class='fas fa-star'></i>";
+						echo " <i class='fas fa-star'></i> ";
 
 						## RATINGS COUNT
-						echo "(".adv_ratings($result['adv_id'], true, "count ratings")." reviews) ";
+						echo "(".adv_ratings($result['adv_id'], true, "count ratings")." reviews)";
 
 						## ADV STATUS
-						if($result['adv_status'] == "done") echo "- done";
-						elseif($numRemainingGuests == 0) echo "- full";
+						if($result['adv_status'] == "done") echo " - done";
+						elseif($numRemainingGuests == 0) echo " - full";
 						else echo $remainingGuestsText;
 					echo "
 						</span>
@@ -697,7 +703,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 
 				// REMAINING GUEST IN TEXT
 				if($result['adv_type'] == 'Packaged')
-					$remainingGuestsText = "- ".$numRemainingGuests." slots remaining";
+					$remainingGuestsText = " - ".$result['adv_currentGuest']."/".$numRemainingGuests." slots occupied";
 
 				// DISPLAY ALL ADVENTURE WITH FUTURE DATES
 				if($result["adv_date"] > date("Y-m-d")){
@@ -713,14 +719,14 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 							$rate = adv_ratings($result['adv_id'], true);
 							if($rate == 0) echo $rate;
 							else echo number_format($rate,1,".","");
-							echo " <i class='fas fa-star'></i>";
+							echo " <i class='fas fa-star'></i> ";
 
 							## RATINGS COUNT
-							echo "(".adv_ratings($result['adv_id'], true, "count ratings")." reviews) ";
+							echo "(".adv_ratings($result['adv_id'], true, "count ratings")." reviews)";
 
 							## ADV STATUS
-							if($result['adv_status'] == "done") echo "- done";
-							elseif($numRemainingGuests == 0) echo "- full";
+							if($result['adv_status'] == "done") echo " - done";
+							elseif($numRemainingGuests == 0) echo " - full";
 							else echo $remainingGuestsText;
 						echo "
 							</span>
@@ -776,7 +782,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 
 				// REMAINING GUEST IN TEXT
 				if($result['adv_type'] == 'Packaged')
-					$remainingGuestsText = "- ".$numRemainingGuests." slots remaining";
+					$remainingGuestsText = " - ".$result['adv_currentGuest']."/".$numRemainingGuests." slots occupied";
 
 				// DISPLAY ALL ADVENTURE WITH FUTURE DATES
 				if($result["adv_date"] > date("Y-m-d")){
@@ -792,14 +798,14 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 							$rate = adv_ratings($result['adv_id'], true);
 							if($rate == 0) echo $rate;
 							else echo number_format($rate,1,".","");
-							echo " <i class='fas fa-star'></i>";
+							echo " <i class='fas fa-star'></i> ";
 
 							## RATINGS COUNT
-							echo "(".adv_ratings($result['adv_id'], true, "count ratings")." reviews) ";
+							echo "(".adv_ratings($result['adv_id'], true, "count ratings")." reviews)";
 
 							## ADV STATUS
-							if($result['adv_status'] == "done") echo "- done";
-							elseif($numRemainingGuests == 0) echo "- full";
+							if($result['adv_status'] == "done") echo " - done";
+							elseif($numRemainingGuests == 0) echo " - full";
 							else echo $remainingGuestsText;
 						echo "
 							</span>

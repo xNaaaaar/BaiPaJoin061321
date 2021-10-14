@@ -72,10 +72,12 @@
 			?>
 			<ul>
 				<li class="<?php if($currentSubMenu == 'cancel') echo 'current_sidebar'; ?>"><a href="request-cancel.php">Cancelation</a></li>
-				<?php if($_SESSION['current_user'] == 'Joiner') {?>
-				<li class="<?php if($currentSubMenu == 'refund') echo 'current_sidebar'; ?>"><a href="request-refund.php">Refund</a></li>
+				<?php if($_SESSION['current_user'] == 'Joiner') { ?>
+					<li class="<?php if($currentSubMenu == 'refund') echo 'current_sidebar'; ?>"><a href="request-refund.php">Refund</a></li>
+				<?php } else { ?>
+					<li class="<?php if($currentSubMenu == 'payout') echo 'current_sidebar'; ?>"><a href="request-payout.php">Payout</a></li>
 				<?php } ?>
-				<li class="<?php if($currentSubMenu == 'payout') echo 'current_sidebar'; ?>"><a href="request-payout.php">Payout</a></li>
+
 			</ul>
 			<?php
 			}

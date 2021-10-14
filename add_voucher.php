@@ -93,7 +93,7 @@
 
 							if(count($adv)>0){
 								foreach ($adv as $result) {
-									echo "<option value='".$result['adv_id']."'>".$result['adv_name']." / ".$result['adv_date']." / ".$result['adv_kind']."</option>";
+									echo "<option value='".$result['adv_id']."'>(".date("M j, Y", strtotime($result['adv_date'])).") ".$result['adv_name']." - ".$result['adv_kind']."</option>";
 								}
 							}
 							?>

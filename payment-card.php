@@ -189,7 +189,6 @@
 								# SUCCESS
 								} else {
 									$discount = $booked['book_totalcosts'] * ($voucher_exist['vouch_discount']/100);
-									$final_price = $final_price - $discount;
 
 									# KEEP TRACK OF USED VOUCHER
 									$_SESSION['used_voucher_code'] = $voucher_exist['vouch_code'];
@@ -200,6 +199,8 @@
 								echo "<p class='error'>Voucher does not exist!</p>";
 							}
 						}
+
+						$final_price = $final_price - $discount;
 					?>
 					<form method="post">
 						<section>

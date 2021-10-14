@@ -24,17 +24,14 @@
 		.main_con{display:flex;justify-content:space-between;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:20px;text-align:left;}
 		main .form{display:flex;justify-content:center;flex-wrap:wrap;margin-bottom:40px;position:relative;}
 		main .form input, main .form select, main .form textarea{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 30px;margin:15px auto;border:1px solid #cfcfcf;}
-		main .form input:nth-of-type(2){width:41%;}
-		main .form input:nth-of-type(3){width:41%;}
-		main .form input:nth-of-type(4){width:16%;}
-		main .form input:nth-of-type(6){width:49%;}
-		main .form input:nth-of-type(7){width:49%;}
+		main .form input[type=radio]{vertical-align:bottom;width:20px;height:20px;margin:0 0 3px 8px;border:none;box-shadow:none;}
 		main .form textarea{height:180px;border-radius:25px;resize:none;padding-top:25px;}
 		main .form input[type=file]{padding-top:13px;color:#b1b1b1;margin-top:0;}
 		main .form .label{font-size:15px;display:inline-block;text-align:left;width:99%;margin:5px 0 0;}
+		main .form .label-view{text-align:left;}
 
 		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 30px 30px 200px;line-height:35px;text-align:left;margin:15px 0;border:1px solid #cfcfcf;}
 		.card figure{width:140px;height:140px;position:absolute;top:30px;left:30px;border:1px solid #1a1a1a;}
@@ -87,6 +84,13 @@
 					<h2>Add Legal Documents</h2>
 
 					<div class="form form2">
+						<div class="label-view">
+							<label>Document viewable by joiners: </label>
+							<input type="radio" name="radioView" value="1" required>
+							<label>public</label>
+							<input type="radio" name="radioView" value="0" required>
+							<label>private</label>
+						</div>
 						<div class="label">
 							<label for="f01">Add Legal Document Image</label>
 						</div>

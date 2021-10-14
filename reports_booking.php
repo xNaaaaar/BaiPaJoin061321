@@ -232,7 +232,7 @@
 											## CHECK IF THERE ARE THE SAME adv_name, adv_kind, adv_address, adv_totalcostprice/person
 											## && CHECK IF THERE ARE ENOUGH GUESTS
 											if($this_adv['adv_name'] == $adv['adv_name'] && $this_adv['adv_kind'] == $adv['adv_kind'] && $this_adv['adv_address'] == $this_adv['adv_address'] && $this_adv_price == $adv_price && $this_guest >= $result['book_guests']){
-												$_SESSION['resched'][] = $this_adv['adv_id'];
+												$_SESSION['resched'] = $this_adv['adv_id'];
 											}
 										}
 
@@ -252,8 +252,6 @@
 											##
 											} else {
 												echo "<td><a href='reports_booking-resched.php?book_id=".$result['book_id']."&available=".implode(",",$_SESSION['resched'])."' onclick='return confirm(\"You can only resched this adventure once. Are you sure you want to reschedule?\");'>resched</a></td>";
-												## DESTROY THIS SESSION AFTER SENDING
-												unset($_SESSION['resched']);
 											}
 										}
 									}

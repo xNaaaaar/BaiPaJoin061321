@@ -68,7 +68,7 @@
 		.card figure img{width:100%;height:100%;}
 		.card div{display:inline-block;vertical-align:top;}
 		.card h2{font:600 35px/100% Montserrat,sans-serif;color:#313131;margin-bottom:15px;}
-		.card h2 span{font:500 italic 18px/100% Montserrat,sans-serif;color:#989898;display:block;margin:5px 0 0;}
+		.card h2 span{font:500 18px/100% Montserrat,sans-serif;color:#989898;display:block;margin:5px 0 0;}
 		.card p{font-size:23px;color:#989898;width:100% !important;font-weight:bold;}
 		.card ul{position:absolute;top:20px;right:20px;font-size:30px;}
 		.card ul li{display:inline-block;margin:0;}
@@ -140,9 +140,14 @@
 					</div>
 
 					<h2>Legal Documents <span class="legal" >
-						<a href="add_docu.php"><i class='fas fa-plus-circle' data-toggle='tooltip' title='Add Documents'></i></a>
+
 						<?php
 						$docu = DB::query("SELECT * FROM legal_document l INNER JOIN organizer o ON l.orga_id=o.orga_id WHERE o.orga_id=? AND orga_company!=? AND orga_address!=? AND orga_phone!=?", array($_SESSION['organizer'], "", "", ""), "READ");
+
+						## CANNOT ADD IF VERIFIED
+						if($_SESSION['verified'] != 1)
+							echo "<a href='add_docu.php'><i class='fas fa-plus-circle' data-toggle='tooltip' title='Add Documents'></i></a>";
+
 						## CHECK IF ORGANIZER STATUS IS NOT VERIFIED AND ADDED LEGAL IS GREATER THAN OR EQUAL TO TWO
 						if($_SESSION['verified'] == 0 && count($docu) >= 2){
 						?>

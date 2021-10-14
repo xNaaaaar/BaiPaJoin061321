@@ -166,9 +166,9 @@ header{}
 /*banner*/
 #banner{background:url(images/bnr-bg.png) no-repeat center top/cover, #fff;}
 	.bnr_con{min-height:948px;padding:0;}
-	.slider{width:884px;height:561px;position:absolute;top:238px;right:-102px;}
-	.slider:after{content:'';width:907px;height:581px;border-radius:120px;position:absolute;top:-10px;left:-5px;background:#72c4bb;transform:rotate(9deg);}
-	.rslides{border-radius:15px;box-shadow:15px 15px 10px -5px #cfcfcf;}
+	.slider{width:884px;height:460px;position:absolute;top:238px;right:-102px;}
+	.slider:after{content:'';width:900px;height:480px;border-radius:120px;position:absolute;top:-10px;left:-5px;background:#72c4bb;transform:rotate(9deg);}
+	.rslides{border-radius:15px;}
 
 	.bnr_info{max-width:100%;width:473px;position:absolute;top:330px;left:9px;z-index:50;}
 	.bnr_info h2{color:#fff;margin-bottom:30px;font:600 50px/100% Montserrat,sans-serif;}

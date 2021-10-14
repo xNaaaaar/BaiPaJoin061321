@@ -4,6 +4,9 @@
 	ob_start();
 	##
 	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
+
+	## DESTROY THIS SESSION AFTER SENDING
+	unset($_SESSION['resched']);
 ?>
 
 <!-- Head -->
