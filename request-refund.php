@@ -72,7 +72,7 @@
 			<!-- End of Sub Navigation -->
 			<main>
 				<form method="post" >
-					<h2>Refund</h2>
+					<h2>My Refund</h2>
 
 					<?php ##
 					// DISPLAY REFUND REQUEST FOR ORGANIZER

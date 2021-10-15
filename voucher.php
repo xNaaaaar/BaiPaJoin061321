@@ -102,7 +102,7 @@
 			<!-- End of Sub Navigation -->
 
 			<main>
-				<h2>Vouchers <span>
+				<h2>My Vouchers<span>
 					<?php
 						// CHECK IF ORGANIZER IS VERIFIED TO ADD VOUCHER
 						if(isset($_SESSION['organizer'])){

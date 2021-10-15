@@ -75,7 +75,7 @@
 			?>
 			<!-- End of Sub Navigation -->
 			<main>
-				<h2>Ratings</h2>
+				<h2>My Ratings</h2>
 
 				<?php ##
 				// DISPLAY RATING REPORTS FOR ORGANIZER

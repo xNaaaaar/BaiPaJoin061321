@@ -138,17 +138,17 @@ main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;pad
         <!-- MAIN -->
         <main>
           <h1><i class="fas fa-user-circle"></i> Admin: <?php echo $current_admin['admin_name']; ?></h1>
-          <h2>Payout (for organizer)</h2>
+          <h2>Payout (for organizers)</h2>
           <div class="contents">
             <div class="admins">
-							<form method="post">
+							<!-- <form method="post">
 								<select name="cboOption" required>
 									<option value="">-- SELECT USER --</option>
 									<option value="joiner">Joiner</option>
 									<option value="organizer">Organizer</option>
 								</select>
 								<button type="submit" name="btnSearch">Search</button>
-							</form>
+							</form> -->
 							<table class="table-responsive table">
 								<thead class="table-dark">
 									<tr>

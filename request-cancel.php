@@ -70,7 +70,7 @@
 			<!-- End of Sub Navigation -->
 			<main>
 				<form method="post" >
-					<h2>Cancelation</h2>
+					<h2>My Cancelations</h2>
 
 					<?php ##
 					// DISPLAY CANCELATION REQUEST FOR ORGANIZER

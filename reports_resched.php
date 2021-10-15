@@ -113,7 +113,7 @@
 			?>
 			<!-- End of Sub Navigation -->
 			<main>
-				<h2>Rescheduled</h2>
+				<h2>My Rescheduled Bookings</h2>
 
 				<?php ##
 				// DISPLAY BOOKING REPORTS FOR ORGANIZER

@@ -117,7 +117,7 @@
 
 			<main>
 				<form method="post">
-					<h2>Profile <span><a href="edit_profile.php"><i class='fas fa-edit' data-toggle='tooltip' title='Update Info'></i></a></span></h2>
+					<h2>My Profile <span><a href="edit_profile.php"><i class='fas fa-edit' data-toggle='tooltip' title='Update Info'></i></a></span></h2>
 					<!-- FOR ORGANIZER -->
 					<?php if(isset($_SESSION['organizer'])){
 						if($_SESSION['verified'] == 0)
@@ -134,12 +134,12 @@
 						<input type="email" value="<?php echo "{$_SESSION['email']}"; ?>" placeholder="Email Address" disabled>
 					</div>
 
-					<h2>Password <span><a href="edit_password.php"><i class='fas fa-edit' data-toggle='tooltip' title='Change Password'></i></a></span></h2>
+					<h2>My Password <span><a href="edit_password.php"><i class='fas fa-edit' data-toggle='tooltip' title='Change Password'></i></a></span></h2>
 					<div class="form form2">
 						<input type="password" name="" value="" placeholder="**********" disabled>
 					</div>
 
-					<h2>Legal Documents <span class="legal" >
+					<h2>My Legal Documents <span class="legal" >
 
 						<?php
 						$docu = DB::query("SELECT * FROM legal_document l INNER JOIN organizer o ON l.orga_id=o.orga_id WHERE o.orga_id=? AND orga_company!=? AND orga_address!=? AND orga_phone!=?", array($_SESSION['organizer'], "", "", ""), "READ");
@@ -179,7 +179,7 @@
 						<input type="email" value="<?php echo "{$_SESSION['email']}"; ?>" placeholder="Email Address" disabled>
 					</div>
 
-					<h2>Password <span><a href="edit_password.php"><i class='fas fa-edit' data-toggle='tooltip' title='Change Password'></i></a></span></h2>
+					<h2>My Password <span><a href="edit_password.php"><i class='fas fa-edit' data-toggle='tooltip' title='Change Password'></i></a></span></h2>
 					<div class="form form2">
 						<input type="password" name="" value="" placeholder="**********" disabled>
 					</div>

@@ -103,6 +103,21 @@
 					<div class="main_info">
 						<h2>Overview</h2>
 						<p><?php echo $place['adv_details']; ?></p>
+						<?php
+						## LEGAL DOCU OF SPECIFIC ORGANIZER
+						$docu = DB::query("SELECT * FROM legal_document WHERE orga_id=? AND docu_viewable=?", array($place['orga_id'],1), "READ");
+						if(count($docu)>0){
+							echo "
+							<p>Here are some legal documents of organizer you can download: </p>
+							<ul>";
+							foreach ($docu as $result) {
+								echo "<li><a href='legal_docu/".$place['orga_id']."/".$result['docu_image']."' download='Legal-Documents'>".$result['docu_type']."</a></li>";
+							}
+							echo "
+							</ul>";
+						}
+						?>
+
 						<p>You can also download <a href="<?php echo "images/organizers/".$place['orga_id']."/".$place['adv_itineraryImg']; ?>" download="Adventure-Itinerary">this</a> adventure itinerary and <a href="<?php echo "images/organizers/".$place['orga_id']."/".$place['adv_dosdont_image']; ?>" download="Dos-And-Donts">do's and dont's</a>.</p>
 					</div>
 					<div class="book_info">
@@ -160,7 +175,7 @@
 									}
 								}
 
-								
+
 								// WHEN BUTTON IS CLICKED
 								if(isset($_POST['btnBook'])){
 									if(count($adv_checker)>0){

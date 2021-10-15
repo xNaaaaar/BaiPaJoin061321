@@ -120,7 +120,7 @@
 			<!-- End of Sub Navigation -->
 
 			<main>
-				<h2>Favorite Adventures</h2>
+				<h2>My Favorite Adventures</h2>
 				<form method="post" >
 					<input type="text" name="txtSearch" placeholder="Search any...">
 

@@ -77,7 +77,7 @@
 			<!-- End of Sub Navigation -->
 			<main>
 				<form method="post" >
-					<h2>Pending Requests</h2>
+					<h2>My Pending Requests</h2>
 
 					<?php ##
 					// DISPLAY REQUEST FOR ORGANIZER

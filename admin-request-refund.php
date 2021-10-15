@@ -101,17 +101,17 @@ main .admins table tr td:nth-child(8){color:#5cb85c;}
         <!-- MAIN -->
         <main>
           <h1><i class="fas fa-user-circle"></i> Admin: <?php echo $current_admin['admin_name']; ?></h1>
-          <h2>Refund (for joiner)</h2>
+          <h2>Refund (for joiners)</h2>
           <div class="contents">
             <div class="admins">
-							<form method="post">
+							<!-- <form method="post">
 								<select name="cboOption" required>
 									<option value="">-- SELECT USER --</option>
 									<option value="joiner">Joiner</option>
 									<option value="organizer">Organizer</option>
 								</select>
 								<button type="submit" name="btnSearch">Search</button>
-							</form>
+							</form> -->
 							<table class="table-responsive table">
 								<thead class="table-dark">
 									<tr>

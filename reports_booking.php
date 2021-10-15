@@ -14,10 +14,10 @@
 		DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($adv['adv_currentGuest'] - $adv['book_guests'], $adv['adv_id']), "UPDATE");
 
 		## UPDATE BOOKING PAID TO REFUNDED
-		DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array("refunded", $_GET['book_id']), "UPDATE");
+		## DB::query("UPDATE booking SET book_status=? WHERE book_id=?", array("refunded", $_GET['book_id']), "UPDATE");
 
 		## REFUND 100% PRICE PAID BY JOINER MINUS THE FEE
-		$final_price = $adv['adv_totalcostprice'] / $adv['adv_maxguests'];
+		$final_price = ($adv['adv_totalcostprice'] / $adv['adv_maxguests']) * $adv['book_guests'];
 		$final_price = number_format($final_price, 2, ".", ",");
 
 		## ADD NEW REQUEST AS REFUND
@@ -93,7 +93,7 @@
 			?>
 			<!-- End of Sub Navigation -->
 			<main>
-				<h2>Bookings</h2>
+				<h2>My Bookings</h2>
 				<!-- <h3>Note: Pay anytime by clicking the <i class='fas fa-hand-holding-usd'></i> icon. Request cancel by clicking <i class='fas fa-ban'></i> icon. View booking details by clicking <i class='far fa-eye'></i> icon.</h3> -->
 
 				<?php ##
@@ -275,7 +275,7 @@
 
 									## CHECK IF THIS ADVENTURE IS CANCELED BY ORGANIZER
 									} elseif($canceled){
-										echo "<td><a href='reports_booking.php?book_id=".$result['book_id']."' onclick='return confirm(\"Are you sure you want a refund to this canceled adventure?\");'>refund</a></td>";
+										echo "<td><a href='reports_booking.php?book_id=".$result['book_id']."' onclick='return confirm(\"Refunding canceled adventure is 100% moneyback excluding the fee. Are you sure you want a refund?\");'>refund</a></td>";
 
 									## CANCELABLE DATE
 									} else {
@@ -290,9 +290,6 @@
 									## JOINER CANNOT PAY IF 5 DAYS BEFORE ADVENTURE
 								}
 								echo "</tr>";
-							} else {
-								echo "</table>";
-								echo "<h3>No bookings found!</h3>";
 							}
 						}
 						echo "</table>";

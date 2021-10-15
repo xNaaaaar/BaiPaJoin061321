@@ -83,7 +83,7 @@
 			<!-- End of Sub Navigation -->
 			<main>
 				<form method="post" >
-					<h2>Payout</h2>
+					<h2>My Payouts</h2>
 
 					<?php ##
 					// DISPLAY PAYOUT REQUEST FOR ORGANIZER

@@ -103,7 +103,7 @@
 			<!-- End of Sub Navigation -->
 
 			<main>
-				<h2>Posted Adventures <span class="legal">
+				<h2>My Posted Adventures <span class="legal">
 					<?php
 					// CHECK IF ORGANIZER IS VERIFIED TO POST ADVENTURE
 					if($_SESSION['verified'] == 1)
