@@ -11,6 +11,7 @@
 	// IF ADVENTURE IS FULL
 	if(isset($_GET['full']))
 		echo "<script>alert('This adventure is full!')</script>";
+
 ?>
 
 <!-- Head -->
@@ -138,30 +139,36 @@
 								$adv_checker = DB::query('SELECT * FROM adventure WHERE adv_id=?', array($_GET['id']), "READ");
 								$adv_checker = $adv_checker[0];
 
-								// IF CHECK JOINER HAS OTHER BOOKING SET ON THE SAME DATE
-								$adv_ids = DB::query('SELECT adv_id FROM booking WHERE joiner_id=? AND book_status=?', array($_SESSION['joiner'], 'paid'), "READ");
-								$adv_ids = $adv_ids[0];
+								//This will only excute if a joiner will login.
+								if(!empty($_SESSION['joiner'])) {
+									// IF CHECK JOINER HAS OTHER BOOKING SET ON THE SAME DATE
+									$adv_ids = DB::query('SELECT adv_id FROM booking WHERE joiner_id=? AND book_status=?', array($_SESSION['joiner'], 'paid'), "READ");
+									if(!empty($adv_ids)) {
+										$adv_ids = $adv_ids[0];
+										$sameday_booking = -1;
+										if(!empty($adv_ids)) {
+											foreach ($adv_ids as $adv_id) {
+												$adv = DB::query('SELECT adv_date FROM adventure WHERE adv_id=?', array($adv_id), "READ");
+												$adv = $adv[0];
 
-								$sameday_booking = 0;
-
-								if(!empty($adv_ids)) {
-									foreach ($adv_ids as $adv_id) {
-										$adv = DB::query('SELECT adv_date FROM adventure WHERE adv_id=?', array($adv_id), "READ");
-										$adv = $adv[0];
-
-										if($adv['adv_date'] == $adv_checker['adv_date']) {
-											$sameday_booking = 1;
-											break;
+												if($adv['adv_date'] == $adv_checker['adv_date']) {
+													$sameday_booking = 1;
+													break;
+												}
+											}
 										}
 									}
 								}
 
+								
 								// WHEN BUTTON IS CLICKED
 								if(isset($_POST['btnBook'])){
 									if(count($adv_checker)>0){
 										// CHECK ADVENTURE IF FULL
-										if($adv_checker['adv_status'] == 'not full')
+										if($adv_checker['adv_status'] == 'not full') {
+											file_put_contents('debug.log', date('h:i:sa').' => '. $sameday_booking . "\n" . "\n", FILE_APPEND);
 											header("Location: book.php?id=".$_GET['id']."&same_day=".$sameday_booking."");
+										}
 										else
 											header("Location: place.php?id=".$_GET['id']."&full");
 									}

@@ -2709,7 +2709,8 @@ function html_transreceipt_message($attach, $type) {
 
 function html_bookitinerary_message($book, $adventure, $guests , $joiner) {
 
-	$guest_data = $guests[0];
+	if(!empty($guests))
+		$guest_data = $guests[0];
 
 	$message = "
 		<html>
