@@ -116,6 +116,7 @@ main .admins{height:auto;width:100%;}
     								<th>Status</th>
     								<th></th>
     								<th></th>
+    								<th></th>
                   </tr>
                 </thead>
 								<tbody>
@@ -146,10 +147,12 @@ main .admins{height:auto;width:100%;}
 													echo "<td><a href='admin-verify.php?orga_id=".$result['orga_id']."'>view</a></td>";
 											} elseif($result['orga_status'] == 1) {
 												echo "<td style='color:#00c851;'><em>verified</em></td>";
-												echo "<td><a href=''>5 <i class='fas fa-star'></i></a></td>";
+												echo "<td>5 <i class='fas fa-star'></i></td>";
+												echo "<td><a href=''>view ratings</a></td>";
 											} else {
 												echo "<td style='color:#ff4444;'><em>not verified</em></td>";
 												echo "<td><em>no ratings</em></td>";
+												echo "<td>---</td>";
 											}
                       echo "
 												<td></td>

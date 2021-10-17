@@ -116,18 +116,18 @@
 
 	<script type="text/javascript" defer>
 		"use strict"
-
+		// LOADING SCREEN
 		$(window).on("load",()=>{
 			$(".loader-wrapper").fadeOut();
 		});
-
+		// DISPLAY INPUT FIELD FOR MAX GUESTS IN ADDING ADVENTURE
 		function displayMaxGuests(that) {
 			if (that.value == "packaged")
 					document.getElementById("display").style.opacity = 1;
 			else
 					document.getElementById("display").style.opacity = 0;
 		}
-
+		// TOTAL PRICE FOR NUMBER OF GUESTS
 		function displayTotalPrice(guest=1, slots = null){
 			let price = 0;
 			let text = guest.concat("/");
@@ -141,7 +141,7 @@
 
 			<?php } ?>
 		}
-
+		// COPYING OF VOUCHER CODE
 		function copy_voucher_code(code){
 		  /* Copy the text inside the text field */
 		  navigator.clipboard.writeText(code);
@@ -149,10 +149,44 @@
 		  /* Alert the copied text */
 		  alert("Voucher code " + code + " successfully copied!");
 		}
-
+		// NUMBER WITH COMMA
 		function numberWithCommas(x) {
 		  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		}
+		// COUNTDOWN TIMER
+		<?php
+		if(isset($_SESSION['date_process'])){ ?>
+			// Update the count down every 1 second
+			var x = setInterval(function() {
+				<?php // echo date("M j, Y", strtotime($_SESSION['date_process'])); ?>
+				// Set the date we're counting down to
+				var this_date = document.getElementById("countdowndate").innerHTML;
+				var countDownDate = new Date(this_date).getTime();
+
+				// Get today's date and time
+				var now = new Date().getTime();
+
+				// Find the distance between now and the count down date
+			  var distance = countDownDate - now;
+
+				// Time calculations for days, hours, minutes and seconds
+			  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+			  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+			  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+				// Display the result in the element with id="demo"
+			  document.getElementById("timer").innerHTML = hours + "H "
+			  + minutes + "M " + seconds + "S ";
+
+				// If the count down is finished, write some text
+			  if (distance < 0) {
+			    clearInterval(x);
+			    document.getElementById("timer").innerHTML = "<span style='color:red;'>EXPIRED</span>";
+			  }
+			}, 1000);
+		<?php
+		} ?>
 	</script>
 </body>
 </html>

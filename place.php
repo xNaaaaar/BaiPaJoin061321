@@ -28,6 +28,8 @@
 		main h1 span{display:block;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 
+		.main_info ul{text-align:left;margin:-20px 0 30px 30px;list-style:circle;}
+
 		.error{font-size:20px;color:red;margin:50px auto;}
 	</style>
 

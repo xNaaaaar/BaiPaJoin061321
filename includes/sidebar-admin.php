@@ -35,7 +35,6 @@
 			<?php
 			}
 			?>
-		<li class="<?php if($currentSidebarPage == 'ratings') echo 'current_sidebar'; ?>"><a href="admin-joiner.php">Ratings</a> </li>
 		<li><a href="logout.php" onclick="return confirm('Are you sure you want to logout?');"><q>Logout</q></a></li>
 	</ul>
 </aside>

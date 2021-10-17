@@ -195,7 +195,7 @@
 					if(count($joiner_bookings)>0){
 						foreach ($joiner_bookings as $result) {
 							## CHECK IF BOOKING IS IN REQUEST
-							$req = DB::query("SELECT * FROM request WHERE book_id=? AND req_status!=?", array($result['book_id'], "disapproved"), "READ");
+							$req = DB::query("SELECT * FROM request WHERE book_id=? AND req_status!=? AND req_status!=?", array($result['book_id'], "disapproved", "reverted"), "READ");
 							## GET THE SPECIFIC ADVENTURE
 							$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($result['adv_id']), "READ");
 							$adv = $adv[0];
@@ -225,6 +225,8 @@
 									$adv_all = DB::query("SELECT * FROM adventure WHERE adv_id!=?", array($result['adv_id']), "READ");
 									if(count($adv_all)>0){
 										foreach ($adv_all as $this_adv) {
+											## DO NOT INCLUDE THE CANCELED ADV
+											if($this_adv['adv_status'] == "canceled") continue;
 											## PRICE PER PERSON
 											$this_adv_price = number_format(($this_adv['adv_totalcostprice'] / $this_adv['adv_maxguests']),2,'.',',');
 											## REMAINING GUESTS
@@ -251,7 +253,11 @@
 
 											##
 											} else {
-												echo "<td><a href='reports_booking-resched.php?book_id=".$result['book_id']."&available=".implode(",",$_SESSION['resched'])."' onclick='return confirm(\"You can only resched this adventure once. Are you sure you want to reschedule?\");'>resched</a></td>";
+												## THIS ADV CAN BE RESCHED IF AVAILABLE && NOT REVERTED
+												if(adv_is_available($result['adv_id'], "resched") && !adv_is_reverted($result['book_id'])){
+													echo "<td><a href='reports_booking-resched.php?book_id=".$result['book_id']."&available=".implode(",",$_SESSION['resched'])."' onclick='return confirm(\"You can only resched this adventure once. Are you sure you want to reschedule?\");'>resched</a></td>";
+
+												} else echo "<td></td>";
 											}
 										}
 									}
@@ -285,9 +291,14 @@
 								} else {
 									echo "<td></td>";
 									echo "<td></td>";
-									echo "<td><a href='payment-card.php?book_id=".$result['book_id']."&id=".$result['adv_id']."' onclick='return confirm(\"Ready to pay now?\");'>pay</a></td>";
-
 									## JOINER CANNOT PAY IF 5 DAYS BEFORE ADVENTURE
+									if(adv_is_available($result['adv_id'], "pay")) {
+										echo "<td><a href='payment-card.php?book_id=".$result['book_id']."&id=".$result['adv_id']."' onclick='return confirm(\"Ready to pay now?\");'>pay</a></td>";
+									} else {
+										echo "<td></td>";
+									}
+
+
 								}
 								echo "</tr>";
 							}

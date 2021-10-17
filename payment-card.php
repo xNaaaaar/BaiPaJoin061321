@@ -61,7 +61,7 @@
 		.voucher p{margin:0 0 5px 5px;width:100%;}
 		.voucher .error{color:red;}
 		.voucher section{display:flex;justify-content:space-between;}
-		.voucher input{display:inline-block;width:80%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
+		.voucher input{display:inline-block;width:80%;height:50px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
 		.voucher .edit{width:18% !important;margin:0 auto;}
 
 		.price_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}

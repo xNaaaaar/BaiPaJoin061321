@@ -21,7 +21,7 @@
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:30px;text-align:left;}
-		main h3{font-weight:500;font-size:20px;color:red;margin:20px 0 0;text-align:center;}
+		main h3{font-weight:500;font-size:25px;margin:20px 0 10px;text-align:left;display:block;}
 
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
@@ -64,13 +64,46 @@
 				<div class="place_ratings">
 					<h2>Rate</h2>
 					<form method="post" enctype="multipart/form-data">
-						<div class="rating">
-							<input type="radio" id="star5" name="star" value="5" required><label for="star5"></label>
-							<input type="radio" id="star4" name="star" value="4" required><label for="star4"></label>
-							<input type="radio" id="star3" name="star" value="3" required><label for="star3"></label>
-							<input type="radio" id="star2" name="star" value="2" required><label for="star2"></label>
-							<input type="radio" id="star1" name="star" value="1" required><label for="star1"></label>
-						</div>
+						<h3>Accomodation Rating</h3>
+						<section>
+							<div class="rating">
+								<input type="radio" id="star5" name="overall_rating" value="5" required><label for="star5" title='Excellent'></label>
+								<input type="radio" id="star4" name="overall_rating" value="4" required><label for="star4" title='Very Good'></label>
+								<input type="radio" id="star3" name="overall_rating" value="3" required><label for="star3" title='Good'></label>
+								<input type="radio" id="star2" name="overall_rating" value="2" required><label for="star2" title='Bad'></label>
+								<input type="radio" id="star1" name="overall_rating" value="1" required><label for="star1" title='Very Bad'></label>
+							</div>
+						</section>
+						<h3>Tour Provider Rating</h3>
+						<section>
+							<div class="rating">
+								<input type="radio" id="star5" name="overall_rating" value="5" required><label for="star5" title='Excellent'></label>
+								<input type="radio" id="star4" name="overall_rating" value="4" required><label for="star4" title='Very Good'></label>
+								<input type="radio" id="star3" name="overall_rating" value="3" required><label for="star3" title='Good'></label>
+								<input type="radio" id="star2" name="overall_rating" value="2" required><label for="star2" title='Bad'></label>
+								<input type="radio" id="star1" name="overall_rating" value="1" required><label for="star1" title='Very Bad'></label>
+							</div>
+						</section>
+						<h3>Overall Rating</h3>
+						<section>
+							<div class="rating">
+								<input type="radio" id="star5" name="overall_rating" value="5" required><label for="star5" title='Excellent'></label>
+								<input type="radio" id="star4" name="overall_rating" value="4" required><label for="star4" title='Very Good'></label>
+								<input type="radio" id="star3" name="overall_rating" value="3" required><label for="star3" title='Good'></label>
+								<input type="radio" id="star2" name="overall_rating" value="2" required><label for="star2" title='Bad'></label>
+								<input type="radio" id="star1" name="overall_rating" value="1" required><label for="star1" title='Very Bad'></label>
+							</div>
+						</section>
+						<h3>Overall Rating</h3>
+						<section>
+							<div class="rating">
+								<input type="radio" id="star5" name="overall_rating" value="5" required><label for="star5" title='Excellent'></label>
+								<input type="radio" id="star4" name="overall_rating" value="4" required><label for="star4" title='Very Good'></label>
+								<input type="radio" id="star3" name="overall_rating" value="3" required><label for="star3" title='Good'></label>
+								<input type="radio" id="star2" name="overall_rating" value="2" required><label for="star2" title='Bad'></label>
+								<input type="radio" id="star1" name="overall_rating" value="1" required><label for="star1" title='Very Bad'></label>
+							</div>
+						</section>
 						<div class="feedback">
 							<label>Upload pictures of adventure</label>
 							<input type="file" name="fileAdvImg" required>

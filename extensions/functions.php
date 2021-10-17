@@ -662,10 +662,10 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					if(count($favAdv) > 0)
 						echo "<li><a id='saved' class='added' href='favorites.php?removeFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to remove this adventure to your favorites?\");'><i class='fas fa-heart' data-toggle='tooltip' title='Remove from Favorite'></i></a></li>";
 					else
-						echo "<li><a href='favorites.php?addFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to add this adventure to your favorites?\");'><i class='fas fa-heart' data-toggle='tooltip' title='Add to Favorite'></i></a></li>";
+						echo "<li><a href='favorites.php?addFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to add this adventure to your favorites?\");'><i class='far fa-heart' data-toggle='tooltip' title='Add to Favorite'></i></a></li>";
 
 				} else
-					echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to add adventures to favorites?\");'><i class='fas fa-heart' data-toggle='tooltip' data-placement='top' title='Add to Favorite'></i></a></li>";
+					echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to add adventures to favorites?\");'><i class='far fa-heart' data-toggle='tooltip' data-placement='top' title='Add to Favorite'></i></a></li>";
 
 				echo "
 					</ul>
@@ -814,10 +814,10 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						if(count($favAdv) > 0)
 							echo "<li><a id='saved' class='added' href='adventures.php?removeFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to remove this adventure to your favorites?\");'><i class='fas fa-heart' data-toggle='tooltip' data-placement='top' title='Remove from Favorite'></i></a></li>";
 						else
-							echo "<li><a href='adventures.php?addFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to add this adventure to your favorites?\");'><i class='fas fa-heart' data-toggle='tooltip' data-placement='top' title='Add to Favorite'></i></a></li>";
+							echo "<li><a href='adventures.php?addFav=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to add this adventure to your favorites?\");'><i class='far fa-heart' data-toggle='tooltip' data-placement='top' title='Add to Favorite'></i></a></li>";
 
 					} else {
-						echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to add adventures to favorites?\");'><i class='fas fa-heart' data-toggle='tooltip' data-placement='top' title='Add to Favorite'></i></a></li>";
+						echo "<li><a href='login.php' onclick='return confirm(\"Are you sure you want to login to add adventures to favorites?\");'><i class='far fa-heart' data-toggle='tooltip' data-placement='top' title='Add to Favorite'></i></a></li>";
 					}
 					##
 					echo "
@@ -2821,7 +2821,8 @@ function html_bookitinerary_message($book, $adventure, $guests , $joiner) {
 }
 
 function adv_ratings($adv_id, $specific_advs = false, $counts = null){
-	$total_stars = 0; $counter = 0;
+	$total_stars = 0;
+	$counter = 0;
 	$this_adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($adv_id), "READ");
 	$this_adv = $this_adv[0];
 	## ADVENTURE THAT HAS BEEN RATED WITH SPECIFIC ORGANIZER
@@ -2849,5 +2850,44 @@ function adv_ratings($adv_id, $specific_advs = false, $counts = null){
 		else return $total_stars = $total_stars / $counter;
 	} else return $counter;
 }
+
+## CHECK ADVENTURES AVAILABILITY IN TERMS OF CANCELING, BOOKING, RESCHEDULING, PAYING FOR JOINER
+function adv_is_available($adv_id, $type){
+	$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($adv_id), "READ");
+	## CHECK IF ADV EXISTS
+	if(count($adv)>0){
+		$adv = $adv[0];
+		if($type == "cancel"){
+			## CHECK IF CURRENT DATE IS NOT THE 10TH DAY BEFORE ADV
+			$not_avail_date = date("Y-m-d", strtotime("-10 days", strtotime($adv['adv_date'])));
+			if(date("Y-m-d") >= $not_avail_date)
+				return false;
+			else
+				return true;
+
+		} elseif ($type == "resched" || $type == "pay" || $type == "book") {
+			## CHECK IF CURRENT DATE IS NOT THE 5TH DAY BEFORE ADV
+			$not_avail_date = date("Y-m-d", strtotime("-5 days", strtotime($adv['adv_date'])));
+			if(date("Y-m-d") >= $not_avail_date)
+				return false;
+			else
+				return true;
+
+		} else {
+			return false;
+		}
+	}
+
+	return false;
+}
+
+## ADV IS REVERTED AFTER RESCHEDULED
+function adv_is_reverted($book_id){
+	$req = DB::query("SELECT * FROM request WHERE book_id=? AND req_status=?", array($book_id, "reverted"), "READ");
+	if(count($req)>0)
+		return true;
+	return false;
+}
+
 
 ##### END OF CODES #####

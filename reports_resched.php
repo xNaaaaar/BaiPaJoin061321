@@ -27,7 +27,7 @@
 		DB::query("UPDATE booking SET adv_id=? WHERE book_id=?", array($_GET['adv_id'], $_GET['book_id']), "UPDATE");
 
 		## INSERT RESCHED IN REQUEST
-		DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, req_rcvd, book_id) VALUES(?,?,?,?,?,?,?,?)", array("joiner", "resched", date("Y-m-d"), date("Y-m-d"), $booked['book_totalcosts'], "rescheduled", 0, $_GET['book_id']), "CREATE");
+		DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, req_rcvd, book_id, adv_id) VALUES(?,?,?,?,?,?,?,?,?)", array("joiner", "resched", date("Y-m-d"), date("Y-m-d"), $booked['book_totalcosts'], "rescheduled", 0, $_GET['book_id'], $booked['adv_id']), "CREATE");
 
 		## EMAIL + SMS NOTIFICATION
 		$joiner_db = DB::query("SELECT * FROM joiner WHERE joiner_id = ?", array($_SESSION['joiner']), "READ");
@@ -46,6 +46,36 @@
 		$email_message = html_reschedule_message($joiner_info['joiner_fname'], $current_adv['adv_date'], $resched_adv['adv_date']);
 
 		send_email($joiner_info['joiner_email'], "BOOKING RESCHEDULE", $email_message, $img_address, $img_name);
+
+		echo "<script>alert('Successfully resched adventure!')</script>";
+	}
+
+	## REVERTING TO PREVIOUS ADVENTURE BOOKED
+	if(isset($_POST['btnRevert'])){
+		## GET THE SPECIFIC REQUEST
+		$joiner_req = DB::query("SELECT * FROM request r JOIN booking b ON r.book_id = b.book_id WHERE joiner_id=? AND req_type=?", array($_SESSION['joiner'], "resched"), "READ");
+		$joiner_req = $joiner_req[0];
+		##
+		$current_adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($joiner_req[18]), "READ");
+		$current_adv = $current_adv[0];
+		$to_revert_adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($joiner_req[11]), "READ");
+		$to_revert_adv = $to_revert_adv[0];
+		## UPDATE ADVENTURES CURRENT GUEST
+			## CURRENT ADV
+			DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($current_adv['adv_currentGuest'] - $joiner_req['book_guests'], $current_adv['adv_id']), "UPDATE");
+			## TO REVERT ADV
+			DB::query("UPDATE adventure SET adv_currentGuest=? WHERE adv_id=?", array($to_revert_adv['adv_currentGuest'] + $joiner_req['book_guests'], $to_revert_adv['adv_id']), "UPDATE");
+
+		## UPDATE IF FULL OR NOT FULL
+		adv_full_checker();
+
+		## UPDATE BOOKING ADV_ID
+		DB::query("UPDATE booking SET adv_id=? WHERE book_id=?", array($to_revert_adv['adv_id'], $joiner_req[10]), "UPDATE");
+
+		## UPDATE req_status = reverted
+		DB::query("UPDATE request SET req_status=? WHERE req_id=?", array("reverted", $joiner_req['req_id']), "UPDATE");
+
+		echo "<script>alert('Successfully reverted to previous adventure!')</script>";
 	}
 
 ?>
@@ -74,6 +104,7 @@
 		main table tr:hover{background:#fafafa;}
 		main table td{padding:15px 10px;line-height:20px;}
 		main table td a:hover{text-decoration:none;color:#000;}
+		main table td button{padding:5px 10px;}
 
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
@@ -123,6 +154,7 @@
 				// DISPLAY BOOKING REPORTS FOR JOINER
 				} else {
 					echo "
+					<form method='post'>
 					<table>
 						<thead>
 							<tr>
@@ -130,30 +162,45 @@
 								<th>Date Process</th>
 								<th>Amount</th>
 								<th>Status</th>
+								<th>Revert Resched Time</th>
+								<th>Revert</th>
 								<th>Receipt</th>
 							</tr>
 						</thead>
 					";
 
-					$booked_resched = DB::query("SELECT * FROM booking b INNER JOIN request r ON b.book_id=r.book_id WHERE joiner_id=? AND req_type=? ORDER BY book_datetime DESC", array($_SESSION['joiner'], "resched"), "READ");
+					$booked_resched = DB::query("SELECT * FROM booking b INNER JOIN request r ON b.book_id=r.book_id WHERE joiner_id=? AND req_type=? AND req_status!=? ORDER BY book_datetime DESC", array($_SESSION['joiner'], "resched", "reverted"), "READ");
 
 					if(count($booked_resched)>0){
 						foreach ($booked_resched as $result) {
+							$_SESSION['date_process'] = date("Y-m-d", strtotime("+1 day", strtotime($result['req_dateprocess'])));
+							$_SESSION['date_process'] = date("M j, Y", strtotime($_SESSION['date_process']));
 							echo "
+							<span style='display:none;' id='countdowndate'>".$_SESSION['date_process']."</span>
 							<tr>
 								<td>".$result['book_id']."</td>
 								<td>".date("M j, Y", strtotime($result['req_dateprocess']))."</td>
 								<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
 								<td><em style='color:#5cb85c;'>".$result['req_status']."</em></td>
+								<td id='timer'></td>";
+							## CAN BE REVERTABLE
+							if($_SESSION['date_process'] > date("M j, Y")) {
+								echo "
+									<td><button type='submit' name='btnRevert' onclick='return confirm(\"Are you sure you want to revert to previous adventure?\");'>Revert</button></td>";
+							} else echo "<td></td>";
+
+							echo "
 								<td><a href='reports_booking-view.php?book_id=".$result['book_id']."' onclick='return confirm(\"View receipt?\");'>view</a></td>
 							</tr>
 							";
 						}
 						echo "</table>";
+						echo "</form>";
 
 					// NO RECORDS FOUND
 					} else {
 						echo "</table>";
+						echo "</form>";
 						echo "<h3>No rescheduled bookings found!</h3>";
 					}
 				}
