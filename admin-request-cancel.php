@@ -45,7 +45,7 @@
 
 			send_sms($sms_sendto,$sms_message);
 
-			$email_message = html_cancellation_message($joiner_info['joiner_fname'], 'Joiner');
+			$email_message = html_cancellation_message($joiner_info['joiner_fname'], 'Joiner',$req['book_id']);
 
 			$img_address = array();
 			$img_name = array();
@@ -86,6 +86,7 @@
 		$orga_id_db = DB::query("SELECT orga_id FROM adventure WHERE adv_id = ?", array($req['adv_id']), "READ");
 		$orga_db1 = $orga_id_db[0];
 
+		## EMAIL + SMS NOTIFICATION FOR ORGANIZER
 		if($req['req_user'] == 'organizer') {
 			$orga_db = DB::query("SELECT * FROM organizer WHERE orga_id = ?", array($orga_db1[0]), "READ");
 			$orga_info = $orga_db[0];
@@ -95,7 +96,7 @@
 
 			send_sms($sms_sendto,$sms_message);
 
-			$email_message = html_cancellation_message($orga_info['orga_fname'], 'Organizer');
+			$email_message = html_cancellation_message($orga_info['orga_fname'], 'Organizer',null);
 
 			$img_address = array();
 			$img_name = array();
@@ -104,6 +105,29 @@
 			array_push($img_name,'background','logo','main');
 
 			send_email($orga_info['orga_email'], "BOOKING CANCELATION APPROVED", $email_message, $img_address, $img_name);
+
+			## EMAIL NOTIFICATION FOR JOINER DUE TO ORGANIZER CANCELLATION
+			$book_db = DB::query("SELECT * FROM booking WHERE adv_id = ?", array($req['adv_id']), "READ");
+
+			if(!empty($book_db) && count($book_db) > 0) {
+				foreach($book_db as $book) {
+					$joiner_info = DB::query("SELECT * FROM joiner WHERE joiner_id = ?", array($book['joiner_id']), "READ");
+
+					if(!empty($joiner_info)) {
+						$joiner_info = $joiner_info[0];
+
+						$email_message = html_cancellation_message($joiner_info['joiner_fname'], 'JoinerOrganizer', $book['book_id']);
+
+						$img_address = array();
+						$img_name = array();
+
+						array_push($img_address,'images/cancel-bg.png','images/main-logo-green.png','images/cancel-img.png');
+						array_push($img_name,'background','logo','main');
+
+						send_email($joiner_info['joiner_email'], "ORGANIZER ADVENTURE CANCELATION", $email_message, $img_address, $img_name);
+					}
+				}
+			}
 
 			echo "<script>alert('Successfully approved cancelation!')</script>";
 		}
@@ -124,7 +148,7 @@
 			$joiner_db = DB::query("SELECT * FROM joiner WHERE joiner_id = ?", array($booking_joiner_id['joiner_id']), "READ");
 			$joiner_info = $joiner_db[0];
 
-			$email_message = html_cancellation_message($joiner_info['joiner_fname'], 'denied');
+			$email_message = html_cancellation_message($joiner_info['joiner_fname'], 'denied',null);
 
 			$img_address = array();
 			$img_name = array();
