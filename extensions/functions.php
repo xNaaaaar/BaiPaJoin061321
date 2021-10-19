@@ -468,6 +468,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 
 						## ADV STATUS
 						if($result['adv_status'] == "done") echo " - done";
+						if($result['adv_status'] == "canceled") echo " - cancelled";
 						elseif($numRemainingGuests == 0) echo " - full";
 						else echo $remainingGuestsText;
 					echo "
@@ -477,7 +478,12 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
 					<ul class='icons'>";
 				#
-				if($result['adv_currentGuest'] == 0){
+				if($result['adv_status'] == "canceled"){
+					echo "
+						<li><a href='delete.php?table=adventure&id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to delete this adventure?\");'><i class='far fa-trash-alt' data-toggle='tooltip' title='Remove Adventure'></i></a></li>
+					";
+				#
+				} elseif($result['adv_currentGuest'] == 0){
 					echo "
 						<li><a href='edit_adv.php?id=".$result['adv_id']."'><i class='fas fa-edit' data-toggle='tooltip' title='Update Adventure'></i></a></li>
 						<li><a href='delete.php?table=adventure&id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to delete this adventure?\");'><i class='far fa-trash-alt' data-toggle='tooltip' title='Remove Adventure'></i></a></li>
@@ -1882,7 +1888,7 @@ function send_sms($mobile, $message) {
 ##### CODE START HERE @PHPMAILER API #####
 function send_email($to, $subject, $message, $img_address = null, $img_name = null ) {
 
-	require 'PHPMailerAutoload.php';
+	require_once 'PHPMailerAutoload.php';
 
 	# EMAIL EMBEDDED WITH IMAGE
 	if(!empty($img_address) && !empty($img_name)) {
@@ -2408,7 +2414,7 @@ function html_request_message($name, $req_type, $type) {
 	return $message;
 }
 
-function html_cancellation_message($name, $type) {
+function html_cancellation_message($name, $type, $book_id) {
 
 	if($type == 'Joiner') {
 		$message = "
@@ -2428,7 +2434,69 @@ function html_cancellation_message($name, $type) {
 		              <img src='cid:main' style='max-width:100%;width:300px;height:270px;margin:0 auto;'>
 		            </figure>
 		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Oooh No! Adventure Cancelled!</h1>
-		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! I'm sorry to hear that you have cancel your adventure. We've recieved your request and it's already <b>APPROVED</b>. Please provide us with your bank details by responding to this email. In order for us to transfer the refund amount as soon as possible, please refer to the sample below. Stay safe and thank you for using BaiPaJoin!</p>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! I'm sorry to hear that you have cancel your adventure. We've recieved your request to cancel booking id <b>".$book_id."</b> and it's already <b>APPROVED</b>. Please provide us with your bank details by responding to this email. In order for us to transfer the refund amount as soon as possible, please refer to the sample below. Stay safe and thank you for using BaiPaJoin!</p>
+	            	<table style='width:500px;max-width:100%;margin:0 auto; line-height:25px; text-align:left;'>
+		              <h2>SAMPLE BANK DETAILS</h2>
+		              <tr>
+		                <td>Bank Name :</td>
+		                <td>BDO UniBank Ltd.</td>
+		              </tr>
+		              <tr>
+		                <td>Bank Code :</td>
+		                <td>BDO Colon 1</td>
+		              </tr>
+		              <tr>
+		                <td>Bank Address :</td>
+		                <td>Sanciangko St, Cebu City</td>
+		              </tr>
+		              <br>
+		              <tr>
+		                <td>Account Name :</td>
+		                <td>Juan Dela Cruz</td>
+		              </tr>
+		               <tr>
+		                <td>Account Number : </td>
+		                <td>123-456-7890</td>
+		              </tr>
+		              <tr>
+		                <td>Account Type :</td>
+		                <td>(Savings/Checking)</td>
+		              </tr>
+		              <tr>
+		                <td>Routing Number : </td>
+		                <td>123-456-7890-123-456789</td>
+		              </tr>
+		            </table>
+		            <br>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Once we receive your banking details we will process the refund within 24-48 hours upon receipt of the email. Once, we send it you will recieve a notification thru SMS and EMail about the it. Also, you may view the refund transaction receipt in payout section of the request tab. Thank you!</p>
+		            <br><br>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you have any questions or did not make this changes, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com].  </a> </p>
+		          </div>
+		        </div>
+		      </body>
+    		</html>
+		";
+	}
+
+	if($type == 'JoinerOrganizer') {
+		$message = "
+		    <!DOCTYPE html>
+		    <html>
+		      <head>
+		        <meta charset='utf-8'>
+		        <title>BaiPaJoin | Cancelation</title>
+		      </head>
+		      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 110%;background-size:350px 300px;font:normal 15px/20px Verdana,sans-serif;'>
+		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
+		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
+		            <figure class='main-logo'>
+		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
+		            </figure>
+		            <figure >
+		              <img src='cid:main' style='max-width:100%;width:300px;height:270px;margin:0 auto;'>
+		            </figure>
+		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Oooh No! Adventure Cancelled!</h1>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! We're sorry to inform you that the organizer cancel your booked adventure id <b>".$book_id."</> due to unforeseen circumtances. We've reviewed the case and we concur with the organizer to cancel the adventure. Please provide us with your bank details by responding to this email. In order for us to transfer the refund amount as soon as possible, please refer to the sample below. Stay safe and thank you for using BaiPaJoin!</p>
 	            	<table style='width:500px;max-width:100%;margin:0 auto; line-height:25px; text-align:left;'>
 		              <h2>SAMPLE BANK DETAILS</h2>
 		              <tr>
