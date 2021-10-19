@@ -208,6 +208,8 @@ function currentJoiner($id){
 		$_SESSION['phone'] = $user['joiner_phone'];
 		$_SESSION['email'] = $user['joiner_email'];
 		$_SESSION['password'] = $user['joiner_password'];
+		$_SESSION['citymuni'] = $user['joiner_citymuni'];
+
 	}
 }
 
@@ -273,6 +275,7 @@ function joinerSaveProfileChanges(){
 	$txtAddress = trim(ucwords($_POST['txtAddress']));
 	$txtPhone = trim($_POST['txtPhone']);
 	$emEmail = trim($_POST['emEmail']);
+	$txtCityMuni = trim($_POST['txtCityMuni']);
 	//ERROR HANDLING
 	if(preg_match('/\d/', $txtFirstname)){
 		echo "<script>alert('Firstname cannot have a number!')</script>";
@@ -288,7 +291,7 @@ function joinerSaveProfileChanges(){
 	}
 	else {
 		//UPDATE CHANGES
-		DB::query("UPDATE joiner SET joiner_fname=?, joiner_lname=?, joiner_mi=?, joiner_address=?, joiner_phone=?, joiner_email=? WHERE joiner_id=?", array($txtFirstname, $txtLastname, $txtMi, $txtAddress, $txtPhone, $emEmail, $_SESSION['joiner']), "UPDATE");
+		DB::query("UPDATE joiner SET joiner_fname=?, joiner_lname=?, joiner_mi=?, joiner_address=?, joiner_phone=?, joiner_email=?, joiner_citymuni=? WHERE joiner_id=?", array($txtFirstname, $txtLastname, $txtMi, $txtAddress, $txtPhone, $emEmail, $txtCityMuni, $_SESSION['joiner']), "UPDATE");
 		//DISPLAY UPDATED CHANGES
 		currentJoiner($_SESSION['joiner']);
 		//
@@ -815,7 +818,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 							echo "<p>".$result['adv_address']." - <b>".$distance."</b> KMs away from ".$joiner['joiner_citymuni']."</p>";
 						else
 							echo "<p>".$result['adv_address']."</p>";
-						
+
 						echo "
 						<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
 						<ul class='icons'>";

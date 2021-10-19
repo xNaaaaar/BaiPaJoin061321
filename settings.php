@@ -174,7 +174,8 @@
 						<input type="text" value="<?php echo "{$_SESSION['fname']}"; ?>" placeholder="Firstname" disabled>
 						<input type="text" value="<?php echo "{$_SESSION['lname']}"; ?>" placeholder="Lastname" disabled>
 						<input type="text" value="<?php echo "{$_SESSION['mi']}"; ?>" placeholder="Mi" disabled>
-						<input type="text" value="<?php echo "{$_SESSION['address']}"; ?>" placeholder="Address" disabled>
+						<input type="text" value="<?php echo "{$_SESSION['address']}"; ?>" placeholder="Street Address" disabled>
+						<input type="text" value="<?php echo "{$_SESSION['citymuni']}"; ?>" placeholder="City / Municipality" disabled>
 						<input type="text" value="<?php echo "{$_SESSION['phone']}"; ?>" placeholder="0999XXXXXXX" disabled>
 						<input type="email" value="<?php echo "{$_SESSION['email']}"; ?>" placeholder="Email Address" disabled>
 					</div>

@@ -14,7 +14,7 @@
 			header("Location: edit_profile.php?error");
 	}
 	else if(isset($_POST['btnSaveJoiner'])){
-		if(!empty(trim(ucwords($_POST['txtFirstname']))) && !empty(trim(ucwords($_POST['txtLastname']))) && !empty(trim(ucwords($_POST['txtMi']))) && !empty(trim(ucwords($_POST['txtAddress']))) && !empty(trim($_POST['txtPhone'])) && !empty(trim($_POST['emEmail'])))
+		if(!empty(trim(ucwords($_POST['txtFirstname']))) && !empty(trim(ucwords($_POST['txtLastname']))) && !empty(trim(ucwords($_POST['txtMi']))) && !empty(trim(ucwords($_POST['txtAddress']))) && !empty(trim(ucwords($_POST['txtCityMuni']))) && !empty(trim($_POST['txtPhone'])) && !empty(trim($_POST['emEmail'])))
 			joinerSaveProfileChanges();
 		else
 			header("Location: edit_profile.php?error");
@@ -106,6 +106,7 @@
 						<input type="text" name="txtLastname" value="<?php echo "{$_SESSION['lname']}"; ?>" placeholder="Lastname" readonly required>
 						<input type="text" name="txtMi" value="<?php echo "{$_SESSION['mi']}"; ?>" placeholder="Mi" maxlength="1" readonly required>
 						<input type="text" name="txtAddress" value="<?php echo "{$_SESSION['address']}"; ?>" placeholder="Address" required>
+						<input type="text" name="txtCityMuni" value="<?php echo "{$_SESSION['citymuni']}"; ?>" placeholder="City / Municipality" required>
 						<input type="text" name="txtPhone" value="<?php echo "{$_SESSION['phone']}"; ?>" placeholder="0999XXXXXXX" maxlength="11" required>
 						<input type="email" name="emEmail" value="<?php echo "{$_SESSION['email']}"; ?>" placeholder="Email Address" required>
 					</div>
