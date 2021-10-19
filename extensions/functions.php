@@ -468,7 +468,6 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 
 						## ADV STATUS
 						if($result['adv_status'] == "done") echo " - done";
-						if($result['adv_status'] == "canceled") echo " - cancelled";
 						elseif($numRemainingGuests == 0) echo " - full";
 						else echo $remainingGuestsText;
 					echo "
@@ -478,12 +477,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
 					<ul class='icons'>";
 				#
-				if($result['adv_status'] == "canceled"){
-					echo "
-						<li><a href='delete.php?table=adventure&id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to delete this adventure?\");'><i class='far fa-trash-alt' data-toggle='tooltip' title='Remove Adventure'></i></a></li>
-					";
-				#
-				} elseif($result['adv_currentGuest'] == 0){
+				if($result['adv_currentGuest'] == 0){
 					echo "
 						<li><a href='edit_adv.php?id=".$result['adv_id']."'><i class='fas fa-edit' data-toggle='tooltip' title='Update Adventure'></i></a></li>
 						<li><a href='delete.php?table=adventure&id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to delete this adventure?\");'><i class='far fa-trash-alt' data-toggle='tooltip' title='Remove Adventure'></i></a></li>
