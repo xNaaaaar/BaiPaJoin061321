@@ -753,10 +753,13 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 			echo "<h3>No adventure exists!</h3>";
 		}
 
-	// ELSE TO IFS AND DISPLAY ALL ADVENTURES
+	// ELSE TO IFS AND DISPLAY ALL ADVENTURES FOR JOINER
 	} else {
 		$card = DB::query("SELECT * FROM adventure", array(), "READ");
 		if($query != NULL) $card = $query;
+
+		$joiner = DB::query("SELECT * FROM joiner WHERE joiner_id = ?", array($_SESSION['joiner']), "READ");
+		$joiner = $joiner[0];
 
 		if(count($card)>0){
 			foreach($card as $result){
@@ -803,8 +806,13 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 							else echo $remainingGuestsText;
 						echo "
 							</span>
-						</h2>
-						<p>".$result['adv_address']."</p>
+						</h2>";
+						$distance = get_distance_from_location($joiner['joiner_citymuni'],$result['adv_town']);
+						if($distance != 0) 
+							echo "<p>".$result['adv_address']." - <b>".$distance."</b> KMs away from ".$joiner['joiner_citymuni']."</p>";
+						else
+							echo "<p>".$result['adv_address']."</p>";
+						echo "
 						<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
 						<ul class='icons'>";
 
@@ -1997,6 +2005,45 @@ function get_current_weather_location($location) {
     } //This code will a log.txt file to get the response of the cURL command
 
 	return $response;
+}
+
+##### CODE START HERE @DISTANCE24.ORG API #####
+function get_distance_from_location($from, $to) {
+
+	$curl = curl_init();
+
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+    $query = 'https://www.distance24.org/route.json?stops='.$from.'%20Cebu|'.$to.'%20Cebu';
+
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => $query,
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'GET',
+	));
+
+	$response = curl_exec($curl);
+	$err = curl_error($curl);
+
+	curl_close($curl);
+
+	if(!empty($response)) {
+      if(!file_exists('logs\distance24')) {
+        mkdir('logs\distance24', 0777, true);
+      }
+      $log_file_data = 'logs\\distance24\\log_' . date('d-M-Y') . '.log';
+      file_put_contents($log_file_data, date('h:i:sa').' => '. $response . "\n" . "\n", FILE_APPEND);
+    } //This code will a log.txt file to get the response of the cURL command
+
+	$distance = json_decode($response,true);
+
+	return $distance['distance'];
 }
 
 ##### CODE START HERE @NECESSARY UPDATES WHEN BOOKING IS PAID #####
