@@ -1099,7 +1099,7 @@ function postAdventure(){
 		else {
 			if($cboLoc == "Bantayan Island") $town = "Bantayan";
 			elseif($cboLoc == "Malapascua Island") $town = "Daanbantayan";
-			elseif($cboLoc == "Camotes Island") $town = "Camotes";
+			elseif($cboLoc == "Camotes Island") $town = "Poro";
 			else $town = $cboLoc;
 
 			DB::query('INSERT INTO adventure(adv_images, adv_name, adv_kind, adv_type, adv_address, adv_town, adv_totalcostprice, adv_date, adv_details, adv_postedDate, adv_maxguests, adv_currentGuest, adv_itineraryImg, adv_dosdont_image, adv_status, orga_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', array($fileAdvImgs, $txtName, $cboKind, $cboType, $cboLoc, $town, $numPrice, $dateDate, $txtDetails, date('Y-m-d'), $numMaxGuests, 0, $fileItineraryImg, $fileDosDontsImg, "not full", $_SESSION['organizer']), "CREATE");
@@ -1174,7 +1174,7 @@ function updateAdventure(){
 			else {
 				if($cboLoc == "Bantayan Island") $town = "Bantayan";
 				elseif($cboLoc == "Malapascua Island") $town = "Daanbantayan";
-				elseif($cboLoc == "Camotes Island") $town = "Camotes";
+				elseif($cboLoc == "Camotes Island") $town = "Poro";
 				else $town = $cboLoc;
 
 				// UPDATE

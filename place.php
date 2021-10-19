@@ -177,17 +177,15 @@
 									}
 								}
 
-
 								// WHEN BUTTON IS CLICKED
 								if(isset($_POST['btnBook'])){
 									if(count($adv_checker)>0){
 										// CHECK ADVENTURE IF FULL
 										if($adv_checker['adv_status'] == 'not full') {
-											file_put_contents('debug.log', date('h:i:sa').' => '. $sameday_booking . "\n" . "\n", FILE_APPEND);
+											//file_put_contents('debug.log', date('h:i:sa').' => '. $sameday_booking . "\n" . "\n", FILE_APPEND);
 											header("Location: book.php?id=".$_GET['id']."&same_day=".$sameday_booking."");
 										}
-										else
-											header("Location: place.php?id=".$_GET['id']."&full");
+										else header("Location: place.php?id=".$_GET['id']."&full");
 									}
 								}
 							?>

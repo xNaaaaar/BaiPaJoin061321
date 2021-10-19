@@ -100,10 +100,11 @@
 
 						# PRICE FOR EACH GUEST
 						$price = $adv['adv_totalcostprice'] / $adv['adv_maxguests'];
-						$_SESSION['price'] = number_format((float)$price, 2, '.', ',');
+						$_SESSION['price'] = number_format($price, 2, '.', '');
+						$price_with_comma = number_format($price, 2, '.', ',');
 
 						# SLOTS REMAINING
-						$slots = $adv['adv_maxguests']-$adv['adv_currentGuest'];
+						$slots = $adv['adv_maxguests'] - $adv['adv_currentGuest'];
 
 						# CHOOSING RANDOM IMAGE
 						$images = $adv['adv_images'];
@@ -207,7 +208,7 @@
 									?>
 								</select>
 								<label>Total Price</label>
-								<input type="text" name="numTotal" id="totalPrice" value="<?php echo $_SESSION['price']; ?>" readonly required>
+								<input type="text" name="numTotal" id="totalPrice" value="<?php echo $price_with_comma; ?>" readonly required>
 							</section>
 							<button class="edit" type="submit" name="btnCont1">Continue</button>
 							<a href="place.php?id=<?php echo $_GET['id']; ?>" class="edit">Back</a>
