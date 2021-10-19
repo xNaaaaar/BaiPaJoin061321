@@ -807,11 +807,15 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						echo "
 							</span>
 						</h2>";
-						$distance = get_distance_from_location($joiner['joiner_citymuni'],$result['adv_town']);
-						if($distance != 0) 
+						$distance = 0;
+
+						if(!empty($joiner['joiner_citymuni'])) 
+							$distance = get_distance_from_location($joiner['joiner_citymuni'],$result['adv_town']);
+						if($distance > 0) 
 							echo "<p>".$result['adv_address']." - <b>".$distance."</b> KMs away from ".$joiner['joiner_citymuni']."</p>";
 						else
 							echo "<p>".$result['adv_address']."</p>";
+						
 						echo "
 						<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
 						<ul class='icons'>";
