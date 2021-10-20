@@ -170,19 +170,23 @@
 					";
 
 					$booked_resched = DB::query("SELECT * FROM booking b INNER JOIN request r ON b.book_id=r.book_id WHERE joiner_id=? AND req_type=? AND req_status!=? ORDER BY book_datetime DESC", array($_SESSION['joiner'], "resched", "reverted"), "READ");
+					$_SESSION['revert_counter'] = 0;
 
 					if(count($booked_resched)>0){
 						foreach ($booked_resched as $result) {
 							$_SESSION['date_process'] = date("Y-m-d", strtotime("+1 day", strtotime($result['req_dateprocess'])));
 							$_SESSION['date_process'] = date("M j, Y", strtotime($_SESSION['date_process']));
+							$_SESSION['revert_counter'] += 1;
 							echo "
-							<span style='display:none;' id='countdowndate'>".$_SESSION['date_process']."</span>
+							<span style='display:none;' id='countdowndate".$_SESSION['revert_counter']."'>".$_SESSION['date_process']."</span>
 							<tr>
 								<td>".$result['book_id']."</td>
 								<td>".date("M j, Y", strtotime($result['req_dateprocess']))."</td>
 								<td>₱".number_format($result['req_amount'],2,'.',',')."</td>
 								<td><em style='color:#5cb85c;'>".$result['req_status']."</em></td>
-								<td id='timer'></td>";
+								<td id='timer".$_SESSION['revert_counter']."'></td>";
+								## REVERT COUNTDOWN TIMER
+								echo "<script>revert_timer(".$_SESSION['revert_counter'].")</script>";
 							## CAN BE REVERTABLE
 							if($_SESSION['date_process'] > date("M j, Y")) {
 								echo "

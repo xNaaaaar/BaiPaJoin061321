@@ -153,38 +153,76 @@
 		function numberWithCommas(x) {
 		  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		}
-		// COUNTDOWN TIMER
 		<?php
+		// COUNTDOWN TIMER FOR REVERT
 		if(isset($_SESSION['date_process'])){ ?>
-			// Update the count down every 1 second
-			var x = setInterval(function() {
-				<?php // echo date("M j, Y", strtotime($_SESSION['date_process'])); ?>
-				// Set the date we're counting down to
-				var this_date = document.getElementById("countdowndate").innerHTML;
-				var countDownDate = new Date(this_date).getTime();
+			function revert_timer(counter){
+				// Update the count down every 1 second
+				var x = setInterval(function() {
+					<?php // echo date("M j, Y", strtotime($_SESSION['date_process'])); ?>
+					// Set the date we're counting down to
+					var this_date = document.getElementById("countdowndate"+counter).innerHTML;
+					var countDownDate = new Date(this_date).getTime();
 
-				// Get today's date and time
-				var now = new Date().getTime();
+					// Get today's date and time
+					var now = new Date().getTime();
 
-				// Find the distance between now and the count down date
-			  var distance = countDownDate - now;
+					// Find the distance between now and the count down date
+				  var distance = countDownDate - now;
 
-				// Time calculations for days, hours, minutes and seconds
-			  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-			  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-			  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-			  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+					// Time calculations for days, hours, minutes and seconds
+				  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+				  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+				  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+				  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-				// Display the result in the element with id="demo"
-			  document.getElementById("timer").innerHTML = hours + "H "
-			  + minutes + "M " + seconds + "S ";
+					// Display the result in the element with id="demo"
+				  document.getElementById("timer"+counter).innerHTML = hours + "H "
+				  + minutes + "M " + seconds + "S ";
 
-				// If the count down is finished, write some text
-			  if (distance < 0) {
-			    clearInterval(x);
-			    document.getElementById("timer").innerHTML = "<span style='color:red;'>EXPIRED</span>";
-			  }
-			}, 1000);
+					// If the count down is finished, write some text
+				  if (distance < 0) {
+				    clearInterval(x);
+				    document.getElementById("timer"+counter).innerHTML = "<span style='color:red;'>EXPIRED</span>";
+				  }
+				}, 1000);
+			}
+		<?php
+		} ?>
+
+		<?php
+		// COUNTDOWN TIMER FOR WAITING FOR PAYMENT
+		if(isset($_SESSION['waiting_expry'])){ ?>
+			function payment_timer(counter){
+				// Update the count down every 1 second
+				var new_x = setInterval(function() {
+					// Set the date we're counting down to
+					var new_this_date = document.getElementById("waiting_expry"+counter).innerHTML;
+					var new_countDownDate = new Date(new_this_date).getTime();
+					console.log(new_this_date);
+
+					// Get today's date and time
+					var new_now = new Date().getTime();
+
+					// Find the distance between now and the count down date
+				  var new_distance = new_countDownDate - new_now;
+
+					// Time calculations for days, hours, minutes and seconds
+				  var new_days = Math.floor(new_distance / (1000 * 60 * 60 * 24));
+				  var new_hours = Math.floor((new_distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+				  var new_minutes = Math.floor((new_distance % (1000 * 60 * 60)) / (1000 * 60));
+				  var new_seconds = Math.floor((new_distance % (1000 * 60)) / 1000);
+
+					// Display the result in the element with id="demo"
+				  document.getElementById("exp_timer"+counter).innerHTML = new_minutes + "M " + new_seconds + "S ";
+
+					// If the count down is finished, write some text
+				  if (new_distance < 0) {
+				    clearInterval(new_x);
+				    document.getElementById("exp_timer"+counter).innerHTML = "<span style='color:red;'>EXPIRED</span>";
+				  }
+				}, 1000);
+			}
 		<?php
 		} ?>
 	</script>

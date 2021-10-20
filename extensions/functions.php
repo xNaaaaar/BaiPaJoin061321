@@ -810,12 +810,18 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						echo "
 							</span>
 						</h2>";
+<<<<<<< Updated upstream
 						$distance = 0;
 
 						if(!empty($joiner['joiner_citymuni'])) 
 							$distance = get_distance_from_location($joiner['joiner_citymuni'],$result['adv_town']);
 						if($distance > 0) 
 							echo "<p>".$result['adv_address']." - <b>".$distance."</b> KMs away from ".$joiner['joiner_citymuni']."</p>";
+=======
+						$distance = get_distance_from_location($joiner['joiner_citymuni'],$result['adv_town']);
+						if($distance != 0)
+							echo "<p>".$result['adv_address']." - <b>".$distance."</b> KMs away from ".$joiner['joiner_address']."</p>";
+>>>>>>> Stashed changes
 						else
 							echo "<p>".$result['adv_address']."</p>";
 

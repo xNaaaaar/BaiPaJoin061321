@@ -1,6 +1,7 @@
 <?php
 	include("extensions/functions.php");
 	require_once("extensions/db.php");
+	unset($_SESSION['discounted']);
 	##
 	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
 
@@ -191,6 +192,7 @@
 					";
 
 					$joiner_bookings = DB::query("SELECT * FROM booking WHERE joiner_id=?", array($_SESSION['joiner']), "READ");
+					$_SESSION['pay_counter'] = 0;
 
 					if(count($joiner_bookings)>0){
 						foreach ($joiner_bookings as $result) {
@@ -289,10 +291,16 @@
 									}
 									echo "<td><a href='reports_booking-view.php?book_id=".$result['book_id']."' onclick='return confirm(\"View receipt?\");'>view</a></td>";
 								} else {
-									echo "<td></td>";
-									echo "<td></td>";
+									$_SESSION['waiting_expry'] = date("Y-m-d G:i:s", strtotime("+15 mins", strtotime($result['book_datetime'])));
+									$_SESSION['waiting_expry'] = date("M j, Y G:i:s", strtotime($_SESSION['waiting_expry']));
+									$_SESSION['pay_counter'] += 1;
+									echo "<span style='display:none;' id='waiting_expry".$_SESSION['pay_counter']."'>".$_SESSION['waiting_expry']."</span>";
+									echo "<td>payment expiry:</td>";
+									echo "<td id='exp_timer".$_SESSION['pay_counter']."'></td>";
+									## PAYMENT COUNTDOWN TIMER
+									echo "<script>payment_timer(".$_SESSION['pay_counter'].")</script>";
 									## JOINER CANNOT PAY IF 5 DAYS BEFORE ADVENTURE
-									if(adv_is_available($result['adv_id'], "pay")) {
+									if(adv_is_available($result['adv_id'], "pay") && $_SESSION['waiting_expry'] > date("M j, Y G:i:s")) {
 										echo "<td><a href='payment-card.php?book_id=".$result['book_id']."&id=".$result['adv_id']."' onclick='return confirm(\"Ready to pay now?\");'>pay</a></td>";
 									} else {
 										echo "<td></td>";

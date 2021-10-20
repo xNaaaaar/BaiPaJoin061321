@@ -66,6 +66,7 @@
 
 		.price_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
 		.price_details h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
+		.price_details p{width:100% !important;}
 		.price_details section{position:relative;}
 		.price_details section:before{content:"";width:100%;height:2px;background:#cfcfcf;position:absolute;bottom:50px;right:0;}
 		.price_details section table{width:100%;}
@@ -224,6 +225,10 @@
 					</div>
 
 					<div class="price_details">
+						<h2 style='color:red;'>Important Note:</h2>
+						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! Provident similique accusantium nemo autem.</p>
+					</div>
+					<div class="price_details">
 						<h2>Price Details</h2>
 						<section>
 							<table>
@@ -255,7 +260,7 @@
 										// echo number_format($final_price, 2, '.', '');
 										if(!isset($_SESSION['discounted'])) $_SESSION['discounted'] = $final_price;
 
-										echo number_format($_SESSION['discounted'], 2, '.', '');
+										echo number_format($_SESSION['discounted'], 2, '.', ',');
 										?>
 									</td>
 								</tr>
