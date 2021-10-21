@@ -150,7 +150,7 @@
 								<th>Adventure Name</th>
 								<th>Adventure Date</th>
 								<th>Price</th>
-								<th>Ratings</th>
+								<th>Overall Ratings</th>
 							</tr>
 						</thead>
 					";
@@ -172,7 +172,7 @@
 							$rated = DB::query("SELECT * FROM rating WHERE joiner_id=? AND book_id=?", array($_SESSION['joiner'], $result['book_id']), "READ");
 							## RATED
 							if(count($rated)>0){
-								$rated = $rated[0];
+								$rated = $rated[3];
 								echo "<td>".$rated['rating_stars']." <i class='fas fa-star'></i></td>";
 							# NOT RATED
 							} else {

@@ -64,44 +64,44 @@
 				<div class="place_ratings">
 					<h2>Rate</h2>
 					<form method="post" enctype="multipart/form-data">
-						<h3>Customer Engagement & Communication Rating</h3>
+						<h3>Joiner Engagement & Communication Rating</h3>
 						<section>
 							<div class="rating">
-								<input type="radio" id="star5" name="overall_rating" value="5" required><label for="star5" title='Excellent'></label>
-								<input type="radio" id="star4" name="overall_rating" value="4" required><label for="star4" title='Very Good'></label>
-								<input type="radio" id="star3" name="overall_rating" value="3" required><label for="star3" title='Good'></label>
-								<input type="radio" id="star2" name="overall_rating" value="2" required><label for="star2" title='Bad'></label>
-								<input type="radio" id="star1" name="overall_rating" value="1" required><label for="star1" title='Very Bad'></label>
+								<input type="radio" id="star5" name="engage_rating" value="5" required><label for="star5" title='Excellent'></label>
+								<input type="radio" id="star4" name="engage_rating" value="4" required><label for="star4" title='Very Good'></label>
+								<input type="radio" id="star3" name="engage_rating" value="3" required><label for="star3" title='Good'></label>
+								<input type="radio" id="star2" name="engage_rating" value="2" required><label for="star2" title='Bad'></label>
+								<input type="radio" id="star1" name="engage_rating" value="1" required><label for="star1" title='Very Bad'></label>
 							</div>
 						</section>
 						<h3>Tour Safety, Mastery & Expertise Rating</h3>
 						<section>
 							<div class="rating">
-								<input type="radio" id="star5" name="overall_rating" value="5" required><label for="star5" title='Excellent'></label>
-								<input type="radio" id="star4" name="overall_rating" value="4" required><label for="star4" title='Very Good'></label>
-								<input type="radio" id="star3" name="overall_rating" value="3" required><label for="star3" title='Good'></label>
-								<input type="radio" id="star2" name="overall_rating" value="2" required><label for="star2" title='Bad'></label>
-								<input type="radio" id="star1" name="overall_rating" value="1" required><label for="star1" title='Very Bad'></label>
+								<input type="radio" id="star10" name="quality_rating" value="5" required><label for="star10" title='Excellent'></label>
+								<input type="radio" id="star9" name="quality_rating" value="4" required><label for="star9" title='Very Good'></label>
+								<input type="radio" id="star8" name="quality_rating" value="3" required><label for="star8" title='Good'></label>
+								<input type="radio" id="star7" name="quality_rating" value="2" required><label for="star7" title='Bad'></label>
+								<input type="radio" id="star6" name="quality_rating" value="1" required><label for="star6" title='Very Bad'></label>
 							</div>
 						</section>
 						<h3>Tour Expectation VS Reality Rating</h3>
 						<section>
 							<div class="rating">
-								<input type="radio" id="star5" name="overall_rating" value="5" required><label for="star5" title='Excellent'></label>
-								<input type="radio" id="star4" name="overall_rating" value="4" required><label for="star4" title='Very Good'></label>
-								<input type="radio" id="star3" name="overall_rating" value="3" required><label for="star3" title='Good'></label>
-								<input type="radio" id="star2" name="overall_rating" value="2" required><label for="star2" title='Bad'></label>
-								<input type="radio" id="star1" name="overall_rating" value="1" required><label for="star1" title='Very Bad'></label>
+								<input type="radio" id="star15" name="expect_rating" value="5" required><label for="star15" title='Excellent'></label>
+								<input type="radio" id="star14" name="expect_rating" value="4" required><label for="star14" title='Very Good'></label>
+								<input type="radio" id="star13" name="expect_rating" value="3" required><label for="star13" title='Good'></label>
+								<input type="radio" id="star12" name="expect_rating" value="2" required><label for="star12" title='Bad'></label>
+								<input type="radio" id="star11" name="expect_rating" value="1" required><label for="star11" title='Very Bad'></label>
 							</div>
 						</section>
 						<h3>Overall Experience Rating</h3>
 						<section>
 							<div class="rating">
-								<input type="radio" id="star5" name="overall_rating" value="5" required><label for="star5" title='Excellent'></label>
-								<input type="radio" id="star4" name="overall_rating" value="4" required><label for="star4" title='Very Good'></label>
-								<input type="radio" id="star3" name="overall_rating" value="3" required><label for="star3" title='Good'></label>
-								<input type="radio" id="star2" name="overall_rating" value="2" required><label for="star2" title='Bad'></label>
-								<input type="radio" id="star1" name="overall_rating" value="1" required><label for="star1" title='Very Bad'></label>
+								<input type="radio" id="star20" name="overall_rating" value="5" required><label for="star20" title='Excellent'></label>
+								<input type="radio" id="star19" name="overall_rating" value="4" required><label for="star19" title='Very Good'></label>
+								<input type="radio" id="star18" name="overall_rating" value="3" required><label for="star18" title='Good'></label>
+								<input type="radio" id="star17" name="overall_rating" value="2" required><label for="star17" title='Bad'></label>
+								<input type="radio" id="star16" name="overall_rating" value="1" required><label for="star16" title='Very Bad'></label>
 							</div>
 						</section>
 						<div class="feedback">
@@ -116,9 +116,12 @@
 
 				<?php
 				if(isset($_POST['btnRate'])){
-					$star = $_POST['star'];
+					$engage = $_POST['engage_rating'];
+					$quality = $_POST['quality_rating'];
+					$expect = $_POST['expect_rating'];
+					$overall = $_POST['overall_rating'];
 					$imageName = uploadImage('fileAdvImg', "images/joiners/".$_SESSION['joiner']."/");
-					$txtFeedback = trim(ucwords($_POST['txtFeedback']));
+					$txtFeedback = trim($_POST['txtFeedback']);
 
 					// ERROR TRAPPINGS
 					if($imageName === 1){
@@ -128,7 +131,14 @@
 						echo "<script>alert('File type is not allowed!')</script>";
 
 					} else {
-						DB::query("INSERT INTO rating(rating_img, rating_stars, rating_message, joiner_id, book_id) VALUES(?,?,?,?,?)", array($imageName, $star, $txtFeedback, $_SESSION['joiner'], $_GET['book_id']), "CREATE");
+						## FOR ENGAGEMENT RATING
+						DB::query("INSERT INTO rating(rating_img, rating_type, rating_stars, joiner_id, book_id) VALUES(?,?,?,?,?)", array($imageName, 1, $engage, $_SESSION['joiner'], $_GET['book_id']), "CREATE");
+						## FOR QUALITY RATING
+						DB::query("INSERT INTO rating(rating_img, rating_type, rating_stars, joiner_id, book_id) VALUES(?,?,?,?,?)", array($imageName, 2, $quality, $_SESSION['joiner'], $_GET['book_id']), "CREATE");
+						## FOR EXPECTATION RATING
+						DB::query("INSERT INTO rating(rating_img, rating_type, rating_stars, joiner_id, book_id) VALUES(?,?,?,?,?)", array($imageName, 3, $expect, $_SESSION['joiner'], $_GET['book_id']), "CREATE");
+						## FOR OVERALL RATING
+						DB::query("INSERT INTO rating(rating_img, rating_type, rating_stars, rating_message, joiner_id, book_id) VALUES(?,?,?,?,?,?)", array($imageName, 4, $overall, $txtFeedback, $_SESSION['joiner'], $_GET['book_id']), "CREATE");
 
 						header("Location: reports_rating.php?success");
 					}

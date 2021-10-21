@@ -761,8 +761,10 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 		$card = DB::query("SELECT * FROM adventure", array(), "READ");
 		if($query != NULL) $card = $query;
 
-		$joiner = DB::query("SELECT * FROM joiner WHERE joiner_id = ?", array($_SESSION['joiner']), "READ");
-		$joiner = $joiner[0];
+		if(isset($_SESSION['joiner'])){
+			$joiner = DB::query("SELECT * FROM joiner WHERE joiner_id = ?", array($_SESSION['joiner']), "READ");
+			$joiner = $joiner[0];
+		}
 
 		if(count($card)>0){
 			foreach($card as $result){
@@ -2943,7 +2945,7 @@ function adv_ratings($adv_id, $specific_advs = false, $counts = null){
 	$this_adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($adv_id), "READ");
 	$this_adv = $this_adv[0];
 	## ADVENTURE THAT HAS BEEN RATED WITH SPECIFIC ORGANIZER
-	$adv = DB::query("SELECT * FROM rating r JOIN booking b ON r.book_id=b.book_id JOIN adventure a ON b.adv_id=a.adv_id WHERE orga_id=?", array($this_adv['orga_id']), "READ");
+	$adv = DB::query("SELECT * FROM rating r JOIN booking b ON r.book_id=b.book_id JOIN adventure a ON b.adv_id=a.adv_id WHERE orga_id=? AND rating_message != ''", array($this_adv['orga_id']), "READ");
 	##
 	if(count($adv)>0){
 		foreach ($adv as $result) {

@@ -190,7 +190,7 @@
 								}
 							?>
 
-							<a class="edit" href="#">Lend</a>
+							<a class="edit" href="lend.php?adv_id=<?php echo $_GET['id']; ?>">Lend</a>
 						</div>
 					</div>
 				</div>
@@ -210,17 +210,48 @@
 							$this_adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($_GET['id']), "READ");
 							$this_adv = $this_adv[0];
 							## ADVENTURE THAT HAS BEEN RATED WITH SPECIFIC ORGANIZER
-							$adv = DB::query("SELECT * FROM rating r JOIN booking b ON r.book_id=b.book_id JOIN adventure a ON b.adv_id=a.adv_id WHERE orga_id=?", array($this_adv['orga_id']), "READ");
+							$adv = DB::query("SELECT * FROM rating r JOIN booking b ON r.book_id=b.book_id JOIN adventure a ON b.adv_id=a.adv_id WHERE orga_id=? AND rating_message != ''", array($this_adv['orga_id']), "READ");
 							##
 							if(count($adv)>0){
 								foreach ($adv as $result) {
 									if($result['adv_name'] == $this_adv['adv_name'] && $result['adv_kind'] == $this_adv['adv_kind'] && $result['adv_type'] == $this_adv['adv_type'] && $result['adv_address'] == $this_adv['adv_address']){
+										$rates = DB::query("SELECT * FROM rating r JOIN booking b ON r.book_id=b.book_id JOIN adventure a ON b.adv_id=a.adv_id WHERE orga_id=? AND rating_message is NULL", array($result['orga_id']), "READ");
 										echo "
 										<div class='card carousel-cell'>
 											<figure>
 												<img src='images/joiners/".$result['joiner_id']."/".$result['rating_img']."'>
 											</figure>
-											<h3>Anonymous <span>rated ".$result['rating_stars']." <i class='fas fa-star'></i></span></h3>
+											<h3>Anonymous"; ## <span>rated ".$result['rating_stars']." <i class='fas fa-star'></i></span>
+										## DISPLAY NON-OVERALL RATING
+										if(count($rates)>0){
+											foreach ($rates as $key) {
+												## Joiner Engagement & Communication Rating
+												if($key['rating_type'] == 1){
+													echo "<span>Joiner Engagement & Communication Rating: ";
+
+												## Tour Safety, Mastery & Expertise Rating
+												} elseif($key['rating_type'] == 2){
+													echo "<span>Tour Safety, Mastery & Expertise Rating: ";
+
+												## Tour Expectation VS Reality Rating
+												} elseif($key['rating_type'] == 3){
+													echo "<span>Tour Expectation VS Reality Rating: ";
+
+												## UNTIL FURTHER CHANGES
+												} else {}
+
+												echo "<em>";
+												$no_stars = (int)$key['rating_stars'];
+												## DISPLAY NUMBER OF STARS
+												for($i=1; $i<=$no_stars; $i++){
+													echo "<i class='fas fa-star'></i>";
+												}
+												echo "</em>";
+												echo "</span>";
+											}
+										}
+										echo "
+											</h3>
 											<i class='fas fa-quote-left'></i>
 											<p>".$result['rating_message']."</p>
 										</div>
