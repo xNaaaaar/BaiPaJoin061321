@@ -61,11 +61,19 @@
 					<a href="forgotpass.php">Forgot Password &#187;</a>
 					<button type="submit" name="btnLogin">Login</button>
 					<a href="create.php">Create</a>
-					<label>or login Joiner as:</label>
+					<span>or login Joiner as:</span>
 				<?php
 					echo $google_login_url;
 					//echo '<a href="'.$facebook_login_url.'">Log in with Facebook!</a>';
 				?>
+				<span>Payment Method:</span>
+				<ul>
+					<li><i class="far fa-credit-card"></i></li>
+					<li><i class="fab fa-cc-mastercard"></i></li>
+					<li><i class="fab fa-cc-visa"></i></li>
+					<li><img src="https://img.icons8.com/wired/40/000000/google-pay.png"/></li>
+					<li><img src="https://img.icons8.com/plasticine/40/000000/gcash.png"/></li>
+				</ul>
 				</form>
 
 			</main>

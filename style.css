@@ -246,16 +246,21 @@ header{}
   /*LOGIN AREA @login.php*/
   .user_area{position:relative;}
   .user_area .main_con{min-height:100vh;}
-  .user_area main{float:none;width:500px;height:auto;text-align:center;background:rgba(136,223,216,.8);color:#2f2f2f;margin:0;border-radius:30px;padding:275px 0 30px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:5;}
+  .user_area main{float:none;width:500px;height:auto;text-align:center;background:rgba(136,223,216,.8);color:#2f2f2f;margin:0;border-radius:30px;padding:275px 0 120px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:5;}
   .user_area main .main_logo{left:50%;transform:translateX(-50%);}
   .user_area main form{max-width:100%;width:400px;display:flex;justify-content:center;flex-wrap:wrap;text-align:center;margin:0 auto;}
   .user_area main form input{width:100%;height:60px;margin:10px auto 0;border:1px solid #fff;padding:0 15px;border-radius:5px;font:normal 18px/20px Montserrat,sans-serif;}
   .user_area main form button, .user_area main form a:nth-of-type(2){width:170px;height:50px;margin:60px auto 50px;display:inline-block;background:#bf127a;color:#fff;text-align:center;border-radius:50px;border:none;font:600 16px/20px Montserrat,sans-serif;}
   .user_area main form button:hover{background:#8c0047;}
-  .user_area main form label{position:absolute;bottom:80px;left:0;right:0;color:#fff;}
-  .user_area main form a:first-of-type{position:absolute;bottom:205px;right:53px;color:#fff;}
-  .user_area main form a:nth-of-type(2){line-height:48px;}
+  .user_area main form span{}
+  .user_area main form span:first-of-type{position:absolute;bottom:170px;left:0;right:0;color:#fff;}
+  .user_area main form span:nth-of-type(2){position:absolute;bottom:80px;left:0;right:0;color:#fff;}
+  .user_area main form a:first-of-type{position:absolute;bottom:295px;right:53px;color:#fff;}
+  .user_area main form a:nth-of-type(2){line-height:48px;display:block;}
   .user_area main form a:nth-of-type(2):hover{background:#8c0047;text-decoration:none;}
+  .user_area main form ul{display:block;position:absolute;bottom:30px;left:0;right:0;}
+  .user_area main form ul li{display:inline-block;vertical-align:top;margin:0 2px;}
+  .user_area main form ul li i{font-size:40px;}
 
   /*CREATE AREA @create.php*/
   .create main{min-height:800px;}
