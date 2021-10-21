@@ -64,7 +64,7 @@
 				<div class="place_ratings">
 					<h2>Rate</h2>
 					<form method="post" enctype="multipart/form-data">
-						<h3>Accomodation Rating</h3>
+						<h3>Customer Engagement & Communication Rating</h3>
 						<section>
 							<div class="rating">
 								<input type="radio" id="star5" name="overall_rating" value="5" required><label for="star5" title='Excellent'></label>
@@ -74,7 +74,7 @@
 								<input type="radio" id="star1" name="overall_rating" value="1" required><label for="star1" title='Very Bad'></label>
 							</div>
 						</section>
-						<h3>Tour Provider Rating</h3>
+						<h3>Tour Safety, Mastery & Expertise Rating</h3>
 						<section>
 							<div class="rating">
 								<input type="radio" id="star5" name="overall_rating" value="5" required><label for="star5" title='Excellent'></label>
@@ -84,7 +84,7 @@
 								<input type="radio" id="star1" name="overall_rating" value="1" required><label for="star1" title='Very Bad'></label>
 							</div>
 						</section>
-						<h3>Overall Rating</h3>
+						<h3>Tour Expectation VS Reality Rating</h3>
 						<section>
 							<div class="rating">
 								<input type="radio" id="star5" name="overall_rating" value="5" required><label for="star5" title='Excellent'></label>
@@ -94,7 +94,7 @@
 								<input type="radio" id="star1" name="overall_rating" value="1" required><label for="star1" title='Very Bad'></label>
 							</div>
 						</section>
-						<h3>Overall Rating</h3>
+						<h3>Overall Experience Rating</h3>
 						<section>
 							<div class="rating">
 								<input type="radio" id="star5" name="overall_rating" value="5" required><label for="star5" title='Excellent'></label>

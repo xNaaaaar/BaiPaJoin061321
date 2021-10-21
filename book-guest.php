@@ -216,7 +216,7 @@
 									";
 								}
 							?>
-							<a class="terms_cond" href="terms.php" target="_blank">Accept terms & condition</a>
+							<a class="terms_cond" href="terms.php" target="_blank">By checking this box, you accept, read and understood terms & condition</a>
 							<input class="radio" type="checkbox" name="radioTerms" required>
 							<button class="edit" type="submit" name="btnCont2">Continue</button>
 							<a href="delete.php?table=booking&id=<?php echo $pendingBooking['book_id']; ?>&adv=<?php echo $_GET['id']; ?>" class="edit">Back</a>

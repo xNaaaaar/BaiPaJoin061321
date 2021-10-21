@@ -226,7 +226,14 @@
 
 					<div class="price_details">
 						<h2 style='color:red;'>Important Note:</h2>
-						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! Provident similique accusantium nemo autem.</p>
+						<ul>
+							<li>Cards payments are processed and verified by our payment gateway (Paymongo Philippines). All payments are subject to fees and other service related charges like any other forms of online payment.</li>
+							<li>Fees and other charges includes foreign fee, trasaction fee, service fee, inconvience fee and government sanction charges imposed by the law imposed by the payment gateway (Paymongo Philippines) or BaiPaJoin </li>
+							<li>All successful bookings can be reschedule for FREE without any approval as long as there is an IDENTICAL ADVENTURE provided by the same ORGANIZER, the NUMBER OF GUEST/S booked can be accomodated by the ADVENTURE SELECTED and it is 5 DAYS PRIOR to the date of adventure. If the adventure is LESS THAN 5 DAYS then you cannot reschedule the booking. </li>
+							<li>All successful bookings can be cancel subject to 3% inconvience fee and other charges. If a joiner wishes to cancel a booking, he/she may do so as long as it is 10 DAYS PRIOR to the date of adventure. If the adventure is LESS THAN 10 DAYS then he/she cannot cancel the booking. Once a request is submitted BaiPaJoin will approve the request with 3-5 business days.</li>
+							<li>You may read the terms and conditions of this site under the foother section of this website.</li>
+						</ul>
+						
 					</div>
 					<div class="price_details">
 						<h2>Price Details</h2>

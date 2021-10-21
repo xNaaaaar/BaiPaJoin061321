@@ -121,7 +121,7 @@
 
 				<div class="filters">
 					<ul class="places">
-						<li><h3>Places</h3></li>
+						<li><h3>Top 10 Places</h3></li>
 
 						<?php
 							if(isset($_GET['reset'])) {
@@ -146,7 +146,7 @@
 						?>
 					</ul>
 					<ul class="activites">
-						<li><h3>Activities</h3></li>
+						<li><h3>Top 10 Activities</h3></li>
 
 						<?php
 							if(isset($_GET['reset'])) {
