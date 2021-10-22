@@ -20,8 +20,9 @@
 		.sidebar ul ul{height:auto;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:30px;text-align:left;}
+		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h3{font-weight:500;font-size:25px;margin:20px 0 10px;text-align:left;display:block;}
+		main h4{font-weight:500;font-size:20px;display:block;color:red;text-align:left;margin-bottom:20px;}
 
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
@@ -63,6 +64,7 @@
 			<main>
 				<div class="place_ratings">
 					<h2>Rate</h2>
+					<h4>Your ratings will be seen as Anonymous in adventure's reviews.</h4>
 					<form method="post" enctype="multipart/form-data">
 						<h3>Joiner Engagement & Communication Rating</h3>
 						<section>

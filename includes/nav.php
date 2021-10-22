@@ -1,7 +1,7 @@
 <div id="nav_area">
 	<!-- Loader -->
 	<?php include("includes/loader.php"); ?>
-	
+
 	<div class="nav_toggle_button">
 	<div class="logo_wrap"></div>
 		<div class="toggle_holder">
@@ -42,6 +42,7 @@
 					<?php
 						}
 					?>
+					<li class="<?php if($currentPage == 'gallery') echo 'current_page_item'; ?>"><a href="gallery.php">Gallery</a></li>
 					<li class="<?php if($currentPage == 'contactus') echo 'current_page_item'; ?>"><a href="#contact-us">Contact Us</a></li>
 					<!-- IF USER LOGIN OR NOT -->
 					<?php

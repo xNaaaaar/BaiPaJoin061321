@@ -88,7 +88,7 @@
 					</ul> -->
 				</div>
 				<!--  -->
-				<div class="carousel" data-flickity>
+				<div class="carousel" data-flickity='{ "wrapAround": true }'>
 					<?php
 						// DISPLAYING IMAGES
 						for($i = 1; $i < count($advImages); $i++){
@@ -215,7 +215,7 @@
 							if(count($adv)>0){
 								foreach ($adv as $result) {
 									if($result['adv_name'] == $this_adv['adv_name'] && $result['adv_kind'] == $this_adv['adv_kind'] && $result['adv_type'] == $this_adv['adv_type'] && $result['adv_address'] == $this_adv['adv_address']){
-										$rates = DB::query("SELECT * FROM rating r JOIN booking b ON r.book_id=b.book_id JOIN adventure a ON b.adv_id=a.adv_id WHERE orga_id=? AND rating_message is NULL", array($result['orga_id']), "READ");
+										$rates = DB::query("SELECT * FROM rating r JOIN booking b ON r.book_id=b.book_id JOIN adventure a ON b.adv_id=a.adv_id WHERE orga_id=? AND rating_img=? AND rating_message is NULL", array($result['orga_id'], $result['rating_img']), "READ");
 										echo "
 										<div class='card carousel-cell'>
 											<figure>
