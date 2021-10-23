@@ -4,7 +4,10 @@
 	</figure>
 	<h2>BaiPaJoin <span>an online joiner platform for tourists</span> </h2>
 	<ul>
-		<li class="<?php if($currentSidebarPage == 'dashboard') echo 'current_sidebar'; ?>"><a href="admin-dashboard.php">Dashboard</a></li>
+		<li class="<?php if($currentSidebarPage == 'dashboard') echo 'current_sidebar'; ?>"><a href="adminDashboard.php">Dashboard</a></li>
+		
+		<!-- TEMPORARY DISABLED 
+
 			<?php
 			## IF CURRENT MENU IS EQUAL TO DASHBOARD
 			if($currentSidebarPage == 'dashboard'){
@@ -18,6 +21,8 @@
 			<?php
 			}
 			?>
+		-->	
+
 		<li class="<?php if($currentSidebarPage == 'admin') echo 'current_sidebar'; ?>"><a href="admin.php">Admins</a></li>
 		<li class="<?php if($currentSidebarPage == 'joiner') echo 'current_sidebar'; ?>"><a href="admin-joiner.php">Joiners</a></li>
 		<li class="<?php if($currentSidebarPage == 'organizer') echo 'current_sidebar'; ?>"><a href="admin-organizer.php">Organizers</a></li>

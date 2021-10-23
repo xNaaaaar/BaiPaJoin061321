@@ -37,9 +37,12 @@
 	<!-- SUB NAVIGATION: SETTINGS -->
 	<ul>
 		<?php if($_SESSION['current_user'] == 'Organizer') { ?>
-		<li class="<?php if($currentSidebarPage == 'dashboard') echo 'current_sidebar'; ?>"><a href="dashboard.php"><i class="fas fa-chart-line"></i> <q>Dashboard</q></a></li>
-			<?php
-			if($currentSidebarPage == 'dashboard'){
+		<li class="<?php if($currentSidebarPage == 'dashboard') echo 'current_sidebar'; ?>"><a href="dashboardOrg.php"><i class="fas fa-chart-line"></i> <q>Dashboard</q></a></li>
+
+		<!-- TEMPORARY DISABLED -->
+
+			<?php 
+			/*if($currentSidebarPage == 'dashboard'){
 			?>
 			<ul>
 				<li class="<?php if($currentSubMenu == 'sales') echo 'current_sidebar'; ?>"><a href="dashboard.php">Sales</a></li>
@@ -47,9 +50,12 @@
 				<li class="<?php if($currentSubMenu == 'payout') echo 'current_sidebar'; ?>"><a href="dashboard_payout.php">Payouts</a></li>
 			</ul>
 		<?php
-			}
+			}*/
 		}
-		?>
+		?> 
+		
+
+
 		<li class="<?php if($currentSidebarPage == 'profile') echo 'current_sidebar'; ?>"><a href="settings.php"><i class="fas fa-user-circle"></i> <q>Profile</q></a></li>
 		<?php
 			if($_SESSION['current_user'] == 'Joiner') {
