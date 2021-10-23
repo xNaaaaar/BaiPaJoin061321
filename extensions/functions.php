@@ -169,10 +169,18 @@ function loginCreateAccountSocial($first_name, $last_name, $email){
 
 	$pwPassword = md5($randomString);
 
-	$email_subject = 'WELCOME TO BAIPAJOIN';
-	$email_message = 'Dear '.$first_name.', Thank you for signing up BaiPaJoin! Your USERNAME is "'.$email.'" and your TEMPORARY PASSWORD is "'.$randomString.'" , you any access your account anytime but you\'re advised to change the password immediately. Thank you! THIS IS A TEST. DO NOT REPLY!';
+	$img_address = array();
+  	$img_name = array();
 
-	send_email($email, $email_subject, $email_message);
+ 	array_push($img_address,'images/welcome-bg.jpg',
+ 		'images/main-logo-green.png','images/welcome-img.jpg');
+
+  	array_push($img_name,'background','logo','main');
+
+	$email_subject = 'WELCOME TO BAIPAJOIN';
+	$email_message = html_welcome_message_social($first_name, $pwPassword);
+
+	send_email($email, $email_subject, $email_message, $img_address, $img_name);
 
 	DB::query("INSERT INTO joiner(joiner_fname, joiner_lname, joiner_email, joiner_password) VALUES(?,?,?,?)", array($first_name, $last_name, $email, $pwPassword), "CREATE");
 
@@ -1729,6 +1737,7 @@ function process_paymongo_ewallet_source($ewallet_type, $final_price, $joiner, $
     	file_put_contents($log_file_data, date('h:i:sa').' => '. $ewallet_source . "\n" . "\n", FILE_APPEND);
 
 			$redirect = "Location: " . $ewallet_data['data']['attributes']['redirect']['checkout_url']."";
+			file_put_contents('debug.log', date('h:i:sa').' => '. $redirect . "\n" . "\n", FILE_APPEND);
 
 	    	header($redirect);
 	} //This code will a log.txt file to get the response of the cURL command
@@ -1862,6 +1871,76 @@ function retrieve_paymongo_ewallet_payment($payment_id) {
 	curl_close($curl);
 
 	return json_decode($response, true);
+}
+
+##### CODE START HERE PAYMAYA API #####
+function process_paymaya_payment($amount,$book_id) {
+
+	$_SESSION['book_id'] = $book_id;
+
+	$curl = curl_init();
+
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => 'https://pg-sandbox.paymaya.com/payby/v2/paymaya/payments/',
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'POST',
+	  CURLOPT_POSTFIELDS =>'{
+	  "totalAmount": {
+	    "currency": "PHP",
+	    "value": "'.$amount.'"
+	  },
+	  "redirectUrl": {
+	    "success": "http://paymaya.com",
+	    "failure": "http://facebook.com",
+	    "cancel": "http://shop.someserver.com/cancel?id=6319921"
+	  },
+	  "requestReferenceNumber": "202259",
+	  "metadata": {
+	    "subMerchantRequestReferenceNumber": "65899",
+	    "pf": {
+	       "smi": "SUB034221",
+	       "smn": "BAIPAJOINCEBU",
+	       "mci": "Cebu",
+	       "mpc": "608",
+	       "mco": "PHL",
+	       "mcc": "3415",
+	       "postalCode": "6000",
+	       "contactNo": "+63923969932",
+	       "state": "Cebu",
+	       "addressLine1": "Lower Purok 8,Kamputhaw"
+	    }
+	  }
+	}',
+	  CURLOPT_HTTPHEADER => array(
+	    'Authorization: Basic cGstcnB3YjVZUjZFZm5LaU1zbGRacVk0aGdwdkpqdXk4aGh4VzJiVkFBaXoyTjo=',
+	    'Content-Type: application/json'
+	  ),
+	));
+
+	$response = curl_exec($curl);
+	$response = json_decode($response, true);
+
+	curl_close($curl);
+
+	$redirect = "Location: " . $response['redirectUrl']."";
+	header($redirect);
+}
+
+##### CODE START HERE 7-CONNECT API #####
+function process_sevenconnect_payment($amount,$book_id) {
+
+	$address = "https://testpay.cliqq.net/transact?merchantID=ATI&merchantRef=6419705015&expDate=20210910235900&amount=".$amount."&successURL=https://google.com&failURL=https://github.com/philseven/cliqq-pay/blob/master/docs/index.md%23request-parameters-1&token=235a23122139152ff830aa7fa1a876a95d4e365b&transactionDescription=Booking Payment for booking id ".$book_id." thru Team BaiPaJoin Cebu&receiptRemarks=Team BaiPaJoin|5th floor, UC-Main Building, Sangciangko St., Cebu City.|Call 0923-968-8932 for questions&email=salvador.alexis01@gmail.com&phone=09239688932&payLoad=https://54e8-49-145-165-0.ngrok.io/api_test/7Connect_payload.ph&returnPaymentDetails=Y";
+
+	$redirect = "Location: " . $address."";
+	header($redirect);
 }
 
 ##### CODE START HERE @ITEXMO API #####
@@ -2054,6 +2133,90 @@ function get_distance_from_location($from, $to) {
 	$distance = json_decode($response,true);
 
 	return $distance['distance'];
+}
+
+##### CODE START HERE FB GRAPH API #####
+function facebook_graph_api($type) {
+
+	$curl = curl_init();
+
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+    $fb_access_token = 'EAA8IHfsXftcBAKmn2kA0UdgZB6iD3wbsZC6Phn6iN943FSgpW12U7OwgpOZCPwJFHmcScdVQWH8ffDeLR6tWKvssGIhJaXYfcIHZAwieaKjcvrMVLs1rDM7kIlYcirWI28yjZChehYL1ZAZAZCZCqkLoPhBtenpYrsJHzM9yJTtsD52N6VOpH84wjFyVfScZBpg29OVCGNX6QbZCwZDZD';
+
+	if($type == 'videos')
+    	$query = 'https://graph.facebook.com/v12.0/100306372435763/videos?access_token='.$fb_access_token.'';
+  	elseif($type == 'live_videos')
+    	$query = 'https://graph.facebook.com/v12.0/100306372435763/live_videos?access_token='.$fb_access_token.'';
+    elseif($type == 'visitor_post')
+    	$query = 'https://graph.facebook.com/v12.0/100306372435763/visitor_posts?access_token='.$fb_access_token.'';
+   	elseif($type == 'tagged')
+   		$query = 'https://graph.facebook.com/v12.0/100306372435763/tagged?access_token='.$fb_access_token.'';
+
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => $query,
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'GET',
+	));
+
+	$response = curl_exec($curl);
+	$err = curl_error($curl);
+
+	curl_close($curl);
+
+	if(!empty($response)) {
+      if(!file_exists('logs\FBGraphAPI')) {
+        mkdir('logs\FBGraphAPI', 0777, true);
+      }
+      $log_file_data = 'logs\\FBGraphAPI\\log_' . date('d-M-Y') . '.log';
+      file_put_contents($log_file_data, date('h:i:sa').' => '. $response . "\n" . "\n", FILE_APPEND);
+    } //This code will a log.txt file to get the response of the cURL command
+
+	return $response;
+}
+
+function get_facebook_media_id($id) {
+
+	$curl = curl_init();
+
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+    $fb_access_token = 'EAA8IHfsXftcBAKmn2kA0UdgZB6iD3wbsZC6Phn6iN943FSgpW12U7OwgpOZCPwJFHmcScdVQWH8ffDeLR6tWKvssGIhJaXYfcIHZAwieaKjcvrMVLs1rDM7kIlYcirWI28yjZChehYL1ZAZAZCZCqkLoPhBtenpYrsJHzM9yJTtsD52N6VOpH84wjFyVfScZBpg29OVCGNX6QbZCwZDZD';
+
+	$query = 'https://graph.facebook.com/v12.0/'.$id.'/attachments?access_token='.$fb_access_token.'';	
+
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => $query,
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'GET',
+	));
+
+	$response = curl_exec($curl);
+	$err = curl_error($curl);
+
+	curl_close($curl);
+
+	if(!empty($response)) {
+      if(!file_exists('logs\FBGraphAPI')) {
+        mkdir('logs\FBGraphAPI', 0777, true);
+      }
+      $log_file_data = 'logs\\FBGraphAPI\\log_' . date('d-M-Y') . '.log';
+      file_put_contents($log_file_data, date('h:i:sa').' video data: => '. $response . "\n" . "\n", FILE_APPEND);
+    } //This code will a log.txt file to get the response of the cURL command
+
+	return $response;
 }
 
 ##### CODE START HERE @NECESSARY UPDATES WHEN BOOKING IS PAID #####
@@ -2269,6 +2432,40 @@ function html_welcome_message($name, $type) {
 		    </html>
 		";
 	}
+
+	return $message;
+}
+
+##### EMAIL TEMPLATE FOR NEW ACCOUNTS
+function html_welcome_message_social($name, $password) {
+
+	$message = "
+	    <!DOCTYPE html>
+	    <html>
+	      <head>
+	        <meta charset='utf-8'>
+	        <title>BaiPaJoin | Welcome</title>
+	      </head>
+	      <body style='background:url(\"cid:background\");font:normal 15px/20px Verdana,sans-serif;'>
+	        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
+	          <div class='contents' style='text-align:center;color:#1a1a1a;'>
+	            <figure class='main-logo'>
+	              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
+	            </figure>
+	            <figure >
+	              <img src='cid:main' style='max-width:100%;width:300px;height:200px;margin:0 auto;'>
+	            </figure>
+	            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Dear ".$name.",</h1>
+	            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Welcome to BaiPaJoin! We have come bearing great news: your account has been activated and now you can enjoy convenient and hassle-free adventures in a click. Your account <b>USERAME</b> is your email address and your <b>TEMPORARY PASSWORD</b> is ".$password.".Be sure, to apply or select a voucher when you book your 1st adventure to get a discount! Have a look at our Terms and Conditions to know what is in the store for you. We are incredibly excited to have you here. Want to start your adventure? Click the button below to login.</p>
+	            <a href='localhost/BaiPaJoin42/login.php' style='display:block;width:140px;height:35px;background:#7fdcd3;margin:0 auto;border-radius:10px;line-height:35px;color:#fff;text-decoration:none;'>Login Here</a>
+	            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you have any questions, please send an email to <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com]</a> </p>
+	          	<p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Regards, </p>
+	            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Team BaiPaJoin</p>
+	          </div>
+	        </div>
+	      </body>
+	    </html>
+	";
 
 	return $message;
 }

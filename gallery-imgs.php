@@ -33,20 +33,41 @@
 	include("includes/nav.php");
 ?>
 <!-- End Navigation -->
+<?php
+	$response = facebook_graph_api('tagged'); 
+    $fb_data = json_decode($response,true);
+    $media_src = array();
+    $media_desc = array();
+  	foreach($fb_data['data'] as $item) {    
+    	$response = get_facebook_media_id($item['id']); 
+    	$fb_media = json_decode($response,true);
+    	if($fb_media['data'][0]['type'] == 'photo') {
+     		array_push($media_src,$fb_media['data'][0]['media']['image']['src']);
+     		array_push($media_desc,$fb_media['data'][0]['description']);
+     	}
+	}
+?>
 
 <!-- Main -->
 <div id="main_area">
 	<div class="wrapper">
 		<div class="breadcrumbs">
-			<a href="gallery.php">Tagged Live & Videos</a> | <a href="gallery-imgs.php" style="color:#bf127a;">Tagged Images</a>
+			<a href="gallery.php">Videos</a> | 
+			<a href="gallery-imgs.php" style="color:#bf127a;">Images</a> | 
+			<a href="gallery-live.php">Live Virtual Tour</a> 
 		</div>
 		<div class="main_con">
 			<main>
-				<h2>Tagged Images</h2>
-				<div class="carousel">
-					<div class="carousel-cell">
+				<h3>Be inspire! Be Bold! Go out! Relive the moments together with our Joiners! Let these images speak for itself!</h3>
+				<br>
+				<div class="carousel" data-flickity>
 						<?php
-						## CODE HERE...
+							for ($i=0; $i <count($media_src) ; $i++) {
+								echo "<div class='carousel-cell images'>";
+								echo "<iframe src=".$media_src[$i]." width='720' height='720' frameborder='0' title='".$media_desc[$i]."'></iframe>";
+								//echo "<p title='".$media_desc[$i]."'></p>";
+								echo "</div>";
+							}
 						?>
 					</div>
 				</div>

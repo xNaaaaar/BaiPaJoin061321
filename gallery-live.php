@@ -34,42 +34,47 @@
 ?>
 <!-- End Navigation -->
 <?php
-	$response = facebook_graph_api('tagged'); 
+	$response = facebook_graph_api('live_videos'); 
     $fb_data = json_decode($response,true);
     $media_id = array();
-  	foreach($fb_data['data'] as $item) {    
-    	$response = get_facebook_media_id($item['id']); 
-    	$fb_media = json_decode($response,true);
-    	if($fb_media['data'][0]['type'] == 'video_inline') {
-     		array_push($media_id,$fb_media['data'][0]['target']['id']);
-    	}
+    if(!empty($fb_data['data'][0]) && $fb_data['data'][0]['status'] == 'LIVE') {
+    	file_put_contents('debug.log', date('h:i:sa').' => '. $fb_data['data'][0]['id'] . "\n" . "\n", FILE_APPEND);  
+    	array_push($media_id,$fb_data['data'][0]['embed_html']);
+    }
+    else {
+    	$response = facebook_graph_api('videos'); 
+    	$fb_data = json_decode($response,true);
+	  	foreach($fb_data['data'] as $item) {
+	    	array_push($media_id,$item['id']);
+		}
 	}
 ?>
 <!-- Main -->
 <div id="main_area">
 	<div class="wrapper">
 		<div class="breadcrumbs">
-			
-			<a href="gallery.php" style="color:#bf127a;">Videos</a> | 
-			<a href="gallery-imgs.php">Images</a> |
-			<a href="gallery-live">Live Virtual Tour</a> 
+			<a href="gallery.php">Videos</a> | 
+			<a href="gallery-imgs.php">Images</a> | 
+			<a href="gallery-live.php" style="color:#bf127a;">Live Virtual Tour</a> 
 		</div>
 		<div class="main_con">
 			<main>
-				<h3>Feel the excitement through Facebook Live or these beautiful videos compiled by our joiners. Every moment is filled with Joy & Happiness!</h3>
+				<h3>Tagged Images</h3>
 				<br>
-				<div class="carousel">
+				<div class="carousel" data-flickity>
 					<?php
-						if(!empty($media_id)) {
+						if(count($media_id) == 1) {
+							echo "<div class='carousel-cell images'>";
+							echo $media_id[0];
+							echo "</div>";
+						}
+						else {
 							for ($i=0; $i <count($media_id) ; $i++) {
 								echo "<div class='carousel-cell images'>";
 								echo "<iframe src='https://www.facebook.com/video/embed?video_id=".$media_id[$i]."' width='720' height='720' frameborder='0'></iframe>";
 								echo "</div>";
 							}
-						}
-						else
-							echo "Sorry, there are no available videos as of this moment.";
-						
+						}					
 					?>
 				</div>
 			</main>
