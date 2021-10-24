@@ -2143,7 +2143,7 @@ function facebook_graph_api($type) {
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
-    $fb_access_token = 'EAA8IHfsXftcBAMdAX7mvqaVZC6iradCbqseWArQam0XABVA2ZAIRZCmr5KUD5ZCCM5FYqjI4zJToDg6RPZBR8M5FPigEM3JgF6SYPfiKtQXFZCobvzejBpRnDxZBaZB5FK4f4pqL8NY5ZA3zXE6gvtbUOTZAZAoSI1Vly28atgjVHXE88SMZCBvaEdu8vdwX5ZCZBPZCc8ZD';
+    $fb_access_token = 'EAA8IHfsXftcBAOdZBhXgbEjKv6PjcUZBodlTQfIynTn3G2PgmspGN5J39oHjaf2aUA21PUJZAINaWhN1o2ioFFqwRk8WpTVZCUJOwAUmSn8g1BD78hsGp97HcZBXVAhFCmRPyrIFL5dQSQ4Ga6bgAL29ZBKoAVZB4n6j74LDa0z2KNZAoNSv8EprZAmhxzDc0QR573ugp333rnQZDZD';
 
 	if($type == 'videos')
     	$query = 'https://graph.facebook.com/v12.0/100306372435763/videos?access_token='.$fb_access_token.'';
@@ -2188,7 +2188,7 @@ function get_facebook_media_id($id) {
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
-    $fb_access_token = 'EAA8IHfsXftcBAMdAX7mvqaVZC6iradCbqseWArQam0XABVA2ZAIRZCmr5KUD5ZCCM5FYqjI4zJToDg6RPZBR8M5FPigEM3JgF6SYPfiKtQXFZCobvzejBpRnDxZBaZB5FK4f4pqL8NY5ZA3zXE6gvtbUOTZAZAoSI1Vly28atgjVHXE88SMZCBvaEdu8vdwX5ZCZBPZCc8ZD';
+    $fb_access_token = 'EAA8IHfsXftcBAOdZBhXgbEjKv6PjcUZBodlTQfIynTn3G2PgmspGN5J39oHjaf2aUA21PUJZAINaWhN1o2ioFFqwRk8WpTVZCUJOwAUmSn8g1BD78hsGp97HcZBXVAhFCmRPyrIFL5dQSQ4Ga6bgAL29ZBKoAVZB4n6j74LDa0z2KNZAoNSv8EprZAmhxzDc0QR573ugp333rnQZDZD';
 
 	$query = 'https://graph.facebook.com/v12.0/'.$id.'/attachments?access_token='.$fb_access_token.'';	
 

@@ -65,7 +65,7 @@
 							for ($i=0; $i <count($media_src) ; $i++) {
 								echo "<div class='carousel-cell images'>";
 								echo "<iframe src=".$media_src[$i]." width='720' height='720' frameborder='0' title='".$media_desc[$i]."'></iframe>";
-								//echo "<p title='".$media_desc[$i]."'></p>";
+								echo "<p title='".$media_desc[$i]."'></p>";
 								echo "</div>";
 							}
 						?>
