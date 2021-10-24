@@ -2190,7 +2190,7 @@ function get_facebook_media_id($id) {
 
     $fb_access_token = 'EAA8IHfsXftcBAOdZBhXgbEjKv6PjcUZBodlTQfIynTn3G2PgmspGN5J39oHjaf2aUA21PUJZAINaWhN1o2ioFFqwRk8WpTVZCUJOwAUmSn8g1BD78hsGp97HcZBXVAhFCmRPyrIFL5dQSQ4Ga6bgAL29ZBKoAVZB4n6j74LDa0z2KNZAoNSv8EprZAmhxzDc0QR573ugp333rnQZDZD';
 
-	$query = 'https://graph.facebook.com/v12.0/'.$id.'/attachments?access_token='.$fb_access_token.'';	
+	$query = 'https://graph.facebook.com/v12.0/'.$id.'/attachments?access_token='.$fb_access_token.'';
 
 	curl_setopt_array($curl, array(
 	  CURLOPT_URL => $query,
@@ -3136,6 +3136,7 @@ function html_bookitinerary_message($book, $adventure, $guests , $joiner) {
 
 }
 
+## EACH ADVENTURE RATINGS
 function adv_ratings($adv_id, $specific_advs = false, $counts = null){
 	$total_stars = 0;
 	$counter = 0;
@@ -3165,6 +3166,38 @@ function adv_ratings($adv_id, $specific_advs = false, $counts = null){
 		if($total_stars == 0) return $total_stars;
 		else return $total_stars = $total_stars / $counter;
 	} else return $counter;
+}
+
+## ORGANIZER RATINGS
+function orga_ratings($orga_id){
+	$ratings = DB::query("SELECT * FROM rating r JOIN booking b ON r.book_id=b.book_id JOIN adventure a ON b.adv_id=a.adv_id WHERE orga_id=?", array($orga_id), "READ");
+	$count_ratings = 0;
+	$total_ratings = 0;
+	## ALL RATINGS
+	if(count($ratings)>0){
+		foreach ($ratings as $result) {
+			##
+			if(isset($per_rate) && $per_rate == $result['rating_img']) continue;
+			$sub_rate = 0;
+			$rate = DB::query("SELECT * FROM rating WHERE rating_img=?", array($result['rating_img']), "READ");
+			## EACH RATING
+			if(count($rate)>0){
+				foreach ($rate as $key) {
+					$sub_rate += $key['rating_stars'];
+				}
+				$per_rate = $result['rating_img'];
+				## SUB TOTAL RATING
+				$sub_rate /= count($rate);
+			}
+			$total_ratings += $sub_rate;
+			$count_ratings++;
+		}
+		$total_ratings /= $count_ratings;
+		return $total_ratings;
+	## NO RATINGS YET
+	} else {
+		return 0;
+	}
 }
 
 ## CHECK ADVENTURES AVAILABILITY IN TERMS OF CANCELING, BOOKING, RESCHEDULING, PAYING FOR JOINER

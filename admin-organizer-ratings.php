@@ -5,14 +5,6 @@
   // REDIRECT IF ADMIN NOT LOGGED IN
   if(!isset($_SESSION['admin'])) header("Location: login.php");
 
-	if(isset($_GET['success'])){
-		echo "<script>alert('Successfully verified!')</script>";
-	}
-
-	if(isset($_GET['return'])){
-		echo "<script>alert('Successfully return organizer's verification request!')</script>";
-	}
-
 ?>
 <!-- Head -->
 <?php include("includes/head.php"); ?>
@@ -101,76 +93,41 @@ main .admins{height:auto;width:100%;}
         <!-- MAIN -->
         <main>
           <h1><i class="fas fa-user-circle"></i> Admin: <?php echo $current_admin['admin_name']; ?></h1>
-          <h2>Organizers</h2>
+					<?php
+					$orga = DB::query("SELECT * FROM organizer WHERE orga_id=?", array($_GET['orga_id']), "READ");
+					$orga = $orga[0];
+					?>
+          <h2><?php echo $orga['orga_fname']."'s"; ?> Ratings</h2>
           <div class="contents">
             <div class="admins">
               <table class="table-responsive table">
                 <thead class="table-dark">
                   <tr>
-                    <th>ID#</th>
-    								<th>Company Name</th>
-    								<th>Name</th>
-    								<th>Address</th>
-    								<th>Phone</th>
-    								<th>Email Address</th>
-    								<th>Status</th>
-    								<th></th>
-    								<th></th>
-    								<th></th>
+                    <th>ADV ID#</th>
+    								<th>RATING TYPE</th>
+    								<th>STARS</th>
+    								<th>FEEDBACK</th>
                   </tr>
                 </thead>
 								<tbody>
                 <?php
 									// ALL ORGANIZERS RESULTS
-                  $organizer = DB::query("SELECT * FROM organizer", array(), "READ");
+                  $all_ratings = DB::query("SELECT * FROM rating r JOIN booking b ON r.book_id=b.book_id JOIN adventure a ON b.adv_id=a.adv_id WHERE orga_id=?", array($_GET['orga_id']), "READ");
 
-                  if(count($organizer)>0){
-                    foreach ($organizer as $result) {
-                      echo "
-                      <tr>
-                        <td>".$result['orga_id']."</td>
-                        <td>".$result['orga_company']."</td>
-                        <td>".$result['orga_fname']." ".$result['orga_mi'].". ".$result['orga_lname']." </td>
-                        <td>".$result['orga_address']."</td>
-                        <td>".$result['orga_phone']."</td>
-                        <td>".$result['orga_email']."</td>
-											";
-
-											$empty_data = ($result['orga_company'] == "" || $result['orga_address'] == "" || $result['orga_phone'] == "") ? true : false;
-
-											if($result['orga_status'] == 2) {
-												echo "<td style='color:#33b5e5;'><em>pending</em></td>";
-												## CHECK IF THERE ARE MISSING DATA IN ORGANIZER PROFILE
-												if($empty_data)
-													echo "<td><a href='' onclick='return confirm(\"Organizer must complete profile data to verify!\");'>view</a></td>";
-												else
-													echo "<td><a href='admin-verify.php?orga_id=".$result['orga_id']."'>view</a></td>";
-											} elseif($result['orga_status'] == 1) {
-												echo "<td style='color:#00c851;'><em>verified</em></td>";
-												echo "<td>";
-													echo $rate = orga_ratings($result['orga_id']);
-												echo " <i class='fas fa-star'></i></td>";
-												if($rate > 0)
-													echo "<td><a href='admin-organizer-ratings.php?orga_id=".$result['orga_id']."'>view ratings</a></td>";
-												else echo "<td></td>";
-											} else {
-												echo "<td style='color:#ff4444;'><em>not verified</em></td>";
-												echo "<td><em>no ratings</em></td>";
-												echo "<td>---</td>";
-											}
-                      echo "
+                  if(count($all_ratings)>0){
+                    foreach ($all_ratings as $result) {
+											echo "
+											<tr>
 												<td></td>
 											</tr>
 											";
-                    }
-										echo "	</tbody>";
-										echo "</table>";
+										}
 
 									## IF NO EXISTING ORGANIZER
                   } else {
 										echo "	</tbody>";
 										echo "</table>";
-										echo "<p>No organizer exists!</p>";
+										echo "<p>No ratings exists!</p>";
 									}
                 ?>
             </div>
