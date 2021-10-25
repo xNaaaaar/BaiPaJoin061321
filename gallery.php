@@ -52,7 +52,7 @@
 			
 			<a href="gallery.php" style="color:#bf127a;">Videos</a> | 
 			<a href="gallery-imgs.php">Images</a> |
-			<a href="gallery-live">Live Virtual Tour</a> 
+			<a href="gallery-live.php">Live Virtual Tour</a> 
 		</div>
 		<div class="main_con">
 			<main>
