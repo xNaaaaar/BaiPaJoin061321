@@ -477,22 +477,15 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						</span>
 					</h2>
 					<p>".$result['adv_address']."</p>
-					<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>
-					<ul class='icons'>";
-				#
-				if($result['adv_currentGuest'] == 0){
-					echo "
-						<li><a href='edit_adv.php?id=".$result['adv_id']."'><i class='fas fa-edit' data-toggle='tooltip' title='Update Adventure'></i></a></li>
-						<li><a href='delete.php?table=adventure&id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to delete this adventure?\");'><i class='far fa-trash-alt' data-toggle='tooltip' title='Remove Adventure'></i></a></li>
-					";
-				#
-				} elseif((date("Y-m-d") < $no_cancel_starting_date) && ($result['adv_currentGuest'] > 0)){
-					echo "
-						<li><a href='reports_booking-cancel.php?adv_id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to cancel this adventure? Joiner who are booked can either request refund or reschedule!\");'><i class='fas fa-ban' data-toggle='tooltip' title='Cancel Adventure'></i></a></li>
-					";
-				# IF ORGANIZER WILL CLICK PAYOUT
-				} else {
-					echo "<li><a href='request-payout.php?adv_id=".$result['adv_id']."' onclick='return confirm(\"Confirm request payout?\");'><i class='fas fa-hand-holding-usd' data-toggle='tooltip' title='Request Payout'></i></a></li>";
+					<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>";
+					##
+					if($result['adv_currentGuest'] == 0){
+						echo "<a href='edit_adv.php?id=".$result['adv_id']."' class='edit'>Edit</a>";
+						echo "<a href='delete.php?table=adventure&id=".$result['adv_id']."' class='edit' onclick='return confirm(\"Are you sure you want to delete this adventure?\");'>Delete</a>";
+					} elseif((date("Y-m-d") < $no_cancel_starting_date) && ($result['adv_currentGuest'] > 0)){
+						echo "<a href='reports_booking-cancel.php?adv_id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to cancel this adventure? Joiner who are booked can either request refund or reschedule!\");' class='edit'>Cancel</a>";
+					} else {
+						echo "<a href='request-payout.php?adv_id=".$result['adv_id']."' onclick='return confirm(\"Confirm request payout?\");' class='edit'>Request Payout</a>";
 
 						## EMAIL ORGANIZER NOTIFICATION
 						$organizer_db = DB::query("SELECT * FROM organizer WHERE orga_id = ?", array($_SESSION['organizer']), "READ");
@@ -507,10 +500,9 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						array_push($img_name,'background','logo','main');
 
 						send_email($organizer_info['orga_email'], "PAYOUT REQUEST ACKNOWLEDGED", $email_message, $img_address, $img_name);
-				}
-				echo "
-					</ul>
-				</div>";
+					}
+				##
+				echo "</div>";
 			}
 		## IF NO ADVENTURE POSTED EXISTS
 		} else {
@@ -1020,7 +1012,7 @@ function create_filter_sql($places, $activities, $min, $max) {
 }
 
 ##### CODE START HERE @DELETE SQL DATA IN SPECIFIED TABLE #####
-function deleteSQLDataTable($table, $id){
+function deleteSQLDataTable($table, $id, $status = NULL){
 	// DELETE LEGAL DOCUMENT
 	if($table == 'legal_document'){
 		// DELETE THE IMAGE FILE
@@ -1065,10 +1057,20 @@ function deleteSQLDataTable($table, $id){
 
 	// DELETE ADDED BOOKING
 	else if($table == 'booking'){
-		// DELETE SPECIFIC ID
-		DB::query("DELETE FROM {$table} WHERE book_id=? AND book_status=?", array($id, "pending"), 'DELETE');
-	}
+		## DELETE WHEN WAITING FOR PAYMENT STATUS IS EXPIRED
+		if($status == "waiting for payment") {
+			DB::query("DELETE FROM {$table} WHERE book_id=? AND book_status=?", array($id, $status), 'DELETE');
 
+		## DELETE WHEN JOINER USES BACK BUTTON FROM book-guest.php TO book.php
+		} elseif($status == "pending") {
+			DB::query("DELETE FROM {$table} WHERE book_id=? AND book_status=?", array($id, "pending"), 'DELETE');
+
+		## TBD
+		} else {
+
+		}
+	}
+	## TBD
 	else {
 
 	}
@@ -2318,11 +2320,11 @@ function get_local_hotels($town) {
 	file_put_contents('debug.log', date('h:i:sa').' => hotels : '. count($response['Comparison']) . "\n" . "\n", FILE_APPEND);
 
 	if(count($response['Comparison']) > 10) {
-		for ($i=0; $i < 10; $i++) 
+		for ($i=0; $i < 10; $i++)
 			array_push($hotel_list, trim($response['Comparison'][$i][0]['hotelName'],""));
 	}
-	else if(count($response['Comparison']) < 10) 
-		for ($i=0; $i < count($response['Comparison']); $i++) { 
+	else if(count($response['Comparison']) < 10)
+		for ($i=0; $i < count($response['Comparison']); $i++) {
 			array_push($hotel_list, trim($response['Comparison'][$i][0]['hotelName'],""));
 	}
 
@@ -3348,5 +3350,53 @@ function adv_is_reverted($book_id){
 	return false;
 }
 
+## GOOGLE MAP OF PLACES
+function google_map($place){
+	if($place == "Bantayan Island"){
+		echo "
+		<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125234.42046805266!2d123.67849425725015!3d11.219000667005867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a886e327a8c905%3A0x9420bd2b1f535656!2sBantayan%20Island!5e0!3m2!1sen!2sph!4v1635172828242!5m2!1sen!2sph' style='width:100%;height:100%;' allowfullscreen='' loading='lazy'></iframe>";
+
+	} elseif($place == "Malapascua Island"){
+		echo "
+		<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15647.867641202327!2d124.10535138248265!3d11.337127560148321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a7de60aa76852f%3A0xe9237836540d3363!2sMalapascua%20Island!5e0!3m2!1sen!2sph!4v1635173564650!5m2!1sen!2sph' style='width:100%;height:100%;' allowfullscreen='' loading='lazy'></iframe>";
+
+	} elseif($place == "Camotes Island"){
+		echo "
+		<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125456.72281399614!2d124.34960560479635!3d10.694116229752517!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a82954c1a4cdfb%3A0x3cad770124ea1811!2sCamotes%20Islands!5e0!3m2!1sen!2sph!4v1635173842282!5m2!1sen!2sph' style='width:100%;height:100%;' allowfullscreen='' loading='lazy'></iframe>";
+
+	} elseif($place == "Moalboal"){
+		echo "
+		<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62879.92029489318!2d123.39621602946062!3d9.934371776563639!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33abe8630166d475%3A0x20ac43b5c4d02c78!2sMoalboal%2C%20Cebu!5e0!3m2!1sen!2sph!4v1635173878794!5m2!1sen!2sph' style='width:100%;height:100%;' allowfullscreen='' loading='lazy'></iframe>";
+
+	} elseif($place == "Badian"){
+		echo "
+		<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62898.13117864832!2d123.38717292937235!3d9.839178567781673!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33abea4c617080f3%3A0xb806741a9d418b34!2sBadian%2C%20Cebu!5e0!3m2!1sen!2sph!4v1635173913371!5m2!1sen!2sph' style='width:100%;height:100%;' allowfullscreen='' loading='lazy'></iframe>";
+
+	} elseif($place == "Oslob"){
+		echo "
+		<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125915.7915430259!2d123.34229640006367!3d9.520153970082804!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33ab9fc3ba1584b3%3A0xcb54005bbcc85855!2sOslob%2C%20Cebu!5e0!3m2!1sen!2sph!4v1635173945529!5m2!1sen!2sph' style='width:100%;height:100%;' allowfullscreen='' loading='lazy'></iframe>";
+
+	} elseif($place == "Alcoy"){
+		echo "
+		<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62920.18334603922!2d123.43448572926658!3d9.722670767938139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33abbddafece6bfb%3A0xf15a0cc4c94d0d76!2sAlcoy%2C%20Cebu!5e0!3m2!1sen!2sph!4v1635173973794!5m2!1sen!2sph' style='width:100%;height:100%;' allowfullscreen='' loading='lazy'></iframe>";
+
+	} elseif($place == "Aloguinsan"){
+		echo "
+		<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62829.04332036611!2d123.5277837797116!3d10.195657312333257!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a96449565c1269%3A0xf13a9e485cd4f776!2sAloguinsan%2C%20Cebu!5e0!3m2!1sen!2sph!4v1635174002890!5m2!1sen!2sph' style='width:100%;height:100%;' allowfullscreen='' loading='lazy'></iframe>";
+
+	} elseif($place == "Santander"){
+		echo "
+		<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62970.56148864604!2d123.2926935290299!3d9.451174483573107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33ab714241461127%3A0x77a9e6bcbdd5b4ad!2sSantander%2C%20Cebu!5e0!3m2!1sen!2sph!4v1635174036626!5m2!1sen!2sph' style='width:100%;height:100%;' allowfullscreen='' loading='lazy'></iframe>";
+
+	} elseif($place == "Alegria"){
+		echo "
+		<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62914.44433296058!2d123.34766537929396!3d9.753124254858855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33ab96b199f31027%3A0x1aae490622a879d7!2zQWxlZ3LDrWEsIENlYnU!5e0!3m2!1sen!2sph!4v1635174091531!5m2!1sen!2sph' style='width:100%;height:100%;' allowfullscreen='' loading='lazy'></iframe>";
+
+	} elseif($place == "Dalaguete"){
+		echo "
+		<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62904.91529812463!2d123.46117642933969!3d9.803482183182943!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33abb92a0116db4f%3A0x1e4b0b1385537b3b!2sDalaguete%2C%20Cebu!5e0!3m2!1sen!2sph!4v1635174119147!5m2!1sen!2sph' style='width:100%;height:100%;' allowfullscreen='' loading='lazy'></iframe>";
+
+	} else {}
+}
 
 ##### END OF CODES #####

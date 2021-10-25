@@ -3,9 +3,19 @@
 	require_once("extensions/db.php");
 
 	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
-
+	##
 	if(isset($_POST['btnCont1'])){
 		booking("pending");
+	}
+	# PARA DILI MA BACK KUNG GIKAN NA SA PAYMENT
+	# GET THE BOOKED ADV WHERE STATUS IS WAITING
+	if(isset($_SESSION['adv_idno'])){
+		$waiting = DB::query("SELECT * FROM booking WHERE book_guests=? AND book_totalcosts=? AND book_status=? AND joiner_id=? AND adv_id=?", array($_SESSION['cboGuests'], $_SESSION['numTotal'], "waiting for payment", $_SESSION['joiner'], $_SESSION['adv_idno']), "READ");
+		# EXISTS
+		if(count($waiting)>0){
+			$waiting = $waiting[0];
+			header("Location: reports_booking.php");
+		}
 	}
 ?>
 
@@ -42,7 +52,7 @@
 		.main_info .form label{float:left;margin-left:5px;}
 		.main_info .form input, .main_info select{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
 		.main_info .form .radio{display:block;width:20px;height:20px;border:none;box-shadow:none;border-radius:0;padding:0;margin:10px auto 25px 5px;}
-		.main_info .form .terms_cond{position:absolute;bottom:97px;left:35px;}
+		.main_info .form .terms_cond{position:absolute;bottom:86px;left:35px;}
 		.main_info .form button, .main_info .form a{margin:15px 5px 0 0;}
 
 		.side_info{width:35%;float:right;}
@@ -98,6 +108,8 @@
 				$joiner = DB::query("SELECT * FROM joiner WHERE joiner_id=?", array($_SESSION['joiner']), "READ");
 				//
 				if(count($adv)>0 && count($pendingBooking)>0 && count($joiner)>0){
+					# FOR BACKING PURPOSES WHEN PAYMENT IS IN PROCESS
+					$_SESSION['adv_idno'] = $_GET['id'];
 					$adv = $adv[0];
 					$pendingBooking = $pendingBooking[0];
 					$joiner = $joiner[0];

@@ -5,6 +5,9 @@
 	##
 	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
 
+	## SUCCESS MSG FOR DELETING EXPIRED BOOKING
+	if(isset($_GET['exp_suc'])) echo "<script>alert('Successfully deleted expired booking!')</script>";
+
 	## WHEN JOINER WANT A REFUND TO THE CANCELED ADVENTURE OF ORGANIZER
 	if(isset($_GET['book_id'])){
 		## SPECIFIC ADVENTURE THAT IS CANCELED
@@ -298,15 +301,13 @@
 									echo "<td>payment expiry:</td>";
 									echo "<td id='exp_timer".$_SESSION['pay_counter']."'></td>";
 									## PAYMENT COUNTDOWN TIMER
-									echo "<script>payment_timer(".$_SESSION['pay_counter'].")</script>";
+									if(isset($_SESSION['waiting_expry']))
+										echo "<script>payment_timer(".$_SESSION['pay_counter'].")</script>";
 									## JOINER CANNOT PAY IF 5 DAYS BEFORE ADVENTURE
 									if(adv_is_available($result['adv_id'], "pay") && $_SESSION['waiting_expry'] > date("M j, Y G:i:s")) {
 										echo "<td><a href='payment-card.php?book_id=".$result['book_id']."&id=".$result['adv_id']."' onclick='return confirm(\"Ready to pay now?\");'>pay</a></td>";
-									} else {
-										echo "<td></td>";
-									}
-
-
+									} else
+										echo "<td><a href='delete.php?table=booking&book_id=".$result['book_id']."&triggers' onclick='return confirm(\"Are you sure you want to delete this expired booking?\");'><i class='far fa-trash-alt'></i></a></td>";
 								}
 								echo "</tr>";
 							}

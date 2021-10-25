@@ -56,6 +56,8 @@
 		.card p{font-size:23px;color:#989898;width:100% !important;margin:0 0 10px 2px;}
 		.card p:last-of-type{color:#111;font-size:30px;font-weight:500;margin:0 0 0 2px;}
 
+		.edit{margin:20px 10px 0 0 !important;width:185px !important;}
+
 		/* PAGINATION COLORS */
 		a.paging:visited {background-color: none;   color:none;}
 		a.paging:active {background-color: #FFCC00; text-decoration: none;  color:#FFFFFF}

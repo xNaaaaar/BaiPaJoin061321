@@ -26,9 +26,10 @@
 		/* Main Area */
 		main{width:100%;flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0;border-radius:0;text-align:center;}
 		main h1 span{display:block;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin:0 0 10px;text-align:left;}
 
 		.main_info ul{text-align:left;margin:-20px 0 30px 30px;list-style:circle;}
+		.location h2{margin:70px 0 20px;}
 
 		.error{font-size:20px;color:red;margin:50px auto;}
 	</style>
@@ -264,6 +265,32 @@
 						## IF THERE ARE NO RATINGS
 						echo ($message == "")? "" : "<h3 class='error'>".$message."</h3>";
 						?>
+					</div>
+				</div>
+				<div class="location">
+					<h2>Location</h2>
+					<div class="map">
+					<?php
+					## GOOGLE MAP LOCATION
+					$loc = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($_GET['id']), "READ");
+					$loc = $loc[0];
+					##
+					google_map($loc['adv_address']);
+					?>
+					</div>
+				</div>
+				<div class="hotels">
+					<h2>Nearby Hotels</h2>
+					<div class="nearby">
+						<section>
+							<h3>Solea Mactan Resort</h3>
+						</section>
+						<section>
+							<h3>Radisson Blue Cebu</h3>
+						</section>
+						<section>
+							<h3>Marco Polo Plaza Cebu qweqwe</h3>
+						</section>
 					</div>
 				</div>
 			</main>

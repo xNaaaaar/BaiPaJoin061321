@@ -278,7 +278,7 @@
 					</div>
 
 					<button class="edit" type="submit" name="btnPayCard">Pay with Credit/Debit Card</button>
-					<a class="edit" href="reports_booking.php">Pay Later</a>
+					<a class="edit" href="reports_booking.php?countdown" onclick='return confirm("You will be given 15mins to pay this booking!");'>Pay Later</a>
 
 					<?php
 						if(isset($_POST['btnPayCard'])) {
