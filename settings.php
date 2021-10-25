@@ -144,8 +144,8 @@
 						<?php
 						$docu = DB::query("SELECT * FROM legal_document l INNER JOIN organizer o ON l.orga_id=o.orga_id WHERE o.orga_id=? AND orga_company!=? AND orga_address!=? AND orga_phone!=?", array($_SESSION['organizer'], "", "", ""), "READ");
 
-						## CANNOT ADD IF VERIFIED
-						if($_SESSION['verified'] != 1)
+						## CANNOT ADD IF VERIFIED OR BANNED
+						if($_SESSION['verified'] == 0 || $_SESSION['verified'] == 2)
 							echo "<a href='add_docu.php'><i class='fas fa-plus-circle' data-toggle='tooltip' title='Add Documents'></i></a>";
 
 						## CHECK IF ORGANIZER STATUS IS NOT VERIFIED AND ADDED LEGAL IS GREATER THAN OR EQUAL TO TWO

@@ -14,7 +14,12 @@
 			#
 			echo "<h2> {$_SESSION['fname']} {$_SESSION['lname']} ";
 			#IF ORGANIZER SENDS LEGAL DOCU STATUS: PENDING
-			if($_SESSION['verified'] == 2) {
+			if($_SESSION['verified'] == 3) {
+				echo "<i class='fas fa-user-slash' style='color:#ff4444;'></i></h2>
+				<p>Status: <q style='color:#ff4444;'>Banned</q></p>
+				";
+			}
+			else if($_SESSION['verified'] == 2) {
 				echo "<i class='fas fa-undo' style='color:#33b5e5;'></i></h2>
 				<p>Status: <q style='color:#33b5e5;'>Pending</q></p>
 				";
@@ -41,7 +46,7 @@
 
 		<!-- TEMPORARY DISABLED -->
 
-			<?php 
+			<?php
 			/*if($currentSidebarPage == 'dashboard'){
 			?>
 			<ul>
@@ -52,8 +57,8 @@
 		<?php
 			}*/
 		}
-		?> 
-		
+		?>
+
 
 
 		<li class="<?php if($currentSidebarPage == 'profile') echo 'current_sidebar'; ?>"><a href="settings.php"><i class="fas fa-user-circle"></i> <q>Profile</q></a></li>

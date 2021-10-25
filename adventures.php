@@ -13,6 +13,10 @@
 		echo "<script>alert('Adventure successfully added to favorites!')</script>";
 	}
 
+	// REQUEST ADVENTURE FOR A DATE
+	if(isset($_GET['request_success']))
+		echo "<script>alert('Request for a date is successful and will be sent to Organizer's email!')</script>";
+
 	// IF ADVENTURE IS REMOVED SUCCESSFULLY
 	if(isset($_GET['removed']) && $_GET['removed'] == 1){
 		echo "<script>
@@ -41,6 +45,7 @@
 		.sidebar{height:auto;}
 		.sidebar ul{height:auto;}
 		.sidebar ul li{line-height:25px;font-size:20px;font-weight:500;}
+		.sidebar ul li label{margin-left:5px;}
 		.sidebar ul li h3{font-size:25px;font-weight:600;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;position:relative;}
@@ -55,7 +60,7 @@
 		main button:hover{background:#8c0047;}
 
 		.card-link{text-decoration:none !important;}
-		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 125px 30px 215px;line-height:35px;text-align:left;margin:25px auto;border:1px solid #cfcfcf;}
+		.card{width:100%;min-height:227px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 125px 30px 215px;line-height:35px;text-align:left;margin:25px auto;border:1px solid #cfcfcf;}
 		.card:hover{border:1px solid #bf127a;}
 		.card figure{width:165px;height:165px;position:absolute;top:30px;left:30px;border:1px solid #cfcfcf;}
 		.card figure img{width:100%;height:100%;}
@@ -69,6 +74,8 @@
 		.card h2 span i{color:#ffac33;}
 		.card p{font-size:23px;color:#989898;width:100% !important;margin:0 0 10px 2px;}
 		.card p:last-of-type{color:#111;font-size:30px;font-weight:500;margin:0 0 0 2px;}
+
+		.edit{width:260px !important;}
 
 		/* PAGINATION COLORS */
 		a.paging:visited {background-color: black;}

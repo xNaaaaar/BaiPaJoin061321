@@ -145,18 +145,22 @@ main .admins{height:auto;width:100%;}
 													echo "<td><a href='' onclick='return confirm(\"Organizer must complete profile data to verify!\");'>view</a></td>";
 												else
 													echo "<td><a href='admin-verify.php?orga_id=".$result['orga_id']."'>view</a></td>";
-											} elseif($result['orga_status'] == 1) {
-												echo "<td style='color:#00c851;'><em>verified</em></td>";
+											} elseif($result['orga_status'] == 0) {
+												echo "<td style='color:#ff4444;'><em>not verified</em></td>";
+												echo "<td><em>no ratings</em></td>";
+												echo "<td>---</td>";
+											} else {
+												if($result['orga_status'] == 1)
+													echo "<td style='color:#00c851;'><em>verified</em></td>";
+												else
+													echo "<td style='color:red;'><em>banned</em></td>";
+												##
 												echo "<td>";
 													echo $rate = orga_ratings($result['orga_id']);
 												echo " <i class='fas fa-star'></i></td>";
 												if($rate > 0)
 													echo "<td><a href='admin-organizer-ratings.php?orga_id=".$result['orga_id']."'>view ratings</a></td>";
 												else echo "<td></td>";
-											} else {
-												echo "<td style='color:#ff4444;'><em>not verified</em></td>";
-												echo "<td><em>no ratings</em></td>";
-												echo "<td>---</td>";
 											}
                       echo "
 												<td></td>

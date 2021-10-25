@@ -133,14 +133,14 @@
 						echo "<script>alert('File type is not allowed!')</script>";
 
 					} else {
+						## FOR OVERALL RATING
+						DB::query("INSERT INTO rating(rating_img, rating_type, rating_stars, rating_message, joiner_id, book_id) VALUES(?,?,?,?,?,?)", array($imageName, 4, $overall, $txtFeedback, $_SESSION['joiner'], $_GET['book_id']), "CREATE");
 						## FOR ENGAGEMENT RATING
 						DB::query("INSERT INTO rating(rating_img, rating_type, rating_stars, joiner_id, book_id) VALUES(?,?,?,?,?)", array($imageName, 1, $engage, $_SESSION['joiner'], $_GET['book_id']), "CREATE");
 						## FOR QUALITY RATING
 						DB::query("INSERT INTO rating(rating_img, rating_type, rating_stars, joiner_id, book_id) VALUES(?,?,?,?,?)", array($imageName, 2, $quality, $_SESSION['joiner'], $_GET['book_id']), "CREATE");
 						## FOR EXPECTATION RATING
 						DB::query("INSERT INTO rating(rating_img, rating_type, rating_stars, joiner_id, book_id) VALUES(?,?,?,?,?)", array($imageName, 3, $expect, $_SESSION['joiner'], $_GET['book_id']), "CREATE");
-						## FOR OVERALL RATING
-						DB::query("INSERT INTO rating(rating_img, rating_type, rating_stars, rating_message, joiner_id, book_id) VALUES(?,?,?,?,?,?)", array($imageName, 4, $overall, $txtFeedback, $_SESSION['joiner'], $_GET['book_id']), "CREATE");
 
 						header("Location: reports_rating.php?success");
 					}

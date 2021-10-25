@@ -28,11 +28,11 @@ html, body{height:100%;}
 main{flex:4;float:none;height:100%;background:none;margin:0;padding:50px 50px 0;border-radius:0;text-align:center;}
 main h1{text-align:right;font-size:20px;}
 main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin:15px 0;text-align:left;}
-main h2 span{font-size:30px;}
-main h2 span a:hover, main a:hover{color:#313131;text-decoration:none;}
-main h3{font:600 30px/100% Montserrat,sans-serif;;margin-bottom:10px;text-align:center;}
-main input{display:inline-block;width:99%;height:50px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 20px;margin:5px auto;border:1px solid #cfcfcf;}
-main p:last-of-type{width:100%;color:red;font-size:20px;}
+main h2 button{font:normal 18px/18px Montserrat,sans-serif;margin-left:20px;border:1px solid #cfcfcf;padding:7px 20px;}
+main h2 a{display:inline-block;font:normal 18px/18px Montserrat,sans-serif;border:1px solid #cfcfcf;padding:7px 20px;color:#000;background:#efefef;}
+main h2 button:hover, main h2 a:hover{background:#000;color:#fff;}
+main a:hover{color:#313131;text-decoration:none;}
+main h3{font:600 20px/100% Montserrat,sans-serif;;text-align:left;color:red;}
 
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 
@@ -97,13 +97,41 @@ main .admins{height:auto;width:100%;}
 					$orga = DB::query("SELECT * FROM organizer WHERE orga_id=?", array($_GET['orga_id']), "READ");
 					$orga = $orga[0];
 					?>
-          <h2><?php echo $orga['orga_fname']."'s"; ?> Ratings</h2>
+					<form method="post">
+	          <h2><?php echo $orga['orga_fname']."'s"; ?> Ratings
+							<?php
+							## CHECK IF ORGA IS BANNED
+							if($orga['orga_status'] == 3)
+								echo "<button type='submit' name='btnUnban' onclick='return confirm(\"Are you sure you want to unban this organizer?\")'>Unban</button>";
+							else
+								echo "<button type='submit' name='btnBan' onclick='return confirm(\"Are you sure you want to ban this organizer?\")'>Ban</button>";
+							?>
+							<a href="admin-organizer.php">Back</a>
+						</h2>
+						<?php
+						## IF BANNED
+						if($orga['orga_susp_datetime'] != "")
+							echo "<h3>Banned on ".date("M. j, Y g:i a", strtotime($orga['orga_susp_datetime']))."</h3>";
+						?>
+					</form>
+					<?php
+					## WHEN BAN IS CLICKED
+					if(isset($_POST['btnBan'])){
+						DB::query("UPDATE organizer SET orga_status=?, orga_susp_datetime=? WHERE orga_id=?", array(3, date("Y-m-d g:i:a"), $_GET['orga_id']), "UPDATE");
+					}
+
+					## WHEN UNBAN IS CLICKED
+					if(isset($_POST['btnUnban'])){
+						DB::query("UPDATE organizer SET orga_status=?, orga_susp_datetime=? WHERE orga_id=?", array(1, NULL, $_GET['orga_id']), "UPDATE");
+					}
+					?>
           <div class="contents">
             <div class="admins">
               <table class="table-responsive table">
                 <thead class="table-dark">
                   <tr>
                     <th>ADV ID#</th>
+                    <th>JOINER ID#</th>
     								<th>RATING TYPE</th>
     								<th>STARS</th>
     								<th>FEEDBACK</th>
@@ -118,9 +146,26 @@ main .admins{height:auto;width:100%;}
                     foreach ($all_ratings as $result) {
 											echo "
 											<tr>
-												<td></td>
-											</tr>
-											";
+												<td>".$result['adv_id']."</td>
+												<td>".$result['joiner_id']."</td>";
+											## RATING TYPE IN TEXT
+											if($result['rating_type'] == 1)
+												echo "<td>Engagement Rating</td>";
+											elseif($result['rating_type'] == 2)
+												echo "<td>Safety & Expertise Rating</td>";
+											elseif($result['rating_type'] == 3)
+												echo "<td>Expectation Rating</td>";
+											else
+												echo "<td>Overall Rating</td>";
+											##
+											echo "<td>".$result['rating_stars']." <i class='fas fa-star'></i></td>";
+											## RATING MESSAGE
+											if($result['rating_message'] == '')
+												echo "<td>---</td>";
+											else
+												echo "<td>".$result['rating_message']."</td>";
+											##
+											echo "</tr>";
 										}
 
 									## IF NO EXISTING ORGANIZER

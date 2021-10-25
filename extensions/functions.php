@@ -12,19 +12,14 @@ function createAccount(){
 	$emEmail = trim($_POST['emEmail']);
 	$pwPassword = trim(md5($_POST['pwPassword']));
 
-	//CHECK IF ACCOUNT USER TYPE EXIST
-	if($cboType === "Joiner") {
-		//CHECK IF EMAIL ALREADY EXIST FOR JOINER
-		$checkEmail = DB::query("SELECT * FROM joiner WHERE joiner_email=?", array($emEmail), "READ");
-	} elseif($cboType === "Organizer") {
-		//CHECK IF EMAIL ALREADY EXIST FOR ORGANIZER
-		$checkEmail = DB::query("SELECT * FROM organizer WHERE orga_email=?", array($emEmail), "READ");
-	} else {
-		//CHECK IF EMAIL ALREADY EXIST FOR ADMIN
-		$checkEmail = DB::query("SELECT * FROM admin WHERE admin_email=?", array($emEmail), "READ");
-	}
+	//CHECK IF EMAIL ALREADY EXIST FOR JOINER
+	$check_joiner_email = DB::query("SELECT * FROM joiner WHERE joiner_email=?", array($emEmail), "READ");
+	//CHECK IF EMAIL ALREADY EXIST FOR ORGANIZER
+	$check_orga_email = DB::query("SELECT * FROM organizer WHERE orga_email=?", array($emEmail), "READ");
+	//CHECK IF EMAIL ALREADY EXIST FOR ADMIN
+	$check_admin_email = DB::query("SELECT * FROM admin WHERE admin_email=?", array($emEmail), "READ");
 	//
-	if(count($checkEmail)>0){
+	if(count($check_joiner_email)>0 || count($check_orga_email)>0 || count($check_admin_email)>0){
 		echo "<script>alert('Email address already exists!')</script>";
 	}
 	//ERROR HANDLING
@@ -138,13 +133,10 @@ function loginAccount(){
 	// ORGANIZER ACCOUNT
 	} else if(count($organizerAccount)>0){
 		$organizerAccount = $organizerAccount[0];
-		## CHECK IF ORGANIZER IS NOT BANNED
-		if($organizerAccount['orga_status'] <= 2){
-			$_SESSION['organizer'] = $organizerAccount['orga_id'];
+		$_SESSION['organizer'] = $organizerAccount['orga_id'];
 
-			header('Location: index.php');
-			exit;
-		}
+		header('Location: index.php');
+		exit;
 
 	// ADMIN ACCOUNT
 	} else if(count($adminAccount)>0){
@@ -848,6 +840,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					##
 					echo "
 						</ul>
+						<a href='adventures-request.php?adv_id=".$result['adv_id']."' class='edit' onclick='return confirm(\"Confirm request a date for this adventure?\")'>Request Adventure Date</a>
 					</div>
 					</a>
 					";

@@ -60,7 +60,7 @@ iframe{ border: none; width: 100%;}
 ul, h1, h2, h3, h4{ margin:0; padding:0; list-style:none; }
 strong , b{ font-weight: bold;}
 em, i{font-style: italic;}
-input, select{width:99%;height:60px;margin:10px auto 0;border:1px solid #fff;padding:0 15px;border-radius:10px;font:normal 18px/20px Montserrat,sans-serif;border:1px solid #cfcfcf;}
+input, select{width:99%;height:50px;margin:10px auto 0;border:1px solid #fff;padding:0 15px;border-radius:8px;font:normal 18px/20px Montserrat,sans-serif;border:1px solid #cfcfcf;}
 input[type="checkbox"]{width:18px;height:18px;}
 input[type="file"]{height:auto;border:none;}
 input[type="submit"]{cursor: pointer;}
@@ -221,7 +221,7 @@ header{}
 	main a:hover{color:#7fdcd3;text-decoration:underline;}
 
   main .form{margin-bottom:40px;position:relative;}
-  main .edit{display:inline-block;max-width:100%;width:150px;height:50px;background:#bf127a;border-radius:10px;color:#fff;margin:15px auto;text-align:center;font:normal 18px/50px Montserrat,sans-serif;border:none;vertical-align:top;}
+  main .edit{display:inline-block;max-width:100%;width:150px;height:50px;background:#bf127a;border-radius:8px;color:#fff;margin:15px auto;text-align:center;font:normal 18px/50px Montserrat,sans-serif;border:none;vertical-align:top;}
   main .edit:hover{background:#8c0047;text-decoration:none;color:#fff;}
 
 	.intro_txt{text-align:center;width:80%;margin:0 auto 34px;padding:15px;border-bottom:3px solid #7fdcd3;font-weight:bold;font-size:22px;}
