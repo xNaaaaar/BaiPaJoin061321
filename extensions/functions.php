@@ -2135,6 +2135,43 @@ function get_distance_from_location($from, $to) {
 	return $distance['distance'];
 }
 
+##### CODE START HERE @MAPQUEST API #####
+function get_directions_from_to_location($from, $to) {
+
+	$curl = curl_init();
+
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+    curl_setopt_array($curl, array(
+	  CURLOPT_URL => 'https://www.mapquestapi.com/directions/v2/route?key=iPNZaAasLzp7dSD4VtnZGKmuz3Wy6SXA&from='.$from.',Cebu&to='.$to.',Cebu',
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'GET',
+	  CURLOPT_HTTPHEADER => array(
+	  	'Content-Type: application/json'
+	  ),
+	));
+
+	$response = curl_exec($curl);
+
+	curl_close($curl);
+
+	if(!empty($response)) {
+      if(!file_exists('logs\mapsquestapi')) {
+        mkdir('logs\mapsquestapi', 0777, true);
+      }
+      $log_file_data = 'logs\\mapsquestapi\\log_' . date('d-M-Y') . '.log';
+      file_put_contents($log_file_data, date('h:i:sa').' => '. $response . "\n" . "\n", FILE_APPEND);
+    } //This code will a log.txt file to get the response of the cURL command
+
+	return $response;
+}
+
 ##### CODE START HERE FB GRAPH API #####
 function facebook_graph_api($type) {
 
@@ -2143,7 +2180,7 @@ function facebook_graph_api($type) {
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
-    $fb_access_token = 'EAA8IHfsXftcBAMa04pAYZC2QLxUfZBMZCwTBp2xKImHtoNp9CwVYI9MMlv0cdqbayIvsLrUIPhT5Mu7M9ovYqWIL4PcCXs54ZCOMss2ynUzMEy3BMJZC6Ghrv4ZCaRGCZCPGlwgU8GGI0ZB8jk8WxZCNyGKQLWxrsiLh59l3McWcMcyVdD6tdc3oC7JO2crIIZBJHS18lGMOFA2AZDZD';
+    $fb_access_token = 'EAA8IHfsXftcBAKD51RzsmCC50HkWDzZBFZAFblMMIBkITtVX87fYj5scWgE5MvUc1wzm7RHspbbmUw5tmshBYXXGDNZAoGPMybSj3alg19dvzNJujLbvVVWZAGVePyZAwlZC2oXxCG1AhcPuJfaRZAiACkNXtOtv0OaROJqsuEVW8CwxoNRPwnGmZBdueubLlZCoZD';
 
 	if($type == 'videos')
     	$query = 'https://graph.facebook.com/v12.0/100306372435763/videos?access_token='.$fb_access_token.'';
@@ -2175,7 +2212,7 @@ function facebook_graph_api($type) {
         mkdir('logs\FBGraphAPI', 0777, true);
       }
       $log_file_data = 'logs\\FBGraphAPI\\log_' . date('d-M-Y') . '.log';
-      file_put_contents($log_file_data, date('h:i:sa').' => '. $response . "\n" . "\n", FILE_APPEND);
+      file_put_contents($log_file_data, date('h:i:sa').' => tagged'. $response . "\n" . "\n", FILE_APPEND);
     } //This code will a log.txt file to get the response of the cURL command
 
 	return $response;
@@ -2188,7 +2225,7 @@ function get_facebook_media_id($id) {
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
-    $fb_access_token = 'EAA8IHfsXftcBAMa04pAYZC2QLxUfZBMZCwTBp2xKImHtoNp9CwVYI9MMlv0cdqbayIvsLrUIPhT5Mu7M9ovYqWIL4PcCXs54ZCOMss2ynUzMEy3BMJZC6Ghrv4ZCaRGCZCPGlwgU8GGI0ZB8jk8WxZCNyGKQLWxrsiLh59l3McWcMcyVdD6tdc3oC7JO2crIIZBJHS18lGMOFA2AZDZD';
+    $fb_access_token = 'EAA8IHfsXftcBAKD51RzsmCC50HkWDzZBFZAFblMMIBkITtVX87fYj5scWgE5MvUc1wzm7RHspbbmUw5tmshBYXXGDNZAoGPMybSj3alg19dvzNJujLbvVVWZAGVePyZAwlZC2oXxCG1AhcPuJfaRZAiACkNXtOtv0OaROJqsuEVW8CwxoNRPwnGmZBdueubLlZCoZD';
 
 	$query = 'https://graph.facebook.com/v12.0/'.$id.'/attachments?access_token='.$fb_access_token.'';
 
@@ -2213,10 +2250,90 @@ function get_facebook_media_id($id) {
         mkdir('logs\FBGraphAPI', 0777, true);
       }
       $log_file_data = 'logs\\FBGraphAPI\\log_' . date('d-M-Y') . '.log';
-      file_put_contents($log_file_data, date('h:i:sa').' video data: => '. $response . "\n" . "\n", FILE_APPEND);
+      file_put_contents($log_file_data, date('h:i:sa').' => '. $response . "\n" . "\n", FILE_APPEND);
     } //This code will a log.txt file to get the response of the cURL command
 
 	return $response;
+}
+
+### CODE START HERE MAKCORPS HOTEL API
+function get_local_hotels($town) {
+	$curl = curl_init();
+
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => 'https://api.makcorps.com/auth',
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'POST',
+	  CURLOPT_POSTFIELDS =>'{
+	    "username":"salvadoralexis01",
+	    "password":"W@lf0721"
+	}',
+	  CURLOPT_HTTPHEADER => array(
+	    'Content-Type: application/json'
+	  ),
+	));
+
+	$response = curl_exec($curl);
+
+	if(!empty($response)) {
+      if(!file_exists('logs\HotelsAPI')) {
+        mkdir('logs\HotelsAPI', 0777, true);
+      }
+      $log_file_data = 'logs\\HotelsAPI\\log_' . date('d-M-Y') . '.log';
+      file_put_contents($log_file_data, date('h:i:sa').' => access_token : '. $response . "\n" . "\n", FILE_APPEND);
+    } //This code will a log.txt file to get the response of the cURL command
+
+    $response = json_decode($response,true);
+
+    curl_setopt_array($curl, array(
+	  CURLOPT_URL => 'https://api.makcorps.com/free/'.$town.'%20cebu',
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'GET',
+	  CURLOPT_HTTPHEADER => array(
+	    'Authorization: JWT '.$response['access_token'].''
+	  ),
+	));
+
+	$response = curl_exec($curl);
+
+	if(!empty($response)) {
+      if(!file_exists('logs\HotelsAPI')) {
+        mkdir('logs\HotelsAPI', 0777, true);
+      }
+      $log_file_data = 'logs\\HotelsAPI\\log_' . date('d-M-Y') . '.log';
+      file_put_contents($log_file_data, date('h:i:sa').' => hotels : '. $response . "\n" . "\n", FILE_APPEND);
+    } //This code will a log.txt file to get the response of the cURL command
+
+	curl_close($curl);
+
+	$response = json_decode($response,true);
+	$hotel_list = array();
+
+	file_put_contents('debug.log', date('h:i:sa').' => hotels : '. count($response['Comparison']) . "\n" . "\n", FILE_APPEND);
+
+	if(count($response['Comparison']) > 10) {
+		for ($i=0; $i < 10; $i++) 
+			array_push($hotel_list, trim($response['Comparison'][$i][0]['hotelName'],""));
+	}
+	else if(count($response['Comparison']) < 10) 
+		for ($i=0; $i < count($response['Comparison']); $i++) { 
+			array_push($hotel_list, trim($response['Comparison'][$i][0]['hotelName'],""));
+	}
+
+	return $hotel_list;
 }
 
 ##### CODE START HERE @NECESSARY UPDATES WHEN BOOKING IS PAID #####

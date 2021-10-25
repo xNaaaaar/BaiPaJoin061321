@@ -55,7 +55,8 @@
 		<div class="breadcrumbs">
 			<a href="gallery.php">Videos</a> | 
 			<a href="gallery-imgs.php">Images</a> | 
-			<a href="gallery-live.php" style="color:#bf127a;">Live Virtual Tour</a> 
+			<a href="gallery-live.php" style="color:#bf127a;">Live Virtual Tour</a> |
+			<a href="directions.php">Directions</a>  
 		</div>
 		<div class="main_con">
 			<main>

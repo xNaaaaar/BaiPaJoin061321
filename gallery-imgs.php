@@ -52,8 +52,6 @@
      		array_push($media_height,$fb_media['data'][0]['media']['image']['height']);
      		array_push($media_width,$fb_media['data'][0]['media']['image']['width']);
      		//array_push($media_desc,$fb_media['data'][0]['description']);
-   		    //file_put_contents('debug.log', date('h:i:sa').' => '. $fb_media['data'][0]['media']['image']['height'] .' : '. $fb_media['data'][0]['media']['image']['width'] . "\n" . "\n", FILE_APPEND);
-
      	}
      	else if($fb_media['data'][0]['type'] == 'album') {
      		for ($i=0; $i < count($fb_media['data'][0]['subattachments']['data']) ; $i++) { 
@@ -62,7 +60,6 @@
      				array_push($media_height,$fb_media['data'][0]['subattachments']['data'][$i]['media']['image']['height']);
      				array_push($media_width,$fb_media['data'][0]['subattachments']['data'][$i]['media']['image']['width']);
      				//array_push($media_desc,$fb_media['data'][0]['description']);
-   		    		//file_put_contents('debug.log', date('h:i:sa').' => '. $fb_media['data'][0]['media']['image']['height'] .' : '. $fb_media['data'][0]['media']['image']['width'] . "\n" . "\n", FILE_APPEND);
      			}
      		}
      	}
