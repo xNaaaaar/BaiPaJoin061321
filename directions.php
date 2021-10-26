@@ -34,7 +34,27 @@
 ?>
 <!-- End Navigation -->
 <?php
-	$response = get_directions_from_to_location('AS%20Fortuna%20St.,Mandaue%20City','Dalaguete');
+
+	$dest = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($_GET['id']), "READ");
+	$dest = $dest[0];
+
+	$loc = DB::query("SELECT * FROM joiner WHERE joiner_id=?", array($_SESSION['joiner']), "READ");
+	$loc = $loc[0];
+
+	if($dest['adv_town'] == 'Poro')
+		$to = "Camotes"; 
+	else if($dest['adv_town'] == 'Bantayan')
+		$to = "Santa%Fe";
+	else
+		$to = $dest['adv_town'];
+
+	if($loc['joiner_citymuni'] == 'Cebu' || $loc['joiner_citymuni'] == 'Mandaue' || $loc['joiner_citymuni'] == 'Talisay' || $loc['joiner_citymuni'] == 'LapuLapu')
+		$from = $loc['joiner_address'].",".$loc['joiner_citymuni']."%20City";
+	else
+		$from = $loc['joiner_address'].",".$loc['joiner_citymuni'];
+
+
+	$response = get_directions_from_to_location($from,$to);
     $directions_data = json_decode($response,true);
     $directions = array();
     $directions_snips = array();
@@ -46,11 +66,11 @@
     			$url = $directions_data['route']['legs'][0]['maneuvers'][$i]['iconUrl'];
     		}
     		else {
-    			$url = substr_replace($directions_data['route']['legs'][0]['maneuvers'][$i]['mapUrl'], '300', 86, 3);
-				$url = substr_replace($url,'300', 90, 3);
+    			$url = substr_replace($directions_data['route']['legs'][0]['maneuvers'][$i]['mapUrl'], '500', 86, 3);
+				$url = substr_replace($url,'500', 90, 3);
 			}
     		array_push($directions_snips,$url);
-    		file_put_contents('debug.log', date('h:i:sa').' => '. $directions_data['route']['legs'][0]['maneuvers'][$i]['narrative'] . "\n" . "\n", FILE_APPEND);
+    		//file_put_contents('debug.log', date('h:i:sa').' => '. $directions_data['route']['legs'][0]['maneuvers'][$i]['narrative'] . "\n" . "\n", FILE_APPEND);
     	}
     }
 ?>
@@ -58,21 +78,21 @@
 <div id="main_area">
 	<div class="wrapper">
 		<div class="breadcrumbs">
-			<a href="gallery.php">Videos</a> | 
+			<!-- <a href="gallery.php">Videos</a> | 
 			<a href="gallery-imgs.php">Images</a> | 
 			<a href="gallery-live.php">Live Virtual Tour</a> |
-			<a href="directions.php" style="color:#bf127a;">Live Virtual Tour</a> 
+			<a href="directions.php" style="color:#bf127a;">Live Virtual Tour</a>  -->
 		</div>
 		<div class="main_con">
 			<main>
-				<h3>Tagged Images</h3>
+				<h3>Here's a detailed navigation towards your destination</h3>
 				<br>
 				<div class="carousel">
 					<?php
 						for ($i=0; $i < count($directions) ; $i++) {
 							echo "<h4>".$directions[$i]."</h4><br>";							
 							echo "<div class='carousel-cell'>";
-							echo "<iframe src='".$directions_snips[$i]."' width='300' height='300' frameborder='0'></iframe>";
+							echo "<iframe src='".$directions_snips[$i]."' width='500' height='500' frameborder='0'></iframe>";
 							echo "</div><br>";
 						}			
 					?>

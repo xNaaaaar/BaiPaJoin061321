@@ -269,7 +269,7 @@
 					</div>
 				</div>
 				<div class="location">
-					<h2>Location <span><a href="#">Click to view detailed location &#187;</a></span></h2>
+					<h2>Location | <span><a href="directions.php?id=<?php echo $_GET['id']; ?>"> Navigation</a></span></h2>
 					<div class="map">
 					<?php
 					## GOOGLE MAP LOCATION
@@ -281,17 +281,16 @@
 					</div>
 				</div>
 				<div class="hotels">
-					<h2>Nearby Hotels</h2>
+					<h2>Nearby Hotels & Inns</h2>
 					<div class="nearby">
-						<section>
-							<h3>Solea Mactan Resort</h3>
-						</section>
-						<section>
-							<h3>Radisson Blue Cebu</h3>
-						</section>
-						<section>
-							<h3>Marco Polo Plaza Cebu qweqwe</h3>
-						</section>
+						<?php
+							$hotel_list = get_local_hotels($loc['adv_town']);
+							for ($i=0; $i < count($hotel_list) ; $i++) { 
+								echo "<div>";
+								echo "<h3><b>".$hotel_list[$i]."</b></h3>";
+								echo "</div>";
+							}
+						?>
 					</div>
 				</div>
 			</main>

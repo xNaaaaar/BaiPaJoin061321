@@ -2153,7 +2153,7 @@ function get_directions_from_to_location($from, $to) {
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
     curl_setopt_array($curl, array(
-	  CURLOPT_URL => 'https://www.mapquestapi.com/directions/v2/route?key=iPNZaAasLzp7dSD4VtnZGKmuz3Wy6SXA&from='.$from.',Cebu&to='.$to.',Cebu',
+	  CURLOPT_URL => 'https://www.mapquestapi.com/directions/v2/route?key=iPNZaAasLzp7dSD4VtnZGKmuz3Wy6SXA&from='.$from.',Cebu,Philippines&to='.$to.',Cebu,Philippines',
 	  CURLOPT_RETURNTRANSFER => true,
 	  CURLOPT_ENCODING => '',
 	  CURLOPT_MAXREDIRS => 10,
@@ -2333,11 +2333,11 @@ function get_local_hotels($town) {
 
 	file_put_contents('debug.log', date('h:i:sa').' => hotels : '. count($response['Comparison']) . "\n" . "\n", FILE_APPEND);
 
-	if(count($response['Comparison']) > 10) {
-		for ($i=0; $i < 10; $i++)
+	if(count($response['Comparison']) > 3) {
+		for ($i=0; $i < 3; $i++)
 			array_push($hotel_list, trim($response['Comparison'][$i][0]['hotelName'],""));
 	}
-	else if(count($response['Comparison']) < 10)
+	else if(count($response['Comparison']) < 3)
 		for ($i=0; $i < count($response['Comparison']); $i++) {
 			array_push($hotel_list, trim($response['Comparison'][$i][0]['hotelName'],""));
 	}
