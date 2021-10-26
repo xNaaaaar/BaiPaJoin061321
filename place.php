@@ -30,6 +30,7 @@
 
 		.main_info ul{text-align:left;margin:-20px 0 30px 30px;list-style:circle;}
 		.location h2{margin:70px 0 20px;}
+		.location h2 span{font-size:20px;}
 
 		.error{font-size:20px;color:red;margin:50px auto;}
 	</style>
@@ -268,7 +269,7 @@
 					</div>
 				</div>
 				<div class="location">
-					<h2>Location</h2>
+					<h2>Location <span><a href="#">Click to view detailed location &#187;</a></span></h2>
 					<div class="map">
 					<?php
 					## GOOGLE MAP LOCATION
