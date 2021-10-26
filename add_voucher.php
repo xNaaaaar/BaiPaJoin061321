@@ -85,7 +85,7 @@
 					<div class="form form2">
 						<input type="text" name="txtName" value="" placeholder="Name" required>
 						<select name="cboAdv" required>
-							<option>-- SELECT ADVENTURE --</option>
+							<option value="-1">-- SELECT ADVENTURE --</option>
 							<?php
 							$currentDate = date('Y-m-d');
 							// DISPLAY ALL ADVENTURES CREATED BY CURRENT ORGANIZER

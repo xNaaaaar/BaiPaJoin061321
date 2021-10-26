@@ -112,6 +112,19 @@
 				if(isset($_POST['btnRequest'])){
 					$dateDate = $_POST['dateDate'];
 
+					$img_address = array();
+				  	$img_name = array();
+
+					array_push($img_address,'images/request_date-bg.jpg',
+				 		'images/main-logo-green.png','images/request_date-img.jpg');
+
+				  	array_push($img_name,'background','logo','main');
+
+					$email_subject = 'REQUEST DATE ACKNOWLEDGE';
+					$email_message = html_requestdate_joiner_message($joiner['joiner_fname'], $dateDate);
+
+					send_email($joiner['joiner_email'], $email_subject, $email_message, $img_address, $img_name);
+
 					header("Location: adventures.php?request_success");
 				}
 				?>

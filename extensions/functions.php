@@ -1102,6 +1102,9 @@ function postAdventure(){
 	else if($numPrice < 1){
 		echo "<script>alert('Price cannot be zero or negative!')</script>";
 	}
+	else if($dateDate < date("Y-m-d")){
+		echo "<script>alert('The adventure date should be greater than the current date.')</script>";
+	}
 	else {
 		$fileDosDontsImg = uploadImage('fileDosDontsImg', "images/organizers/".$_SESSION['organizer']."/");
 		$fileItineraryImg = uploadImage('fileItineraryImg', "images/organizers/".$_SESSION['organizer']."/");
@@ -1218,25 +1221,36 @@ function addVoucher(){
 	$vouchCode = uniqid('', true);
 
 	// QUERY ADVENTURE FOR COMPARING DATE PURPOSES
-	$this_adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($cboAdv), "READ");
-	if(count($this_adv)>0){
-		$this_adv = $this_adv[0];
-		$adv_date = date("Y-m-d", strtotime($this_adv['adv_date']));
-		## CHECK IF VOUCHER STARTING DATE IS GREATER THAN ADV DATE
-		if($dateStartDate > $adv_date){
-			echo "<script>alert('Voucher start date cannot be greater than adventure date!')</script>";
-		## CHECK IF VOUCHER ENDING DATE IS GREATER THAN ADV DATE
-		} else if($dateEndDate > $adv_date){
-			echo "<script>alert('Voucher end date cannot be greater than adventure date!')</script>";
-		## CHECK IF VOUCHER STARTING DATE IS GREATER THAN VOUCHER ENDING DATE
-		} else if($dateStartDate > $dateEndDate){
-			echo "<script>alert('Start date cannot be greater than end date!')</script>";
-		// NO ERROR FOUND
-		} else {
-			DB::query("INSERT INTO voucher(vouch_code, vouch_discount, vouch_name, vouch_minspent, vouch_startdate, vouch_enddate, orga_id, adv_id, vouch_user) VALUES(?,?,?,?,?,?,?,?,?)", array($vouchCode, $numDiscount, $txtName, $numMinSpent, $dateStartDate, $dateEndDate, $_SESSION['organizer'], $cboAdv, 0), "CREATE");
+	if($cboAdv >= 0) {
+		$this_adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($cboAdv), "READ");
+		if(count($this_adv)>0){
+			$this_adv = $this_adv[0];
+			$adv_date = date("Y-m-d", strtotime($this_adv['adv_date']));
+			## CHECK IF VOUCHER STARTING DATE IS GREATER THAN ADV DATE
+			if($dateStartDate > $adv_date){
+				echo "<script>alert('Voucher start date cannot be greater than adventure date!')</script>";
+			## CHECK IF VOUCHER ENDING DATE IS GREATER THAN ADV DATE
+			} else if($dateEndDate > $adv_date){
+				echo "<script>alert('Voucher end date cannot be greater than adventure date!')</script>";
+			## CHECK IF VOUCHER STARTING DATE IS GREATER THAN VOUCHER ENDING DATE
+			} else if($dateStartDate > $dateEndDate){
+				echo "<script>alert('Start date cannot be greater than end date!')</script>";
+			}  
+			## CHECK WHETHER END AND/OR START DATE IS NOT BEYOND CURRENT DATE
+			else if($dateStartDate < date("Y-m-d") || $dateEndDate < date("Y-m-d")) {
+				file_put_contents('debug.log', date('h:i:sa').' => '. 'beyond' . "\n" . "\n", FILE_APPEND);
+				echo "<script>alert('Please ensure that start date and/or end date is not beyond the current date.')</script>";
+			} // NO ERROR FOUND
+			else {
+				DB::query("INSERT INTO voucher(vouch_code, vouch_discount, vouch_name, vouch_minspent, vouch_startdate, vouch_enddate, orga_id, adv_id, vouch_user) VALUES(?,?,?,?,?,?,?,?,?)", array($vouchCode, $numDiscount, $txtName, $numMinSpent, $dateStartDate, $dateEndDate, $_SESSION['organizer'], $cboAdv, 0), "CREATE");
 
-			header("Location: voucher.php?added=1");
+				header("Location: voucher.php?added=1");
+			}
 		}
+	}
+	## CHECK WHETHER ORGANIZER FAILED TO SELECT AN ADVENTURE OR NO ACTIVE ADVENTURE
+	else if($cboAdv == -1) {
+		echo "<script>alert('Please select an adventure in order to create a voucher OR there is no active adventures in your account.')</script>";
 	}
 }
 
@@ -2641,6 +2655,37 @@ function html_reschedule_message($name, $current, $resched) {
 
 	return $message;
 }
+
+function html_requestdate_joiner_message($name, $date) {
+
+		$message = "
+		    <!DOCTYPE html>
+		    <html>
+		      <head>
+		        <meta charset='utf-8'>
+		        <title>BaiPaJoin | Request Date</title>
+		      </head>
+		      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 360%;font:normal 15px/20px Verdana,sans-serif;'>
+		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
+		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
+		            <figure class='main-logo'>
+		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
+		            </figure>
+		            <figure >
+		              <img src='cid:main' style='max-width:100%;width:300px;height:200px;margin:0 auto;'>
+		            </figure>
+		            <h1 style='margin:-20px 0 80px;color:#000;font-size:30px;'>Hooray! Requested Date Sent!</h1>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>Hi ".$name."! We've recieved your request to open an adventure on <b>".$date."</b>. We're happy to forward this request to the organizer for action. We hope serve and see you soon! Enjoy your BaiPaJoin Adventure!</p>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:50px auto;'>If you did not make this changes, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com]. Thank you!</a> </p>
+		          </div>
+		        </div>
+		      </body>
+		    </html>
+		";
+
+	return $message;
+}
+
 
 function html_request_message($name, $req_type, $type) {
 
