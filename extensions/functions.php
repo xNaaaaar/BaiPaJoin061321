@@ -1690,7 +1690,6 @@ function process_paymongo_card_payment($card_name, $card_num, $card_expiry, $car
 }
 
 function process_paymongo_ewallet_source($ewallet_type, $final_price, $joiner, $book_id) {
-	$_SESSION['book_id'] = $book_id;
 	$curl = curl_init();
 
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
@@ -1701,8 +1700,8 @@ function process_paymongo_ewallet_source($ewallet_type, $final_price, $joiner, $
 	        "attributes": {
 	            "amount": '.$final_price.',
 	            "redirect": {
-	                "success": "https://6b1c-180-190-172-59.ngrok.io/Melnar%20Ancit/BaiPaJoin061321/thankyou.php?gcash=1",
-	                "failed": "https://6b1c-180-190-172-59.ngrok.io/Melnar%20Ancit/BaiPaJoin061321/thankyou.php?gcash=0"
+	                "success": "https://6fa3-2001-4455-329-f600-883d-d473-4803-5735.ngrok.io/BaiPaJoin42/thankyou.php?gcash=1",
+	                "failed": "https://6fa3-2001-4455-329-f600-883d-d473-4803-5735.ngrok.io/BaiPaJoin42/thankyou.php?gcash=0"
 	            },
 	            "billing": {
 	                "name": "'.$joiner[1].' '.$joiner[2].'",
@@ -1710,7 +1709,8 @@ function process_paymongo_ewallet_source($ewallet_type, $final_price, $joiner, $
 	                "email": "'.$joiner[6].'"
 	            },
 	            "type": "'.$ewallet_type.'",
-	            "currency": "PHP"
+	            "currency": "PHP",
+	            "description" : "'.$book_id.'"
 	        }
 	    }
 	}';
@@ -1754,7 +1754,7 @@ function process_paymongo_ewallet_source($ewallet_type, $final_price, $joiner, $
 	curl_close($curl);
 }
 
-function process_paymongo_ewallet_payment($amount, $source_id) {
+function process_paymongo_ewallet_payment($amount, $source_id,$book_id) {
 
 	$curl = curl_init();
 
@@ -1786,18 +1786,14 @@ function process_paymongo_ewallet_payment($amount, $source_id) {
 	$ewallet_payment = json_decode($response, true);
 
     if(!empty($response)) {
-      if(!file_exists('logs\ewallet_payment')) {
-        mkdir('logs\ewallet_payment', 0777, true);
-      }
-      $log_file_data = 'logs\\ewallet_payment\\log_' . date('d-M-Y') . '.log';
-      file_put_contents($log_file_data, date('h:i:sa').' => '. $response . "\n" . "\n", FILE_APPEND);
-			//
-			$payment_id = $ewallet_payment['data']['id'];
-			$ewallet_type = $ewallet_payment['data']['attributes']['source']['type'];
-			//
-			file_put_contents("test.log", date('h:i:sa').' => '. $payment_id . "\n" .$ewallet_type. "\n ".$_SESSION['book_id']."", FILE_APPEND);
-			//
-			booking_paid_updates($ewallet_type, $_SESSION['book_id'], $payment_id, $amount);
+    	if(!file_exists('logs\ewallet_payment')) {
+        	mkdir('logs\ewallet_payment', 0777, true);
+      	}
+      	$log_file_data = 'logs\\ewallet_payment\\log_' . date('d-M-Y') . '.log';
+      	file_put_contents($log_file_data, date('h:i:sa').' => '. $response . "\n" . "\n", FILE_APPEND);
+		$payment_id = $ewallet_payment['data']['id'];
+		$ewallet_type = $ewallet_payment['data']['attributes']['source']['type'];
+		booking_paid_updates($ewallet_type, $book_id, $payment_id, $amount);
 	} //This code will a log.txt file to get the response of the cURL command
 
     curl_close($curl);
@@ -2333,11 +2329,11 @@ function get_local_hotels($town) {
 
 	file_put_contents('debug.log', date('h:i:sa').' => hotels : '. count($response['Comparison']) . "\n" . "\n", FILE_APPEND);
 
-	if(count($response['Comparison']) > 3) {
-		for ($i=0; $i < 3; $i++)
+	if(count($response['Comparison']) > 9) {
+		for ($i=0; $i < 9; $i++)
 			array_push($hotel_list, trim($response['Comparison'][$i][0]['hotelName'],""));
 	}
-	else if(count($response['Comparison']) < 3)
+	else if(count($response['Comparison']) < 9)
 		for ($i=0; $i < count($response['Comparison']); $i++) {
 			array_push($hotel_list, trim($response['Comparison'][$i][0]['hotelName'],""));
 	}
@@ -2347,6 +2343,7 @@ function get_local_hotels($town) {
 
 ##### CODE START HERE @NECESSARY UPDATES WHEN BOOKING IS PAID #####
 function booking_paid_updates($method, $book_id, $intent_id, $total=null){
+	file_put_contents("debug.log", date('h:i:sa').' => '. $method . " " . $book_id . " " . $intent_id . " " . $total . "\n" . "\n", FILE_APPEND);
 	# UPDATE VOUCHER USERS
 	if(isset($_SESSION['used_voucher_code'])){
 		$voucher = DB::query("SELECT * FROM voucher WHERE vouch_code=?", array($_SESSION['used_voucher_code']), "READ");
@@ -2357,7 +2354,7 @@ function booking_paid_updates($method, $book_id, $intent_id, $total=null){
 	# UPDATE BOOKING STATUS
 	$booked = DB::query("SELECT * FROM booking WHERE book_id=?", array($book_id), "READ");
 	$booked = $booked[0];
-	DB::query("UPDATE booking SET book_status=?, book_totalcosts=? WHERE book_id=?", array("paid", $total, $booked['book_id']), "UPDATE");
+	DB::query("UPDATE booking SET book_status=?, book_totalcosts=? WHERE book_id=?", array("paid", ($total/100), $booked['book_id']), "UPDATE");
 
 	# UPDATE ADVENTURE STATUS
 	$adv_booked = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($booked['adv_id']), "READ");
@@ -2369,7 +2366,7 @@ function booking_paid_updates($method, $book_id, $intent_id, $total=null){
 		DB::query("UPDATE adventure SET adv_status=? WHERE adv_id=?", array("full", $adv_booked['adv_id']), "UPDATE");
 
 	# INSERT DATA TO PAYMENT TABLE
-	DB::query("INSERT INTO payment(payment_id, payment_method, payment_total, payment_datetime, book_id) VALUES(?,?,?,?,?)", array($intent_id, $method, $total, date("Y-m-d H:i:s"), $book_id), "CREATE");
+	DB::query("INSERT INTO payment(payment_id, payment_method, payment_total, payment_datetime, book_id) VALUES(?,?,?,?,?)", array($intent_id, $method, ($total/100), date("Y-m-d H:i:s"), $book_id), "CREATE");
 
 	# IF PAYMENT METHOD IS THRU CARD
 	if($method == "card"){
@@ -2378,7 +2375,8 @@ function booking_paid_updates($method, $book_id, $intent_id, $total=null){
 
 	# IF PAYMENT METHOD IS THRU GCASH
 	} elseif($method == "gcash") {
-
+		# SUCCESSFUL MESSAGE
+		echo "<h1><span class='success'>Thank you! Successfully paid thru ".$method.".</span></h1>";
 	# IF PAYMENT METHOD IS THRU GRAB PAY
 	} elseif($method == "grabpay") {
 
@@ -3067,24 +3065,24 @@ function html_payout_message($name, $type, $amount) {
 
 function html_transreceipt_message($attach, $type) {
 
-	$name = $attach['data']['attributes']['payments'][0]['attributes']['billing']['name'];
-	$address = $attach['data']['attributes']['payments'][0]['attributes']['billing']['address']['line1'];
-	$mobile = $attach['data']['attributes']['payments'][0]['attributes']['billing']['phone'];
-	$email = $attach['data']['attributes']['payments'][0]['attributes']['billing']['email'];
-	$id = $attach['data']['id'];
-	$description = $attach['data']['attributes']['description'];
-	$amount = ($attach['data']['attributes']['amount'] / 100);
-	$fee = ($attach['data']['attributes']['payments'][0]['attributes']['fee'] / 100);
-	$foreign_fee = ($attach['data']['attributes']['payments'][0]['attributes']['foreign_fee'] / 100);
-	$net_amount = ($attach['data']['attributes']['payments'][0]['attributes']['net_amount'] / 100);
-	$currency = $attach['data']['attributes']['currency'];
-	$pay_type = $attach['data']['attributes']['payments'][0]['attributes']['source']['type'];
-	$card_brand = $attach['data']['attributes']['payments'][0]['attributes']['source']['brand'];
-	$card_last_num = $attach['data']['attributes']['payments'][0]['attributes']['source']['last4'];
-	$available_at = $attach['data']['attributes']['payments'][0]['attributes']['available_at'];
-	$paid_at = $attach['data']['attributes']['payments'][0]['attributes']['updated_at'];
-
 	if($type == 'card') {
+		$name = $attach['data']['attributes']['payments'][0]['attributes']['billing']['name'];
+		$address = $attach['data']['attributes']['payments'][0]['attributes']['billing']['address']['line1'];
+		$mobile = $attach['data']['attributes']['payments'][0]['attributes']['billing']['phone'];
+		$email = $attach['data']['attributes']['payments'][0]['attributes']['billing']['email'];
+		$id = $attach['data']['id'];
+		$description = $attach['data']['attributes']['description'];
+		$amount = ($attach['data']['attributes']['amount'] / 100);
+		$fee = ($attach['data']['attributes']['payments'][0]['attributes']['fee'] / 100);
+		$foreign_fee = ($attach['data']['attributes']['payments'][0]['attributes']['foreign_fee'] / 100);
+		$net_amount = ($attach['data']['attributes']['payments'][0]['attributes']['net_amount'] / 100);
+		$currency = $attach['data']['attributes']['currency'];
+		$pay_type = $attach['data']['attributes']['payments'][0]['attributes']['source']['type'];
+		$card_brand = $attach['data']['attributes']['payments'][0]['attributes']['source']['brand'];
+		$card_last_num = $attach['data']['attributes']['payments'][0]['attributes']['source']['last4'];
+		$available_at = $attach['data']['attributes']['payments'][0]['attributes']['available_at'];
+		$paid_at = $attach['data']['attributes']['payments'][0]['attributes']['updated_at'];
+
 		$message = "
 			<html>
 		      <head>
@@ -3158,6 +3156,91 @@ function html_transreceipt_message($attach, $type) {
 		              <tr>
 		                <td>Card Last  4 Digits :</td>
 		                <td>".$card_last_num."</td>
+		              </tr>
+		              <tr>
+		                <td>Created at:</td>
+		                <td>".date('m/d/Y H:i:s', $available_at)."</td>
+		              </tr>
+		              <tr>
+		                <td>Paid at:</td>
+		                <td>".date('m/d/Y H:i:s', $paid_at)."</td>
+		              </tr>
+		            </table>
+		            <p style='margin:50px 0 0;'>Powered by: Paymongo <span style='display:block;'></span> </p>
+		            <p style='line-height:20px;width:1000px;max-width:100%;margin:0 auto;'>If you have any questions or dispute, please send us an email at <a href='#' style='text-decoration:underline;color:#1a1a1a;'>[teambaipajoincebu@gmail.com]</a> </p>
+		          </div>
+		        </div>
+		      </body>
+		    </html>
+	    ";
+	}
+
+	if($type == 'gcash') {
+
+		$name = $attach['data']['attributes']['data']['attributes']['billing']['name']; 
+    	$mobile = $attach['data']['attributes']['data']['attributes']['billing']['phone'];
+    	$email = $attach['data']['attributes']['data']['attributes']['billing']['email'];
+    	$amount = ($attach['data']['attributes']['data']['attributes']['amount'] / 100);
+    	$currency = $attach['data']['attributes']['data']['attributes']['currency'];
+    	$method = $attach['data']['attributes']['data']['attributes']['source']['type'];
+    	$transaction_id = $attach['data']['attributes']['data']['id'];
+    	$fee = ($attach['data']['attributes']['data']['attributes']['fee'] / 100);
+    	$available_at = $attach['data']['attributes']['data']['attributes']['available_at'];
+    	$paid_at = $attach['data']['attributes']['data']['attributes']['paid_at'];
+
+		$message = "
+			<html>
+		      <head>
+		        <meta charset='utf-8'>
+		        <title>BaiPaJoin | TRANSACTION RECEIPT</title>
+		      </head>
+		      <body style='background:linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url(\"cid:background\") no-repeat center;background-position:50% 100%;background-size:350px 350px;font:normal 15px/20px Verdana,sans-serif;'>
+		        <div class='wrapper' style='width:100%;max-width:1390px;margin:0 auto;position:relative;'>
+		          <div class='contents' style='text-align:center;color:#1a1a1a;'>
+		            <figure class='main-logo'>
+		              <img src='cid:logo' style='max-width:100%;width:100px;height:80px;margin:0 auto;'>
+		            </figure>
+		            <figure >
+		              <img src='cid:main' style='max-width:100%;width:350px;height:225px;margin:0 auto;'>
+		            </figure>
+		            <h1 style='margin:-40px 0 60px;color:#000;font-size:30px;'>Payment Successful</h1>
+		            <table style='width:500px;max-width:100%;margin:0 auto; line-height:25px; text-align:left;'>
+		              <h2>Transaction Receipt</h2>
+		              <tr>
+		                <td>Name :</td>
+		                <td>".$name."</td>
+		              </tr>
+		              <tr>
+		                <td>Phone Number :</td>
+		                <td>".$mobile."</td>
+		              </tr>
+		              <tr>
+		                <td>Email :</td>
+		                <td>".$email."</td>
+		              </tr>
+		               <tr>
+		                <td>Payment ID : </td>
+		                <td>".$transaction_id."</td>
+		              </tr>
+		              <tr>
+		                <td>Total Amount : </td>
+		                <td>".$amount."</td>
+		              </tr>
+		              <tr>
+		                <td>Fee :</td>
+		                <td>".$fee."</td>
+		              </tr>
+		              <tr>
+		                <td>Net Amount : </td>
+		                <td>".($amount-$fee)."</td>
+		              </tr>
+		              <tr>
+		                <td>Currency : </td>
+		                <td>".$currency."</td>
+		              </tr>
+		              <tr>
+		                <td>Payment Type :</td>
+		                <td>".$type."</td>
 		              </tr>
 		              <tr>
 		                <td>Created at:</td>
@@ -3290,7 +3373,6 @@ function html_bookitinerary_message($book, $adventure, $guests , $joiner) {
 	";
 
 	return $message;
-
 }
 
 ## EACH ADVENTURE RATINGS
@@ -3442,6 +3524,124 @@ function google_map($place){
 		<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62904.91529812463!2d123.46117642933969!3d9.803482183182943!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33abb92a0116db4f%3A0x1e4b0b1385537b3b!2sDalaguete%2C%20Cebu!5e0!3m2!1sen!2sph!4v1635174119147!5m2!1sen!2sph' style='width:100%;height:100%;' allowfullscreen='' loading='lazy'></iframe>";
 
 	} else {}
+}
+
+function get_most_favorite_adventure() {
+
+	$current_date = date('Y-m-d');
+
+	$adv_db = DB::query("SELECT adv_id FROM adventure WHERE adv_date > '$current_date'", array(), "READ");
+
+	$high_count = 0;
+
+	foreach($adv_db as $adv) {
+		$count_db = DB::query("SELECT count(adv_id) FROM favorite WHERE adv_id =?", array($adv[0]), "READ");
+		$count = $count_db[0];						
+		if($count[0] > $high_count) {
+			$high_count = $count[0];
+			$favorite_db = DB::query("SELECT adv_id FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
+			$favorite = $favorite_db[0];
+		}
+	}
+
+	if(!empty($favorite))
+		return $favorite;
+	else
+		return -1;
+}
+
+function get_best_seller_adventure() {
+
+	$current_date = date('Y-m-d');
+
+	$adv_db = DB::query("SELECT adv_id FROM adventure WHERE adv_date > '$current_date'", array(), "READ");
+
+	$high_count = 0;
+
+	foreach($adv_db as $adv) {
+		$count_db = DB::query("SELECT count(adv_id) FROM booking WHERE book_status='paid' AND adv_id =?", array($adv[0]), "READ");
+		$count = $count_db[0];						
+		if($count[0] > $high_count) {
+			$high_count = $count[0];
+			$best_seller_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
+			$best_seller = $best_seller_db[0];
+		}
+	}
+
+	if(!empty($best_seller))
+		return $best_seller;
+	else
+		return -1;
+}
+
+function get_most_popular_adventure() {
+
+	$current_date = date('Y-m-d');
+
+	$adv_db = DB::query("SELECT adv_id FROM adventure WHERE adv_date > '$current_date'", array(), "READ");
+
+	$high_count = 0;
+
+	foreach($adv_db as $adv) {
+		$count_db = DB::query("SELECT count(adv_id) FROM booking WHERE adv_id =?", array($adv[0]), "READ");
+		$count = $count_db[0];						
+		if($count[0] > $high_count) {
+			$high_count = $count[0];
+			$popular_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
+			$popular = $popular_db[0];
+			//file_put_contents('debug.log', date('h:i:sa').' => '. $high_count.' : '. $best_seller[0] . "\n" . "\n", FILE_APPEND);
+		}
+	}
+
+	if(!empty($popular))
+		return $popular;
+	else
+		return -1;
+}
+
+function get_highest_rating_adventure() {
+
+	$current_date = date('Y-m-d');
+
+	$adv_db = DB::query("SELECT adv_id FROM adventure WHERE adv_date > '$current_date'", array(), "READ");
+
+	$high_count = 0;
+
+	foreach($adv_db as $adv) {
+		$count_db = DB::query("SELECT count(adv_id) FROM rating WHERE adv_id =?", array($adv[0]), "READ");
+		$count = $count_db[0];						
+		if($count[0] > $high_count) {
+			$high_count = $count[0];
+			$top_rate_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
+			$top_rate = $top_rate_db[0];
+			//file_put_contents('debug.log', date('h:i:sa').' => '. $high_count.' : '. $best_seller[0] . "\n" . "\n", FILE_APPEND);
+		}
+	}
+
+	if(!empty($top_rate))
+		return $top_rate;
+	else
+		return -1;
+}
+
+function get_voucher_discount($adv_id) {
+
+	$current_date = date('Y-m-d');
+
+	$discount = DB::query("SELECT vouch_discount FROM voucher WHERE vouch_enddate >= '$current_date' AND  vouch_startdate <= '$current_date' AND adv_id=?", array($adv_id), "READ");
+	$discount = $discount[0];
+	if(count($discount)>1) {
+		$high_count = 0;
+		foreach($discount as $item) {
+			if($item > $high_count)
+				$high_count = $item;
+		}
+		return $high_count[0];
+	}
+	else if(count($discount)==1)
+		return $discount[0];
+	else
+		return -1;
 }
 
 ##### END OF CODES #####

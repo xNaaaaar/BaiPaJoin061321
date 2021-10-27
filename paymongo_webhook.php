@@ -27,8 +27,9 @@
 
     $amount = $payload['data']['attributes']['data']['attributes']['amount'];
     $id = $payload['data']['attributes']['data']['id'];
+    $book_id = $payload['data']['attributes']['data']['attributes']['description'];
 
-    process_paymongo_ewallet_payment($amount, $id);
+    process_paymongo_ewallet_payment($amount, $id, $book_id);
   }
 
   if($type == 'payment.paid' && $pay_method != 'card') {
@@ -43,9 +44,14 @@
     
     $sms_message = "Hello " . $name . "! Your payment for " . $amount . " " . $currency . " thru " . $method . " was successful. Thank you.";
 
-    $email_subject = 'BOOKING CONFIRMATION';
-    $email_message = 'Dear '.$name.',  Hooray! Your payment for '.$amount.' '.$currency.' thru '.$method. ' was successful. Transaction id '.$transaction_id.' . Enjoy your BaiPaJoin Adventure! Thank you! THIS IS A TEST. DO NOT REPLY!';    
-
     send_sms($mobile, $sms_message);
-    send_email($email, $email_subject, $email_message);
+
+    $img_address = array();
+    $img_name = array();
+    array_push($img_address,'images/receipt-bg.png','images/main-logo-green.png','images/receipt-img.png');
+    array_push($img_name,'background','logo','main');
+
+    $email_message = html_transreceipt_message($payload, 'gcash');
+
+    send_email($email, 'BOOKING TRANSACTION RECEIPT', $email_message, $img_address, $img_name);
   }

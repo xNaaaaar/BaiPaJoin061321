@@ -113,6 +113,8 @@
 					<li class="current_sidebar"><a href="payment-card.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Card</a> </li>
 					<li><a href="payment-gcash.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Gcash</a> </li>
 					<li><a href="payment-gpay.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Grab Pay</a> </li>
+					<li class=""><a href="payment-paymaya.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Paymaya</a> </li>
+					<li class=""><a href="payment-seven_connect.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">7/11</a> </li>
 				</ul>
 			</aside>
 			<!-- End of Sub Navigation -->

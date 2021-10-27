@@ -269,7 +269,7 @@
 					</div>
 				</div>
 				<div class="location">
-					<h2>Location | <span><a href="directions.php?id=<?php echo $_GET['id']; ?>"> Navigation</a></span></h2>
+					<h2>Location</h2>
 					<div class="map">
 					<?php
 					## GOOGLE MAP LOCATION
@@ -286,9 +286,9 @@
 						<?php
 							$hotel_list = get_local_hotels($loc['adv_town']);
 							for ($i=0; $i < count($hotel_list) ; $i++) { 
-								echo "<div>";
-								echo "<h3><b>".$hotel_list[$i]."</b></h3>";
-								echo "</div>";
+								echo "<section>";
+								echo "<h3>".$hotel_list[$i]."</h3>";
+								echo "</section>";
 							}
 						?>
 					</div>

@@ -99,8 +99,8 @@
 				<ul>
 					<li class=""><a href="payment-card.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Card</a> </li>
 					<li class=""><a href="payment-gcash.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Gcash</a> </li>
-					<li class="current_sidebar"><a href="payment-gpay.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Grab Pay</a> </li>
-					<li class=""><a href="payment-paymaya.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Paymaya</a> </li>
+					<li class=""><a href="payment-gpay.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Grab Pay</a> </li>
+					<li class="current_sidebar"><a href="payment-paymaya.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">Paymaya</a> </li>
 					<li class=""><a href="payment-seven_connect.php?book_id=<?php echo $_GET['book_id']; ?>&id=<?php echo $_GET['id']; ?>">7/11</a> </li>
 				</ul>
 			</aside>
@@ -116,7 +116,7 @@
 					$adv = $adv[0];
 					$booked = $booked[0];
 					// JOINER FEES CALCULATION
-					$price_fee = $booked['book_totalcosts'] * 0.035 + 15;
+					$price_fee = $booked['book_totalcosts'] * 0.035;
 					$final_price = $booked['book_totalcosts'] + $price_fee;
 			?>
 			<main>
@@ -145,17 +145,6 @@
 							<li>on <?php echo date('l - M. j, Y', strtotime($adv['adv_date'])); ?></li>
 						</ul>
 					</div>
-					<div class="price_details">
-						<h2 style='color:red;'>Important Notes:</h2>
-						<ul>
-							<li>Cards payments are processed and verified by our payment gateway (Paymongo Philippines). All payments are subject to fees and other service related charges like any other forms of online payment.</li>
-							<li>Fees and other charges includes foreign fee, transaction fee, service fee, inconvience fee and government sanction charges imposed by the law implemented by the payment gateway (Paymongo Philippines) or BaiPaJoin </li>
-							<li>All successful bookings can be reschedule for FREE without any approval as long as there is an IDENTICAL ADVENTURE, the NUMBER OF GUEST/S booked can be accomodated by the ADVENTURE SELECTED and it is 5 DAYS PRIOR to the date of adventure. If current date is LESS THAN 5 DAYS before the adventure happens then you cannot reschedule the booking. </li>
-							<li>All successful bookings can be cancel subject to 3% inconvience fee and other charges. If a joiner wishes to cancel a booking, he/she may do so as long as it is 10 DAYS PRIOR to the date of adventure. If the adventure is LESS THAN 10 DAYS then he/she cannot cancel the booking. Once a request is submitted BaiPaJoin will approve the request with 3-5 business days.</li>
-							<li>You may read the <a href="terms.php" target="_blank">terms and conditions</a> of this website.</li>
-						</ul>
-
-					</div>
 
 					<div class="price_details">
 						<h2>Price Details</h2>
@@ -177,13 +166,13 @@
 						</section>
 					</div>
 
-					<button class="edit" type="submit" name="btnGrabPayEWallet">Pay with GrabPay</button>
+					<button class="edit" type="submit" name="btnPaymaya">Pay with Paymaya</button>
 
 					<?php
-						if(isset($_POST['btnGrabPayEWallet'])) {
+						if(isset($_POST['btnPaymaya'])) {
 							$final_price = number_format($final_price, 2, '', '');
-							process_paymongo_ewallet_source('grab_pay', $final_price, $joiner);
-						}
+							process_paymaya_payment(($final_price/100),$_GET['book_id']);
+						}	
 					?>
 				</form>
 			</main>

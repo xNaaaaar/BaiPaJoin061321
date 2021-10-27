@@ -58,7 +58,7 @@
     $directions_data = json_decode($response,true);
     $directions = array();
     $directions_snips = array();
-    //file_put_contents('debug.log', date('h:i:sa').' => '. count($directions_data[0]). "\n" . "\n", FILE_APPEND);
+
     if(count($directions_data['route']['legs'][0]['maneuvers']) != 0) {
     	for ($i=0; $i < count($directions_data['route']['legs'][0]['maneuvers']); $i++) { 
     		array_push($directions,$directions_data['route']['legs'][0]['maneuvers'][$i]['narrative']);
@@ -66,11 +66,10 @@
     			$url = $directions_data['route']['legs'][0]['maneuvers'][$i]['iconUrl'];
     		}
     		else {
-    			$url = substr_replace($directions_data['route']['legs'][0]['maneuvers'][$i]['mapUrl'], '500', 86, 3);
-				$url = substr_replace($url,'500', 90, 3);
+    			$url = substr_replace($directions_data['route']['legs'][0]['maneuvers'][$i]['mapUrl'], '620', 86, 3);
+				$url = substr_replace($url,'620', 90, 3);
 			}
     		array_push($directions_snips,$url);
-    		//file_put_contents('debug.log', date('h:i:sa').' => '. $directions_data['route']['legs'][0]['maneuvers'][$i]['narrative'] . "\n" . "\n", FILE_APPEND);
     	}
     }
 ?>
@@ -90,9 +89,12 @@
 				<div class="carousel">
 					<?php
 						for ($i=0; $i < count($directions) ; $i++) {
-							echo "<h4>".$directions[$i]."</h4><br>";							
+							echo "<h4><b>".$directions[$i]."</b></h4><br>";							
 							echo "<div class='carousel-cell'>";
-							echo "<iframe src='".$directions_snips[$i]."' width='500' height='500' frameborder='0'></iframe>";
+							if($i == (count($directions)-1))
+								break;
+							else
+								echo "<iframe src='".$directions_snips[$i]."' width='620' height='620' frameborder='0'></iframe>";
 							echo "</div><br>";
 						}			
 					?>
