@@ -45,8 +45,9 @@
 		.sidebar{height:auto;}
 		.sidebar ul{height:auto;}
 		.sidebar ul li{line-height:25px;font-size:20px;font-weight:500;}
+		.sidebar ul li i{width:25px;font-size:22px;}
 		.sidebar ul li label{margin-left:5px;}
-		.sidebar ul li h3{font-size:25px;font-weight:600;}
+		.sidebar ul li h3{font-size:25px;font-weight:600;margin:0 0 5px;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;position:relative;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
@@ -178,6 +179,14 @@
 								}
 							}
 						?>
+					</ul>
+					<ul>
+						<li><h3>Ratings</h3></li>
+						<li><input type="checkbox" name="ratings[]" value=""> <?php echo filter_ratings(5); ?></li>
+						<li><input type="checkbox" name="ratings[]" value=""> <?php echo filter_ratings(4); ?></li>
+						<li><input type="checkbox" name="ratings[]" value=""> <?php echo filter_ratings(3); ?></li>
+						<li><input type="checkbox" name="ratings[]" value=""> <?php echo filter_ratings(2); ?></li>
+						<li><input type="checkbox" name="ratings[]" value=""> <?php echo filter_ratings(1); ?></li>
 					</ul>
 					<ul class="prices">
 						<li><h3>Prices</h3></li>

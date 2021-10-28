@@ -4,10 +4,6 @@
 	ob_start();
 
 	if(empty($_SESSION['joiner']) && empty($_SESSION['organizer'])) header("Location: login.php");
-
-	if(isset($_POST['btnCont2']) && isset($_GET['book_id'])){
-		booking("waiting for payment", $_GET['book_id']);
-	}
 ?>
 
 <!-- Head -->
@@ -45,6 +41,7 @@
 		.booking_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
 		.booking_details h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
 		.booking_details h2 em{display:block;font-size:20px;color:gray;}
+		.booking_details ul li span{color:red;}
 
 		.payment_method{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
 		.payment_method h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
@@ -54,6 +51,7 @@
 
 		.price_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
 		.price_details h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
+		.price_details ul li{list-style:circle;margin:0 0 10px 22px;}
 		.price_details section{position:relative;}
 		.price_details section:before{content:"";width:100%;height:2px;background:#cfcfcf;position:absolute;bottom:50px;right:0;}
 		.price_details section table{width:100%;}
@@ -118,6 +116,10 @@
 					// JOINER FEES CALCULATION
 					$price_fee = $booked['book_totalcosts'] * 0.035 + 15;
 					$final_price = $booked['book_totalcosts'] + $price_fee;
+					//
+					$verified = false;
+					$discount = 0;
+					//
 			?>
 			<main>
 				<ul class="sub-breadcrumbs">
@@ -140,9 +142,15 @@
 							?>
 						</h2>
 						<ul>
-							<li>Book ID: <?php echo $booked['book_id']; ?></li>
-							<li>Total guest/s: <?php echo $booked['book_guests']; ?></li>
-							<li>on <?php echo date('l - M. j, Y', strtotime($adv['adv_date'])); ?></li>
+							<li>Book ID: <b><?php echo $booked['book_id']; ?></b></li>
+							<li>Total guest/s:
+								<?php
+								echo $booked['book_guests'];
+								$info = (isset($_SESSION['bookOption']) && $_SESSION['bookOption'] == "someone") ? "(excluding you)" : "(including you)";
+								echo " <span>".$info."</span>";
+								?>
+							</li>
+							<li><?php echo date('l, M. j, Y', strtotime($adv['adv_date'])); ?></li>
 						</ul>
 					</div>
 					<div class="price_details">

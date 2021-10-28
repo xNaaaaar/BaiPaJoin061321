@@ -52,7 +52,7 @@
 		.payment_method{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
 		.payment_method h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
 		.payment_method h2 span{margin:0 0 0 20px;}
-		.payment_method input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
+		.payment_method input{margin:0 auto 10px;}
 		.payment_method label span{color:red;}
 
 		.voucher{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
@@ -61,12 +61,11 @@
 		.voucher p{margin:0 0 5px 5px;width:100%;}
 		.voucher .error{color:red;}
 		.voucher section{display:flex;justify-content:space-between;}
-		.voucher input{display:inline-block;width:80%;height:50px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
+		.voucher input{display:inline-block;width:80%;margin:0 auto;}
 		.voucher .edit{width:18% !important;margin:0 auto;}
 
 		.price_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
 		.price_details h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
-		.price_details ul{}
 		.price_details ul li{list-style:circle;margin:0 0 10px 22px;}
 		.price_details p{width:100% !important;}
 		.price_details section{position:relative;}

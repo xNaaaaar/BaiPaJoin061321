@@ -785,6 +785,36 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					echo "
 					<a class='card-link' href='place.php?id=".$result['adv_id']."'>
 					<div class='card'>
+						<div class='label'>
+
+							";
+							##
+							// $discount = get_voucher_discount($result['adv_id']);
+							// if($discount != -1){
+							// 	echo "<span style='min-width:90px;'>".$discount."% OFF</span>";
+							// }
+							##
+							// $highest_adv = get_highest_rating_adventure();
+							// if(gettype($highest_adv) == "string" && $highest_adv == $result['adv_name']){
+							// 	echo "<span style='min-width:155px;'>HIGHEST RATING</span>";
+							// }
+							##
+							// $most_fave = get_most_favorite_adventure();
+							// echo $most_fave;
+							// if($most_fave != -1 && $most_fave == $result['adv_id']){
+							// 	echo "<span style='min-width:150px;'>MOST FAVORITE</span>";
+							// }
+							##
+							// $most_popular = get_most_popular_adventure();
+							// echo $most_popular;
+							##
+							// $best_seller = get_best_seller_adventure();
+							// echo $best_seller;
+							echo "
+							<span style='min-width:150px;'>MOST POPULAR</span>
+							<span style='min-width:125px;'>BEST SELLER</span>
+
+						</div>
 						<figure>
 							<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt=''>
 						</figure>
@@ -1237,7 +1267,7 @@ function addVoucher(){
 			## CHECK IF VOUCHER STARTING DATE IS GREATER THAN VOUCHER ENDING DATE
 			} else if($dateStartDate > $dateEndDate){
 				echo "<script>alert('Start date cannot be greater than end date!')</script>";
-			}  
+			}
 			## CHECK WHETHER END AND/OR START DATE IS NOT BEYOND CURRENT DATE
 			else if($dateStartDate < date("Y-m-d") || $dateEndDate < date("Y-m-d")) {
 				file_put_contents('debug.log', date('h:i:sa').' => '. 'beyond' . "\n" . "\n", FILE_APPEND);
@@ -3179,7 +3209,7 @@ function html_transreceipt_message($attach, $type) {
 
 	if($type == 'gcash') {
 
-		$name = $attach['data']['attributes']['data']['attributes']['billing']['name']; 
+		$name = $attach['data']['attributes']['data']['attributes']['billing']['name'];
     	$mobile = $attach['data']['attributes']['data']['attributes']['billing']['phone'];
     	$email = $attach['data']['attributes']['data']['attributes']['billing']['email'];
     	$amount = ($attach['data']['attributes']['data']['attributes']['amount'] / 100);
@@ -3538,7 +3568,7 @@ function get_most_favorite_adventure() {
 
 	foreach($adv_db as $adv) {
 		$count_db = DB::query("SELECT count(adv_id) FROM favorite WHERE adv_id =?", array($adv[0]), "READ");
-		$count = $count_db[0];						
+		$count = $count_db[0];
 		if($count[0] > $high_count) {
 			$high_count = $count[0];
 			$favorite_db = DB::query("SELECT adv_id FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
@@ -3562,7 +3592,7 @@ function get_best_seller_adventure() {
 
 	foreach($adv_db as $adv) {
 		$count_db = DB::query("SELECT count(adv_id) FROM booking WHERE book_status='paid' AND adv_id =?", array($adv[0]), "READ");
-		$count = $count_db[0];						
+		$count = $count_db[0];
 		if($count[0] > $high_count) {
 			$high_count = $count[0];
 			$best_seller_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
@@ -3586,7 +3616,7 @@ function get_most_popular_adventure() {
 
 	foreach($adv_db as $adv) {
 		$count_db = DB::query("SELECT count(adv_id) FROM booking WHERE adv_id =?", array($adv[0]), "READ");
-		$count = $count_db[0];						
+		$count = $count_db[0];
 		if($count[0] > $high_count) {
 			$high_count = $count[0];
 			$popular_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
@@ -3611,7 +3641,7 @@ function get_highest_rating_adventure() {
 
 	foreach($adv_db as $adv) {
 		$count_db = DB::query("SELECT count(adv_id) FROM rating WHERE adv_id =?", array($adv[0]), "READ");
-		$count = $count_db[0];						
+		$count = $count_db[0];
 		if($count[0] > $high_count) {
 			$high_count = $count[0];
 			$top_rate_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
@@ -3644,6 +3674,14 @@ function get_voucher_discount($adv_id) {
 		return $discount[0];
 	else
 		return -1;
+}
+
+function filter_ratings($rate){
+	$rate_txt = "";
+	for($i=0; $i<$rate; $i++){
+		$rate_txt = $rate_txt."<i class='fas fa-star'></i> ";
+	}
+	return $rate_txt;
 }
 
 ##### END OF CODES #####

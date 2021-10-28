@@ -286,6 +286,12 @@ header{}
   .images img{width:100%;}
 
   .card{width:500px;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px 30px 220px;line-height:35px;text-align:left;margin:20px 20px 20px 0;border:1px solid #cfcfcf;}
+  .card .label{position:absolute;top:0;right:0;}
+  .card .label span{padding:5px;height:30px;background:#bf127a;color:#fff;position:absolute;top:90px;right:0;z-index:10;font-size:15px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .card .label span:nth-child(2){top:125px;}
+  .card .label span:nth-child(3){top:160px;}
+  .card .label span:nth-child(4){top:195px;}
+  .card .label span:nth-child(5){top:230px;}
   .card figure{height:250px;margin:0 0 15px;}
   .card figure img{width:100%;height:100%;}
   .card .fa-quote-left{font-size:40px;color:#88dfd8;}
@@ -322,8 +328,8 @@ header{}
   .location .map{width:100%;height:350px;}
 
   .hotels{margin:40px 0 0;}
-  .hotels .nearby{display:flex;justify-content:space-between;}
-  .hotels .nearby section{width:32%;height:auto;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:20px 10px;line-height:35px;margin:20px auto;border:1px solid #cfcfcf;font-size:30px;display:flex;align-items:center;justify-content:center;}
+  .hotels .nearby{display:flex;justify-content:space-between;flex-wrap:wrap;}
+  .hotels .nearby section{width:32%;height:auto;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:20px 10px;line-height:35px;margin:20px auto 5px;border:1px solid #cfcfcf;font-size:30px;display:flex;align-items:center;justify-content:center;}
 
   .place_ratings{margin:0;}
   .place_ratings h2{font:600 40px/100% Montserrat,sans-serif;}

@@ -285,7 +285,7 @@
 					<div class="nearby">
 						<?php
 							$hotel_list = get_local_hotels($loc['adv_town']);
-							for ($i=0; $i < count($hotel_list) ; $i++) { 
+							for ($i=0; $i < count($hotel_list) ; $i++) {
 								echo "<section>";
 								echo "<h3>".$hotel_list[$i]."</h3>";
 								echo "</section>";
