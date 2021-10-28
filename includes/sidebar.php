@@ -61,7 +61,7 @@
 
 
 
-		<li class="<?php if($currentSidebarPage == 'profile') echo 'current_sidebar'; ?>"><a href="settings.php"><i class="fas fa-user-circle"></i> <q>Profile</q></a></li>
+		<li class="<?php if($currentSidebarPage == 'profile') echo 'current_sidebar'; ?>"><a href="settings.php"><i class="fas fa-user-circle"></i> <q>My Profile</q></a></li>
 		<?php
 			if($_SESSION['current_user'] == 'Joiner') {
 				echo "<li class='";

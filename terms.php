@@ -98,7 +98,7 @@
 							</p>
 						</section>
 						<section>
-							<h2>SPEICAL REQUESTS</h2>
+							<h2>SPECIAL REQUESTS</h2>
 							<p>
 								<ul>
 									<li>

@@ -171,7 +171,17 @@
 						<input id="f03" type="file" name="fileDosDontsImg" required/>
 						<input type="num" name="numPrice" placeholder="Total Price" value="<?php echo (isset($_SESSION['this_price'])) ? $_SESSION['this_price']:""; ?>" required>
 					</div>
-
+					<div class="price_details">
+						<h2 style='color:red;'>Important Notes:</h2>
+						<ul>
+							<li>When posting an adventure, the organizer agrees to provide a tour or service to joiner/s whose booking is under the posted adventure. The organizer is responsible for the joiner/s by the time the adventure is underway or if the joiner is under the jurisdiction of the organizers premises.</li>
+							<li>Fees and other charges includes transaction fee, service fee, environmental fee and government sanction charges imposed by the LGU or a National Government should not & is not include on invidual posted in the site or app. </li>
+							<li>All successful posted adventure can be deleted for FREE without any approval as long as there is/are no bookings made for the adventure. The organizer can edit and update the adventure to a different date or alter the price for FREE without any approval as long as there is/are no bookings made for the adventure.</li>
+							<li>All successful posted adventure can be canceled subject to approval if there is/are bookings made for the adventure. The organizer can file for a cancelation request provided clear documentation as to why it needs to be cancelled. If the organizer wanted to cancel and reschedule the adventure at the same time, then the current booking made to the adventure is given an option for refund or book for an identical adventure on a different date.</li>
+							<li>All successful adventures will tag as done, once the adventure is considered as done then the organizer may file for a payout request within the site or app. Once a payment request is submitted then the organizer will submit the preferred payout method thru email. All payout request is subject to 5% service and transaction fee including other charges as it deems fit. </li>
+							<li>Upon posting an adventure you've read and agree to the important notes mentioned above and to the terms and condition set by BaiPaJoin. You may read the <a href="terms.php" target="_blank">terms and conditions</a> of this website.</li>
+						</ul>
+					</div>
 					<button class="edit" type="submit" name="btnPost">Post</button>
 					<a class="edit" href="adventures_posted.php">Back</a>
 				</form>

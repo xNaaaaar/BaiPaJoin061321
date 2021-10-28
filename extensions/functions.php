@@ -484,6 +484,8 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						echo "<a href='delete.php?table=adventure&id=".$result['adv_id']."' class='edit' onclick='return confirm(\"Are you sure you want to delete this adventure?\");'>Delete</a>";
 					} elseif((date("Y-m-d") < $no_cancel_starting_date) && ($result['adv_currentGuest'] > 0)){
 						echo "<a href='reports_booking-cancel.php?adv_id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to cancel this adventure? Joiner who are booked can either request refund or reschedule!\");' class='edit'>Cancel</a>";
+					} elseif((date("Y-m-d") >= $no_cancel_starting_date) && (date("Y-m-d") <= $result['adv_date'])){
+						echo "<a class='edit disable'>Cancel</a>";
 					} else {
 						echo "<a href='request-payout.php?adv_id=".$result['adv_id']."' onclick='return confirm(\"Confirm request payout?\");' class='edit'>Request Payout</a>";
 
