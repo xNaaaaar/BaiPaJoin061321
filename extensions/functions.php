@@ -761,6 +761,12 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 		}
 
 		if(count($card)>0){
+
+			$favorite_adv = get_most_favorite_adventure();
+			$best_seller_adv = get_best_seller_adventure();
+			$popular_adv = get_most_popular_adventure();
+			//$highest_rating_adv = get_highest_rating_adventure();
+
 			foreach($card as $result){
 				$remainingGuestsText = "";
 				$images = $result['adv_images'];
@@ -785,35 +791,23 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					echo "
 					<a class='card-link' href='place.php?id=".$result['adv_id']."'>
 					<div class='card'>
-						<div class='label'>
+						<div class='label'>";
+						
+							$discount = get_voucher_discount($result['adv_id']);
+							if($discount != -1){
+								echo "<span style='min-width:90px;'>".$discount."% OFF</span>";
+							}
+							if($favorite_adv == $result['adv_id']) {
+								echo "<span style='min-width:155px;'>MOST FAVORITE!</span>";
+							}
+							if($best_seller_adv == $result['adv_id']) {
+								echo "<span style='min-width:155px;'>BEST SELLER!</span>";
+							}
+							if($popular_adv == $result['adv_id']) {
+								echo "<span style='min-width:155px;'>MOST POPULAR!</span>";
+							}
 
-							";
-							##
-							// $discount = get_voucher_discount($result['adv_id']);
-							// if($discount != -1){
-							// 	echo "<span style='min-width:90px;'>".$discount."% OFF</span>";
-							// }
-							##
-							// $highest_adv = get_highest_rating_adventure();
-							// if(gettype($highest_adv) == "string" && $highest_adv == $result['adv_name']){
-							// 	echo "<span style='min-width:155px;'>HIGHEST RATING</span>";
-							// }
-							##
-							// $most_fave = get_most_favorite_adventure();
-							// echo $most_fave;
-							// if($most_fave != -1 && $most_fave == $result['adv_id']){
-							// 	echo "<span style='min-width:150px;'>MOST FAVORITE</span>";
-							// }
-							##
-							// $most_popular = get_most_popular_adventure();
-							// echo $most_popular;
-							##
-							// $best_seller = get_best_seller_adventure();
-							// echo $best_seller;
-							echo "
-							<span style='min-width:150px;'>MOST POPULAR</span>
-							<span style='min-width:125px;'>BEST SELLER</span>
-
+						echo "
 						</div>
 						<figure>
 							<img src='images/organizers/".$result['orga_id']."/$image[$displayImage]' alt=''>
@@ -3577,7 +3571,7 @@ function get_most_favorite_adventure() {
 	}
 
 	if(!empty($favorite))
-		return $favorite;
+		return $favorite[0];
 	else
 		return -1;
 }
@@ -3595,13 +3589,13 @@ function get_best_seller_adventure() {
 		$count = $count_db[0];
 		if($count[0] > $high_count) {
 			$high_count = $count[0];
-			$best_seller_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
+			$best_seller_db = DB::query("SELECT adv_id FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
 			$best_seller = $best_seller_db[0];
 		}
 	}
 
 	if(!empty($best_seller))
-		return $best_seller;
+		return $best_seller[0];
 	else
 		return -1;
 }
@@ -3619,39 +3613,14 @@ function get_most_popular_adventure() {
 		$count = $count_db[0];
 		if($count[0] > $high_count) {
 			$high_count = $count[0];
-			$popular_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
+			$popular_db = DB::query("SELECT adv_id FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
 			$popular = $popular_db[0];
 			//file_put_contents('debug.log', date('h:i:sa').' => '. $high_count.' : '. $best_seller[0] . "\n" . "\n", FILE_APPEND);
 		}
 	}
 
 	if(!empty($popular))
-		return $popular;
-	else
-		return -1;
-}
-
-function get_highest_rating_adventure() {
-
-	$current_date = date('Y-m-d');
-
-	$adv_db = DB::query("SELECT adv_id FROM adventure WHERE adv_date > '$current_date'", array(), "READ");
-
-	$high_count = 0;
-
-	foreach($adv_db as $adv) {
-		$count_db = DB::query("SELECT count(adv_id) FROM rating WHERE adv_id =?", array($adv[0]), "READ");
-		$count = $count_db[0];
-		if($count[0] > $high_count) {
-			$high_count = $count[0];
-			$top_rate_db = DB::query("SELECT adv_name FROM adventure WHERE adv_id = ?", array($adv[0]), "READ");
-			$top_rate = $top_rate_db[0];
-			//file_put_contents('debug.log', date('h:i:sa').' => '. $high_count.' : '. $best_seller[0] . "\n" . "\n", FILE_APPEND);
-		}
-	}
-
-	if(!empty($top_rate))
-		return $top_rate;
+		return $popular[0];
 	else
 		return -1;
 }
@@ -3661,17 +3630,19 @@ function get_voucher_discount($adv_id) {
 	$current_date = date('Y-m-d');
 
 	$discount = DB::query("SELECT vouch_discount FROM voucher WHERE vouch_enddate >= '$current_date' AND  vouch_startdate <= '$current_date' AND adv_id=?", array($adv_id), "READ");
-	$discount = $discount[0];
-	if(count($discount)>1) {
-		$high_count = 0;
-		foreach($discount as $item) {
-			if($item > $high_count)
-				$high_count = $item;
+	if(!empty($discount)) {
+		$discount = $discount[0];
+		if(count($discount)>1) {
+			$high_count = 0;
+			foreach($discount as $item) {
+				if($item > $high_count)
+					$high_count = $item;
+			}
+			return $high_count;
 		}
-		return $high_count[0];
+		else if(count($discount)==1)
+			return $discount[0];
 	}
-	else if(count($discount)==1)
-		return $discount[0];
 	else
 		return -1;
 }
