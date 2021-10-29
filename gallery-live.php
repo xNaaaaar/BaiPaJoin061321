@@ -15,6 +15,10 @@
 		/* Main Area */
 		main{width:100%;flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0;border-radius:0;text-align:center;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+
+		.images{height:auto;}
+	  .images iframe{min-height:1000px;}
+	  .images img{width:100%;}
 	</style>
 
 	<!--?php wp_head(); ?-->
@@ -34,15 +38,15 @@
 ?>
 <!-- End Navigation -->
 <?php
-	$response = facebook_graph_api('live_videos'); 
+	$response = facebook_graph_api('live_videos');
     $fb_data = json_decode($response,true);
     $media_id = array();
     if(!empty($fb_data['data'][0]) && $fb_data['data'][0]['status'] == 'LIVE') {
-    	file_put_contents('debug.log', date('h:i:sa').' => '. $fb_data['data'][0]['id'] . "\n" . "\n", FILE_APPEND);  
+    	file_put_contents('debug.log', date('h:i:sa').' => '. $fb_data['data'][0]['id'] . "\n" . "\n", FILE_APPEND);
     	array_push($media_id,$fb_data['data'][0]['embed_html']);
     }
     else {
-    	$response = facebook_graph_api('videos'); 
+    	$response = facebook_graph_api('videos');
     	$fb_data = json_decode($response,true);
 	  	foreach($fb_data['data'] as $item) {
 	    	array_push($media_id,$item['id']);
@@ -53,8 +57,8 @@
 <div id="main_area">
 	<div class="wrapper">
 		<div class="breadcrumbs">
-			<a href="gallery.php">Videos</a> | 
-			<a href="gallery-imgs.php">Images</a> | 
+			<a href="gallery.php">Videos</a> |
+			<a href="gallery-imgs.php">Images</a> |
 			<a href="gallery-live.php" style="color:#bf127a;">Live Virtual Tour</a>
 		</div>
 		<div class="main_con">
@@ -74,7 +78,7 @@
 								echo "<iframe src='https://www.facebook.com/video/embed?video_id=".$media_id[$i]."' width='720' height='720' style='border:none;overflow:hidden' scrolling='no' frameborder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share' allowFullScreen='true'></iframe>";
 								echo "</div>";
 							}
-						}					
+						}
 					?>
 				</div>
 			</main>
