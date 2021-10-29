@@ -63,7 +63,7 @@
 						if(!empty($media_id)) {
 							for ($i=0; $i <count($media_id) ; $i++) {
 								echo "<div class='carousel-cell images'>";
-								echo "<iframe src='https://www.facebook.com/video/embed?video_id=".$media_id[$i]."' width='720' height='720' frameborder='0'></iframe>";
+								echo "<iframe src='https://www.facebook.com/video/embed?video_id=".$media_id[$i]."' width='720' height='720' style='border:none;overflow:hidden' scrolling='no' frameborder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share' allowFullScreen='true'></iframe></iframe>";
 								echo "</div>";
 							}
 						}

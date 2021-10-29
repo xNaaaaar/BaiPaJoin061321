@@ -55,12 +55,11 @@
 		<div class="breadcrumbs">
 			<a href="gallery.php">Videos</a> | 
 			<a href="gallery-imgs.php">Images</a> | 
-			<a href="gallery-live.php" style="color:#bf127a;">Live Virtual Tour</a> |
-			<a href="directions.php">Directions</a>  
+			<a href="gallery-live.php" style="color:#bf127a;">Live Virtual Tour</a>
 		</div>
 		<div class="main_con">
 			<main>
-				<h3>Tagged Images</h3>
+				<h3>Experience it Live! Feel the vibe and excitement as we let you join our BaiPaJoin adventure!</h3>
 				<br>
 				<div class="carousel" data-flickity>
 					<?php
@@ -72,7 +71,7 @@
 						else {
 							for ($i=0; $i <count($media_id) ; $i++) {
 								echo "<div class='carousel-cell images'>";
-								echo "<iframe src='https://www.facebook.com/video/embed?video_id=".$media_id[$i]."' width='720' height='720' frameborder='0'></iframe>";
+								echo "<iframe src='https://www.facebook.com/video/embed?video_id=".$media_id[$i]."' width='720' height='720' style='border:none;overflow:hidden' scrolling='no' frameborder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share' allowFullScreen='true'></iframe>";
 								echo "</div>";
 							}
 						}					
