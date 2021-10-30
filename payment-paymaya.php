@@ -166,13 +166,13 @@
 						</section>
 					</div>
 
-					<button class="edit" type="submit" name="btnPaymaya">Pay with Paymaya</button>
+					<button class="edit" type="submit" name="btnPaymaya" target="_blank">Pay with Paymaya</button>
 
 					<?php
 						if(isset($_POST['btnPaymaya'])) {
 							$final_price = number_format($final_price, 2, '', '');
 							process_paymaya_payment(($final_price/100),$_GET['book_id']);
-						}	
+						}
 					?>
 				</form>
 			</main>

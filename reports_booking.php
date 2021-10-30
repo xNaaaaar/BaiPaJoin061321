@@ -254,7 +254,11 @@
 
 											##
 											} elseif(empty($_SESSION['resched'])) {
-												echo "<td><a href='' onclick='return confirm(\"Sorry! There is no available adventure for you to reschedule!\");'>resched</a></td>";
+												## CHECK IF ADV IS AVAILABLE FOR RESCHEDULE
+												if(adv_is_available($adv['adv_id'], "resched")){
+													echo "<td><a href='' onclick='return confirm(\"Sorry! There is no available adventure for you to reschedule!\");'>resched</a></td>";
+												} else echo "<td></td>";
+
 
 											##
 											} else {
@@ -294,7 +298,7 @@
 									}
 									echo "<td><a href='reports_booking-view.php?book_id=".$result['book_id']."' onclick='return confirm(\"View receipt?\");'>view</a></td>";
 								} else {
-									$_SESSION['waiting_expry'] = date("Y-m-d G:i:s", strtotime("+15 mins", strtotime($result['book_datetime'])));
+									$_SESSION['waiting_expry'] = date("Y-m-d G:i:s", strtotime("+1 hours", strtotime($result['book_datetime'])));
 									$_SESSION['waiting_expry'] = date("M j, Y G:i:s", strtotime($_SESSION['waiting_expry']));
 									$_SESSION['pay_counter'] += 1;
 									echo "<span style='display:none;' id='waiting_expry".$_SESSION['pay_counter']."'>".$_SESSION['waiting_expry']."</span>";

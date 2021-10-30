@@ -166,7 +166,7 @@
 						</section>
 					</div>
 
-					<button class="edit" type="submit" name="btnSevenConnect">Pay with 7/11</button>
+					<button class="edit" type="submit" name="btnSevenConnect" target="_blank">Pay with 7/11</button>
 
 					<?php
 						if(isset($_POST['btnSevenConnect'])) {

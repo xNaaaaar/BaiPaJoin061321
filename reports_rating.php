@@ -23,10 +23,10 @@
 		.sidebar ul ul{height:auto;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:30px;text-align:left;}
+		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 		main h3{font-weight:500;font-size:20px;color:red;margin:20px 0;text-align:center;}
 		main form{margin:0 0 20px;text-align:left;}
-		main form select{max-width:100%;width:240px;height:40px;padding:0 15px;}
+		main form select{max-width:100%;width:320px;height:40px;padding:0 15px;}
 		main form button{max-width:100%;width:100px;height:40px;padding:0 15px;}
 		main table{width:100%;text-align:center;font-size:16px;}
 		main table thead{background:#7fdcd3;color:#fff;}
@@ -113,9 +113,9 @@
 					if(isset($_POST['btnSearch'])){
 						$cboOption = $_POST['cboOption'];
 
-						$done_adv = DB::query('SELECT * FROM adventure a JOIN booking b ON a.adv_id=b.adv_id JOIN rating r ON b.book_id=r.book_id JOIN joiner j ON r.joiner_id=j.joiner_id WHERE a.orga_id=? AND a.adv_status=? AND a.adv_id=?', array($_SESSION['organizer'], "done", $cboOption), 'READ');
+						$done_adv = DB::query('SELECT * FROM adventure a JOIN booking b ON a.adv_id=b.adv_id JOIN rating r ON b.book_id=r.book_id JOIN joiner j ON r.joiner_id=j.joiner_id WHERE a.orga_id=? AND a.adv_status=? AND rating_type=? AND a.adv_id=?', array($_SESSION['organizer'], "done", 4, $cboOption), 'READ');
 					} else {
-						$done_adv = DB::query('SELECT * FROM adventure a JOIN booking b ON a.adv_id=b.adv_id JOIN rating r ON b.book_id=r.book_id JOIN joiner j ON r.joiner_id=j.joiner_id WHERE a.orga_id=? AND a.adv_status=?', array($_SESSION['organizer'], "done"), 'READ');
+						$done_adv = DB::query('SELECT * FROM adventure a JOIN booking b ON a.adv_id=b.adv_id JOIN rating r ON b.book_id=r.book_id JOIN joiner j ON r.joiner_id=j.joiner_id WHERE a.orga_id=? AND a.adv_status=? AND rating_type=?', array($_SESSION['organizer'], "done", 4), 'READ');
 					}
 
 					if(count($done_adv)>0){
@@ -128,7 +128,7 @@
 								<td>".$result['adv_type']."</td>
 								<td>".$result['rating_stars']." <i class='fas fa-star'></i></td>
 								<td>".$result['rating_message']."</td>
-								<td></td>
+								<td><a href='reports_rating_all.php?rate_id=".$result['rating_id']."'>view all ratings &#187;</a></td>
 							</tr>
 							";
 						}

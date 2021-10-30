@@ -15,6 +15,7 @@
 		/* Main Area */
 		main{width:100%;flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0;border-radius:0;text-align:center;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+		main h3{font-size:30px;color:#313131;margin-bottom:10px;}
 
 		.images{height:auto;}
 	  .images iframe{min-height:1000px;}
@@ -39,15 +40,19 @@
 <!-- End Navigation -->
 <?php
 	$response = facebook_graph_api('tagged');
-    $fb_data = json_decode($response,true);
-    $media_id = array();
-  	foreach($fb_data['data'] as $item) {
-    	$response = get_facebook_media_id($item['id']);
-    	$fb_media = json_decode($response,true);
-    	if($fb_media['data'][0]['type'] == 'video_inline') {
-     		array_push($media_id,$fb_media['data'][0]['target']['id']);
-    	}
-	}
+  $fb_data = json_decode($response,true);
+  $media_id = array();
+	$message = "";
+	if(isset($fb_data['data'])) {
+		foreach($fb_data['data'] as $item) {
+	  	$response = get_facebook_media_id($item['id']);
+	  	$fb_media = json_decode($response,true);
+	  	if($fb_media['data'][0]['type'] == 'video_inline') {
+	   		array_push($media_id,$fb_media['data'][0]['target']['id']);
+	  	}
+		}
+	## TOKEN EXPIRED
+	} else $message = "Token has expired!";
 ?>
 <!-- Main -->
 <div id="main_area">
@@ -60,7 +65,13 @@
 		</div>
 		<div class="main_con">
 			<main>
-				<h3>Feel the excitement through Facebook Live or these beautiful videos compiled by our joiners. Every moment is filled with Joy & Happiness!</h3>
+				<?php
+				if($message == "")
+					echo "<h3>Feel the excitement through Facebook Live or these beautiful videos compiled by our joiners. Every moment is filled with Joy & Happiness!</h3>";
+				else
+					echo "<h3>".$message."</h3>";
+				?>
+
 				<br>
 				<div class="carousel" data-flickity>
 					<?php

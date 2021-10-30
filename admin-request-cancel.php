@@ -26,7 +26,7 @@
 
 		## TO BE REFUNDED AMOUNT
 		$adv_price = ($adv['adv_totalcostprice'] / $adv['adv_maxguests']) * $adv['book_guests'];
-		$cancel_fee = $adv_price * 0.3;
+		$cancel_fee = $adv_price * 0.03;
 		$final_price = $adv_price - $cancel_fee;
 
 		## ADD NEW REQUEST AS REFUND

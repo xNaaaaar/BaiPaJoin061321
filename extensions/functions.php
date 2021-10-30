@@ -444,7 +444,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 
 				// REMAINING GUEST IN TEXT
 				if($result['adv_type'] == 'Packaged')
-					$remainingGuestsText = " - ".$result['adv_currentGuest']."/".$result['adv_maxguests']." slots occupied";
+					$remainingGuestsText = " - ".$result['adv_currentGuest']."/".$result['adv_maxguests'];
 
 				$no_cancel_starting_date = date("Y-m-d", strtotime("-5 days", strtotime($result['adv_date'])));
 
@@ -470,9 +470,9 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						echo "(".adv_ratings($result['adv_id'], true, "count ratings")." reviews)";
 
 						## ADV STATUS
-						if($result['adv_status'] == "done") echo " - done";
-						elseif($numRemainingGuests == 0) echo " - full";
-						else echo $remainingGuestsText;
+						if($result['adv_status'] == "done") echo $remainingGuestsText." slots (DONE)";
+						elseif($numRemainingGuests == 0) echo $remainingGuestsText." slots (FULL)";
+						else echo $remainingGuestsText." slots occupied";
 					echo "
 						</span>
 					</h2>
@@ -792,7 +792,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					<a class='card-link' href='place.php?id=".$result['adv_id']."'>
 					<div class='card'>
 						<div class='label'>";
-						
+							// background:#4a934a; GREEN
 							$discount = get_voucher_discount($result['adv_id']);
 							if($discount != -1){
 								echo "<span style='min-width:90px;'>".$discount."% OFF</span>";
@@ -2211,7 +2211,7 @@ function facebook_graph_api($type) {
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
-    $fb_access_token = 'EAA8IHfsXftcBAKD51RzsmCC50HkWDzZBFZAFblMMIBkITtVX87fYj5scWgE5MvUc1wzm7RHspbbmUw5tmshBYXXGDNZAoGPMybSj3alg19dvzNJujLbvVVWZAGVePyZAwlZC2oXxCG1AhcPuJfaRZAiACkNXtOtv0OaROJqsuEVW8CwxoNRPwnGmZBdueubLlZCoZD';
+    $fb_access_token = 'EAA8IHfsXftcBAHumtFmKeT8igVmo7D8YsB7dhGkJXS6JyZCcpluBeWUEsaGomqkh4pnLZBZCiHgOTrGTZBqZBClv6SWjrScvXGMZCHT3g2N1TIJduidkcWCTwfx3xlZAIydsQ1eZCkHS9b2aHZAck7ETnLMZCwotzYgivZAL7udWgdghAzrEKsA7gZA0cIC3BVmVZBhrgHfgiqgGr4lDpZAP3o4BfK';
 
 	if($type == 'videos')
     	$query = 'https://graph.facebook.com/v12.0/100306372435763/videos?access_token='.$fb_access_token.'';
@@ -2256,7 +2256,7 @@ function get_facebook_media_id($id) {
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
-    $fb_access_token = 'EAA8IHfsXftcBAKD51RzsmCC50HkWDzZBFZAFblMMIBkITtVX87fYj5scWgE5MvUc1wzm7RHspbbmUw5tmshBYXXGDNZAoGPMybSj3alg19dvzNJujLbvVVWZAGVePyZAwlZC2oXxCG1AhcPuJfaRZAiACkNXtOtv0OaROJqsuEVW8CwxoNRPwnGmZBdueubLlZCoZD';
+    $fb_access_token = 'EAA8IHfsXftcBAHumtFmKeT8igVmo7D8YsB7dhGkJXS6JyZCcpluBeWUEsaGomqkh4pnLZBZCiHgOTrGTZBqZBClv6SWjrScvXGMZCHT3g2N1TIJduidkcWCTwfx3xlZAIydsQ1eZCkHS9b2aHZAck7ETnLMZCwotzYgivZAL7udWgdghAzrEKsA7gZA0cIC3BVmVZBhrgHfgiqgGr4lDpZAP3o4BfK';
 
 	$query = 'https://graph.facebook.com/v12.0/'.$id.'/attachments?access_token='.$fb_access_token.'';
 
@@ -2380,7 +2380,7 @@ function booking_paid_updates($method, $book_id, $intent_id, $total=null){
 	# UPDATE BOOKING STATUS
 	$booked = DB::query("SELECT * FROM booking WHERE book_id=?", array($book_id), "READ");
 	$booked = $booked[0];
-	DB::query("UPDATE booking SET book_status=?, book_totalcosts=? WHERE book_id=?", array("paid", ($total/100), $booked['book_id']), "UPDATE");
+	DB::query("UPDATE booking SET book_status=?, book_totalcosts=? WHERE book_id=?", array("paid", ($total), $booked['book_id']), "UPDATE");
 
 	# UPDATE ADVENTURE STATUS
 	$adv_booked = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($booked['adv_id']), "READ");
@@ -2392,7 +2392,7 @@ function booking_paid_updates($method, $book_id, $intent_id, $total=null){
 		DB::query("UPDATE adventure SET adv_status=? WHERE adv_id=?", array("full", $adv_booked['adv_id']), "UPDATE");
 
 	# INSERT DATA TO PAYMENT TABLE
-	DB::query("INSERT INTO payment(payment_id, payment_method, payment_total, payment_datetime, book_id) VALUES(?,?,?,?,?)", array($intent_id, $method, ($total/100), date("Y-m-d H:i:s"), $book_id), "CREATE");
+	DB::query("INSERT INTO payment(payment_id, payment_method, payment_total, payment_datetime, book_id) VALUES(?,?,?,?,?)", array($intent_id, $method, ($total), date("Y-m-d H:i:s"), $book_id), "CREATE");
 
 	# IF PAYMENT METHOD IS THRU CARD
 	if($method == "card"){
@@ -3479,7 +3479,15 @@ function adv_is_available($adv_id, $type){
 			else
 				return true;
 
-		} elseif ($type == "resched" || $type == "pay" || $type == "book") {
+		} elseif ($type == "pay"){
+			## CHECK IF CURRENT DATE IS NOT THE DAY ADV HAPPENS
+			$not_avail_date = date("Y-m-d", strtotime("-1 days", strtotime($adv['adv_date'])));
+			if(date("Y-m-d") > $not_avail_date)
+				return false;
+			else
+				return true;
+
+		} elseif ($type == "resched" || $type == "book") {
 			## CHECK IF CURRENT DATE IS NOT THE 5TH DAY BEFORE ADV
 			$not_avail_date = date("Y-m-d", strtotime("-5 days", strtotime($adv['adv_date'])));
 			if(date("Y-m-d") >= $not_avail_date)

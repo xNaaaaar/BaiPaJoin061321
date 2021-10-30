@@ -73,11 +73,19 @@
 								} else if(isset($_GET['grabpay']) && $_GET['grabpay'] == 1) {
 									echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru grabpay!</p>";
 
+								## FAILED PAYING GCASH
 								} else if(isset($_GET['gcash']) && $_GET['gcash'] == 0) {
 									echo "<i class='far fa-times-circle error'></i><p class='error'>Error paying thru gcash!</p>";
 
+								## FAILED PAYING GRAB PAY
 								} else if(isset($_GET['grabpay']) && $_GET['grabpay'] == 0) {
 									echo "<i class='far fa-times-circle error'></i><p class='error'>Error paying thru grabpay!</p>";
+
+								} else if(isset($_GET['paymaya'])){
+									echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru paymaya!</p>";
+
+								} else if(isset($_GET['seven-eleven'])){
+									echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru 7/11!</p>";
 								}
 							?>
 

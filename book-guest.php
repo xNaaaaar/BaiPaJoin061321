@@ -9,14 +9,14 @@
 	}
 	# PARA DILI MA BACK KUNG GIKAN NA SA PAYMENT
 	# GET THE BOOKED ADV WHERE STATUS IS WAITING
-	if(isset($_SESSION['adv_idno'])){
-		$waiting = DB::query("SELECT * FROM booking WHERE book_guests=? AND book_totalcosts=? AND book_status=? AND joiner_id=? AND adv_id=?", array($_SESSION['cboGuests'], $_SESSION['numTotal'], "waiting for payment", $_SESSION['joiner'], $_SESSION['adv_idno']), "READ");
-		# EXISTS
-		if(count($waiting)>0){
-			$waiting = $waiting[0];
-			header("Location: reports_booking.php");
-		}
-	}
+	// if(isset($_SESSION['adv_idno'])){
+	// 	$waiting = DB::query("SELECT * FROM booking WHERE book_guests=? AND book_totalcosts=? AND book_status=? AND joiner_id=? AND adv_id=?", array($_SESSION['cboGuests'], $_SESSION['numTotal'], "waiting for payment", $_SESSION['joiner'], $_SESSION['adv_idno']), "READ");
+	// 	# EXISTS
+	// 	if(count($waiting)>0){
+	// 		$waiting = $waiting[0];
+	// 		header("Location: reports_booking.php");
+	// 	}
+	// }
 ?>
 
 <!-- Head -->
