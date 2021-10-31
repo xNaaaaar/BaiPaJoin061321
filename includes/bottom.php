@@ -3,8 +3,7 @@
 		<div class="btm1_con">
 			<div class="btm1_info">
 				<h2>Most Visited Places</h2>
-				<p>Can't decide which adventure to go?</p>
-				<p>Don't worry, here are our most visited places!</p>
+				<p>Can't decide which adventure to go? Don't worry, here are our most visited places!</p>
 			</div>
 
 			<div class="btm1_boxes">

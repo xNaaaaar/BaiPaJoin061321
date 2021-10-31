@@ -1,18 +1,100 @@
 /* Large Tablet Devices */
-@media only screen
-and (max-width : 1400px) {
+@media only screen and (max-width:1900px){
+  /*Header Area*/
+
+  /*Nav Area*/
+  .page_nav{right:110px;}
+
+  /*Breadcrumbs*/
+
+  /*Banner Area*/
+
+  /*Middle Area*/
+
+  /*Main Area*/
+
+  /*Footer Area*/
+}
+@media only screen and (max-width:1800px){
+  /*Header Area*/
+
+  /*Nav Area*/
+
+  /*Breadcrumbs*/
+
+  /*Banner Area*/
+
+  /*Middle Area*/
+
+  /*Main Area*/
+
+  /*Footer Area*/
+
+}
+@media only screen and (max-width:1700px){
+  /*Header Area*/
+
+  /*Nav Area*/
+
+  /*Breadcrumbs*/
+
+  /*Banner Area*/
+
+  /*Middle Area*/
+
+  /*Main Area*/
+  .user_area .slider, .user_area .slider ul, .user_area .slider ul li, .user_area .slider ul li figure, .user_area .rslides li figure img{height:100%;}
+
+  /*Footer Area*/
+
+}
+@media only screen and (max-width:1600px){
+  /*Header Area*/
+
+  /*Nav Area*/
+  .page_nav{right:10px;}
+
+  /*Breadcrumbs*/
+
+  /*Banner Area*/
+
+  /*Middle Area*/
+
+  /*Main Area*/
+
+  /*Footer Area*/
+
+}
+@media only screen and (max-width:1500px){
+  /*Header Area*/
+
+  /*Nav Area*/
+
+
+  /*Breadcrumbs*/
+
+  /*Banner Area*/
+
+  /*Middle Area*/
+
+  /*Main Area*/
+
+  /*Footer Area*/
+
+}
+@media only screen and (max-width:1400px){
   /*Header Area*/
   header{background-position-x:left !important;}
 
   /*Nav Area*/
-  .page_nav{right:10px;}
+
 
   /*Breadcrumbs*/
   .breadcrumbs {padding:20px 10px;}
 
   /*Banner Area*/
   .slider{width:780px;right:10px;top:320px;}
-  .slider:after{width:803px;height:520px;}
+  .slider:after{display:none;}
 
   .bnr_info{left:10px;}
 
@@ -25,12 +107,11 @@ and (max-width : 1400px) {
 	.main_images figure{margin-right:10px;width:300px;}
 
   .sidebar ul{font-size:28px !important;}
+  .sidebar h2 span{line-height:100%;}
 
   /*Bottom Area*/
-  .btm1_con{padding:267px 10px 0;}
+  .btm1_con{padding:150px 10px;}
   .btm1_boxes section p{width:279px;padding:0 10px;}
-
-  .btm2_con{padding:117px 10px 0;}
 
   /*Footer Area*/
   .contact_info1{margin:17px 0 0;}
@@ -47,7 +128,6 @@ and (max-width : 1300px) {
 
   /*Banner Area*/
   .slider{width:685px;}
-  .slider:after{width:700px;height:460px;}
 
   /*Middle Area*/
 
@@ -55,9 +135,6 @@ and (max-width : 1300px) {
   main{flex:3.7 !important;margin-right:-275px;}
 
   /*Bottom Area*/
-  .btm2_img{right:-375px;}
-
-	.btm3_info form input:nth-of-type(3){width:42%;}
 
   /*Footer Area*/
   .footer_nav{left:425px;}
@@ -72,7 +149,6 @@ and (max-width : 1200px) {
 
   /*Banner Area*/
   .slider{width:615px;top:340px;}
-  .slider:after{width:625px;height:411px;}
 
   .bnr_info{width:440px;}
 
@@ -87,10 +163,6 @@ and (max-width : 1200px) {
   .sidebar ul li i:before{top:-21px !important;}
 
   /*Bottom Area*/
-  .btm2_img{right:-425px;}
-  .btm2_info{width:530px;}
-
-  .btm3_info form input:nth-of-type(3){width:40%;}
 
   /*Footer Area*/
   .footer_nav{left:370px;}
@@ -111,7 +183,6 @@ and (max-width : 1090px) {
 
   /*Banner Area*/
   .slider{width:531px;}
-  .slider:after{width:541px;height:360px;}
 
   /*Middle Area*/
 
@@ -122,12 +193,6 @@ and (max-width : 1090px) {
   .sidebar ul{font-size:21px !important;}
 
   /*Bottom Area*/
-  .btm1_boxes section{height:460px;}
-
-  .btm2_con{padding:80px 10px 0;}
-  .btm2_info{width:420px;}
-
-  .btm3_info form input:nth-of-type(3){width:38%;}
 
   /*Footer Area*/
   .footer_logo{width:275px;padding:17px 10px 0;}
@@ -181,14 +246,13 @@ and (max-width : 1000px) {
 	.bnr_con{min-height:0;padding:0;}
 	.box_skitter{display:none;}
 	.slider{display:block;width:125%;height:auto;margin-left:-9%;position:static;}
-	.slider:after{display:none;}
 	.rslides{border-radius:0;box-shadow:none;}
 
     .bnr_info{width:100%;position:static;padding:45px 25px;text-align:center;background:#7fdcd3;}
-    .bnr_info h2{margin-bottom:25px;}
+    .bnr_info h2{margin-bottom:25px;font-size:45px;}
   	.bnr_info h2 span{margin:0;}
   	.bnr_info p{margin:0;line-height:25px;}
-  	.bnr_info a{margin:25px auto 0;max-width:100%;}
+  	.bnr_info a{margin:25px 5px 0;max-width:100%;}
 
 	/*NON-HOME*/
     .non_ban_img{width:185%;margin-left:-40%;transform:none;}
@@ -210,10 +274,12 @@ and (max-width : 1000px) {
     .main_con{min-height:0;padding:0;}
     .main_images{display:none;}
 
-      main{float:none;margin:auto;width:100%;height:auto}
+      main{float:none;margin:auto;width:100%;height:auto;}
       main{line-height:30px;background:none;margin:0;border-radius:0;padding:0;}
     	main .h1_title{margin-bottom:25px;}
     	main .h1_title span{margin:0;}
+      main h2{font-size:40px;}
+      main h4{font-size:16px;line-height:100%;}
     	main p{margin:0 0 25px;width:100%;}
     	main p:last-of-type{width:100%;}
 
@@ -221,20 +287,32 @@ and (max-width : 1000px) {
       .sidebar:after{content:'\203A';width:40px;height:80px;background:#7fdcd3;color:#fff;font-size:50px;position:absolute;top:0;left:0;display:flex;justify-content:center;align-items:center;border-top-right-radius:5px;border-bottom-right-radius:5px;font-weight:bold;}
       .sidebar:hover{background:#fff;width:280px;box-shadow:10px 10px 10px -5px gray;cursor:pointer;}
       .sidebar:hover:after{display:none;}
+      .sidebar:hover form, .sidebar:hover h2, .sidebar:hover p, .sidebar:hover ul li{display:block;}
       .sidebar:hover figure{display:block;width:50%;}
-      .sidebar:hover h2{display:block;}
-      .sidebar:hover p{display:block;}
       .sidebar:hover ul{display:flex;}
-      .sidebar:hover ul li{display:block;}
-      .sidebar:before{display:none;}
-  		.sidebar figure{display:none;font-size:30px !important;}
-  		.sidebar h2{display:none;font-size:30px !important;}
-  		.sidebar p{display:none;}
+      .sidebar:before, .sidebar p, .sidebar ul li{display:none;}
+  		.sidebar form, .sidebar figure, .sidebar h2{display:none;font-size:30px !important;}
   		.sidebar ul{display:none;font-size:25px !important;}
-  		.sidebar ul li{display:none;}
 
-      .card{min-height:auto !important;line-height:30px !important;}
-      .card p{margin:0 !important;}
+      .user_area .slider{display:none;}
+      .user_area .main_con{min-height:0;height:100vh;}
+      .user_area main{background:rgba(136,223,216,1);border-radius:15px;padding:0 0 120px;margin:0 auto;max-width:100%;}
+      .user_area main .main_logo{transform:none;width:200px;}
+
+      .create main{min-height:0;}
+
+      .card .label span{top:50px;}
+      .card .label span:nth-child(2){top:85px;}
+      .card .label span:nth-child(3){top:120px;}
+      .card .label span:nth-child(4){top:155px;}
+      .card .label span:nth-child(5){top:190px;}
+      .card p{line-height:100%;}
+
+      .place_info{display:block;}
+      .main_info{width:100%;padding:0;}
+      .book_info div{margin:30px auto 0;}
+
+      .images img{height:100%;}
 
   /*Bottom Area*/
   #bottom1{padding:40px 25px;}
@@ -245,29 +323,10 @@ and (max-width : 1000px) {
    .btm1_info p{line-height:25px;}
 
    .btm1_boxes{margin-top:40px;flex-wrap:wrap;justify-content:center;}
-   .btm1_boxes section{width:48%;height:auto;margin:15px auto;padding:15px 15px 115px;}
+   .btm1_boxes section{width:48%;height:auto;margin:15px auto;padding:15px 15px 110px;}
    .btm1_boxes section:nth-child(even){margin-top:15px;}
    .btm1_boxes section h2{margin:25px 0;padding:0;}
    .btm1_boxes section p{width:100%;padding:0;}
-
-  #bottom2{padding:40px 25px;}
-	 .btm2_con{min-height:0;padding:0;}
-   .btm2_img{display:none;}
-
-   .btm2_info{width:100%;text-align:center;}
- 	 .btm2_info h2{margin-bottom:25px;}
- 	 .btm2_info p{line-height:25px;margin:0;}
- 	 .btm2_info a{margin:33px auto 0;max-width:100%;}
-
-  #bottom3{padding:40px 25px;}
-   .btm3_con{min-height:0;padding:0;}
-
- 	 .btm3_info h2{margin-bottom:25px;}
-
- 	 .btm3_info form{justify-content:center;margin-top:40px;flex-wrap:wrap;}
- 	 .btm3_info form input{width:48%;margin:10px auto;background:#fff;}
- 	 .btm3_info form input:nth-of-type(3){width:71%;}
- 	 .btm3_info form button{margin:12px auto;}
 
   /*Footer Area*/
   footer{}
@@ -277,7 +336,6 @@ and (max-width : 1000px) {
     .footer_map{margin:0 auto;max-width:100%;}
 
     .contact_info1{width:100%;margin:25px 0;line-height:25px;}
-
     .contact_info2{width:100%;position:static;}
 		.contact_info2 h2{margin:0 0 25px;}
 		.contact_info2 ul li{margin:15px 0 0;}
@@ -292,6 +350,7 @@ and (max-width : 1000px) {
 
 	  .footer_btm{height:auto;padding:40px 25px;}
 	  .footer_btm_con{min-height:0;padding:0;}
+    .footer_map{width:100%;height:180px;}
 
     .footer_nav{width:100%;position:static;text-align:center;}
     .footer_nav h2{display:none;}
@@ -337,9 +396,13 @@ and (max-width : 800px) {
   /*Middle Area*/
 
   /*Main Area*/
+  .user_area main .main_logo{float:none;}
+
+  h1{font-size:40px !important;}
+  h1 span{font-size:30px !important;}
+  h2{font-size:35px !important;}
 
   /*Bottom Area*/
-  .btm3_info form input:nth-of-type(3){width:61%;}
 
   /*Footer Area*/
   .contact_info ul li{display:block;margin:15px auto;}
@@ -360,6 +423,7 @@ and (max-width : 800px) {
 and (max-width : 600px) {
 
   /*Header Area*/
+  .main_logo{margin:0 auto 0 -45px !important;}
 
   /*Nav Area*/
 
@@ -368,15 +432,13 @@ and (max-width : 600px) {
   .non_ban_img{width: 275%;margin-left: -82%;}
   .page_title{position:static;background:#348b83;font-size:30px;}
 
-  .bnr_info h2{font-size:45px;}
-
   /*Middle Area*/
   .middle_boxes section{display:block;width:100%;}
   .middle_boxes:before{display:none;}
 
   /*Main Area*/
   main .h1_title{font-size:45px;}
-  main h2{font-size:35px !important;}
+  main .h1_title span{line-height:100%;}
   main .form input{margin:10px auto !important;}
   main .form input:nth-child(2){width:99% !important;}
   main .form input:nth-child(3){width:99% !important;}
@@ -388,22 +450,17 @@ and (max-width : 600px) {
   .card figure{width:100% !important;position:static !important;display:block;margin:0 0 10px;}
   .card h2{text-align:center;margin-bottom:20px !important;}
 
+  .user_area main .main_logo{margin:0 auto !important;}
+
+  .create main form input:nth-child(3), .create main form select{width:99%;}
+
   /*Bottom Area*/
   .btm1_boxes section{display:block;width:100%;}
-  .btm1_boxes section figure{display:none;}
-
-  .btm2_info h2{font-size:45px;}
-
-  .btm3_info h2{font-size:45px;}
-  .btm3_info form input{width:100%;}
-  .btm3_info form input:nth-of-type(3){width:100%;}
 
   /*Footer Area*/
   footer {padding-bottom: 45px;}
   .footer_logo{max-width:100%;}
   .footer_logo figure{width:100%;padding:0 10px;}
-
-  .contact_info2 h2{font-size:45px;}
 
   .footer_nav ul li{display:block;vertical-align:top;width:100%;}
   .footer_nav ul li a{margin:5px auto;}
@@ -420,4 +477,28 @@ and (max-width : 600px) {
   .withAddThis_ftr_btm {padding: 0 10px 88px;}
   /*End (AddThis) Plugins*/
 
+}
+
+@media only screen and (max-width:500px){
+  /*Banner Area*/
+  .bnr_info p{margin:0 0 25px;}
+  .bnr_info a{display:block;margin:0 auto 10px;width:80%;}
+
+  /*Main Area*/
+  .user_area main{padding:0 20px 120px;}
+  .user_area main form a:first-of-type{right:30px;}
+  .user_area main form button, .user_area main form a:nth-of-type(2){width:45%;}
+
+  .book_info div{padding:15px;}
+  .book_info a{width:100%;}
+  .book_info button{width:100% !important;}
+
+  .hotels .nearby section{width:48%;}
+
+  /*Breadcrumbs*/
+  .breadcrumbs{font-size:17px;}
+
+  /*Carousel*/
+  .adv-imgs{height:300px;}
+  .images{height:100%;}
 }

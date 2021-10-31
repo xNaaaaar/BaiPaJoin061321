@@ -31,11 +31,6 @@
 <?php include("includes/head.php"); ?>
 <!-- End of Head -->
 
-<style >
-	.slider{width:100%;height:auto;top:0;right:0;left:0;z-index:3;}
-	.slider:after{display:none;}
-	.rslides{border-radius:0;box-shadow:none;}
-</style>
 </head>
 	<body>
 		<div class="protect-me">
@@ -59,8 +54,8 @@
 					<input type="email" name="emEmail" placeholder="sample@gmail.com" required>
 					<input type="password" name="pwPassword" placeholder="Password" required>
 					<a href="forgotpass.php">Forgot Password &#187;</a>
-					<button type="submit" name="btnLogin">Login</button>
-					<a href="create.php">Create</a>
+					<button class='edit' type="submit" name="btnLogin">Login</button>
+					<a class='edit' href="create.php">Create</a>
 					<span>or login Joiner as:</span>
 				<?php
 					echo $google_login_url;

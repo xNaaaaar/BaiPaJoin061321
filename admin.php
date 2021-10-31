@@ -47,21 +47,18 @@ html, body{height:100%;}
 /* Main Area */
 .main_con{display:flex;justify-content:space-between;min-height:100vh;}
 
-.sidebar{padding:30px;background:#7fdcd3;height:auto;}
+.sidebar{padding:30px;background:#7fdcd3;}
 .sidebar:before{display:none;}
 .sidebar figure{width:150px;margin:0 auto!important;}
 .sidebar h2{text-align:center;}
-.sidebar h2 span{display:block;font-size:15px;}
+.sidebar h2 span{font-size:15px;}
 .sidebar ul{margin:35px 0 0 25px;height:auto;}
 
 main{flex:4;float:none;height:100%;background:none;margin:0;padding:50px 50px 0;border-radius:0;text-align:center;}
 main h1{text-align:right;font-size:20px;}
-main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin:15px 0;text-align:left;}
-main h2 span{font-size:30px;}
-main h2 span a:hover{color:#313131;text-decoration:none;}
-main h3{font:600 30px/100% Montserrat,sans-serif;;margin-bottom:10px;text-align:center;}
-main input{display:inline-block;width:99%;height:50px;border:none;outline:none;font:normal 18px/20px Montserrat,sans-serif;padding:0 20px;margin:5px auto;border:1px solid #cfcfcf;}
-main p:last-of-type{width:100%;color:red;font-size:20px;}
+main h2{margin:15px 0;}
+main h3{color:#000;}
+main input{margin:5px auto;}
 
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 
@@ -71,11 +68,9 @@ main .admins table tr td:last-child i{color:red;}
 
 main .forms{width:28%;}
 main .forms form{height:auto;padding:40px 25px 25px;box-shadow:10px 10px 10px -5px #cfcfcf;border:1px solid #cfcfcf;margin:0 0 20px;}
-main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;border-radius:0;}
 
 /* Responsive Design */
 @media only screen and (max-width: 1800px) {
-	.main_con{min-height:0;}
 	main{height:100%;}
 }
 
@@ -85,17 +80,17 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
 	main .admins{width:100%;}
 	main .forms{width:100%;display:flex;justify-content:space-between;margin:30px 0 0;}
 	main .forms form{width:48%;}
-}
 
-@media only screen and (max-width: 1200px){
-	.sidebar ul{margin:35px 0 0;}
+	.sidebar ul{margin:35px 0 0;padding-left:10px;}
 }
 
 @media only screen and (max-width: 1000px){
 	main{padding:0 0 0 30px;}
+	main .forms form{background:#fff;}
 }
 
 @media only screen and (max-width: 800px){
+	main h1{font-size:20px !important;}
 	main .forms{display:block;}
 	main .forms form{width:100%;}
 }

@@ -20,10 +20,10 @@
 							foreach($adv_db as $item) {
 								array_push($adv_list, $item[0]);
 							}
-							$random_adv = array_rand($adv_list,1);	
+							$random_adv = array_rand($adv_list,1);
 							echo "<a href='place.php?id=".$adv_list[$random_adv]."' class='wow fadeInLeft' data-wow-duration='1.5s' data-wow-delay='1s'>Surprise Me &#187;</a>";
 						}
-					}						
+					}
 				?>
 
 			</div>

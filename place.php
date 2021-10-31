@@ -26,13 +26,19 @@
 		/* Main Area */
 		main{width:100%;flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0;border-radius:0;text-align:center;}
 		main h1 span{display:block;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin:0 0 10px;text-align:left;}
 
 		.main_info ul{text-align:left;margin:-20px 0 30px 30px;list-style:circle;}
 		.location h2{margin:70px 0 20px;}
 		.location h2 span{font-size:20px;}
 
 		.error{font-size:20px;color:red;margin:50px auto;}
+
+		@media only screen and (max-width:600px){
+			.card{width:100%;text-align:left !important;}
+			.card h3{margin:0;position:static;}
+			.card .fa-quote-left{margin:20px 0 0;}
+			.card p{margin:0 0 20px;}
+		}
 	</style>
 
 	<!--?php wp_head(); ?-->
@@ -90,7 +96,7 @@
 					</ul> -->
 				</div>
 				<!--  -->
-				<div class="carousel" data-flickity='{ "wrapAround": true }'>
+				<div class="carousel adv-imgs" data-flickity='{ "wrapAround": true }'>
 					<?php
 						// DISPLAYING IMAGES
 						for($i = 1; $i < count($advImages); $i++){
@@ -287,7 +293,7 @@
 							$hotel_list = get_local_hotels($loc['adv_town']);
 							for ($i=0; $i < count($hotel_list) ; $i++) {
 								echo "<section>";
-								echo "<h3>".$hotel_list[$i]."</h3>";
+								echo "<h4>".$hotel_list[$i]."</h4>";
 								echo "</section>";
 							}
 						?>

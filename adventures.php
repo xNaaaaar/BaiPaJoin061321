@@ -42,7 +42,6 @@
 		/* Main Area */
 		.main_con{display:flex;justify-content:space-between;}
 
-		.sidebar{height:auto;}
 		.sidebar ul{height:auto;}
 		.sidebar ul li{line-height:25px;font-size:20px;font-weight:500;}
 		.sidebar ul li i{width:25px;font-size:22px;}
@@ -50,33 +49,21 @@
 		.sidebar ul li h3{font-size:25px;font-weight:600;margin:0 0 5px;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;position:relative;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
-		main h2 span{font-size:30px;}
-		main h2 span a:hover{color:#313131;text-decoration:none;}
-		main h3{font:600 20px/100% Montserrat,sans-serif;color:red;margin-bottom:10px;text-align:center;}
-		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
-		main .form{position:relative;}
+		main input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:50px;padding:0 110px 0 30px;margin:15px auto;border:1px solid #cfcfcf;}
+		main .form{position:relative;margin-bottom:10px;}
 		main button:first-of-type{right:67px;}
 		main button{display:block;width:45px;height:45px;border:none;background:#bf127a;border-radius:50px;color:#fff;position:absolute;top:50%;right:15px;transform:translateY(-50%);z-index:5;font-size:20px;}
 		main button:hover{background:#8c0047;}
 
-		.card-link{text-decoration:none !important;}
-		.card{width:100%;min-height:227px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 125px 30px 215px;line-height:35px;text-align:left;margin:25px auto;border:1px solid #cfcfcf;}
-		.card:hover{border:1px solid #bf127a;}
+		.card{width:100%;min-height:227px;padding:30px 125px 30px 215px;margin:25px auto;}
 		.card figure{width:165px;height:165px;position:absolute;top:30px;left:30px;border:1px solid #cfcfcf;}
-		.card figure img{width:100%;height:100%;}
-		.card ul{position:absolute;top:20px;right:20px;font-size:30px;}
-		.card ul li{display:inline-block;margin:0 0 0 8px;}
-		.card ul li .added{color:#bf127a;}
-		.card ul li a{color:#313131;}
-		.card ul li a:hover{color:#bf127a;}
-		.card h2{font:600 35px/100% Montserrat,sans-serif;color:#313131;margin-bottom:15px;}
-		.card h2 span{display:block;font-size:18px;color:gray;}
 		.card h2 span i{color:#ffac33;}
 		.card p{font-size:23px;color:#989898;width:100% !important;margin:0 0 10px 2px;}
 		.card p:last-of-type{color:#111;font-size:30px;font-weight:500;margin:0 0 0 2px;}
 
 		.edit{width:260px !important;}
+
+		.filters button{margin:20px auto;padding:10px;width:47.5%;display:inline-block;font:300 15px/100% Montserrat,sans-serif;}
 
 		/* PAGINATION COLORS */
 		a.paging:visited {background-color: black;}
@@ -86,8 +73,27 @@
 		a.pagingCurrent:visited {color:#bf127a;}
 		a.pagingCurrent:hover {background: wheat; font-weight:bold; color: none;}
 
-	</style>
+		@media only screen and (max-width:1000px){
+			.sidebar ul li h3{font-size:23px;}
 
+			.card{width:47.5%;min-height:auto;line-height:30px;padding:45px 30px 30px 30px !important;margin:25px 5px;display:inline-block;vertical-align:top;height:auto;background:#fff;}
+      .card ul{position:absolute;top:10px;right:20px;font-size:20px;}
+      .card h2{font-size:30px !important;}
+      .card figure{width:100%;position:static;}
+      .card p:last-of-type{font-size:25px;margin:0;}
+
+			.edit{width:100% !important;}
+		}
+		@media only screen and (max-width:800px){
+			.card{width:100%;margin:25px auto;display:block;}
+		}
+		@media only screen and (max-width:600px){
+			main{padding:30px 0 30px 30px;}
+		}
+		@media only screen and (max-width:500px){
+			.edit{font-size:12px !important;}
+		}
+	</style>
 
 	<!--?php wp_head(); ?-->
 </head>
@@ -119,8 +125,8 @@
 				if($_SESSION['current_user'] == 'Joiner') {
 					currentJoiner($_SESSION['joiner']);
 					//
-					echo "<h2> {$_SESSION['fname']} {$_SESSION['lname']} </h2>
-					<p>User Type: Joiner</p>";
+					echo "<h2> {$_SESSION['fname']} {$_SESSION['lname']} <span>User Type: Joiner</span></h2>
+					";
 				}
 				else {
 					echo "<h2>Welcome guests!</h2>";
@@ -189,7 +195,7 @@
 						<li><input type="checkbox" name="ratings[]" value=""> <?php echo filter_ratings(1); ?></li>
 					</ul>
 					<ul class="prices">
-						<li><h3>Prices</h3></li>
+						<li><h3>Prices (per person)</h3></li>
 						<?php
 							if(isset($_GET['reset'])) {
 
@@ -210,8 +216,8 @@
 						?>
 
 					</ul>
-					<button class="edit" type="submit" name="btnSave" formaction="adventures.php">Search</button>
-					<button class="edit" type="submit" name="btnReset" formaction="adventures.php?reset">Reset</button>
+					<button class="" type="submit" name="btnSave" formaction="adventures.php">Search</button>
+					<button class="" type="submit" name="btnReset" formaction="adventures.php?reset">Reset</button>
 				</div>
 				</form>
 			</aside>

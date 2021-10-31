@@ -53,7 +53,6 @@
 <!-- End of Head -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 
-
 <style media="screen">
 html, body{height:100%;}
 .wrapper{max-width:100%;}
@@ -70,10 +69,8 @@ html, body{height:100%;}
 
 main{flex:4;float:none;height:100%;background:none;margin:0;padding:50px 50px 0;border-radius:0;text-align:center;}
 main h1{text-align:right;font-size:20px;}
-main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin:15px 0;text-align:left;}
-main h2 span{font-size:30px;}
-main h2 span a:hover, main a:hover{color:#313131;text-decoration:none;}
-main h3{font:600 30px/100% Montserrat,sans-serif;;margin-bottom:15px;text-align:left;}
+main h2{margin:15px 0;}
+main h3{text-align:left;color:#313131;font-size:30px;}
 
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 
@@ -83,11 +80,10 @@ main section table{height:auto;width:100%;text-align:left;}
 
 main form input{margin:30px 5px 15px;display:block;}
 
-main .edit{float:left;display:inline-block;width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;border-radius:0;vertical-align:top;margin:0 5px;}
+main .edit{float:left;margin:0 5px;}
 
 /* Responsive Design */
 @media only screen and (max-width: 1800px) {
-	.main_con{min-height:0;}
 	main{height:100%;}
 }
 
@@ -95,12 +91,8 @@ main .edit{float:left;display:inline-block;width:150px;height:45px;font:normal 1
 	.main_con{padding:0;}
 	main .contents{display:block;}
 	main .admins{width:100%;}
-	main .forms{width:100%;display:flex;justify-content:space-between;margin:30px 0 0;}
-	main .forms form{width:48%;}
-}
 
-@media only screen and (max-width: 1200px){
-	.sidebar ul{margin:35px 0 0;}
+	.sidebar ul{margin:35px 0 0;padding-left:10px;}
 }
 
 @media only screen and (max-width: 1000px){
@@ -108,14 +100,12 @@ main .edit{float:left;display:inline-block;width:150px;height:45px;font:normal 1
 }
 
 @media only screen and (max-width: 800px){
-	main .forms{display:block;}
-	main .forms form{width:100%;}
+	main h1{font-size:20px !important;}
 }
 
-@media only screen and (max-width: 600px){
-	main input{font-size:15px;}
-	main .admins{width:100%;clear:both;overflow-x:auto;}
-	main .admins table{min-width: rem-calc(640);}
+@media only screen and (max-width: 500px){
+	main .admins input{width:100%;}
+	main .admins .edit{margin:0 0 20px;display:block;width:100%;}
 }
 
 </style>

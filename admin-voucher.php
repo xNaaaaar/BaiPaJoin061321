@@ -26,22 +26,17 @@ html, body{height:100%;}
 
 main{flex:4;float:none;height:100%;background:none;margin:0;padding:50px 50px 0;border-radius:0;text-align:center;}
 main h1{text-align:right;font-size:20px;}
-main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin:15px 0;text-align:left;}
-main h2 span{font-size:30px;}
-main h2 span a:hover{color:#313131;text-decoration:none;}
-main h3{font:600 30px/100% Montserrat,sans-serif;;margin-bottom:10px;text-align:center;}
-main input{display:inline-block;width:99%;height:50px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 20px;margin:5px auto;border:1px solid #cfcfcf;}
-main p:last-of-type{width:100%;color:red;font-size:20px;}
+main h2{margin:15px 0;}
 
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 
 main .admins{height:auto;width:100%;}
-main .admins select{float:left;margin:0 0 20px;height:40px;max-width:100%;padding:0 10px;}
-main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;padding:0 30px;}
+main .admins select{float:left;margin:0 0 20px;height:40px;width:205px;max-width:100%;padding:0 10px;}
+main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;padding:0 30px;border:1px solid #000;}
+main .admins button:hover{background:#000;color:#fff;}
 
 /* Responsive Design */
 @media only screen and (max-width: 1800px) {
-	.main_con{min-height:0;}
 	main{height:100%;}
 }
 
@@ -49,27 +44,26 @@ main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;pad
 	.main_con{padding:0;}
 	main .contents{display:block;}
 	main .admins{width:100%;}
-	main .forms{width:100%;display:flex;justify-content:space-between;margin:30px 0 0;}
-	main .forms form{width:48%;}
-}
 
-@media only screen and (max-width: 1200px){
-	.sidebar ul{margin:35px 0 0;}
+	.sidebar ul{margin:35px 0 0;padding-left:10px;}
 }
 
 @media only screen and (max-width: 1000px){
 	main{padding:0 0 0 30px;}
 }
 
-@media only screen and (max-width: 800px){
-	main .forms{display:block;}
-	main .forms form{width:100%;}
-}
-
-@media only screen and (max-width: 600px){
-	main input{font-size:15px;}
+@media only screen and (max-width: 1200px){
 	main .admins{width:100%;clear:both;overflow-x:auto;}
 	main .admins table{min-width: rem-calc(640);}
+}
+
+@media only screen and (max-width: 800px){
+	main h1{font-size:20px !important;}
+}
+
+@media only screen and (max-width: 500px){
+	main .admins select{margin:0 0 10px;width:100%;}
+	main .admins button{margin:0 0 20px;display:block;width:100%;}
 }
 
 </style>
@@ -165,7 +159,7 @@ main .admins button{float:left;margin:0 10px 20px;height:40px;max-width:100%;pad
 								} else {
 									echo "	</tbody>";
 									echo "</table>";
-									echo "<p>No voucher added exists!</p>";
+									echo "<h3>No voucher added exists!</h3>";
 								}
                 ?>
             </div>

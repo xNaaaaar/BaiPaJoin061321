@@ -60,7 +60,7 @@ iframe{ border: none; width: 100%;}
 ul, h1, h2, h3, h4{ margin:0; padding:0; list-style:none; }
 strong , b{ font-weight: bold;}
 em, i{font-style: italic;}
-input, select{width:99%;height:50px;margin:10px auto 0;border:1px solid #fff;padding:0 15px;border-radius:8px;font:normal 18px/20px Montserrat,sans-serif;border:1px solid #cfcfcf;}
+input, select{display:inline-block;width:99%;height:50px;margin:10px auto 0;padding:0 15px;border-radius:8px;font:normal 18px/20px Montserrat,sans-serif;border:1px solid #cfcfcf;outline:none;}
 input[type="checkbox"]{width:18px;height:18px;}
 input[type="file"]{height:auto;border:none;}
 input[type="submit"]{cursor: pointer;}
@@ -77,7 +77,7 @@ a[href^="tel:"]{color: inherit!important; text-decoration: none;}
 
 .back_top{display:none;background:#348b83;position: fixed; z-index:999;bottom:0;width: 100%;height: 45px;cursor:pointer;}
 .back_top:before{content:"";position:absolute;top:45%;left:50%;transform:translate(-50%,-45%);border-bottom:15px solid #fff;border-left:10px solid transparent;border-right:10px solid transparent;}
-.back_top:hover{opacity:.7}
+.back_top:hover{background:#015850;}
 
 /*Heading for SEO*/
 .h1_hdng{font-size: 22px; font-weight: 700; color: #000;}
@@ -107,7 +107,7 @@ body:-webkit-scrollbar-thumb{background:#88dfd8;}
 
 .wrapper{width:100%;max-width:1390px;margin:0 auto;position:relative;}
 .loader-wrapper{width:100%;height:100vh;position:absolute;top:0;left:0;right:0;display:flex;justify-content:center;align-items:center;background:#fafafa;z-index:100;}
-.loader{width:400px;height:400px;}
+.loader{width:300px;height:300px;}
 
 /*header*/
 header{}
@@ -209,6 +209,11 @@ header{}
 	main{float:right;width:984px;height:529px;line-height:28px;max-width:100%;text-align:left;background:#f1fffd;color:#2f2f2f;margin-right:-265px;border-top-left-radius:300px;border-bottom-left-radius:300px;padding:97px 0 0 156px;}
 	main .h1_title{margin-bottom:35px;font:600 45px/100% Montserrat,sans-serif;color:#313131;}
 	main .h1_title span{display:block;font-size:28px;color:#989898;}
+  main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+  main h2 span{font-size:30px;}
+  main h2 span a:hover{color:#313131;text-decoration:none;}
+  main h3{font:600 20px/100% Montserrat,sans-serif;color:red;margin-bottom:10px;text-align:center;}
+  main th, main td{line-height:20px !important;}
 	main p{margin:0 0 30px 2px;max-width:100%;width:552px;}
 	main p:last-of-type{width:502px;}
 
@@ -230,6 +235,7 @@ header{}
   .sidebar{flex:1;height:auto;padding:30px 30px 30px 0;position:relative;z-index:5;}
   .sidebar:before{content:'';width:2px;height:70%;background:#cdcdcd;position:absolute;top:50%;right:0;transform:translateY(-50%);}
   .sidebar h2{font-size:30px;line-height:100%;}
+  .sidebar h2 span{font-size:18px;display:block;}
   .sidebar p{margin-bottom:20px;}
   .sidebar ul{display:flex;height:100%;flex-direction:column;justify-content:flex-start;font:600 30px/100% Montserrat,sans-serif;list-style:none;margin:35px 0 0;}
   .sidebar ul li{line-height:45px;}
@@ -249,14 +255,15 @@ header{}
 
   /*LOGIN AREA @login.php*/
   .user_area{position:relative;}
+  .user_area .slider{width:100%;height:auto;top:0;right:0;left:0;z-index:3;}
+	.user_area .slider:after{display:none;}
+	.user_area .rslides{border-radius:0;box-shadow:none;}
   .user_area .main_con{min-height:100vh;}
   .user_area main{float:none;width:500px;height:auto;text-align:center;background:rgba(136,223,216,.8);color:#2f2f2f;margin:0;border-radius:30px;padding:275px 0 120px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:5;}
   .user_area main .main_logo{left:50%;transform:translateX(-50%);}
   .user_area main form{max-width:100%;width:400px;display:flex;justify-content:center;flex-wrap:wrap;text-align:center;margin:0 auto;}
-  .user_area main form input{width:100%;height:60px;margin:10px auto 0;border:1px solid #fff;padding:0 15px;border-radius:5px;font:normal 18px/20px Montserrat,sans-serif;}
-  .user_area main form button, .user_area main form a:nth-of-type(2){width:170px;height:50px;margin:60px auto 50px;display:inline-block;background:#bf127a;color:#fff;text-align:center;border-radius:50px;border:none;font:600 16px/20px Montserrat,sans-serif;}
-  .user_area main form button:hover{background:#8c0047;}
-  .user_area main form span{}
+  /* .user_area main form input{width:100%;height:60px;margin:10px auto 0;border:1px solid #fff;padding:0 15px;border-radius:5px;font:normal 18px/20px Montserrat,sans-serif;} */
+  .user_area main form button, .user_area main form a:nth-of-type(2){margin:60px auto 50px;}
   .user_area main form span:first-of-type{position:absolute;bottom:170px;left:0;right:0;color:#fff;}
   .user_area main form span:nth-of-type(2){position:absolute;bottom:80px;left:0;right:0;color:#fff;}
   .user_area main form a:first-of-type{position:absolute;bottom:295px;right:53px;color:#fff;}
@@ -269,7 +276,8 @@ header{}
   /*CREATE AREA @create.php*/
   .create main{min-height:800px;}
   .create main form input:nth-child(3){width:22.3%;}
-  .create main form select{width:75%;height:60px;margin:10px 0 0 10px;border:1px solid #fff;padding:0 15px;border-radius:5px;font:normal 18px/20px Montserrat,sans-serif;color:#b1b1b1;}
+  /* .create main form select{width:75%;height:60px;margin:10px 0 0 10px;border:1px solid #fff;padding:0 15px;border-radius:5px;font:normal 18px/20px Montserrat,sans-serif;color:#b1b1b1;} */
+  .create main form select{width:75%;color:#b1b1b1;}
   .create main form button{margin:30px auto 0;}
   .create main form a:last-of-type{width:170px;height:30px;margin:0;display:block;background:none;color:#fff;text-align:center;border-radius:0;border:none;font:600 20px/20px Montserrat,sans-serif;position:absolute;bottom:30px;left:53px;color:#fff;}
   .create main form a:last-of-type:hover{background:none;text-decoration:underline;}
@@ -285,7 +293,9 @@ header{}
   .images{--height:500px;width:100%;height:var(--height);margin-right:10px;}
   .images img{width:100%;}
 
+  .card-link{text-decoration:none !important;}
   .card{width:500px;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px 30px 220px;line-height:35px;text-align:left;margin:20px 20px 20px 0;border:1px solid #cfcfcf;}
+  .card:hover{border:1px solid #bf127a;}
   .card .label{position:absolute;top:0;right:0;}
   .card .label span{padding:5px;height:30px;background:#bf127a;color:#fff;position:absolute;top:90px;right:0;z-index:10;font-size:15px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
   .card .label span:nth-child(2){top:125px;}
@@ -295,7 +305,14 @@ header{}
   .card figure{height:250px;margin:0 0 15px;}
   .card figure img{width:100%;height:100%;}
   .card .fa-quote-left{font-size:40px;color:#88dfd8;}
-  .card h3{font:600 20px/100% Montserrat,sans-serif;position:absolute;bottom:40px;left:30px;}
+  .card ul{position:absolute;top:20px;right:20px;font-size:30px;}
+  .card ul li{display:inline-block;margin:0 0 0 8px;}
+  .card ul li .added{color:#bf127a;}
+  .card ul li a{color:#313131;}
+  .card ul li a:hover{color:#bf127a;}
+  .card h2{font:600 35px/100% Montserrat,sans-serif;color:#313131;margin-bottom:15px;}
+  .card h2 span{display:block;font-size:18px;color:gray;}
+  .card h3{font:600 22px/100% Montserrat,sans-serif;position:absolute;bottom:40px;left:30px;text-align:left;color:#000;}
   .card h3 span{display:block;font:600 italic 18px/100% Montserrat,sans-serif;color:gray;margin:10px 0 0;}
   .card h3 span em{display:block;margin:5px 0 0;}
   .card p{margin:0 0 25px;font:400 18px/30px Montserrat,sans-serif;}
@@ -377,7 +394,7 @@ footer{}
 		.contact_info1{max-width:100%;width:278px;margin:17px 0 0 -4px;line-height:31px;}
 
 		.contact_info2{max-width:100%;width:366px;position:absolute;top:187px;right:19px;}
-		.contact_info2 h2{font:600 40px/100% Montserrat,sans-serif;margin:0 0 27px;}
+		.contact_info2 h2{font:600 45px/100% Montserrat,sans-serif;margin:0 0 27px;}
 		.contact_info2 ul li{display:block;font-weight:600;font-size:22px;margin:15px 0 0 2px;}
 		.contact_info2 ul li address{display:block;font:normal 18px/28px Montserrat,sans-serif;margin-top:4px;}
 		.contact_info2 ul li address q{display:block;}
@@ -392,7 +409,7 @@ footer{}
 	  .social_media ul li a:hover img{opacity:0.5;}
 
 	.footer_btm{background:#67beb6;}
-		.footer_btm_con{min-height:73px;padding:29px 0 0;position:relative;}
+		.footer_btm_con{min-height:43px;padding:13px 0 0;position:relative;}
 
 		.footer_nav{max-width:100%;width:316px;position:absolute;top:-360px;left:508px;color:#fff;font-weight:600;}
 		.footer_nav h2{font-size:40px;line-height:100%;margin-bottom:15px;}
