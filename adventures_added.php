@@ -22,32 +22,36 @@
 		.main_con{display:flex;justify-content:space-between;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
-		main .form{display:flex;justify-content:center;flex-wrap:wrap;margin-bottom:40px;position:relative;}
-		main .form input, main .form select, main .form textarea{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 30px;margin:15px auto;border:1px solid #cfcfcf;}
+		main .form{display:flex;justify-content:center;flex-wrap:wrap;}
 		main .form select{width:73%;}
 		main .form select:nth-of-type(2){width:49%;}
 		main .form select:nth-of-type(3){width:73%;}
-		main .form textarea{resize:none;height:180px;border-radius:25px;padding-top:25px;}
+		main .form textarea{height:180px;padding:15px;margin:15px auto 0;}
 		main .form input:first-of-type{width:25%;opacity:0;}
 		main .form input:nth-of-type(2){width:49%;}
 		main .form input:nth-of-type(3){width:25%;}
 		main .form input[type=file]{padding-top:13px;color:#b1b1b1;margin-top:0;}
 		main .form .label{font-size:15px;display:inline-block;text-align:left;width:99%;margin:5px 0 0;}
 
-		.reuse_data select{display:inline-block;height:50px;border:1px solid #cfcfcf;outline:none;border-radius:10px;padding:0 30px;font:normal 15px/50px Montserrat,sans-serif;}
-		.reuse_data button{display:inline-block;height:50px;border:1px solid #cfcfcf;outline:none;border-radius:10px;padding:0 30px;font:normal 15px/50px Montserrat,sans-serif;}
-		.reuse_data button:hover{color:#fff;background:#d1375d;border:1px solid #d1375d;}
+		.reuse_data select{width:35%;margin:10px auto 35px;}
+		.reuse_data .edit{margin:10px auto 35px;}
 
-		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 30px 30px 200px;line-height:35px;text-align:left;margin:15px 0;border:1px solid #cfcfcf;}
-		.card figure{width:140px;height:140px;position:absolute;top:30px;left:30px;border:1px solid #1a1a1a;}
-		.card figure img{width:100%;}
-		.card h2{font:600 35px/100% Montserrat,sans-serif;color:#313131;margin-bottom:15px;}
-		.card p{font-size:23px;color:#989898;width:100% !important;}
+		.notes{min-height:200px;width:99%;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;background:#fff;}
+		.notes h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
+		.notes ul li{list-style:circle;margin:0 0 10px 22px;}
 
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
 			main{padding:50px 0 0 25px;}
+
+			.reuse_data select{width:76%;}
+			.reuse_data .edit{width:22%;}
+		}
+		@media only screen and (max-width:600px) {
+			.reuse_data .edit{width:99%;}
+		}
+		@media only screen and (max-width:500px) {
+			main .edit{width:48%;}
 		}
 	</style>
 
@@ -97,7 +101,7 @@
 					}
 					?>
 					</select>
-					<button type="submit" name="btnReuse">Reuse</button>
+					<button class="edit" type="submit" name="btnReuse">Reuse</button>
 				</form>
 				<?php
 				## REUSE EXISTING ADVENTURE DATA
@@ -171,7 +175,7 @@
 						<input id="f03" type="file" name="fileDosDontsImg" required/>
 						<input type="num" name="numPrice" placeholder="Total Price" value="<?php echo (isset($_SESSION['this_price'])) ? $_SESSION['this_price']:""; ?>" required>
 					</div>
-					<div class="price_details">
+					<div class="notes">
 						<h2 style='color:red;'>Important Notes:</h2>
 						<ul>
 							<li>When posting an adventure, the organizer agrees to provide a tour or service to joiner/s whose booking is under the posted adventure. The organizer is responsible for the joiner/s by the time the adventure is underway or if the joiner is under the jurisdiction of the organizers premises.</li>

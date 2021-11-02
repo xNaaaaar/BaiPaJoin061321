@@ -301,6 +301,7 @@ and (max-width : 1000px) {
 
       .create main{min-height:0;}
 
+      .card{background:#fff;}
       .card .label span{top:50px;}
       .card .label span:nth-child(2){top:85px;}
       .card .label span:nth-child(3){top:120px;}
@@ -439,12 +440,13 @@ and (max-width : 600px) {
   /*Main Area*/
   main .h1_title{font-size:45px;}
   main .h1_title span{line-height:100%;}
-  main .form input{margin:10px auto !important;}
+  input, select, textarea{margin:8px auto !important;width:99% !important;}
+  /* main .form input{margin:8px auto !important;}
   main .form input:nth-child(2){width:99% !important;}
   main .form input:nth-child(3){width:99% !important;}
   main .form input:nth-child(4){width:99% !important;}
   main .form input:nth-child(6){width:99% !important;}
-  main .form input:nth-child(7){width:99% !important;}
+  main .form input:nth-child(7){width:99% !important;} */
 
   .card{padding:25px !important;text-align:center !important;}
   .card figure{width:100% !important;position:static !important;display:block;margin:0 0 10px;}

@@ -22,7 +22,13 @@
 <!-- Head -->
 <?php include("includes/head.php"); ?>
 <!-- End of Head -->
-
+<style >
+	@media only screen and (max-width:1000px) {
+		#main_area{height:100vh;}
+		.wrapper{height:100%;}
+		.main_con{height:100% !important;}
+	}
+</style>
 </head>
 	<body>
 		<div class="protect-me">

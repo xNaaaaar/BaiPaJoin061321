@@ -8,17 +8,37 @@
 <!-- End of Head -->
 	<style>
 		.user_area{background:#88dfd8 !important;}
-		.user_area main{width:100%;height:100vh;background:none;color:#2f2f2f;border-radius:0;padding:0;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
-		.user_area main .main_logo{left:-4px;transform:none;}
-		.user_area main form{width:95%;display:block;position:absolute;top:55%;left:50%;transform:translate(-50%,-50%);height:60vh;text-align:left;}
+		.user_area main{width:100%;height:100vh;background:none;color:#2f2f2f;border-radius:0;padding:0;position:static;transform:none;}
+		.user_area main .main_logo{position:static;transform:none;margin-left:-40px;}
+		.user_area main form{width:100%;display:block;text-align:left;}
 		.user_area main form h2{font:600 45px/100% Montserrat,sans-serif;color:#fff;}
-		.user_area main form h2 span{display:block;color:#fff;font-size:25px;}
-		.user_area main form ul{margin:25px 10px 0;}
-		.user_area main form ul li{line-height:40px;}
+		.user_area main form h2 span{display:block;color:#fff;font-size:25px;position:static !important;}
+		.user_area main form ul{margin:25px 10px 0;position:static;}
+		.user_area main form ul li{line-height:40px;display:block;}
 	  .user_area main form input{display:inline-block;width:20px;height:20px;margin:0 10px 0 0;border:none;padding:0;border-radius:5px;}
 	  .user_area main form label{display:inline-block;font:normal 25px/20px Montserrat,sans-serif;color:#fff;}
-	  .user_area main form button{width:170px;margin:0;background:none;border-radius:0;position:absolute;bottom:-60px;right:0;font-size:25px;}
-	  .user_area main form button:hover{background:none;text-decoration:underline;}
+	  .user_area main form button{margin:0;border:none;background:none;border-radius:0;position:absolute;bottom:80px;right:0;font-size:30px;color:#fff;letter-spacing:4px;}
+	  .user_area main form button:hover{color:#bf127a;}
+		/* RESPONSIVE DESIGN */
+		@media only screen and (max-width:1400px){
+			.user_area main form button{right:20px;}
+		}
+		@media only screen and (max-width:1000px){
+			#main_area{height:100vh;padding:0 25px 40px;}
+			.main_con{height:0 !important;}
+	    main{height:0 !important;}
+
+			.user_area main .main_logo{margin-left:0 !important;}
+			.user_area main form button{bottom:30px;}
+		}
+		@media only screen and (max-width:500px){
+			.user_area main .main_logo{margin:0 auto !important;}
+			.user_area main form h2 span{margin:10px 0 0;line-height:100%;}
+			.user_area main form ul{margin:25px 0 0;}
+			.user_area main form ul li{line-height:35px;}
+			.user_area main form label{font-size:23px;}
+			.user_area main form button{position:static;display:block;text-align:left;margin:30px 0 0;}
+		}
 	</style>
 </head>
 	<body>

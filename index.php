@@ -68,7 +68,6 @@
 <!-- Head -->
 <?php include("includes/head.php"); ?>
 <!-- End of Head -->
-
 </head>
 	<body>
 		<div class="protect-me">

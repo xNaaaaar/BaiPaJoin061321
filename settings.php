@@ -50,37 +50,40 @@
 		.main_con{display:flex;justify-content:space-between;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2, main h3{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
-		main h2 span{font-size:25px;}
 		main h2 .legal{font-size:30px;}
 		main h2 span a:hover{color:#313131;text-decoration:none;}
 		main h3{font-size:20px;color:red;margin-left:1px;}
-		main .form{display:flex;justify-content:center;flex-wrap:wrap;margin-bottom:40px;position:relative;}
-		main .form input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 20px/20px Montserrat,sans-serif;padding:0 30px;margin:15px auto;border:1px solid #cfcfcf;}
+		main .form{display:flex;justify-content:center;flex-wrap:wrap;}
 		main .form input:nth-child(2){width:41%;}
 		main .form input:nth-child(3){width:41%;}
 		main .form input:nth-child(4){width:16%;}
 		main .form input:nth-child(6){width:49%;}
 		main .form input:nth-child(7){width:49%;}
 
-		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px;line-height:35px;text-align:left;margin:15px 0;border:1px solid #cfcfcf;flex-direction:row;}
+		.card{width:48%;padding:30px;margin:15px 10px 15px 0;display:inline-block;}
 		.card figure{width:165px;height:165px;border:1px solid #cfcfcf;margin-right:30px !important;display:inline-block;vertical-align:top;}
 		.card figure img{width:100%;height:100%;}
 		.card div{display:inline-block;vertical-align:top;}
-		.card h2{font:600 35px/100% Montserrat,sans-serif;color:#313131;margin-bottom:15px;}
-		.card h2 span{font:500 18px/100% Montserrat,sans-serif;color:#989898;display:block;margin:5px 0 0;}
-		.card p{font-size:23px;color:#989898;width:100% !important;font-weight:bold;}
+		.card h2{font-size:30px;}
+		.card h2 span{font:500 18px/100% Montserrat,sans-serif;color:#989898;margin:5px 0 0;}
+		.card p{font:600 20px/100% Montserrat,sans-serif;color:#989898;width:100% !important;margin:0;}
 		.card ul{position:absolute;top:20px;right:20px;font-size:30px;}
 		.card ul li{display:inline-block;margin:0;}
 		.card ul li a{color:#313131;}
 		.card ul li a:hover{color:#bf127a;}
 
-		main .edit{display:inline-block;width:209px;height:60px;background:#bf127a;border-radius:50px;color:#fff;margin:15px 5px;text-align:center;font:normal 20px/59px Montserrat,sans-serif;}
-		main .edit:hover{background:#8c0047;text-decoration:none;color:#fff;}
-
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
 			main{padding:50px 0 0 25px;}
+		}
+		@media only screen and (max-width:800px) {
+			.card{width:99%;margin:15px 0;text-align:center;}
+			.card h2{text-align:center;}
+			.card figure{width:165px !important;margin:0 auto 10px !important;display:block;}
+			.card ul{position:static;text-align:center;margin:10px 0 0;}
+		}
+		@media only screen and (max-width:600px) {
+
 		}
 	</style>
 

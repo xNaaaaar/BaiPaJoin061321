@@ -76,7 +76,9 @@
 		@media only screen and (max-width:1000px){
 			.sidebar ul li h3{font-size:23px;}
 
-			.card{width:47.5%;min-height:auto;line-height:30px;padding:45px 30px 30px 30px !important;margin:25px 5px;display:inline-block;vertical-align:top;height:auto;background:#fff;}
+			main{padding:50px 0 0 25px;}
+
+			.card{width:47.5%;min-height:auto;line-height:30px;padding:45px 20px 20px 20px !important;margin:25px 5px;display:inline-block;vertical-align:top;height:auto;background:#fff;}
       .card ul{position:absolute;top:10px;right:20px;font-size:20px;}
       .card h2{font-size:30px !important;}
       .card figure{width:100%;position:static;}

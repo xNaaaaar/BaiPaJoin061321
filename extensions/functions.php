@@ -1132,6 +1132,8 @@ function postAdventure(){
 		echo "<script>alert('The adventure date should be greater than the current date.')</script>";
 	}
 	else {
+		if($cboType == "Not Packaged") $numMaxGuests = 1;
+		
 		$fileDosDontsImg = uploadImage('fileDosDontsImg', "images/organizers/".$_SESSION['organizer']."/");
 		$fileItineraryImg = uploadImage('fileItineraryImg', "images/organizers/".$_SESSION['organizer']."/");
 		$fileAdvImgs = uploadMultipleImages('fileAdvImgs', "images/organizers/".$_SESSION['organizer']."/");
@@ -1186,6 +1188,7 @@ function updateAdventure(){
 		echo "<script>alert('Price cannot be zero or negative!')</script>";
 	}
 	else {
+		if($cboType == "Not Packaged") $numMaxGuests = 1;
 		//
 		$adv = DB::query("SELECT * FROM adventure WHERE adv_id = ?", array($_GET['id']), "READ");
 
