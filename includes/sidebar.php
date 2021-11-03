@@ -15,25 +15,25 @@
 			echo "<h2> {$_SESSION['fname']} {$_SESSION['lname']} ";
 			#IF ORGANIZER SENDS LEGAL DOCU STATUS: PENDING
 			if($_SESSION['verified'] == 3) {
-				echo "<i class='fas fa-user-slash' style='color:#ff4444;'></i></h2>
-				<p>Status: <q style='color:#ff4444;'>Banned</q></p>
+				echo "</h2>
+				<p>Status: <q style='color:#ff4444;'>Banned</q> <i class='fas fa-user-slash' style='color:#ff4444;'></i></p>
 				";
 			}
 			else if($_SESSION['verified'] == 2) {
-				echo "<i class='fas fa-undo' style='color:#33b5e5;'></i></h2>
-				<p>Status: <q style='color:#33b5e5;'>Pending</q></p>
+				echo "</h2>
+				<p>Status: <q style='color:#33b5e5;'>Pending</q> <i class='fas fa-undo' style='color:#33b5e5;'></i></p>
 				";
 			}
 			#IF ORGANIZER IS VERIFIED FOR LEGAL DOCU STATUS: VERIFIED
 			else if($_SESSION['verified'] == 1) {
-				echo "<i class='fas fa-check-circle' style='color:#00c851;'></i></h2>
-				<p>Status: <q style='color:#00c851;'>Verified</q></p>
+				echo "</h2>
+				<p>Status: <q style='color:#00c851;'>Verified</q> <i class='fas fa-check-circle' style='color:#00c851;'></i></p>
 				";
 			}
 			#IF ORGANIZER IS NOT VERIFIED FOR LEGAL DOCU OR HAVEN'T SUBMIT STATUS: NOT VERIFIED
 			else {
-				echo "<i class='fas fa-times-circle' style='color:#ff4444;'></i></h2>
-				<p>Status: <q style='color:#ff4444;'>Not Verified</q></p>
+				echo "</h2>
+				<p>Status: <q style='color:#ff4444;'>Not Verified</q> <i class='fas fa-times-circle' style='color:#ff4444;'></i></p>
 				";
 			}
 		}

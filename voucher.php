@@ -43,30 +43,42 @@
 		main button:hover{background:#8c0047;}
 
 		.card-div{display:flex;justify-content:center;flex-wrap:wrap;}
-		.card{width:48%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 100px 30px 175px;line-height:35px;text-align:left;margin:25px auto 0;border:1px solid #cfcfcf;overflow:hidden;}
+		.card{width:48%;padding:30px 100px 30px 175px;margin:25px auto 0;overflow:hidden;}
 		.card:before{content:'';width:1px;height:85%;border:none;border-left:5px dotted #cfcfcf;position:absolute;top:50%;left:30%;transform:translateY(-50%);}
 		.card:hover{border:1px solid #bf127a;margin:20px auto 0;}
 		.card:hover:before{border-left:5px dotted #bf127a;}
-		.card .expired{width:65%;height:100%;top:-5px;left:50%;transform:translateX(-50%);z-index:5;}
+		.card .expired{width:326px;height:223px;top:50%;left:50%;transform:translate(-50%,-50%);z-index:5;}
 		.card figure{width:115px;height:115px;position:absolute;top:50%;left:20px;transform:translateY(-50%);}
 		.card figure img{width:100%;height:100%;}
-		.card ul{position:absolute;top:20px;right:20px;font-size:30px;}
-		.card ul li{display:inline-block;margin:0;}
-		.card ul li a{color:#313131;}
+		.card ul li{margin:0;}
 		.card ul li a:hover{color:#bf127a;cursor:pointer;}
-		.card h2{font:600 35px/100% Montserrat,sans-serif;color:#313131;margin-bottom:15px;}
-		.card h2 span{display:block;font-size:18px;color:gray;line-height:100%;}
+		.card h2 span{line-height:100%;}
 		.card h2 span i{color:#ffac33;}
 		.card p{font-size:23px;color:#989898;width:100% !important;margin:0 0 10px 2px;}
 		.card p:last-of-type{color:#111;font-size:25px;font-weight:500;margin:0 0 0 2px;}
 		.card p q{display:block;}
 
-		/* main .btn{display:inline-block;width:249px;height:60px;background:#bf127a;border-radius:50px;color:#fff;margin:40px 5px;text-align:center;font:normal 20px/59px Montserrat,sans-serif;}
-		main .btn:hover{background:#8c0047;text-decoration:none;color:#fff;} */
-
 		/*RESPONSIVE*/
-		@media only screen and (max-width:1000px) {
+		@media only screen and (max-width:1300px){
+			.card{padding:30px 100px 30px 30px;}
+			.card:before{display:none;}
+			.card figure{position:static;transform:none;}
+			.card .expired{position:absolute;}
+		}
+		@media only screen and (max-width:1000px){
 			main{padding:50px 0 0 25px;}
+		}
+		@media only screen and (max-width:800px){
+			.card{padding:30px;width:99%;text-align:center;}
+			.card:hover{margin:25px auto 0;}
+			.card figure{margin:0 auto;}
+			.card h2{text-align:center;}
+			.card ul{position:static;text-align:center;margin:10px 0 0;}
+			.card p q{display:inline-block;}
+		}
+		@media only screen and (max-width:600px){
+			.card .expired{position:absolute!important;width:326px!important;height:223px!important;}
+			.card figure{width:115px!important;}
 		}
 	</style>
 

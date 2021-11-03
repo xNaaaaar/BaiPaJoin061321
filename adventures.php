@@ -91,6 +91,7 @@
 		}
 		@media only screen and (max-width:600px){
 			main{padding:30px 0 30px 30px;}
+			input[type="checkbox"]{width:18px!important;}
 		}
 		@media only screen and (max-width:500px){
 			.edit{font-size:12px !important;}

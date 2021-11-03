@@ -82,9 +82,6 @@
 			.card figure{width:165px !important;margin:0 auto 10px !important;display:block;}
 			.card ul{position:static;text-align:center;margin:10px 0 0;}
 		}
-		@media only screen and (max-width:600px) {
-
-		}
 	</style>
 
 	<!--?php wp_head(); ?-->

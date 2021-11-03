@@ -20,13 +20,16 @@
 		.sidebar ul ul{height:auto;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
-		main h3{font-weight:500;font-size:25px;margin:20px 0 10px;text-align:left;display:block;}
-		main h4{font-weight:500;font-size:20px;display:block;color:red;text-align:left;margin-bottom:20px;}
+		main h3{display:block;font-weight:500;font-size:30px;margin:20px 0 10px;text-align:left;color:#000;}
+		main h4{font-weight:600;font-size:20px;display:block;color:red;text-align:left;margin-bottom:20px;}
 
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
 			main{padding:50px 0 0 25px;}
+		}
+		@media only screen and (max-width:500px) {
+			main h3{font-size:25px;}
+			main .edit{width:48%;}
 		}
 	</style>
 

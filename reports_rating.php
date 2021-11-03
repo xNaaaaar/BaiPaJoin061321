@@ -23,11 +23,10 @@
 		.sidebar ul ul{height:auto;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
-		main h3{font-weight:500;font-size:20px;color:red;margin:20px 0;text-align:center;}
+		main h3{font-weight:500;font-size:20px;color:red;margin:20px 0 0;}
 		main form{margin:0 0 20px;text-align:left;}
-		main form select{max-width:100%;width:320px;height:40px;padding:0 15px;}
-		main form button{max-width:100%;width:100px;height:40px;padding:0 15px;}
+		main form select{max-width:100%;width:330px;padding:0 15px;margin:15px auto;}
+		main form button{max-width:100%;width:100px;padding:0 15px;margin:15px auto;}
 		main table{width:100%;text-align:center;font-size:16px;}
 		main table thead{background:#7fdcd3;color:#fff;}
 		main table thead tr:hover{background:#7fdcd3;}
@@ -40,6 +39,9 @@
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
 			main{padding:50px 0 0 25px;}
+		}
+		@media only screen and (max-width:600px){
+			main form button{margin:8px auto!important;width:99%!important;}
 		}
 	</style>
 
@@ -92,8 +94,9 @@
 					}
 					echo "
 						</select>
-						<button type='submit' name='btnSearch'>Search</button>
+						<button class='edit' type='submit' name='btnSearch'>Search</button>
 					</form>
+					<div class='scroll-table'>
 					";
 					echo "
 					<table>
@@ -143,6 +146,7 @@
 				// DISPLAY RATING REPORTS FOR JOINER
 				} else {
 					echo "
+					<div class='scroll-table'>
 					<table>
 						<thead>
 							<tr>
@@ -189,7 +193,7 @@
 					}
 				}
 				?>
-
+				</div>
 			</main>
 		</div>
 

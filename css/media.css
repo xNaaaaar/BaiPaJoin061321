@@ -276,6 +276,8 @@ and (max-width : 1000px) {
 
       main{float:none;margin:auto;width:100%;height:auto;}
       main{line-height:30px;background:none;margin:0;border-radius:0;padding:0;}
+      main .scroll-table{width:100%;clear:both;overflow-x:auto;}
+			main .scroll-table table{min-width: rem-calc(640);}
     	main .h1_title{margin-bottom:25px;}
     	main .h1_title span{margin:0;}
       main h2{font-size:40px;}

@@ -28,7 +28,7 @@
 		.success{color:#5cb85c;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:30px;text-align:left;}
+		main h2{margin-bottom:30px;}
 		main h3{font-weight:500;font-size:20px;color:red;margin:20px 0 0;}
 		main table{width:100%;text-align:center;font-size:16px;}
 		main table thead{background:#7fdcd3;color:#fff;}
@@ -78,7 +78,7 @@
 			<main>
 				<form method="post" >
 					<h2>My Pending Requests</h2>
-
+					<div class="scroll-table">
 					<?php ##
 					// DISPLAY REQUEST FOR ORGANIZER
 					if(isset($_SESSION['organizer'])){
@@ -189,6 +189,7 @@
 						}
 					}
 					?>
+					</div>
 				</form>
 			</main>
 		</div>

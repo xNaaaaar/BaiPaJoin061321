@@ -16,7 +16,8 @@
 		.comp{color:#000;}
 
 		/* Main Area */
-		main{width:100%;flex:4;float:none;height:auto;background:none;margin:0;padding:0 0 50px;border-radius:0;text-align:center;}
+		main{width:100%;float:none;height:auto;background:none;margin:0;padding:0 0 50px;border-radius:0;text-align:center;}
+		main h2{text-align:center;margin:10px 0 25px;}
 
 		.success{color:#5cb85c;}
 		.error{color:red;}
@@ -31,6 +32,15 @@
 		.main_info section p{font:400 20px/30px Montserrat,sans-serif;text-align:center;margin:10px auto 0;max-width:100%;width:50% !important;}
 		.main_info section ul{margin:70px 0 0;}
 		.main_info section ul li{display:inline-block;}
+
+		@media only screen and (max-width:1000px){
+			#main_area{background:#fff!important;}
+			.main_info figure{width:100%;}
+			.main_info section p{width:100%!important;}
+		}
+		@media only screen and (max-width:500px){
+			.main_info section i{font-size:80px;}
+		}
 	</style>
 
 	<!--?php wp_head(); ?-->
@@ -68,24 +78,24 @@
 									booking_paid_updates("card", $_GET['book_id'], $_GET['intentid'], $_GET['total']/100);
 
 								} else if(isset($_GET['gcash']) && $_GET['gcash'] == 1) {
-									echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru gcash!</p>";
+									echo "<i class='far fa-check-circle success'></i><h2 class='success'>Successfully paid thru gcash!</h2>";
 
 								} else if(isset($_GET['grabpay']) && $_GET['grabpay'] == 1) {
-									echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru grabpay!</p>";
+									echo "<i class='far fa-check-circle success'></i><h2 class='success'>Successfully paid thru grabpay!</h2>";
 
 								## FAILED PAYING GCASH
 								} else if(isset($_GET['gcash']) && $_GET['gcash'] == 0) {
-									echo "<i class='far fa-times-circle error'></i><p class='error'>Error paying thru gcash!</p>";
+									echo "<i class='far fa-times-circle error'></i><h2 class='error'>Error paying thru gcash!</h2>";
 
 								## FAILED PAYING GRAB PAY
 								} else if(isset($_GET['grabpay']) && $_GET['grabpay'] == 0) {
-									echo "<i class='far fa-times-circle error'></i><p class='error'>Error paying thru grabpay!</p>";
+									echo "<i class='far fa-times-circle error'></i><h2 class='error'>Error paying thru grabpay!</h2>";
 
 								} else if(isset($_GET['paymaya'])){
-									echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru paymaya!</p>";
+									echo "<i class='far fa-check-circle success'></i><h2 class='success'>Successfully paid thru paymaya!</h2>";
 
 								} else if(isset($_GET['seven-eleven'])){
-									echo "<i class='far fa-check-circle success'></i><p class='success'>Successfully paid thru 7/11!</p>";
+									echo "<i class='far fa-check-circle success'></i><h2 class='success'>Successfully paid thru 7/11!</h2>";
 								}
 							?>
 
