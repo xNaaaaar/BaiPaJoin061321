@@ -84,12 +84,24 @@
 				<form method="post" >
 					<h2>Update Profile</h2>
 
-					<?php if(isset($_SESSION['organizer'])){ ?>
+				<?php if(isset($_SESSION['organizer']) && $_SESSION['verified'] == 1){ ?>
 					<div class="form form1">
 						<input type="text" name="txtCompName" value="<?php echo "{$_SESSION['company']}"; ?>" placeholder="Company Name" readonly required>
 						<input type="text" name="txtFirstname" value="<?php echo "{$_SESSION['fname']}"; ?>" placeholder="Firstname" readonly required>
 						<input type="text" name="txtLastname" value="<?php echo "{$_SESSION['lname']}"; ?>" placeholder="Lastname" readonly required>
 						<input type="text" name="txtMi" value="<?php echo "{$_SESSION['mi']}"; ?>" placeholder="Mi" maxlength="1" readonly required>
+						<input type="text" name="txtAddress" value="<?php echo "{$_SESSION['address']}"; ?>" placeholder="Address" required>
+						<input type="text" name="txtPhone" value="<?php echo "{$_SESSION['phone']}"; ?>" placeholder="0999XXXXXXX" maxlength="11" required>
+						<input type="email" name="emEmail" value="<?php echo "{$_SESSION['email']}"; ?>" placeholder="Email Address" required>
+					</div>
+					<button class="edit" type="submit" name="btnSaveOrganizer">Save</button>
+
+				<?php } elseif(isset($_SESSION['organizer']) && $_SESSION['verified'] == 0) { ?>
+					<div class="form form1">
+						<input type="text" name="txtCompName" value="<?php echo "{$_SESSION['company']}"; ?>" placeholder="Company Name" required>
+						<input type="text" name="txtFirstname" value="<?php echo "{$_SESSION['fname']}"; ?>" placeholder="Firstname" required>
+						<input type="text" name="txtLastname" value="<?php echo "{$_SESSION['lname']}"; ?>" placeholder="Lastname" required>
+						<input type="text" name="txtMi" value="<?php echo "{$_SESSION['mi']}"; ?>" placeholder="Mi" maxlength="1" required>
 						<input type="text" name="txtAddress" value="<?php echo "{$_SESSION['address']}"; ?>" placeholder="Address" required>
 						<input type="text" name="txtPhone" value="<?php echo "{$_SESSION['phone']}"; ?>" placeholder="0999XXXXXXX" maxlength="11" required>
 						<input type="email" name="emEmail" value="<?php echo "{$_SESSION['email']}"; ?>" placeholder="Email Address" required>
