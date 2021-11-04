@@ -765,7 +765,13 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 			$favorite_adv = get_most_favorite_adventure();
 			$best_seller_adv = get_best_seller_adventure();
 			$popular_adv = get_most_popular_adventure();
-			//$highest_rating_adv = get_highest_rating_adventure();
+			$highest_rating_adv = 0;
+
+			## GETTING THE HIGHEST RATINGS
+			foreach($card as $result){
+				$highest_rate = adv_ratings($result['adv_id'], true);
+				($highest_rating_adv < $highest_rate) ? $highest_rating_adv = $highest_rate: $highest_rating_adv = $highest_rating_adv;
+			}
 
 			foreach($card as $result){
 				$remainingGuestsText = "";
@@ -792,8 +798,13 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					<a class='card-link' href='place.php?id=".$result['adv_id']."'>
 					<div class='card'>
 						<div class='label'>";
+							## EACH ADV RATINGS
+							$rate = adv_ratings($result['adv_id'], true);
 							// background:#4a934a; GREEN
 							$discount = get_voucher_discount($result['adv_id']);
+							if($highest_rating_adv > 0 && $highest_rating_adv == $rate){
+								echo "<span style='min-width:170px;background:#4a934a;'>HIGHEST RATINGS</span>";
+							}
 							if($discount != -1){
 								echo "<span style='min-width:90px;'>".$discount."% OFF</span>";
 							}
@@ -815,7 +826,6 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						<em> on ".date("F j, Y", strtotime($result['adv_date']))."</em>
 						<h2>".$result['adv_name']." - ".$result['adv_kind']." (".$result['adv_type'].") <span>";
 							## RATINGS
-							$rate = adv_ratings($result['adv_id'], true);
 							if($rate == 0) echo $rate;
 							else echo number_format($rate,1,".","");
 							echo " <i class='fas fa-star'></i> ";
@@ -858,6 +868,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					##
 					echo "
 						</ul>
+						<a href='place.php?id=".$result['adv_id']."' class='edit'>View Adventure</a>
 						<a href='adventures-request.php?adv_id=".$result['adv_id']."' class='edit' onclick='return confirm(\"Confirm request a date for this adventure?\")'>Request Adventure Date</a>
 					</div>
 					</a>
@@ -1089,7 +1100,7 @@ function deleteSQLDataTable($table, $id, $status = NULL){
 
 		## DELETE WHEN JOINER USES BACK BUTTON FROM book-guest.php TO book.php
 		} elseif($status == "pending") {
-			DB::query("DELETE FROM {$table} WHERE book_id=? AND book_status=?", array($id, "pending"), 'DELETE');
+			DB::query("DELETE FROM {$table} WHERE book_id=? AND book_status=?", array($id, $status), 'DELETE');
 
 		## TBD
 		} else {
@@ -1133,7 +1144,7 @@ function postAdventure(){
 	}
 	else {
 		if($cboType == "Not Packaged") $numMaxGuests = 1;
-		
+
 		$fileDosDontsImg = uploadImage('fileDosDontsImg', "images/organizers/".$_SESSION['organizer']."/");
 		$fileItineraryImg = uploadImage('fileItineraryImg', "images/organizers/".$_SESSION['organizer']."/");
 		$fileAdvImgs = uploadMultipleImages('fileAdvImgs', "images/organizers/".$_SESSION['organizer']."/");

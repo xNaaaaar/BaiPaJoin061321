@@ -30,28 +30,24 @@
 		.sidebar ul li a:hover{color:#bf127a;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+		main .edit{width:300px;}
 
 		.sub-breadcrumbs{text-align:right;margin-bottom:30px;}
 		.sub-breadcrumbs li{display:inline;margin-left:10px;color:gray;}
 		.sub-breadcrumbs li span{margin-left:10px;}
 		.ongoing{color:#000 !important;}
 		.success{color:#5cb85c !important;}
+		.error{color:red;}
 
-		.booking_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
-		.booking_details h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
+		.card-contents{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;background:#fff;}
+
+		.booking_details h2{margin:0 0 20px;font:500 30px/100% Montserrat,sans-serif;}
 		.booking_details h2 em{display:block;font-size:20px;color:gray;}
 		.booking_details ul li span{color:red;}
 
-		.payment_method{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
-		.payment_method h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
-		.payment_method h2 span{margin:0 0 0 20px;}
-		.payment_method input{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
-		.payment_method label span{color:red;}
-
-		.price_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
-		.price_details h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
+		.price_details h2{margin:0 0 20px;font:500 30px/100% Montserrat,sans-serif;}
 		.price_details ul li{list-style:circle;margin:0 0 10px 22px;}
+		.price_details p{width:100% !important;}
 		.price_details section{position:relative;}
 		.price_details section:before{content:"";width:100%;height:2px;background:#cfcfcf;position:absolute;bottom:50px;right:0;}
 		.price_details section table{width:100%;}
@@ -59,11 +55,26 @@
 		.price_details section table tr:last-child td{padding:40px 0 0;}
 		.price_details section table tr td:last-child{text-align:right;width:30%;}
 
-		main .edit{width:350px;}
-
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
 			main{padding:50px 0 0 25px;}
+		}
+		/*RESPONSIVE*/
+		@media only screen and (max-width:800px) {
+			main .edit{width:49%;}
+		}
+		@media only screen and (max-width:600px) {
+			main .edit{width:100%;margin:5px auto;}
+
+			.voucher section{display:block;}
+			.voucher input{display:block;width:100%;}
+			.voucher .edit{width:99.5% !important;}
+		}
+		@media only screen and (max-width:500px){
+			.card-contents{padding:20px;}
+			.payment_method h2 span{margin:0;display:inline-block;}
+			.price_details section table tbody{font-size:15px;}
+			.price_details section table tr td{width:50%!important;}
 		}
 	</style>
 
@@ -130,7 +141,7 @@
 				<form method="post">
 					<h2>Payment</h2>
 
-					<div class="booking_details">
+					<div class="booking_details card-contents">
 						<h2>
 							<?php
 							echo $joiner['joiner_fname']." ".$joiner['joiner_mi'].". ".$joiner['joiner_lname'];
@@ -157,7 +168,7 @@
 					## IMPORTANT NOTICE
 					include("includes/notice.php");
 					?>
-					<div class="price_details">
+					<div class="price_details card-contents">
 						<h2>Price Details</h2>
 						<section>
 							<table>
@@ -167,7 +178,7 @@
 								</tr>
 								<tr>
 									<td>Fees</td>
-									<td>₱ <?php echo number_format($price_fee, 2, '.', ''); ?></td>
+									<td class="error">₱ <?php echo number_format($price_fee, 2, '.', ''); ?></td>
 								</tr>
 								<tr>
 									<td>Total Price</td>
@@ -178,6 +189,7 @@
 					</div>
 
 					<button class="edit" type="submit" name="btnGrabPayEWallet">Pay with GrabPay</button>
+					<a class="edit" href="reports_booking.php?countdown" onclick='return confirm("You will be given 1hour to pay this booking!");'>Pay Later</a>
 
 					<?php
 						if(isset($_POST['btnGrabPayEWallet'])) {

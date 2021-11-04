@@ -39,6 +39,9 @@
 			.card .fa-quote-left{margin:20px 0 0;}
 			.card p{margin:0 0 20px;}
 		}
+		@media only screen and (max-width:500px){
+			.card figure{height:150px;}
+		}
 	</style>
 
 	<!--?php wp_head(); ?-->

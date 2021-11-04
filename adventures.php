@@ -73,6 +73,9 @@
 		a.pagingCurrent:visited {color:#bf127a;}
 		a.pagingCurrent:hover {background: wheat; font-weight:bold; color: none;}
 
+		@media only screen and (max-width:1200px){
+			.edit{width:48% !important;font-size:16px !important;}
+		}
 		@media only screen and (max-width:1000px){
 			.sidebar ul li h3{font-size:23px;}
 
@@ -84,7 +87,7 @@
       .card figure{width:100%;position:static;}
       .card p:last-of-type{font-size:25px;margin:0;}
 
-			.edit{width:100% !important;}
+			.edit{width:100% !important;margin:8px auto!important;}
 		}
 		@media only screen and (max-width:800px){
 			.card{width:100%;margin:25px auto;display:block;}
@@ -94,7 +97,7 @@
 			input[type="checkbox"]{width:18px!important;}
 		}
 		@media only screen and (max-width:500px){
-			.edit{font-size:12px !important;}
+			.edit{font-size:14px !important;}
 		}
 	</style>
 

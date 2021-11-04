@@ -16,10 +16,7 @@
 
 		/* Main Area */
 		main{width:100%;flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0;border-radius:0;text-align:center;position:relative;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
-		main h3{font:600 20px/100% Montserrat,sans-serif;color:red;margin:0 0 10px;text-align:left;}
-		main input[type="checkbox"]{position:absolute;bottom:150px;left:0;}
-		main span{position:absolute;bottom:145px;left:25px;}
+		main h3{text-align:left;}
 
 		input{width:99.6%;}
 
@@ -32,7 +29,25 @@
 		.form2 input:nth-of-type(2){width:75.6%;}
 		.form2 input:nth-of-type(3){width:23.6%;}
 
-		.edit{margin:60px auto 15px !important;}
+		.form5{position:relative;min-height:40px;}
+		.form5 input[type="checkbox"]{display:inline-block;}
+
+		/* RESPONSIVE DESIGN */
+		@media only screen and (max-width:1000px){
+			.form1 input:nth-of-type(1){width:48.5%;}
+			.form1 input:nth-of-type(5){width:32.7%;}
+		}
+		@media only screen and (max-width:800px){
+			.form1 input:nth-of-type(1){width:47.5%;}
+			.form1 input:nth-of-type(5){width:32%;}
+			.form2 input:nth-of-type(2){width:75%;}
+		}
+		@media only screen and (max-width:600px){
+			.form5 input[type="checkbox"]{width:18px !important;}
+		}
+		@media only screen and (max-width:500px){
+			.edit{width:48% !important;}
+		}
 	</style>
 
 	<!--?php wp_head(); ?-->
@@ -104,8 +119,10 @@
 						<input type="file" name="fileValidID2" required>
 					</div>
 
-					<input type="checkbox" required>
-					<span>By checking this box, all information is correct and is covered in <a href="https://www.privacy.gov.ph/data-privacy-act/" target="_blank">Data Privacy Act of 2012</a>, read and understood <a href="terms.php" target="_blank">Terms & Conditions</a></span>
+					<div class="form form5">
+						<input type="checkbox" required>
+						<span>By checking this box, all information is correct and is covered in <a href="https://www.privacy.gov.ph/data-privacy-act/" target="_blank">Data Privacy Act of 2012</a>, read and understood <a href="terms.php" target="_blank">Terms & Conditions</a></span>
+					</div>
 
 					<button class="edit" type="submit" name="btnSubmit">Submit</button>
 					<a class="edit" href="place.php?id=<?php echo $_GET['adv_id']; ?>">Back</a>

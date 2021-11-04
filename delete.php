@@ -29,7 +29,7 @@
 		}
 		else if($_GET['table'] == 'booking'){
 			// DELETE TABLE IN BOOKING
-			deleteSQLDataTable($_GET['table'], $_GET['id']);
+			deleteSQLDataTable($_GET['table'], $_GET['id'], "pending");
 			//
 			header("Location: book.php?id={$_GET['adv']}");
 		}

@@ -30,7 +30,7 @@
 		.sidebar ul li a:hover{color:#bf127a;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
+		main .edit{width:300px;}
 
 		.sub-breadcrumbs{text-align:right;margin-bottom:30px;}
 		.sub-breadcrumbs li{display:inline;margin-left:10px;color:gray;}
@@ -39,29 +39,28 @@
 		.success{color:#5cb85c !important;}
 		.error{color:red;}
 
-		.booking_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
-		.booking_details h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
+		.card-contents{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;background:#fff;}
+
+		.booking_details h2{margin:0 0 20px;font:500 30px/100% Montserrat,sans-serif;}
 		.booking_details h2 em{display:block;font-size:20px;color:gray;}
 		.booking_details ul li span{color:red;}
 
-		.payment_method{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
-		.payment_method h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
+		.payment_method h2{margin:0 0 20px;font:500 30px/100% Montserrat,sans-serif;}
 		.payment_method h2 span{margin:0 0 0 20px;}
 		.payment_method input{margin:0 auto 10px;}
 		.payment_method label span{color:red;}
 
-		.voucher{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
-		.voucher h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
-		.voucher h2 span{color:gray;font-size:25px;}
+		.voucher h2{margin:0 0 20px;font:500 30px/100% Montserrat,sans-serif;}
+		.voucher h2 span{color:gray;font-size:20px;display:inline-block;}
 		.voucher p{margin:0 0 5px 5px;width:100%;}
 		.voucher .error{color:red;}
 		.voucher section{display:flex;justify-content:space-between;}
 		.voucher input{display:inline-block;width:80%;margin:0 auto;}
 		.voucher .edit{width:18% !important;margin:0 auto;}
 
-		.price_details{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;text-align:left;}
-		.price_details h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
+		.price_details h2{margin:0 0 20px;font:500 30px/100% Montserrat,sans-serif;}
 		.price_details ul li{list-style:circle;margin:0 0 10px 22px;}
+		.price_details p{width:100% !important;}
 		.price_details section{position:relative;}
 		.price_details section:before{content:"";width:100%;height:2px;background:#cfcfcf;position:absolute;bottom:50px;right:0;}
 		.price_details section table{width:100%;}
@@ -69,11 +68,26 @@
 		.price_details section table tr:last-child td{padding:40px 0 0;}
 		.price_details section table tr td:last-child{text-align:right;width:30%;}
 
-		main .edit{width:350px;}
-
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
 			main{padding:50px 0 0 25px;}
+		}
+		/*RESPONSIVE*/
+		@media only screen and (max-width:800px) {
+			main .edit{width:49%;}
+		}
+		@media only screen and (max-width:600px) {
+			main .edit{width:100%;margin:5px auto;}
+
+			.voucher section{display:block;}
+			.voucher input{display:block;width:100%;}
+			.voucher .edit{width:99.5% !important;}
+		}
+		@media only screen and (max-width:500px){
+			.card-contents{padding:20px;}
+			.payment_method h2 span{margin:0;display:inline-block;}
+			.price_details section table tbody{font-size:15px;}
+			.price_details section table tr td{width:50%!important;}
 		}
 	</style>
 
@@ -140,7 +154,7 @@
 				<?php //echo $_SESSION['book_id']; ?>
 				<h2>Payment</h2>
 				<!-- BOOKING DETAILS SECTION -->
-				<div class="booking_details">
+				<div class="booking_details card-contents">
 					<h2>
 						<?php
 						echo $joiner['joiner_fname']." ".$joiner['joiner_mi'].". ".$joiner['joiner_lname'];
@@ -164,8 +178,8 @@
 					</ul>
 				</div>
 				<!-- VOUCHER SECTION -->
-				<div class="voucher">
-					<h2>Add Voucher <span><a href="voucher.php?adv_id=<?php echo $adv[0]; ?>&adv_org=<?php echo $adv[15]; ?>&booking_total=<?php echo $final_price; ?>" target="_blank" >look for voucher</a></span> </h2>
+				<div class="voucher card-contents">
+					<h2>Add Voucher <span><a href="voucher.php?adv_id=<?php echo $adv[0]; ?>&adv_org=<?php echo $adv[15]; ?>&booking_total=<?php echo $final_price; ?>" target="_blank" >view vouchers &#187;</a></span> </h2>
 
 					<?php
 					if(isset($_POST['btnVerify'])){
@@ -211,7 +225,7 @@
 				</div>
 
 				<form method="post">
-					<div class="payment_method">
+					<div class="payment_method card-contents">
 						<h2>Gcash</h2>
 						<label>Gcash name <span>*</span> </label>
 						<input type="text" name="gcash_name" placeholder="Account name" required>
@@ -224,7 +238,7 @@
 					## IMPORTANT NOTICE
 					include("includes/notice.php");
 					?>
-					<div class="price_details">
+					<div class="price_details card-contents">
 						<h2>Price Details</h2>
 						<section>
 							<table>
@@ -257,6 +271,7 @@
 					</div>
 
 					<button class="edit" type="submit" name="btnGCashEWallet">Pay with Gcash</button>
+					<a class="edit" href="reports_booking.php?countdown" onclick='return confirm("You will be given 1hour to pay this booking!");'>Pay Later</a>
 
 					<?php
 						if(isset($_POST['btnGCashEWallet'])) {

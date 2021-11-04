@@ -145,6 +145,16 @@ $(document).ready(function(){
 		// End (AddThis) Plugins
 		/*uncomment if banner is parallax*/
 		/*$('.box_skitter').css('top', windowScroll * .21 + "px");*/
+
+		// Fixed Sidebar
+		var $el = $('.fixedElement'); 
+	  var isPositionFixed = ($el.css('position') == 'fixed');
+	  if(windowScroll > 200 && !isPositionFixed){
+	    $el.css({'position': 'fixed', 'top': '0px'});
+	  }
+	  if(windowScroll < 200 && isPositionFixed){
+	    $el.css({'position': 'static', 'top': '0px'});
+	  }
 	});
 
 	new WOW().init();

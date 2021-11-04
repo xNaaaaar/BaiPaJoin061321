@@ -1,4 +1,4 @@
-<div class="price_details">
+<div class="price_details card-contents">
 	<h2 style='color:red;'>Important Notes:</h2>
 	<ul>
 		<li>Cards payments are processed and verified by our payment gateway (Paymongo Philippines). All payments are subject to fees and other service related charges like any other forms of online payment.</li>

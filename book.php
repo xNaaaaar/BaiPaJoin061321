@@ -32,26 +32,22 @@
 
 		.main_info section, .weather{min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:10px;padding:30px;line-height:35px;margin:25px auto;border:1px solid #cfcfcf;}
 		.main_info h1{font:600 45px/100% Montserrat,sans-serif;text-align:left;margin:0 0 20px;}
-		.main_info h2{margin:0 0 20px;font:500 35px/100% Montserrat,sans-serif;}
+		.main_info h2{margin:0 0 20px;font:500 30px/100% Montserrat,sans-serif;}
 		.main_info ul{text-align:left;font-size:20px;}
 		.main_info form{margin-bottom:40px;position:relative;}
 		.main_info form label{float:left;margin-left:5px;}
 		.main_info form label span{color:red;}
-		.main_info form input, .main_info form select{display:inline-block;width:99%;height:60px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:50px;font:normal 18px/20px Montserrat,sans-serif;padding:0 30px;margin:0 auto 15px;border:1px solid #cfcfcf;}
 		.main_info form button, .main_info form a{margin:15px 5px 0 0;}
 
 		.side_info{width:35%;position:absolute;right:0;}
 
-		.weather{margin:70px auto 25px;border:none;min-height:100px;padding:20px;}
-		.weather ul{display:flex;justify-content:space-between;text-align:left;color:#fff;font:600 30px/100% Montserrat,sans-serif;}
-		.weather ul li{width:33%;position:relative;}
-		.weather ul li:first-child:before{content:"";height:80%;width:2px;background:#fff;position:absolute;top:50%;right:11px;transform:translateY(-50%);}
-		.weather ul li:first-child{padding:13px 0 0;}
-		.weather ul li:first-child span{font-size:70px;margin-top:30px;}
-		.weather ul li:nth-child(2){width:36%;font-size:18px;padding:35px 0 0 0px;}
-		.weather ul li:last-child{width:28%;}
-		.weather ul li span{display:block;}
-		.weather ul li img{width:100%;}
+		.weather{margin:70px auto 25px;border:none;max-width:100%;min-height:100px;padding:20px 20px 30px;position:relative;display:flex;justify-content:space-between;text-align:left;color:#fff;font:600 30px/100% Montserrat,sans-serif;}
+		.weather figure{position:absolute;top:50%;right:10px;transform:translateY(-50%);}
+		.weather h2:before{content:"";height:80%;width:2px;background:#fff;position:absolute;top:50%;right:-20px;transform:translateY(-50%);}
+		.weather h2{display:inline-block;margin:0 40px 0 0;color:#fff;position:relative;}
+		.weather h2 span{display:block;font-size:70px;margin:10px 0 0;}
+		.weather p{display:inline-block;font-size:18px;margin:15px 0 0;}
+		.weather p span{display:block;}
 
 		.book_info{text-align:left;height:auto;min-height:0;margin:0;width:100%;}
 		.book_info figure img{width:100%;height:200px;border-radius:10px;}
@@ -62,6 +58,29 @@
 	  .book_info .title_info1 li address{display:inline-block;}
 	  .book_info p{margin:5px 0 0;font:600 25px/100% Montserrat,sans-serif;color:gray;display:block;}
 	  .book_info section:last-child p{font:400 18px/30px Montserrat,sans-serif;}
+
+		/* RESPONSIVE DESIGN */
+		@media only screen and (max-width:1400px){
+			.place_info{min-height:940px;}
+			.main_info{padding-right:30px;}
+			.side_info{right:10px;}
+		}
+		@media only screen and (max-width:1000px){
+			main{padding:50px 0 0;}
+
+			.side_info{width:99%;position:static;}
+			.book_info{margin:0 auto 40px;}
+			.book_info div{background:#fff;}
+
+			.place_info{min-height:0;}
+			.main_info{padding:0;}
+			.main_info section{background:#fff;}
+		}
+		@media only screen and (max-width:500px){
+			.main_info ul{font-size:18px;}
+			.edit{width:48% !important;}
+			.main_info form button, .main_info form a{margin:0 auto;}
+		}
 	</style>
 
 	<!--?php wp_head(); ?-->
@@ -130,14 +149,13 @@
 						<div class="weather" style="<?php echo $style; ?>">
 							<?php
 								echo "
-								<ul>
-									<li>".$weather['weather'][0]['main']." <span>".ceil($weather['main']['temp'])."°</span></li>
-									<li>".date("F j")." <span><i class='fas fa-map-marker-alt'></i> ".$adv[6]."</span></li>
-									<li><img src='http://openweathermap.org/img/wn/{$weather['weather'][0]['icon']}@2x.png'></li>
-								</ul>
+								<figure>
+									<img src='http://openweathermap.org/img/wn/{$weather['weather'][0]['icon']}@2x.png' alt='".$weather['weather'][0]['main']."'>
+								</figure>
+								<h2>".$weather['weather'][0]['main']."<span>".ceil($weather['main']['temp'])."°</span></h2>
+								<p>".date("F j")." <span><i class='fas fa-map-marker-alt'></i> ".$adv[6]."</span></p>
 								";
 							?>
-
 						</div>
 						<!-- BOOKED INFORMATION -->
 						<div class="book_info">
@@ -214,8 +232,6 @@
 							<a href="place.php?id=<?php echo $_GET['id']; ?>" class="edit">Back</a>
 						</form>
 					</div>
-
-
 				</div>
 			</main>
 			<?php
