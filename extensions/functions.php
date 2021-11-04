@@ -1932,7 +1932,7 @@ function process_paymaya_payment($amount,$book_id) {
 	    "value": "'.$amount.'"
 	  },
 	  "redirectUrl": {
-	    "success": "http://paymaya.com",
+	    "success": "http://localhost/BaiPaJoin42/thankyou.php?paymaya",
 	    "failure": "http://facebook.com",
 	    "cancel": "http://shop.someserver.com/cancel?id=6319921"
 	  },
@@ -1971,7 +1971,7 @@ function process_paymaya_payment($amount,$book_id) {
 ##### CODE START HERE 7-CONNECT API #####
 function process_sevenconnect_payment($amount,$book_id) {
 
-	$address = "https://testpay.cliqq.net/transact?merchantID=ATI&merchantRef=6419705015&expDate=20210910235900&amount=".$amount."&successURL=https://google.com&failURL=https://github.com/philseven/cliqq-pay/blob/master/docs/index.md%23request-parameters-1&token=235a23122139152ff830aa7fa1a876a95d4e365b&transactionDescription=Booking Payment for booking id ".$book_id." thru Team BaiPaJoin Cebu&receiptRemarks=Team BaiPaJoin|5th floor, UC-Main Building, Sangciangko St., Cebu City.|Call 0923-968-8932 for questions&email=salvador.alexis01@gmail.com&phone=09239688932&payLoad=https://54e8-49-145-165-0.ngrok.io/api_test/7Connect_payload.ph&returnPaymentDetails=Y";
+	$address = "https://testpay.cliqq.net/transact?merchantID=ATI&merchantRef=6419705015&expDate=20210910235900&amount=".$amount."&successURL=http://localhost/BaiPaJoin42/thankyou.php?seven-eleven&failURL=https://github.com/philseven/cliqq-pay/blob/master/docs/index.md%23request-parameters-1&token=235a23122139152ff830aa7fa1a876a95d4e365b&transactionDescription=Booking Payment for booking id ".$book_id." thru Team BaiPaJoin Cebu&receiptRemarks=Team BaiPaJoin|5th floor, UC-Main Building, Sangciangko St., Cebu City.|Call 0923-968-8932 for questions&email=salvador.alexis01@gmail.com&phone=09239688932&payLoad=https://54e8-49-145-165-0.ngrok.io/api_test/7Connect_payload.ph&returnPaymentDetails=Y";
 
 	$redirect = "Location: " . $address."";
 	header($redirect);
@@ -2214,7 +2214,7 @@ function facebook_graph_api($type) {
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
-    $fb_access_token = 'EAA8IHfsXftcBAHumtFmKeT8igVmo7D8YsB7dhGkJXS6JyZCcpluBeWUEsaGomqkh4pnLZBZCiHgOTrGTZBqZBClv6SWjrScvXGMZCHT3g2N1TIJduidkcWCTwfx3xlZAIydsQ1eZCkHS9b2aHZAck7ETnLMZCwotzYgivZAL7udWgdghAzrEKsA7gZA0cIC3BVmVZBhrgHfgiqgGr4lDpZAP3o4BfK';
+    $fb_access_token = 'EAA8IHfsXftcBALcCr7UpMzjEZB0rD8IsdZBbS9JgfZBr5172lVku8QZA21o2VxwJmKcacdlVMqwYpd682Dci2nBywZCcNIgcXnuuItSnZAAUZB99x33O80GLHOI32WezYXh4bviBwpz4Cfqped3CrSrOpEXju3RDdvtvsEaVNN9CCDOmBlQeb0hChEzOvthIP3ZCjc1Rb74fDQ4i6CCxHevD';
 
 	if($type == 'videos')
     	$query = 'https://graph.facebook.com/v12.0/100306372435763/videos?access_token='.$fb_access_token.'';
@@ -2259,7 +2259,7 @@ function get_facebook_media_id($id) {
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
-    $fb_access_token = 'EAA8IHfsXftcBAHumtFmKeT8igVmo7D8YsB7dhGkJXS6JyZCcpluBeWUEsaGomqkh4pnLZBZCiHgOTrGTZBqZBClv6SWjrScvXGMZCHT3g2N1TIJduidkcWCTwfx3xlZAIydsQ1eZCkHS9b2aHZAck7ETnLMZCwotzYgivZAL7udWgdghAzrEKsA7gZA0cIC3BVmVZBhrgHfgiqgGr4lDpZAP3o4BfK';
+    $fb_access_token = 'EAA8IHfsXftcBALcCr7UpMzjEZB0rD8IsdZBbS9JgfZBr5172lVku8QZA21o2VxwJmKcacdlVMqwYpd682Dci2nBywZCcNIgcXnuuItSnZAAUZB99x33O80GLHOI32WezYXh4bviBwpz4Cfqped3CrSrOpEXju3RDdvtvsEaVNN9CCDOmBlQeb0hChEzOvthIP3ZCjc1Rb74fDQ4i6CCxHevD';
 
 	$query = 'https://graph.facebook.com/v12.0/'.$id.'/attachments?access_token='.$fb_access_token.'';
 
