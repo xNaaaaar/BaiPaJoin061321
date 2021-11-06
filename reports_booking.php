@@ -264,7 +264,6 @@
 													echo "<td><a href='' onclick='return confirm(\"Sorry! There is no available adventure for you to reschedule!\");'>resched</a></td>";
 												} else echo "<td></td>";
 
-
 											##
 											} else {
 												## THIS ADV CAN BE RESCHED IF AVAILABLE && NOT REVERTED
@@ -299,7 +298,7 @@
 
 									## CANCELABLE DATE
 									} else {
-										echo "<td><a href='reports_booking-cancel.php?book_id=".$result['book_id']."' onclick='return confirm(\"Are you sure you want to request cancelation for this adventure? BaiPaJoin deducts 30% cancelation fee for the total price you paid (excludes the fee)\");'>cancel</a></td>";
+										echo "<td><a href='reports_booking-cancel.php?book_id=".$result['book_id']."' onclick='return confirm(\"Are you sure you want to request cancelation for this adventure? BaiPaJoin deducts 3% cancelation fee for the total price you paid (excludes the fee)\");'>cancel</a></td>";
 									}
 									echo "<td><a href='reports_booking-view.php?book_id=".$result['book_id']."' onclick='return confirm(\"View receipt?\");'>view</a></td>";
 								} else {

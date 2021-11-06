@@ -20,10 +20,17 @@
 		.sidebar ul ul{height:auto;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
+		main h2{margin-bottom:30px;}
+		main textarea{height:150px;padding:15px;}
+
+		.edit{margin:15px 5px !important;}
 
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
 			main{padding:50px 0 0 25px;}
+		}
+		@media only screen and (max-width:500px) {
+			.edit{width:100% !important;margin:8px auto !important;}
 		}
 	</style>
 

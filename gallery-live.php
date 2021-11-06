@@ -18,7 +18,7 @@
 		main h3{font-size:30px;color:#313131;margin-bottom:10px;}
 
 		.images{height:auto;}
-	  .images iframe{min-height:1000px;}
+	  .images iframe{min-height:600px;}
 	  .images img{width:100%;}
 	</style>
 

@@ -23,7 +23,7 @@
 		.sidebar ul ul{height:auto;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:30px;text-align:left;}
+		main h2{margin-bottom:30px;}
 
 		.card{width:100%;min-height:200px;position:relative;box-shadow:10px 10px 10px -5px #cfcfcf;border-radius:20px;padding:30px 30px 30px 215px;line-height:35px;text-align:left;margin:25px auto;border:1px solid #cfcfcf;}
 		.card:hover{border:1px solid #bf127a;}
@@ -39,11 +39,14 @@
 		.card h2 span i{color:#ffac33;}
 		.card p{font-size:23px;color:#989898;width:100% !important;margin:0 0 10px 2px;}
 		.card p:last-of-type{color:#111;font-size:30px;font-weight:500;margin:0 0 0 2px;}
-		.card .edit{width:320px;margin:15px auto 0;}
+		/* .card .edit{width:200px;margin:15px auto 0;} */
 
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
 			main{padding:50px 0 0 25px;}
+		}
+		@media only screen and (max-width:500px){
+			.card .edit{width:100%;}
 		}
 	</style>
 
@@ -85,10 +88,16 @@
 					<?php
 					## AVAILABLE ADVENTURES
 					$adv = explode(",",$_GET['available']);
-					## DISPLAY ALL ADVENTURES THAT CAN BE RESCHEDULE
-					for($i=0;$i<count($adv);$i++){
-						$card = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($adv[$i]), "READ");
-						displayAll(5, $card, $_GET['book_id']);
+					if (count($adv)>0){
+						## DISPLAY ALL ADVENTURES THAT CAN BE RESCHEDULE
+						for($i=0;$i<count($adv);$i++){
+							$card = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($adv[$i]), "READ");
+							displayAll(5, $card, $_GET['book_id']);
+						}
+
+					## NO AVAIL ADVENTURES
+					} else {
+						echo "<h3>There is no available adventures to reschedules!</h3>";
 					}
 					?>
 

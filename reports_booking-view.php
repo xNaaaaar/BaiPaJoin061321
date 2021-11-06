@@ -22,18 +22,26 @@
 		.fa-ban{font-size:400px;color:red;position:absolute;top:100px;left:0;right:0;z-index:5;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;position:relative;}
-		main h1{font:600 45px/100% Montserrat,sans-serif;color:#313131;text-align:center;margin:-70px 0 0;}
-		main h2{font:600 30px/100% Montserrat,sans-serif;margin:15px 0;text-align:left;}
-		main figure{width:60%;margin:-40px auto 0;}
+		main h2{margin-bottom:30px;text-align:center;margin:-70px auto 0;}
+		main h3{color:#313131;font-size:30px;margin:0 0 10px;text-align:left;}
+		main figure{width:630px;max-width:100%;margin:-40px auto 0;}
 		main section{margin:50px 0 0;position:relative;}
 		main section:before{content:"";width:100%;height:3px;background:#7fdcd3;position:absolute;top:-25px;left:0;}
 		main ol{text-align:left;}
 		main table{width:100%;margin:0 auto 0;text-align:left;}
-		main table tr td{width:50%;line-height:25px;}
+		main table tr td{width:50%;line-height:25px !important;}
 
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
 			main{padding:50px 0 0 25px;}
+			main .scroll-table{min-height:125px !important;}
+			main .table-two{min-height:auto !important;}
+		}
+		@media only screen and (max-width:600px) {
+			main h2{margin:0 auto 25px;}
+			main h3{font-size:25px;text-align:center;}
+			main table tr td{padding-right:10px;}
+			main section{margin:25px 0 0;}
 		}
 	</style>
 
@@ -145,9 +153,9 @@
 				<figure>
 					<img src="images/receipt.jpg" alt="">
 				</figure>
-				<h1>Itinerary Receipt</h1>
-				<section>
-					<h2>Booking Details</h2>
+				<h2>Itinerary Receipt</h2>
+				<section class="scroll-table table-one">
+					<h3>Booking Details</h3>
 					<table>
 						<tr>
 							<td>Adventure Name</td>
@@ -167,8 +175,8 @@
 						</tr>
 					</table>
 				</section>
-				<section>
-					<h2>Guest Details</h2>
+				<section class="scroll-table table-two">
+					<h3>Guest Details</h3>
 					<ol>
 						<?php
 
@@ -200,8 +208,8 @@
 
 					</ol>
 				</section>
-				<section>
-					<h2>Payment Details</h2>
+				<section class="scroll-table table-three">
+					<h3>Payment Details</h3>
 					<table>
 						<tr>
 							<td>Payment ID</td>
@@ -239,8 +247,8 @@
 						</tr>
 					</table>
 				</section>
-				<section>
-					<h2>Billing Details</h2>
+				<section class="scroll-table table-four">
+					<h3>Billing Details</h3>
 					<table>
 						<tr>
 							<td>Name</td>

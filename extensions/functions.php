@@ -734,11 +734,11 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						$no_cancel_date = date("Y-m-d", strtotime("-10 days", strtotime($result['adv_date'])));
 						## CHECK IF CURRENT DAY IS NOT 10DAYS BVEFORE ADV
 						if(date("Y-m-d") > $no_cancel_date) {
-							echo "<a class='edit' href='' onclick='return confirm(\"You cannot resched this adventure because it is happening in a few days!\");'>Reschedule to this adventure</a>";
+							echo "<a class='edit' href='' onclick='return confirm(\"You cannot resched this adventure because it is happening in a few days!\");'>Reschedule</a>";
 
 						## ADV AVAILABLE TO RESCHED
 						} else {
-							echo "<a class='edit' href='reports_resched.php?adv_id=".$result['adv_id']."&book_id=".$book_id."' onclick='return confirm(\"You can only resched this adventure once. Are you sure you want to reschedule?\");'>Reschedule to this adventure</a>";
+							echo "<a class='edit' href='reports_resched.php?adv_id=".$result['adv_id']."&book_id=".$book_id."' onclick='return confirm(\"You can only resched this adventure once. Are you sure you want to reschedule?\");'>Reschedule</a>";
 						}
 					}
 					##
@@ -2225,7 +2225,7 @@ function facebook_graph_api($type) {
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
-    $fb_access_token = 'EAA8IHfsXftcBALcCr7UpMzjEZB0rD8IsdZBbS9JgfZBr5172lVku8QZA21o2VxwJmKcacdlVMqwYpd682Dci2nBywZCcNIgcXnuuItSnZAAUZB99x33O80GLHOI32WezYXh4bviBwpz4Cfqped3CrSrOpEXju3RDdvtvsEaVNN9CCDOmBlQeb0hChEzOvthIP3ZCjc1Rb74fDQ4i6CCxHevD';
+    $fb_access_token = 'EAA8IHfsXftcBAN7nTwNZBZA2DRRw7gIygEzgdhzQpZCd2yOBWWGhiG6B0ryZCoZAhzixT5g4q3R2I0khX49jJ69GbkD1k6xZChUOsxUz22zTqXU3Wm3ZCzTnogCOVc2T8Ow0lMMStirvTUheQKvqyYEEy4fZBcfT81og1ZBtINDkBKrW7US6DTYwwdkjWFO7YDyi5GJLWx6GvLg0Qq1wXyXZAkPyqyxaxO0qcZD';
 
 	if($type == 'videos')
     	$query = 'https://graph.facebook.com/v12.0/100306372435763/videos?access_token='.$fb_access_token.'';
@@ -2270,7 +2270,7 @@ function get_facebook_media_id($id) {
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
-    $fb_access_token = 'EAA8IHfsXftcBALcCr7UpMzjEZB0rD8IsdZBbS9JgfZBr5172lVku8QZA21o2VxwJmKcacdlVMqwYpd682Dci2nBywZCcNIgcXnuuItSnZAAUZB99x33O80GLHOI32WezYXh4bviBwpz4Cfqped3CrSrOpEXju3RDdvtvsEaVNN9CCDOmBlQeb0hChEzOvthIP3ZCjc1Rb74fDQ4i6CCxHevD';
+    $fb_access_token = 'EAA8IHfsXftcBAN7nTwNZBZA2DRRw7gIygEzgdhzQpZCd2yOBWWGhiG6B0ryZCoZAhzixT5g4q3R2I0khX49jJ69GbkD1k6xZChUOsxUz22zTqXU3Wm3ZCzTnogCOVc2T8Ow0lMMStirvTUheQKvqyYEEy4fZBcfT81og1ZBtINDkBKrW7US6DTYwwdkjWFO7YDyi5GJLWx6GvLg0Qq1wXyXZAkPyqyxaxO0qcZD';
 
 	$query = 'https://graph.facebook.com/v12.0/'.$id.'/attachments?access_token='.$fb_access_token.'';
 

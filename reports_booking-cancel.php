@@ -20,14 +20,17 @@
 		.sidebar ul ul{height:auto;}
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
-		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:30px;text-align:left;}
-		main textarea{display:inline-block;width:99%;height:150px;border:none;box-shadow:10px 10px 10px -5px #cfcfcf;outline:none;border-radius:10px;font:normal 18px/20px Montserrat,sans-serif;padding:20px;margin:0 auto 15px;border:1px solid #cfcfcf;resize:none;}
+		main h2{margin-bottom:30px;}
+		main textarea{height:150px;padding:15px;}
 
 		.edit{margin:15px 5px !important;}
 
 		/*RESPONSIVE*/
 		@media only screen and (max-width:1000px) {
 			main{padding:50px 0 0 25px;}
+		}
+		@media only screen and (max-width:500px) {
+			.edit{width:100% !important;margin:8px auto !important;}
 		}
 	</style>
 

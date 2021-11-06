@@ -43,19 +43,15 @@ html, body{height:100%;}
 
 main{flex:4;float:none;height:100%;background:none;margin:0;padding:50px 50px 0;border-radius:0;text-align:center;}
 main h1{text-align:right;font-size:20px;}
-main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin:15px 0;text-align:left;}
-main h2 span{font-size:30px;}
-main h2 span a:hover, main a:hover{color:#313131;text-decoration:none;}
-main h3{font:600 30px/100% Montserrat,sans-serif;;margin-bottom:10px;text-align:left;}
+main h2{margin:15px 0;}
+main h3{color:#313131;}
 
 main .contents{display:flex;justify-content:space-between;margin:30px 0 0;}
 
 main .admins{height:auto;width:100%;}
-main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;border-radius:0;vertical-align:top;margin:30px 5px;}
 
 /* Responsive Design */
 @media only screen and (max-width: 1800px) {
-	.main_con{min-height:0;}
 	main{height:100%;}
 }
 
@@ -63,12 +59,13 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
 	.main_con{padding:0;}
 	main .contents{display:block;}
 	main .admins{width:100%;}
-	main .forms{width:100%;display:flex;justify-content:space-between;margin:30px 0 0;}
-	main .forms form{width:48%;}
+
+	.sidebar ul{margin:35px 0 0;padding-left:10px;}
 }
 
 @media only screen and (max-width: 1200px){
-	.sidebar ul{margin:35px 0 0;}
+	main .admins{width:100%;clear:both;overflow-x:auto;}
+	main .admins table{min-width: rem-calc(640);}
 }
 
 @media only screen and (max-width: 1000px){
@@ -76,14 +73,11 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
 }
 
 @media only screen and (max-width: 800px){
-	main .forms{display:block;}
-	main .forms form{width:100%;}
+	main h1{font-size:20px !important;}
 }
 
-@media only screen and (max-width: 600px){
-	main input{font-size:15px;}
-	main .admins{width:100%;clear:both;overflow-x:auto;}
-	main .admins table{min-width: rem-calc(640);}
+@media only screen and (max-width: 500px){
+	.edit{width:100% !important;margin:8px auto !important;}
 }
 
 </style>
@@ -146,12 +140,12 @@ main .edit{width:150px;height:45px;font:normal 18px/45px Montserrat,sans-serif;b
 								?>
 								</tbody>
 							</table>
-							<form method="post">
-								<button class="edit" type="submit" name="btnVerify" onclick="return confirm('Are you sure you want to verify this organizer?');">Verify</button>
-								<button class="edit" type="submit" name="btnReturn" onclick="return confirm('Are you sure you want to return this documents to organizer?');">Return</button>
-								<a class="edit" href="admin-organizer.php">Back</a>
-							</form>
             </div>
+						<form method="post">
+							<button class="edit" type="submit" name="btnVerify" onclick="return confirm('Are you sure you want to verify this organizer?');">Verify</button>
+							<button class="edit" type="submit" name="btnReturn" onclick="return confirm('Are you sure you want to return this documents to organizer?');">Return</button>
+							<a class="edit" href="admin-organizer.php">Back</a>
+						</form>
           </div>
         </main>
       </div>
