@@ -64,7 +64,7 @@
 		.price_details section{position:relative;}
 		.price_details section:before{content:"";width:100%;height:2px;background:#cfcfcf;position:absolute;bottom:50px;right:0;}
 		.price_details section table{width:100%;}
-		.price_details section table tr td{width:70%;}
+		.price_details section table tr td{width:70%;line-height:25px !important;}
 		.price_details section table tr:last-child td{padding:40px 0 0;}
 		.price_details section table tr td:last-child{text-align:right;width:30%;}
 
@@ -182,39 +182,39 @@
 					<h2>Add Voucher <span><a href="voucher.php?adv_id=<?php echo $adv[0]; ?>&adv_org=<?php echo $adv[15]; ?>&booking_total=<?php echo $final_price; ?>" target="_blank" >view vouchers &#187;</a></span> </h2>
 
 					<?php
-					if(isset($_POST['btnVerify'])){
-						$voucher_code = trim($_POST['txtCode']);
-						# CHECK IF VOUCHER EXIST
-						$voucher_exist = DB::query("SELECT * FROM voucher WHERE vouch_code=?", array($voucher_code), "READ");
+						if(isset($_POST['btnVerify'])){
+							$voucher_code = trim($_POST['txtCode']);
+							# CHECK IF VOUCHER EXIST
+							$voucher_exist = DB::query("SELECT * FROM voucher WHERE vouch_code=?", array($voucher_code), "READ");
 
-						if(count($voucher_exist)>0){
-							$voucher_exist = $voucher_exist[0];
-							# CHECK IF VOUCHER EXPIRED
-							if($voucher_exist['vouch_enddate'] < date('Y-m-d')){
-								echo "<p class='error'>Voucher expired!</p>";
+							if(count($voucher_exist)>0){
+								$voucher_exist = $voucher_exist[0];
+								# CHECK IF VOUCHER EXPIRED
+								if($voucher_exist['vouch_enddate'] < date('Y-m-d')){
+									echo "<p class='error'>Voucher expired!</p>";
 
-							# CHECK IF VOUCHER MATCH THE SPECIFIC ADVENTURE
-							} elseif($voucher_exist['adv_id'] != $_GET['id']){
-								echo "<p class='error'>Cannot use voucher in this adventure!</p>";
+								# CHECK IF VOUCHER MATCH THE SPECIFIC ADVENTURE
+								} elseif($voucher_exist['adv_id'] != $_GET['id']){
+									echo "<p class='error'>Cannot use voucher in this adventure!</p>";
 
-							# CHECK IF VOUCHER MIN. SPEND ATTAINED BY SPECIFIC ADVENTURE PRICE
-							} elseif($voucher_exist['vouch_minspent'] > $booked['book_totalcosts']){
-								echo "<p class='error'>Not enough price to use this voucher!</p>";
+								# CHECK IF VOUCHER MIN. SPEND ATTAINED BY SPECIFIC ADVENTURE PRICE
+								} elseif($voucher_exist['vouch_minspent'] > $booked['book_totalcosts']){
+									echo "<p class='error'>Not enough price to use this voucher!</p>";
 
-							# SUCCESS
+								# SUCCESS
+								} else {
+									$discount = $booked['book_totalcosts'] * ($voucher_exist['vouch_discount']/100);
+									$_SESSION['discounted'] = $final_price - $discount;
+
+									# KEEP TRACK OF USED VOUCHER
+									$_SESSION['used_voucher_code'] = $voucher_exist['vouch_code'];
+
+									echo "<p class='success'>Voucher added successfully!</p>";
+								}
 							} else {
-								$discount = $booked['book_totalcosts'] * ($voucher_exist['vouch_discount']/100);
-								$final_price -= $discount;
-
-								# KEEP TRACK OF USED VOUCHER
-								$_SESSION['used_voucher_code'] = $voucher_exist['vouch_code'];
-
-								echo "<p class='success'>Voucher added successfully!</p>";
+								echo "<p class='error'>Voucher does not exist!</p>";
 							}
-						} else {
-							echo "<p class='error'>Voucher does not exist!</p>";
 						}
-					}
 					?>
 					<form method="post">
 						<section>
@@ -244,11 +244,11 @@
 							<table>
 								<tr>
 									<td><?php echo $adv['adv_name']." - ".$adv['adv_kind']." (".$adv['adv_type'].")"; ?></td>
-									<td>₱ <?php echo $booked['book_totalcosts']; ?></td>
+									<td>₱ <?php echo number_format($booked['book_totalcosts'],2,'.',','); ?></td>
 								</tr>
 								<tr>
 									<td>Fees</td>
-									<td class="success">+ ₱ <?php echo number_format($price_fee, 2, '.', ''); ?></td>
+									<td class="success">+ ₱ <?php echo number_format($price_fee, 2, '.', ','); ?></td>
 								</tr>
 								<tr>
 									<td>Voucher Discount (
@@ -264,20 +264,28 @@
 								</tr>
 								<tr>
 									<td>Total Price</td>
-									<td>₱ <?php echo number_format($final_price, 2, '.', ''); ?></td>
+									<td>₱
+										<?php
+										// IF NO VOUCHER USED
+										// echo number_format($final_price, 2, '.', '');
+										if(!isset($_SESSION['discounted'])) $_SESSION['discounted'] = $final_price;
+
+										echo number_format($_SESSION['discounted'], 2, '.', ',');
+										?>
+									</td>
 								</tr>
 							</table>
 						</section>
 					</div>
 
 					<button class="edit" type="submit" name="btnGCashEWallet">Pay with Gcash</button>
-					<a class="edit" href="reports_booking.php?countdown" onclick='return confirm("You will be given 1hour to pay this booking!");'>Pay Later</a>
+					<a class="edit" href="reports_booking.php?countdown" onclick='return confirm("You will be given 1hour to pay this booking and already started when you landed to this page!");'>Pay Later</a>
 
 					<?php
 						if(isset($_POST['btnGCashEWallet'])) {
+							$_SESSION['discounted'] = number_format($_SESSION['discounted'], 2, '.', '');
 							/*$payment_desc = "This payment is for Booking ID ".$booked['book_id']." under Mr/Ms. " . $_POST['card_name'];*/
-							$final_price = number_format($final_price, 2, '', '');
-							process_paymongo_ewallet_source('gcash', $final_price, $joiner, $_GET['book_id']);
+							process_paymongo_ewallet_source('gcash', $_SESSION['discounted'], $joiner, $_GET['book_id']);
 						}
 					?>
 

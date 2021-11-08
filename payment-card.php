@@ -68,7 +68,7 @@
 		.price_details section{position:relative;}
 		.price_details section:before{content:"";width:100%;height:2px;background:#cfcfcf;position:absolute;bottom:50px;right:0;}
 		.price_details section table{width:100%;}
-		.price_details section table tr td{width:70%;}
+		.price_details section table tr td{width:70%;line-height:25px !important;}
 		.price_details section table tr:last-child td{padding:40px 0 0;}
 		.price_details section table tr td:last-child{text-align:right;width:30%;}
 
@@ -285,7 +285,7 @@
 					</div>
 
 					<button class="edit" type="submit" name="btnPayCard">Pay with Credit/Debit Card</button>
-					<a class="edit" href="reports_booking.php?countdown" onclick='return confirm("You will be given 1hour to pay this booking!");'>Pay Later</a>
+					<a class="edit" href="reports_booking.php?countdown" onclick='return confirm("You will be given 1hour to pay this booking and already started when you landed to this page!");'>Pay Later</a>
 
 					<?php
 						if(isset($_POST['btnPayCard'])) {

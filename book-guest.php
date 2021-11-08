@@ -29,7 +29,7 @@
 		.main_logo{position:static;margin-left:10px;}
 
 		/* Main Area */
-		main{width:100%;flex:4;float:none;min-height:1010px;background:none;margin:0;padding:50px 0;border-radius:0;text-align:center;}
+		main{width:100%;flex:4;float:none;min-height:1010px;background:none;margin:0;padding:50px 0;border-radius:0;text-align:center;height:auto;}
 		main h2{font:600 45px/100% Montserrat,sans-serif;color:#313131;margin-bottom:10px;text-align:left;}
 
 		.sub-breadcrumbs{text-align:right;margin-bottom:30px;}

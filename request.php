@@ -164,7 +164,7 @@
 
 								if($result['req_status'] == "pending"){
 									echo "<td><a href='request-edit.php?req_id=".$result['req_id']."' onclick='return confirm(\"Are you sure you want to edit reason?\");'>edit</a></td>";
-									echo "<td></td>";
+									echo "<td><a href='reports_booking-view.php?book_id=".$result['book_id']."' onclick='return confirm(\"View receipt?\");'>view itinerary</a></td>";
 
 								## CANCELED BY ORGANIZER
 								} elseif($result['req_type'] == "canceled") {
