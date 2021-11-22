@@ -540,7 +540,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					<figure>
 						<img src='images/voucher.jpg' alt='image'>
 					</figure>
-					<em>for ".$adv['adv_name']."</em>
+					<em>for ".$adv['adv_name']." (".date('M. j, Y', strtotime($adv['adv_date'])).")</em>
 					<h2>".$result['vouch_discount']."% OFF <span>₱".$result['vouch_minspent']." min. spend</span> </h2>
 					<p>Valid Until: <q>".date('M. j, Y', strtotime($result['vouch_enddate']))."</q></p>
 
@@ -585,7 +585,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					<figure>
 						<img src='images/voucher.jpg' alt='image'>
 					</figure>
-					<em>for ".$adv['adv_name']."</em>
+					<em>for ".$adv['adv_name']." (".date('M. j, Y', strtotime($adv['adv_date'])).")</em>
 					<h2>".$result['vouch_discount']."% OFF <span>₱".$result['vouch_minspent']." min. spend</span> </h2>
 					<p>Valid Until: <q>".date('M. j, Y', strtotime($result['vouch_enddate']))."</q></p>
 
@@ -731,7 +731,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 						<p>₱".number_format((float)$price, 2, '.', ',')." / person</p>";
 
 					if(isset($_SESSION['joiner'])){
-						$no_cancel_date = date("Y-m-d", strtotime("-10 days", strtotime($result['adv_date'])));
+						$no_cancel_date = date("Y-m-d", strtotime("-5 days", strtotime($result['adv_date'])));
 						## CHECK IF CURRENT DAY IS NOT 10DAYS BVEFORE ADV
 						if(date("Y-m-d") > $no_cancel_date) {
 							echo "<a class='edit' href='' onclick='return confirm(\"You cannot resched this adventure because it is happening in a few days!\");'>Reschedule</a>";
@@ -1943,7 +1943,7 @@ function process_paymaya_payment($amount,$book_id) {
 	    "value": "'.$amount.'"
 	  },
 	  "redirectUrl": {
-	    "success": "http://localhost/BaiPaJoin42/thankyou.php?paymaya",
+	    "success": "http://localhost/Melnar%20Ancit/BaiPaJoin061321/thankyou.php?paymaya",
 	    "failure": "http://facebook.com",
 	    "cancel": "http://shop.someserver.com/cancel?id=6319921"
 	  },
@@ -1982,7 +1982,7 @@ function process_paymaya_payment($amount,$book_id) {
 ##### CODE START HERE 7-CONNECT API #####
 function process_sevenconnect_payment($amount,$book_id) {
 
-	$address = "https://testpay.cliqq.net/transact?merchantID=ATI&merchantRef=6419705015&expDate=20210910235900&amount=".$amount."&successURL=http://localhost/BaiPaJoin42/thankyou.php?seven-eleven&failURL=https://github.com/philseven/cliqq-pay/blob/master/docs/index.md%23request-parameters-1&token=235a23122139152ff830aa7fa1a876a95d4e365b&transactionDescription=Booking Payment for booking id ".$book_id." thru Team BaiPaJoin Cebu&receiptRemarks=Team BaiPaJoin|5th floor, UC-Main Building, Sangciangko St., Cebu City.|Call 0923-968-8932 for questions&email=salvador.alexis01@gmail.com&phone=09239688932&payLoad=https://54e8-49-145-165-0.ngrok.io/api_test/7Connect_payload.ph&returnPaymentDetails=Y";
+	$address = "https://testpay.cliqq.net/transact?merchantID=ATI&merchantRef=6419705015&expDate=20210910235900&amount=".$amount."&successURL=http://localhost/Melnar%20Ancit/BaiPaJoin061321/thankyou.php?seven-eleven&failURL=https://github.com/philseven/cliqq-pay/blob/master/docs/index.md%23request-parameters-1&token=235a23122139152ff830aa7fa1a876a95d4e365b&transactionDescription=Booking Payment for booking id ".$book_id." thru Team BaiPaJoin Cebu&receiptRemarks=Team BaiPaJoin|5th floor, UC-Main Building, Sangciangko St., Cebu City.|Call 0923-968-8932 for questions&email=salvador.alexis01@gmail.com&phone=09239688932&payLoad=https://54e8-49-145-165-0.ngrok.io/api_test/7Connect_payload.ph&returnPaymentDetails=Y";
 
 	$redirect = "Location: " . $address."";
 	header($redirect);
@@ -2005,7 +2005,7 @@ function send_sms($mobile, $message) {
       CURLOPT_FOLLOWLOCATION => true,
       CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
       CURLOPT_CUSTOMREQUEST => 'POST',
-      CURLOPT_POSTFIELDS => array('1' => $mobile ,'2' => $message,'3' => 'TR-ALEXI688932_MPXBC','passwd' => '&9in[7}wh3'),
+      CURLOPT_POSTFIELDS => array('1' => $mobile ,'2' => $message,'3' => 'TR-MELNA376576_TN9CN','passwd' => 'ajp[t9cz4r'),
   ));
 
     $response = curl_exec($curl);
@@ -2035,7 +2035,7 @@ function send_email($to, $subject, $message, $img_address = null, $img_name = nu
 		$mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
 		$mail->SMTPAuth = true;                               	// Enable SMTP authentication
 		$mail->Username = 'teambaipajoincebu@gmail.com';  // SMTP username
-		$mail->Password = 'capstone42';                          	// SMTP password
+		$mail->Password = 'c@pst0ne42';                          	// SMTP password
 		$mail->SMTPSecure = 'tls';                             	// Enable TLS encryption, `ssl` also accepted
 		$mail->Port = 587;                                    	// TCP port to connect to
 		$mail->setFrom('teambaipajoincebu@gmail.com', 'BAIPAJOIN');
@@ -2075,7 +2075,7 @@ function send_email($to, $subject, $message, $img_address = null, $img_name = nu
 		$mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
 		$mail->SMTPAuth = true;                               	// Enable SMTP authentication
 		$mail->Username = 'teambaipajoincebu@gmail.com';  // SMTP username
-		$mail->Password = 'capstone42';                          	// SMTP password
+		$mail->Password = 'c@pst0ne42';                          	// SMTP password
 		$mail->SMTPSecure = 'tls';                             	// Enable TLS encryption, `ssl` also accepted
 		$mail->Port = 587;                                    	// TCP port to connect to
 		$mail->setFrom('teambaipajoincebu@gmail.com', 'BAIPAJOIN');
@@ -2225,7 +2225,7 @@ function facebook_graph_api($type) {
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
-    $fb_access_token = 'EAA8IHfsXftcBAN7nTwNZBZA2DRRw7gIygEzgdhzQpZCd2yOBWWGhiG6B0ryZCoZAhzixT5g4q3R2I0khX49jJ69GbkD1k6xZChUOsxUz22zTqXU3Wm3ZCzTnogCOVc2T8Ow0lMMStirvTUheQKvqyYEEy4fZBcfT81og1ZBtINDkBKrW7US6DTYwwdkjWFO7YDyi5GJLWx6GvLg0Qq1wXyXZAkPyqyxaxO0qcZD';
+    $fb_access_token = 'EAA8IHfsXftcBAPJWtMe8FOwqxlaBZAA8BKF6GgXaPlYjnjsYgCiaFNWbVIhm0xdRz1r9dFRUOpakyfMVsUKhLlijRyQZA9XhWhrm3tZAZCscXIZAdgujPuZCcFZAGIh34P7x2ZC7dCrKU2NGtGZAKqlX29rXWRAQHLUfCOvpgJPPEOCtqVReyVasoOKlwWmcYZAkIZD';
 
 	if($type == 'videos')
     	$query = 'https://graph.facebook.com/v12.0/100306372435763/videos?access_token='.$fb_access_token.'';
@@ -2270,7 +2270,7 @@ function get_facebook_media_id($id) {
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
-    $fb_access_token = 'EAA8IHfsXftcBAN7nTwNZBZA2DRRw7gIygEzgdhzQpZCd2yOBWWGhiG6B0ryZCoZAhzixT5g4q3R2I0khX49jJ69GbkD1k6xZChUOsxUz22zTqXU3Wm3ZCzTnogCOVc2T8Ow0lMMStirvTUheQKvqyYEEy4fZBcfT81og1ZBtINDkBKrW7US6DTYwwdkjWFO7YDyi5GJLWx6GvLg0Qq1wXyXZAkPyqyxaxO0qcZD';
+    $fb_access_token = 'EAA8IHfsXftcBAPJWtMe8FOwqxlaBZAA8BKF6GgXaPlYjnjsYgCiaFNWbVIhm0xdRz1r9dFRUOpakyfMVsUKhLlijRyQZA9XhWhrm3tZAZCscXIZAdgujPuZCcFZAGIh34P7x2ZC7dCrKU2NGtGZAKqlX29rXWRAQHLUfCOvpgJPPEOCtqVReyVasoOKlwWmcYZAkIZD';
 
 	$query = 'https://graph.facebook.com/v12.0/'.$id.'/attachments?access_token='.$fb_access_token.'';
 
