@@ -10,7 +10,7 @@
 		$adv = DB::query("SELECT * FROM adventure WHERE adv_id=?", array($_GET['adv_id']), "READ");
 		$adv = $adv[0];
 		$to_pay = ($adv['adv_totalcostprice'] / $adv['adv_maxguests']) * $adv['adv_currentGuest'];
-		$fee = $to_pay * .10; // 10% FEE FOR ORGANIZER PAYOUT
+		$fee = $to_pay * .05; // 5% FEE FOR ORGANIZER PAYOUT
 		$to_pay -= $fee;
 		##
 		DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, req_rcvd, adv_id) VALUES(?,?,?,?,?,?,?,?)", array("organizer", "payout", date("Y-m-d"), date("Y-m-d"), $to_pay, "approved", 0, $_GET['adv_id']), "CREATE");

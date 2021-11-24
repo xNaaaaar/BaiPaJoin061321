@@ -182,7 +182,7 @@
 				</div>
 
 				<div class="voucher card-contents">
-					<h2>Add Voucher <span><a href="voucher.php?adv_id=<?php echo $adv[0]; ?>&adv_org=<?php echo $adv[15]; ?>&booking_total=<?php echo $final_price; ?>" target="_blank" >view vouchers &#187;</a></span> </h2>
+					<h2>Add Voucher <span><a href="voucher.php?adv_id=<?php echo $adv[0]; ?>&adv_org=<?php echo $adv[16]; ?>&booking_total=<?php echo $final_price; ?>" target="_blank" >view vouchers &#187;</a></span> </h2>
 
 					<?php
 						if(isset($_POST['btnVerify'])){

@@ -487,7 +487,7 @@ function displayAll($num, $query = NULL, $book_id = NULL){
 					} elseif((date("Y-m-d") >= $no_cancel_starting_date) && (date("Y-m-d") <= $result['adv_date'])){
 						echo "<a class='edit disable'>Cancel</a>";
 					} else {
-						echo "<a href='request-payout.php?adv_id=".$result['adv_id']."' onclick='return confirm(\"Confirm request payout?\");' class='edit'>Request Payout</a>";
+						echo "<a href='request-payout.php?adv_id=".$result['adv_id']."' onclick='return confirm(\"BaiPaJoin will deduct 5% as service and transaction fee. Confirm request payout?\");' class='edit'>Request Payout</a>";
 
 						## EMAIL ORGANIZER NOTIFICATION
 						$organizer_db = DB::query("SELECT * FROM organizer WHERE orga_id = ?", array($_SESSION['organizer']), "READ");
@@ -1167,6 +1167,7 @@ function postAdventure(){
 
 			DB::query('INSERT INTO adventure(adv_images, adv_name, adv_kind, adv_type, adv_address, adv_town, adv_totalcostprice, adv_date, adv_details, adv_postedDate, adv_maxguests, adv_currentGuest, adv_itineraryImg, adv_dosdont_image, adv_status, orga_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', array($fileAdvImgs, $txtName, $cboKind, $cboType, $cboLoc, $town, $numPrice, $dateDate, $txtDetails, date('Y-m-d'), $numMaxGuests, 0, $fileItineraryImg, $fileDosDontsImg, "not full", $_SESSION['organizer']), "CREATE");
 
+			unset_reuse_adv();
 			header('Location: adventures_posted.php?added=1');
 		}
 	}
@@ -1740,8 +1741,8 @@ function process_paymongo_ewallet_source($ewallet_type, $final_price, $joiner, $
 	        "attributes": {
 	            "amount": '.$final_price.',
 	            "redirect": {
-	                "success": "https://6fa3-2001-4455-329-f600-883d-d473-4803-5735.ngrok.io/BaiPaJoin42/thankyou.php?gcash=1",
-	                "failed": "https://6fa3-2001-4455-329-f600-883d-d473-4803-5735.ngrok.io/BaiPaJoin42/thankyou.php?gcash=0"
+	                "success": "https://858c-180-190-196-180.ngrok.io/Melnar%20Ancit/BaiPaJoin061321/thankyou.php?gcash=1",
+	                "failed": "https://858c-180-190-196-180.ngrok.io/Melnar%20Ancit/BaiPaJoin061321/thankyou.php?gcash=0"
 	            },
 	            "billing": {
 	                "name": "'.$joiner[1].' '.$joiner[2].'",
@@ -1833,7 +1834,7 @@ function process_paymongo_ewallet_payment($amount, $source_id,$book_id) {
       	file_put_contents($log_file_data, date('h:i:sa').' => '. $response . "\n" . "\n", FILE_APPEND);
 		$payment_id = $ewallet_payment['data']['id'];
 		$ewallet_type = $ewallet_payment['data']['attributes']['source']['type'];
-		booking_paid_updates($ewallet_type, $book_id, $payment_id, $amount);
+		booking_paid_updates($ewallet_type, $book_id, $payment_id, $amount / 100);
 	} //This code will a log.txt file to get the response of the cURL command
 
     curl_close($curl);
@@ -2225,7 +2226,7 @@ function facebook_graph_api($type) {
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
-    $fb_access_token = 'EAA8IHfsXftcBAPJWtMe8FOwqxlaBZAA8BKF6GgXaPlYjnjsYgCiaFNWbVIhm0xdRz1r9dFRUOpakyfMVsUKhLlijRyQZA9XhWhrm3tZAZCscXIZAdgujPuZCcFZAGIh34P7x2ZC7dCrKU2NGtGZAKqlX29rXWRAQHLUfCOvpgJPPEOCtqVReyVasoOKlwWmcYZAkIZD';
+    $fb_access_token = 'EAA8IHfsXftcBALhLbkChgLbZCdyAomxrlztkZBTG62yjMgokqfyooKQw8pMSsjt1R8hCu6U6X9Rs56iw3ZCXxArOW0wg7ZAqD4BztmM8Io8iUxuwBCXzrZAK4dtXQhZAFK7ZCMk23w229wIyKfWPRMEXEJa0ZAigueoULrk3wuYAJk0SMiGj1zZBRJHrNrOxtM1MTSLvS3ydm11XfrQJj5P3w';
 
 	if($type == 'videos')
     	$query = 'https://graph.facebook.com/v12.0/100306372435763/videos?access_token='.$fb_access_token.'';
@@ -2270,7 +2271,7 @@ function get_facebook_media_id($id) {
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
-    $fb_access_token = 'EAA8IHfsXftcBAPJWtMe8FOwqxlaBZAA8BKF6GgXaPlYjnjsYgCiaFNWbVIhm0xdRz1r9dFRUOpakyfMVsUKhLlijRyQZA9XhWhrm3tZAZCscXIZAdgujPuZCcFZAGIh34P7x2ZC7dCrKU2NGtGZAKqlX29rXWRAQHLUfCOvpgJPPEOCtqVReyVasoOKlwWmcYZAkIZD';
+    $fb_access_token = 'EAA8IHfsXftcBALhLbkChgLbZCdyAomxrlztkZBTG62yjMgokqfyooKQw8pMSsjt1R8hCu6U6X9Rs56iw3ZCXxArOW0wg7ZAqD4BztmM8Io8iUxuwBCXzrZAK4dtXQhZAFK7ZCMk23w229wIyKfWPRMEXEJa0ZAigueoULrk3wuYAJk0SMiGj1zZBRJHrNrOxtM1MTSLvS3ydm11XfrQJj5P3w';
 
 	$query = 'https://graph.facebook.com/v12.0/'.$id.'/attachments?access_token='.$fb_access_token.'';
 
@@ -3677,4 +3678,14 @@ function filter_ratings($rate){
 	return $rate_txt;
 }
 
+function unset_reuse_adv(){
+	unset($_SESSION['this_type']);
+	unset($_SESSION['this_guest']);
+	unset($_SESSION['this_name']);
+	unset($_SESSION['this_kind']);
+	unset($_SESSION['this_address']);
+	unset($_SESSION['this_date']);
+	unset($_SESSION['this_details']);
+	unset($_SESSION['this_price']);
+}
 ##### END OF CODES #####

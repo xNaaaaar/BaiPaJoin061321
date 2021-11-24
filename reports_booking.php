@@ -22,7 +22,7 @@
 
 		## REFUND 100% PRICE PAID BY JOINER MINUS THE FEE
 		$final_price = ($adv['adv_totalcostprice'] / $adv['adv_maxguests']) * $adv['book_guests'];
-		$final_price = number_format($final_price, 2, ".", ",");
+		//$final_price = number_format($final_price, 2, ".", ",");
 
 		## ADD NEW REQUEST AS REFUND
 		DB::query("INSERT INTO request(req_user, req_type, req_dateprocess, req_dateresponded, req_amount, req_status, req_rcvd, book_id) VALUES(?,?,?,?,?,?,?,?)", array("joiner", "refund", date("Y-m-d"), date("Y-m-d"), $final_price, "approved", 0, $_GET['book_id']), "CREATE");

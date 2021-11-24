@@ -21,7 +21,7 @@
     file_put_contents($log_file_data, date('h:i:sa').' => '. $type .' : '. $request . "\n" . "\n", FILE_APPEND);
   } //This code will a log.txt file to get the response of the cURL command
 
-  
+
   //If event type is source.chargeable, call the createPayment API
   if ($type == 'source.chargeable') {
 
@@ -33,15 +33,15 @@
   }
 
   if($type == 'payment.paid' && $pay_method != 'card') {
-      
-    $name = $payload['data']['attributes']['data']['attributes']['billing']['name']; 
-    $mobile = $payload['data']['attributes']['data']['attributes']['billing']['phone']; 
-    $email = $payload['data']['attributes']['data']['attributes']['billing']['email'];    
+
+    $name = $payload['data']['attributes']['data']['attributes']['billing']['name'];
+    $mobile = $payload['data']['attributes']['data']['attributes']['billing']['phone'];
+    $email = $payload['data']['attributes']['data']['attributes']['billing']['email'];
     $amount = ($payload['data']['attributes']['data']['attributes']['amount'] / 100);
     $currency = $payload['data']['attributes']['data']['attributes']['currency'];
     $method = $payload['data']['attributes']['data']['attributes']['source']['type'];
     $transaction_id = $payload['data']['attributes']['data']['id'];
-    
+
     $sms_message = "Hello " . $name . "! Your payment for " . $amount . " " . $currency . " thru " . $method . " was successful. Thank you.";
 
     send_sms($mobile, $sms_message);

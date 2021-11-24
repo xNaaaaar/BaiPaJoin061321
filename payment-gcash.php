@@ -283,9 +283,11 @@
 
 					<?php
 						if(isset($_POST['btnGCashEWallet'])) {
-							$_SESSION['discounted'] = number_format($_SESSION['discounted'], 2, '.', '');
+							$_SESSION['discounted'] = number_format($_SESSION['discounted'], 2, '', '');
 							/*$payment_desc = "This payment is for Booking ID ".$booked['book_id']." under Mr/Ms. " . $_POST['card_name'];*/
 							process_paymongo_ewallet_source('gcash', $_SESSION['discounted'], $joiner, $_GET['book_id']);
+
+							unset($_SESSION['discounted']);
 						}
 					?>
 
