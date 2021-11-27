@@ -195,6 +195,7 @@
 								<th></th>
 								<th></th>
 								<th></th>
+								<th></th>
 							</tr>
 						</thead>
 					";
@@ -295,6 +296,7 @@
 									## CHECK IF THIS ADVENTURE IS CANCELED BY ORGANIZER
 									} elseif($canceled){
 										echo "<td><a href='reports_booking.php?book_id=".$result['book_id']."' onclick='return confirm(\"Refunding canceled adventure is 100% moneyback excluding the fee. Are you sure you want a refund?\");'>refund</a></td>";
+										echo "<td><a href='report_organizer.php?adv_id=".$result['adv_id']."' onclick='return confirm(\"Are you sure you want to report this organizer?\");'>Report Organizer</a></td>";
 
 									## CANCELABLE DATE
 									} else {

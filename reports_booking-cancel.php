@@ -21,7 +21,7 @@
 
 		main{flex:4;float:none;height:auto;background:none;margin:0;padding:50px 0 50px 50px;border-radius:0;text-align:center;}
 		main h2{margin-bottom:30px;}
-		main textarea{height:150px;padding:15px;}
+		main input{padding:15px;}
 
 		.edit{margin:15px 5px !important;}
 
@@ -68,8 +68,15 @@
 			<main>
 				<form method="post">
 					<h2>Reason for Cancelling</h2>
-
-					<textarea name="txtReason" placeholder="Type here.." maxlength="100" required></textarea>
+					<input list="valid_reason" name="txtReason" placeholder="Input reason if not stated below.." required/>
+					<datalist id="valid_reason">
+						<option value="Valid Reason 1">Valid Reason 1</option>
+						<option value="Valid Reason 2">Valid Reason 2</option>
+						<option value="Valid Reason 3">Valid Reason 3</option>
+						<option value="Valid Reason 4">Valid Reason 4</option>
+						<option value="Valid Reason 5">Valid Reason 5</option>
+						<option value="Valid Reason 6">Valid Reason 6</option>
+					</datalist>
 					<?php
 					if(isset($_SESSION['joiner'])) {
 						echo "<button class='edit' type='submit' name='btnRequest-Joiner'>Request</button>";
