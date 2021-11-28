@@ -68,14 +68,15 @@
 			<main>
 				<form method="post">
 					<h2>Reason for Cancelling</h2>
-					<input list="valid_reason" name="txtReason" placeholder="Input reason if not stated below.." required/>
+					<input list="valid_reason" name="txtReason" placeholder="Enter your reason if choices below is not applicable." required/>
 					<datalist id="valid_reason">
-						<option value="Valid Reason 1">Valid Reason 1</option>
-						<option value="Valid Reason 2">Valid Reason 2</option>
-						<option value="Valid Reason 3">Valid Reason 3</option>
-						<option value="Valid Reason 4">Valid Reason 4</option>
-						<option value="Valid Reason 5">Valid Reason 5</option>
-						<option value="Valid Reason 6">Valid Reason 6</option>
+						<option value="I'm / One of the guest is positive for COVID-19"></option>
+						<option value="Travel Restriction (Flight / Voyage / Trip Cancelation)"></option>
+						<option value="My / One of the guest community is on Lockdown"></option>
+						<option value="I'm / We're missing a essential required travel document"></option>
+						<option value="Adventure destination has high COVID-19 cases"></option>
+						<option value="LGU Imposed Lockdown or Temporary Closure"></option>
+						<option value="Weather / Natural Phenomenon Concerns"></option>
 					</datalist>
 					<?php
 					if(isset($_SESSION['joiner'])) {

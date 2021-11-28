@@ -98,14 +98,10 @@
 						<h2>Thank you for your report. Report sent to admin!</h2>
 					<?php } else { ?>
 						<h2>Reason for Reporting</h2>
-						<input list="valid_reason" name="txtReason" placeholder="Input reason if not stated below.." required/>
+						<input list="valid_reason" name="txtReason" placeholder="Enter your reason if choices below is not applicable." required/>
 						<datalist id="valid_reason">
-							<option value="Valid Reason 1">Valid Reason 1</option>
-							<option value="Valid Reason 2">Valid Reason 2</option>
-							<option value="Valid Reason 3">Valid Reason 3</option>
-							<option value="Valid Reason 4">Valid Reason 4</option>
-							<option value="Valid Reason 5">Valid Reason 5</option>
-							<option value="Valid Reason 6">Valid Reason 6</option>
+							<option value="Multiple cancelation incidents"></option>
+							<option value="I felt cheated, organizer cancels if slots available is still high"></option>
 						</datalist>
 						<button class='edit' type='submit' name='btnReport'>Report</button>
 					<?php } ?>
